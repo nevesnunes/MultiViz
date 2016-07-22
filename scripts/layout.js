@@ -8,12 +8,14 @@ layoutApp.controller('layoutCtrl', ['$scope', function($scope){
       $scope.Types.push({});
       $scope.width = $scope.Types.length < 7 ? Math.floor(12/$scope.Types.length) : 1;
     };
+    $scope.removeColumn = function(column){
+      $scope.Types.splice($scope.Types.indexOf(column), 1);
+    };
 }]);
 
 layoutApp.directive("splitvertical", function($compile){
 	return function(scope, element, attrs){
 		element.bind("click", function(){
-			scope.count++;
 			angular
                 .element(
                     document.getElementById('layout-rows'))
@@ -23,6 +25,16 @@ layoutApp.directive("splitvertical", function($compile){
                     "<div class='layout-view'>.col-md-8</div>" +
                     "</div>" +
                     "</div>"
+/*
+"<div class='row'>" +
+    "<div class='col-md-{{width}}' ng-repeat='Type in Types'>" +
+        "<div class='layout-view'>" +
+            "{{$index}}" +
+            "<button class='btn btn-primary' ng-click='removeColumn(Type)'>Delete</button>"
+        "</div>"
+    "</div>"
+"</div>"
+*/
                 )(scope));
 		});
 	};
