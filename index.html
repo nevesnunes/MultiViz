@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="layoutApp">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -94,12 +94,18 @@
 
           <h2 class="sub-header">Layout</h2>
             <div id="layout-ctrl" ng-controller="layoutCtrl">
-                <div class="row">
-                  <div class="bg-info col-md-{{width}}" ng-repeat="Type in Types">
-                      {{$index}}
-                  </div>
+                <div class="container-fluid">
+                    <div class="row">
+                      <div class="col-md-{{width}}" ng-repeat="Type in Types">
+                      <div class="layout-view">
+                          {{$index}}
+                      </div>
+                      </div>
+                    </div>
+                    <div id="layout-rows"></div>
                 </div>
-                <button class="btn btn-primary" ng-click="add()">Add</button>
+                <button splitVertical class="btn btn-primary">Vertical</button>
+                <button id="split-horizontal" class="btn btn-primary" ng-click="addColumn()">Horizontal</button>
             </div>
   
         </div>

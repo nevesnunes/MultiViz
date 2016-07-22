@@ -103,3 +103,14 @@ body {
   display: inline-block;
   border-radius: 50%;
 }
+
+/*
+ * Views
+ */
+
+.layout-view {
+    background-color: #ddd;
+    background-clip: content-box;
+    border: 1px solid #aaa;
+    margin-bottom: 30px;
+}
