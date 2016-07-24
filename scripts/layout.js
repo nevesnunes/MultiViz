@@ -1,6 +1,6 @@
-var layoutApp = angular.module('layoutApp',[]);
+var moduleLayout = angular.module('module-layout',[]);
 
-layoutApp.controller('layoutCtrl', ['$scope', function($scope){
+moduleLayout.controller('layoutCtrl', ['$scope', function($scope){
     $scope.Types = [[]];
     $scope.width = 12;
     
@@ -13,7 +13,7 @@ layoutApp.controller('layoutCtrl', ['$scope', function($scope){
     };
 }]);
 
-layoutApp.directive("splitvertical", function($compile, $timeout){
+moduleLayout.directive("splitvertical", function($compile, $timeout){
 	return { 
         restrict: 'A',
         link: function(scope, element, attrs){
@@ -43,3 +43,16 @@ layoutApp.directive("splitvertical", function($compile, $timeout){
         } //link
     }; //return
 });
+
+var moduleSplits = angular.module('module-splits', ['shagstrom.angular-split-pane']);
+
+angular.module("moduleCombined", ["module-layout", "module-splits"]);
+/*
+angular.element(document).ready(function() {
+    var divSplits = document.getElementById("div-splits");
+    angular.bootstrap(divSplits, ['moduleSplits']);
+
+    var divLayout = document.getElementById("div-layout");
+    angular.bootstrap(divLayout, ['moduleLayout']);
+});
+*/

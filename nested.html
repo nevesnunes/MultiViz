@@ -1,27 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!--<link rel="icon" href="node_modules/bootstrap/favicon.ico">-->
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-    <title>Dashboard</title>
+		<title>Dashboard</title>
 
-    <!-- Bootstrap core CSS -->
-    <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+        <!-- Bootstrap core CSS -->
+        <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Custom styles for this template -->
-    <link href="styles/dashboard.css" rel="stylesheet">
-		<style type="text/css">
-			html, body, #div-test, .container-fluid, .row, .main {
-				height: 100%;
-				min-height: 100%;
-			}
-		</style>
-  </head>
-
-  <body data-ng-app="moduleCombined">
+        <!-- Custom styles for this template -->
+        <link rel="stylesheet" href="modules/angular-split-pane/node_modules/@shagstrom/split-pane/split-pane.css" />
+        <link rel="stylesheet" href="modules/angular-split-pane/node_modules/@shagstrom/split-pane/pretty-split-pane.css" />
+        <link href="styles/dashboard.css" rel="stylesheet">
+	</head>
+	<body data-ng-app="moduleCombined">
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
@@ -46,8 +40,6 @@
         </div>
       </div>
     </nav>
-
-    <div class="container-fluid">
       <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
@@ -59,27 +51,28 @@
           </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h1 class="page-header">Splits</h1>
-	<div id="div-splits">
+        <div id="panes">
 		<div class="pretty-split-pane-frame">
 			<div data-split-pane>
-				<div data-split-pane-component>
-					<div class="pretty-split-pane-component-inner"><p>top</p></div>
+				<div data-split-pane-component data-height="50%">
+					<div class="pretty-split-pane-component-inner"><p>top</p>
+                        <button class="btn btn-primary" ng-click="maximize()">Maximizar Vista</button>
+                    </div>
 				</div>
 				<div data-split-pane-divider data-height="5px"></div>
-				<div data-split-pane-component data-height="10em">
+				<div data-split-pane-component data-height="50%">
 					<div data-split-pane>
-						<div data-split-pane-component data-width="40%">
+						<div data-split-pane-component data-width="50%">
 							<div class="pretty-split-pane-component-inner"><p>left</p></div>
 						</div>
 						<div data-split-pane-divider data-width="5px"></div>
 						<div data-split-pane-component>
 							<div data-split-pane>
-								<div data-split-pane-component data-height="40%">
+								<div data-split-pane-component data-height="50%">
 									<div class="pretty-split-pane-component-inner"><p>top</p></div>
 								</div>
 								<div data-split-pane-divider data-height="5px"></div>
-								<div data-split-pane-component>
+								<div data-split-pane-component data-height="50%">
 									<div class="pretty-split-pane-component-inner"><p>bottom</p></div>
 								</div>
 							</div>
@@ -88,34 +81,9 @@
 				</div>
 			</div>
 		</div>
-	</div>
-
-          <h2 class="sub-header">Bootstrap Grid</h2>
-            <div id="div-layout">
-            <div ng-controller="layoutCtrl">
-                <div class="container-fluid">
-                    <div class="row">
-                      <div class="col-md-{{width}}" ng-repeat="Type in Types">
-                      <div class="layout-view">
-                          {{$id}}
-                          <button class="btn btn-primary" ng-click="removeColumn(Type)">Remover Vista</button>
-                      </div>
-                      </div>
-                    </div>
-                    <div id="layout-rows"></div>
-                </div>
-                <button splitVertical class="btn btn-primary">Separar na Vertical</button>
-                <button id="split-horizontal" class="btn btn-primary" ng-click="addColumn()">Separar na Horizontal</button>
-            </div>
-            </div>
-  
-        </div>
-      </div>
-    </div>
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
+		</div>
+		</div>
+		</div>
     <!--
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="node_modules/bootstrap/assets/js/vendor/jquery.min.js"><\/script>')</script>
@@ -124,10 +92,8 @@
     <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 
     <script src="node_modules/angular/angular.js"></script>
-		<link rel="stylesheet" href="modules/angular-split-pane/node_modules/@shagstrom/split-pane/split-pane.css" />
-		<link rel="stylesheet" href="modules/angular-split-pane/node_modules/@shagstrom/split-pane/pretty-split-pane.css" />
-		<script src="modules/angular-split-pane/node_modules/@shagstrom/split-pane/split-pane.js"></script>
-		<script src="modules/angular-split-pane/angular-split-pane.js"></script>
+	<script src="modules/angular-split-pane/node_modules/@shagstrom/split-pane/split-pane.js"></script>
+	<script src="modules/angular-split-pane/angular-split-pane.js"></script>
     <script src="scripts/layout.js"></script>
-  </body>
+	</body>
 </html>
