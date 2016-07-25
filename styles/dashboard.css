@@ -118,7 +118,7 @@ body {
 /* 
  * Splits need all surrounding containers to impose minimum height
  */
-html, body, .row, .main, #panes {
+html, body, .row, .main, .panes {
     height: 100%;
     min-height: 100%;
 }

@@ -51,7 +51,10 @@
           </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-        <div id="panes">
+        <div class="panes" ng-controller="controllerPanes">
+            <div class="panes" data-directive-panes treeRoot="treeRoot"></div>
+        </div>
+        <!--
 		<div class="pretty-split-pane-frame">
 			<div data-split-pane>
 				<div data-split-pane-component data-height="50%">
@@ -82,18 +85,29 @@
 			</div>
 		</div>
 		</div>
+        -->
 		</div>
 		</div>
     <!--
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="node_modules/bootstrap/assets/js/vendor/jquery.min.js"><\/script>')</script>
     -->
+
+    <!-- Bootstrap -->
+    <!-- NOTE: Loading jQuery compatible with angular-split-pane -->
 	<script src="modules/angular-split-pane/node_modules/jquery/dist/jquery.min.js"></script>
     <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 
+    <!-- Angular -->
     <script src="node_modules/angular/angular.js"></script>
+
+    <!-- Other Dependencies -->
+    <script src="node_modules/tree-model/dist/TreeModel.js"></script>
+    <script src="node_modules/node-uuid/uuid.js"></script>
 	<script src="modules/angular-split-pane/node_modules/@shagstrom/split-pane/split-pane.js"></script>
 	<script src="modules/angular-split-pane/angular-split-pane.js"></script>
-    <script src="scripts/layout.js"></script>
+
+    <!-- Our scripts -->
+    <script src="scripts/splits.js"></script>
 	</body>
 </html>
