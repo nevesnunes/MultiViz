@@ -35,12 +35,17 @@ moduleLayout.directive("directivePanes", function($compile, $timeout){
             function makeSplitComponent(orientation, node) {
                 var html = '<div data-split-pane-component data-' + orientation + '="50%">';
                 if (node.hasChildren()) {
-                    // walk
-                    console.log("child hasChildren");
-                    var orientation = (node.model.split === scope.splitType.VERTICAL) ? "height" : "width";
+                    if (node.children.length === 1) {
+                        node = node.children[0];
+                        html += makeSplitInner(node.model.id);
+                    } else {
+                        // walk
+                        console.log("child hasChildren");
+                        var orientation = (node.model.split === scope.splitType.VERTICAL) ? "height" : "width";
 
-                    // FIXME: Hardcoded to 2 childs
-                    html += makeSplitPane(orientation, node.children[0], node.children[1]);
+                        // FIXME: Hardcoded to 2 childs
+                        html += makeSplitPane(orientation, node.children[0], node.children[1]);
+                    }
                 } else {
                     html += makeSplitInner(node.model.id);
                 }
@@ -69,12 +74,17 @@ moduleLayout.directive("directivePanes", function($compile, $timeout){
                 });
 
                 if (treeRootNode.hasChildren()) {
-                    // walk
-                    console.log("root hasChildren");
-                    var orientation = (treeRootNode.model.split === scope.splitType.VERTICAL) ? "height" : "width";
+                    if (treeRootNode.children.length === 1) {
+                        treeRootNode = treeRootNode.children[0];
+                        layout += makeSplitInner(treeRootNode.model.id);
+                    } else {
+                        // walk
+                        console.log("root hasChildren");
+                        var orientation = (treeRootNode.model.split === scope.splitType.VERTICAL) ? "height" : "width";
 
-                    // FIXME: Hardcoded to 2 childs
-                    layout += makeSplitPane(orientation, treeRootNode.children[0], treeRootNode.children[1]);
+                        // FIXME: Hardcoded to 2 childs
+                        layout += makeSplitPane(orientation, treeRootNode.children[0], treeRootNode.children[1]);
+                    }
                 } else {
                     layout += makeSplitInner(treeRootNode.model.id);
                 }
@@ -84,11 +94,24 @@ moduleLayout.directive("directivePanes", function($compile, $timeout){
             };
 
             scope.paneRemove = function(button) {
-                console.log("Removing " + treeRootNode.model.id);
+                var id = angular.element(button.target).data('id');
+                var node = scope.treeRoot.first(function (node1) {
+                    return node1.model.id === id;
+                });
+
+                console.log("Removing " + node.model.id);
+
+                node.drop();
+                scope.updateLayout();
             };
 
             scope.paneMaximize = function(button) {
-                console.log("Maximizing " + treeRootNode.model.id);
+                var id = angular.element(button.target).data('id');
+                var node = scope.treeRoot.first(function (node1) {
+                    return node1.model.id === id;
+                });
+
+                console.log("Maximizing " + node.model.id);
             };
 
             scope.paneSplitVertical = function(button) {
@@ -111,6 +134,7 @@ moduleLayout.directive("directivePanes", function($compile, $timeout){
                         split: scope.splitType.NONE,
                         children: []
                     }));
+
                 scope.updateLayout();
             };
 
@@ -134,6 +158,7 @@ moduleLayout.directive("directivePanes", function($compile, $timeout){
                         split: scope.splitType.NONE,
                         children: []
                     }));
+
                 scope.updateLayout();
             };
 
