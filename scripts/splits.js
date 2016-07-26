@@ -15,6 +15,7 @@ moduleLayout.controller('controllerPanes', ['$scope', function($scope){
         split: $scope.splitType.NONE,
         children: []
     });
+    $scope.currentNode = $scope.treeRoot;
 }]);
 
 moduleLayout.directive("directivePanes", function($compile, $timeout){
@@ -40,9 +41,21 @@ moduleLayout.directive("directivePanes", function($compile, $timeout){
             }
 
             function makeSplitInner(id) {
+                var node = scope.treeRoot.first(function (node1) {
+                    return node1.model.id === id;
+                });
+                var viewportButton = '';
+                if (!node.isRoot()) {
+                    if (scope.currentNode.model.id === id) {
+                        viewportButton = '<button class="btn btn-primary" data-id=' + id + ' ng-click="paneColapse($event)">Colapsar Vista</button>';
+                    } else {
+                        viewportButton = '<button class="btn btn-primary" data-id=' + id + ' ng-click="paneMaximize($event)">Maximizar Vista</button>';
+                    }
+                }
+
                 return '<div class="pretty-split-pane-component-inner"><p>' + id + '</p>' +
                     '<button class="btn btn-primary" data-id=' + id + ' ng-click="paneRemove($event)">Remover Vista</button>' +
-                    '<button class="btn btn-primary" data-id=' + id + ' ng-click="paneMaximize($event)">Maximizar Vista</button>' +
+                    viewportButton +
                     '<button class="btn btn-primary" data-id=' + id + ' ng-click="paneSplitVertical($event)">Separar na Vertical</button>' +
                     '<button class="btn btn-primary" data-id=' + id + ' ng-click="paneSplitHorizontal($event)">Separar na Horizontal</button>' +
                     '</div>';
@@ -66,12 +79,8 @@ moduleLayout.directive("directivePanes", function($compile, $timeout){
             }
 
             scope.updateLayout = function() {
-                var treeRootNode = scope.treeRoot.first(function(node) {
-                    return node.isRoot();
-                });
-
                 element.html($compile(
-                    makeChildrenLayout(treeRootNode)
+                    makeChildrenLayout(scope.currentNode)
                 )(scope));
             };
 
@@ -93,6 +102,7 @@ moduleLayout.directive("directivePanes", function($compile, $timeout){
                             split: otherChildNode.model.split,
                             children: otherChildNode.model.children
                         });
+                        scope.currentNode = scope.treeRoot;
                     } else {
                         node.parent.config = otherChildNode.config;
                         node.parent.model = otherChildNode.model;
@@ -112,8 +122,15 @@ moduleLayout.directive("directivePanes", function($compile, $timeout){
                 var node = scope.treeRoot.first(function (node1) {
                     return node1.model.id === id;
                 });
+                scope.currentNode = node;
 
-                console.log("[INFO] Maximizing " + node.model.id);
+                scope.updateLayout();
+            };
+
+            scope.paneColapse = function(button) {
+                scope.currentNode = scope.treeRoot;
+
+                scope.updateLayout();
             };
 
             scope.paneSplitVertical = function(button) {
