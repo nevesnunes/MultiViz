@@ -1,7 +1,6 @@
 var moduleLayout = angular.module('module-layout',[]);
 
 moduleLayout.controller('controllerPanes', ['$scope', function($scope){
-    // Split type is encoded in an enum
     $scope.splitType = Object.freeze({
         NONE: "NONE",
         VERTICAL: "VERTICAL",
@@ -31,25 +30,9 @@ moduleLayout.directive("directivePanes", function($compile, $timeout){
             }
 
             function makeSplitComponent(orientation, node) {
-                var html = '<div data-split-pane-component data-' + orientation + '="50%">';
-                if (node.hasChildren()) {
-                    if (node.children.length === 1) {
-                        node = node.children[0];
-                        html += makeSplitInner(node.model.id);
-                    } else {
-                        // walk
-                        console.log("child hasChildren");
-                        var orientation = (node.model.split === scope.splitType.VERTICAL) ? "height" : "width";
-
-                        // FIXME: Hardcoded to 2 childs
-                        html += makeSplitPane(orientation, node.children[0], node.children[1]);
-                    }
-                } else {
-                    html += makeSplitInner(node.model.id);
-                }
-                html += '</div>';
-
-                return html;
+                return '<div data-split-pane-component data-' + orientation + '="50%">' +
+                makeChildrenLayout(node) +
+                '</div>';
             }
 
             function makeSplitDivider(orientation) {
@@ -65,30 +48,31 @@ moduleLayout.directive("directivePanes", function($compile, $timeout){
                     '</div>';
             }
 
+            function makeChildrenLayout(node) {
+                if (node.hasChildren()) {
+                    if (node.children.length < 2) {
+                        console.log("[WARN] @makeChildrenLayout: less than 2 childs");
+                    } else {
+                        console.log("[INFO] @makeChildrenLayout: splitting children");
+                        var orientation = (node.model.split === scope.splitType.VERTICAL) ? "height" : "width";
+
+                        return makeSplitPane(orientation, node.children[0], node.children[1]);
+                    }
+                } else {
+                    return makeSplitInner(node.model.id);
+                }
+
+                return "";
+            }
+
             scope.updateLayout = function() {
-                var layout = "";
                 var treeRootNode = scope.treeRoot.first(function(node) {
                     return node.isRoot();
                 });
 
-                if (treeRootNode.hasChildren()) {
-                    if (treeRootNode.children.length === 1) {
-                        treeRootNode = treeRootNode.children[0];
-                        layout += makeSplitInner(treeRootNode.model.id);
-                    } else {
-                        // walk
-                        console.log("root hasChildren");
-                        var orientation = (treeRootNode.model.split === scope.splitType.VERTICAL) ? "height" : "width";
-
-                        // FIXME: Hardcoded to 2 childs
-                        layout += makeSplitPane(orientation, treeRootNode.children[0], treeRootNode.children[1]);
-                    }
-                } else {
-                    layout += makeSplitInner(treeRootNode.model.id);
-                }
-
-                element.html(
-                    $compile(layout)(scope));
+                element.html($compile(
+                    makeChildrenLayout(treeRootNode)
+                )(scope));
             };
 
             scope.paneRemove = function(button) {
@@ -97,10 +81,30 @@ moduleLayout.directive("directivePanes", function($compile, $timeout){
                     return node1.model.id === id;
                 });
 
-                console.log("Removing " + node.model.id);
+                var parentNode = node.parent;
+                if (parentNode !== undefined) {
+                    console.log("[INFO] Removing " + node.model.id);
+                    var otherChildNode = (parentNode.children[0].model.id === id) ? parentNode.children[1] : parentNode.children[0];
 
-                node.drop();
-                scope.updateLayout();
+                    // Copy relevant child properties
+                    if (parentNode.isRoot()) {
+                        scope.treeRoot = scope.treeModel.parse({
+                            id: otherChildNode.model.id,
+                            split: otherChildNode.model.split,
+                            children: otherChildNode.model.children
+                        });
+                    } else {
+                        node.parent.config = otherChildNode.config;
+                        node.parent.model = otherChildNode.model;
+                        node.parent.children = otherChildNode.children;
+                    }
+
+                    // Children are garbage
+                    node = undefined;
+                    otherChildNode = undefined;
+
+                    scope.updateLayout();
+                }
             };
 
             scope.paneMaximize = function(button) {
@@ -109,7 +113,7 @@ moduleLayout.directive("directivePanes", function($compile, $timeout){
                     return node1.model.id === id;
                 });
 
-                console.log("Maximizing " + node.model.id);
+                console.log("[INFO] Maximizing " + node.model.id);
             };
 
             scope.paneSplitVertical = function(button) {
@@ -118,7 +122,7 @@ moduleLayout.directive("directivePanes", function($compile, $timeout){
                     return node1.model.id === id;
                 });
 
-                console.log("Splitting in Vertical " + node.model.id);
+                console.log("[INFO] Splitting in Vertical " + node.model.id);
                 node.model.split = scope.splitType.VERTICAL;
                 node.addChild(
                     scope.treeModel.parse({
@@ -142,7 +146,7 @@ moduleLayout.directive("directivePanes", function($compile, $timeout){
                     return node1.model.id === id;
                 });
 
-                console.log("Splitting in Horizontal " + node.model.id);
+                console.log("[INFO] Splitting in Horizontal " + node.model.id);
                 node.model.split = scope.splitType.HORIZONTAL;
                 node.addChild(
                     scope.treeModel.parse({
@@ -160,15 +164,8 @@ moduleLayout.directive("directivePanes", function($compile, $timeout){
                 scope.updateLayout();
             };
 
+            // Make initial layout
             scope.updateLayout();
-
-            /*
-            scope.$watch(attrs.directivePanes, function(value) {
-                    alert("something happened");
-                element.html(
-                    $compile(layout)(scope));
-            });
-            */
         } //link
     }; //return
 });
