@@ -23,12 +23,10 @@ moduleLayout.directive("directivePanes", function($compile, $timeout){
         scope: true,
         link: function(scope, element, attrs) {
             function makeSplitPane(orientation, node1, node2) {
-                return '<div class="pretty-split-pane-frame">' +
-			        '<div data-split-pane>' +
+                return '<div data-split-pane>' +
                     makeSplitComponent(orientation, node1) +
                     makeSplitDivider(orientation) +
                     makeSplitComponent(orientation, node2) +
-                    '</div>' +
                     '</div>';
             }
 
