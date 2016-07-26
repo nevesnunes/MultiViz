@@ -1,0 +1,3 @@
+[submodule "modules/angular-split-pane"]
+	path = modules/angular-split-pane
+	url = git@github.com:shagstrom/angular-split-pane.git
