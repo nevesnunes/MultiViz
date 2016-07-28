@@ -1,4 +1,5 @@
-var moduleLayout = angular.module('module-layout',[]);
+var moduleIndex = angular.module('moduleIndex');
+var moduleLayout = angular.module('moduleLayout',['moduleIndex']);
 
 moduleLayout.controller('controllerPanes', ['$scope', function($scope){
     $scope.splitType = Object.freeze({
@@ -187,6 +188,6 @@ moduleLayout.directive("directivePanes", function($compile, $timeout){
     }; //return
 });
 
-var moduleSplits = angular.module('module-splits', ['shagstrom.angular-split-pane']);
+var moduleSplits = angular.module('moduleSplits', ['shagstrom.angular-split-pane']);
 
-angular.module("moduleCombined", ["module-layout", "module-splits"]);
+angular.module("moduleCombined", ["moduleLayout", "moduleSplits"]);
