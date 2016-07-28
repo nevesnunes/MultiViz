@@ -13,6 +13,7 @@
 
     <!-- Custom styles for this template -->
     <link href="styles/dashboard.css" rel="stylesheet">
+    <link href="styles/controls.css" rel="stylesheet">
   </head>
 
   <body data-ng-app="moduleIndex">
@@ -23,10 +24,20 @@
             <div class="container-fluid">
               <div class="col-md-8 col-md-offset-2">
                 <h1 class="page-header">Bem-Vindo</h1>
-                <p> Seleccione um paciente da lista:</p>
-                <input type="text" class="form-control" placeholder="Procurar..." ng-model="patient">
+                <p> Seleccione um paciente:</p>
+
+                <div class="right-inner-addon" style="margin-bottom:10px;">
+                    <i class="glyphicon glyphicon-search"></i>
+                    <input type="text" id="input-patient" class="form-control" placeholder="Procurar..." ng-model="patientText" ng-enter="gotoViews($event, patientText)">
+                </div>
                 <p></p>
-                <button class="btn btn-primary" data-id='gotoViews' ng-click="gotoViews($event, patient)">Consultar Dados</button>
+				<div id="patient-table" class="table table-condensed table-bordered">
+                    <div directive-patient-text ng-repeat="patient in patientList | filter:patientText" ng-click="selectPatient($event, patient)">
+                        <div class="patient-table-entry">{{patient}}</div>
+                    </div>
+				</div>
+                <p></p>
+                <button class="btn btn-primary" data-id='gotoViews' ng-click="gotoViews($event, patientText)">Consultar Dados</button>
               </div>
             </div>
             </div>

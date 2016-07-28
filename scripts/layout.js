@@ -190,4 +190,4 @@ moduleLayout.directive("directivePanes", function($compile, $timeout){
 
 var moduleSplits = angular.module('moduleSplits', ['shagstrom.angular-split-pane']);
 
-angular.module("moduleCombined", ["moduleLayout", "moduleSplits"]);
+angular.module("moduleCombined", ["moduleIndex", "moduleLayout", "moduleSplits"]);

@@ -127,8 +127,9 @@ body {
  */
 .infobar {
     top: 50px;
-    background: #ddd;
-    border-bottom: 1px solid #aaa;
+    background: #fff;
+    border-bottom: 1px solid grey;
+    z-index: 1001; /* below navbar */
 }
 
 .infobar-text {
@@ -148,3 +149,18 @@ body {
 }
 
 .main, .pretty-split-pane-frame {background: #ddd;}
+
+#patient-table {
+    display: block;
+	width: 100%;
+    height: 10em;
+    overflow-y: auto;
+}
+
+.patient-table-entry {
+    line-height: 1.42857143;
+    text-align: left;
+    vertical-align: top;
+    border: 1px solid #ddd;
+    padding: 5px;
+}
