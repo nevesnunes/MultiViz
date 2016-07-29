@@ -18,7 +18,7 @@
 	</head>
 	<body class="panes" data-ng-app="moduleCombined">
     <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container-fluid">
+      <div class="container-fluid container-fluid-padding-fix">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
             <span class="sr-only">Toggle navigation</span>
@@ -26,27 +26,28 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <div ng-controller="controllerGoToIndex">
-            <a class="navbar-brand" ng-click="gotoIndex($event)">Fechar Sessão</a>
-          </div>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav navbar-right">
+          <ul class="nav navbar-nav navbar-left bold-text">
+            <li><a href="#">Diário Clínico</a></li>
             <li><a href="#">Carregar Layout</a></li>
             <li><a href="#">Guardar Layout</a></li>
-            <li><a href="#">Diário Clínico</a></li>
+            <li><a href="#">Novo Layout</a></li>
           </ul>
+          <div ng-controller="controllerGoToIndex">
+            <ul class="nav navbar-nav navbar-right bold-text">
+              <li><a href="#" ng-click="gotoIndex($event)">Fechar Sessão</a></li>
+            </ul>
+          </div>
           <form class="navbar-form navbar-right">
             <input type="text" class="form-control" placeholder="Procurar paciente...">
           </form>
         </div>
     </nav>
-    <nav class="navbar navbar-inverse navbar-fixed-top infobar">
+    <nav class="navbar navbar-fixed-top infobar">
       <div class="container-fluid">
-        <div class="navbar-header infobar-text">
-          <div ng-controller="controllerGetData">
-              <p>Paciente: {{ patient }}</p>
-          </div>
+        <div class="navbar-header bar-text">
+          <div ng-controller="controllerGetData" class="navbar-brand bar-text infobar-text">Paciente: {{ patient }}</div>
         </div>
       </div>
     </nav>

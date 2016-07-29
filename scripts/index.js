@@ -47,11 +47,24 @@ moduleIndex.controller('controllerAddData', ['$scope', 'patientData', function($
     window.location.href = "layout.html";
   };
   $scope.selectPatient = function (button, patient) {
-	var input = angular.element('#input-patient').scope();
-	input.patientText = patient;
+    var input = angular.element('#input-patient').scope();
+    input.patientText = patient;
 
     $scope.dataToShare = patient;
     patientData.setData($scope.dataToShare);
+  };
+
+  $scope.isDisabled = function (button) {
+    var input = angular.element('#input-patient').scope();
+    var text = input.patientText;
+
+    var invalidText = ((text === undefined) || (text === ""));
+    if (invalidText) {
+      $scope.tooltipText = "Nenhum paciente foi escolhido";
+    } else {
+      $scope.tooltipText = "";
+    }
+    return invalidText;
   };
 }]);
 
@@ -79,15 +92,37 @@ moduleIndex.directive('directivePatientText', [function() {
     };
 }]);
 
+moduleIndex.directive('directiveTooltip', [function() {
+    return {
+        link: function(scope, element, attributes) {
+            element
+                .on('mouseenter',function() {
+                    /* God bless bootstrap's obnoxious tooltips */
+                    scope.isDisabled();
+                    element.tooltip('hide')
+                        .attr('data-placement', 'right')
+                        .attr('data-original-title', scope.tooltipText)
+                        .tooltip('fixTitle')
+                        .tooltip('show');
+                })
+                .on('mouseleave',function() {
+                    element.tooltip('hide');
+                });
+        }
+    };
+}]);
+
 moduleIndex.directive('ngEnter', function() {
 	return function(scope, element, attrs) {
 		element.bind("keydown keypress", function(event) {
-			if(event.which === 13) {
-				scope.$apply(function(){
-					scope.$eval(attrs.ngEnter);
-				});
-				
-				event.preventDefault();
+			if (event.which === 13) {
+        if (!scope.isDisabled()) {
+          scope.$apply(function(){
+            scope.$eval(attrs.ngEnter);
+          });
+          
+          event.preventDefault();
+        }
 			}
 		});
 	};

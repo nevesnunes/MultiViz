@@ -105,21 +105,32 @@ body {
 }
 
 /*
- * Views
+ * Custom elements
  */
+
+.bold-text {
+  font-weight: bold;
+}
+
+.container-fluid-padding-fix {
+  padding-left: 0; 
+}
+
+/* Panes */
+
+/* Panes need all surrounding containers to impose minimum height */
+.panes {
+    height: 100%;
+    min-height: 100%;
+}
+
 .col-center {
     float: none;
     margin-right: auto;
     margin-left: auto;
 }
 
-/* 
- * Panes need all surrounding containers to impose minimum height
- */
-.panes {
-    height: 100%;
-    min-height: 100%;
-}
+.main, .pretty-split-pane-frame {background: #ddd;}
 
 /* 
  * Due to pane limitations, we display information in fixed containers,
@@ -132,12 +143,13 @@ body {
     z-index: 1001; /* below navbar */
 }
 
-.infobar-text {
-    float: left;
-    height: 50px;
-    padding: 15px 0;
-    font-size: 18px;
-    line-height: 20px;
+.bar-text {
+    font-size: 14px;
+}
+
+.infobar-text,
+.infobat-text:hover {
+    color: black;
 }
 
 .sidebar {
@@ -148,19 +160,36 @@ body {
     padding-top: 100px;
 }
 
-.main, .pretty-split-pane-frame {background: #ddd;}
+/* Tables & Menus */
 
 #patient-table {
     display: block;
-	width: 100%;
+    width: 100%;
     height: 10em;
     overflow-y: auto;
 }
 
 .patient-table-entry {
+    cursor: pointer;
     line-height: 1.42857143;
     text-align: left;
     vertical-align: top;
     border: 1px solid #ddd;
     padding: 5px;
+}
+
+/* Tooltips */
+
+.tooltip-wrapper {
+  display: inline-block; /* display: block works as well */
+}
+
+.tooltip-wrapper .btn[disabled] {
+  /* don't let button block mouse events from reaching wrapper */
+  pointer-events: none;
+}
+
+.tooltip-wrapper.disabled {
+  /* OPTIONAL pointer-events setting above blocks cursor setting, so set it here */
+  cursor: not-allowed;
 }

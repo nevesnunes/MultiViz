@@ -24,7 +24,7 @@
             <div class="container-fluid">
               <div class="col-md-8 col-md-offset-2">
                 <h1 class="page-header">Bem-Vindo</h1>
-                <p> Seleccione um paciente:</p>
+                <p> Escolha um paciente:</p>
 
                 <div class="right-inner-addon" style="margin-bottom:10px;">
                     <i class="glyphicon glyphicon-search"></i>
@@ -37,8 +37,9 @@
                     </div>
 				</div>
                 <p></p>
-                <button class="btn btn-primary" data-id='gotoViews' ng-click="gotoViews($event, patientText)">Consultar Dados</button>
-              </div>
+                <div class="tooltip-wrapper disabled" title="{{tooltipText}}" directive-tooltip>
+                  <button class="btn btn-primary" data-id='gotoViews' ng-click="gotoViews($event, patientText)" ng-disabled="isDisabled($event)">Consultar Dados</button>
+                </div>
             </div>
             </div>
         </div>
