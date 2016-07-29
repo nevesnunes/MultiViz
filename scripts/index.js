@@ -1,17 +1,27 @@
 var moduleIndex = angular.module('moduleIndex',[]);
 
+moduleIndex.factory('retrievePatientData', ['$http',
+        function($http) {
+    var retrieveData = function() {
+    return $http.get('data/patients.json')
+        .then(function(result) { return result.data; });
+    };
+
+    return { retrieveData: retrieveData };
+}]);
+
 moduleIndex.service('patientData', function($window) {
     var KEY = 'App.patientData';
 
     var addData = function(newObj) {
-        var mydata = $window.sessionStorage.getItem(KEY);
-        if (mydata) {
-            mydata = JSON.parse(mydata);
-        } else {
-            mydata = [];
-        }
-        mydata.push(newObj);
-        $window.sessionStorage.setItem(KEY, JSON.stringify(mydata));
+      var mydata = $window.sessionStorage.getItem(KEY);
+      if (mydata) {
+        mydata = JSON.parse(mydata);
+      } else {
+        mydata = [];
+      }
+      mydata.push(newObj);
+      $window.sessionStorage.setItem(KEY, JSON.stringify(mydata));
     };
 
     var setData = function(newObj) {
@@ -33,11 +43,40 @@ moduleIndex.service('patientData', function($window) {
     };
 });
 
-moduleIndex.controller('controllerAddData', ['$scope', 'patientData', function($scope, patientData, $location) {
-  $scope.patientList = ["Alice", "Bob", "Pedro Paulo Pinto Peixoto"];
-  var i;	
-  for (i = 0; i < 100; i++)
-    $scope.patientList.push("Nome " + i.toString());
+moduleIndex.controller('controllerAddData',
+    ['$scope', '$http', 'patientData', 'retrievePatientData',
+    function($scope, $http, patientData, retrievePatientData, $location) {
+  var patientDataPromise = retrievePatientData.retrieveData();
+  patientDataPromise.then(function(result) {  
+      $scope.patientList = result.map(function(data) {
+          return data.name;
+      });
+
+      $scope.isDisabled = function (button) {
+        var input = angular.element('#input-patient').scope();
+        var text = input.patientText;
+
+        var emptyText = ((text === undefined) || (text === ""));
+        var mismatchedText = ($scope.patientList.indexOf(text) === -1);
+        return emptyText || mismatchedText;
+      };
+
+      $scope.setTooltipText = function (button) {
+        var input = angular.element('#input-patient').scope();
+        var text = input.patientText;
+
+        var emptyText = ((text === undefined) || (text === ""));
+        var mismatchedText = ($scope.patientList.indexOf(text) === -1);
+        if (emptyText) {
+          $scope.tooltipText = "Nenhum paciente foi escolhido";
+        } else if (mismatchedText) {
+          $scope.tooltipText = "O paciente escolhido não existe";
+        } else {
+          $scope.tooltipText = "";
+        }
+      };
+  });
+
   $scope.dataToShare = [];
 
   $scope.gotoViews = function (button, patient) {
@@ -46,25 +85,13 @@ moduleIndex.controller('controllerAddData', ['$scope', 'patientData', function($
     
     window.location.href = "layout.html";
   };
+
   $scope.selectPatient = function (button, patient) {
     var input = angular.element('#input-patient').scope();
     input.patientText = patient;
 
-    $scope.dataToShare = patient;
+    $scope.dataToShare = input.patientText;
     patientData.setData($scope.dataToShare);
-  };
-
-  $scope.isDisabled = function (button) {
-    var input = angular.element('#input-patient').scope();
-    var text = input.patientText;
-
-    var invalidText = ((text === undefined) || (text === ""));
-    if (invalidText) {
-      $scope.tooltipText = "Nenhum paciente foi escolhido";
-    } else {
-      $scope.tooltipText = "";
-    }
-    return invalidText;
   };
 }]);
 
@@ -97,11 +124,11 @@ moduleIndex.directive('directiveTooltip', [function() {
         link: function(scope, element, attributes) {
             element
                 .on('mouseenter',function() {
-                    /* God bless bootstrap's obnoxious tooltips */
-                    scope.isDisabled();
+                    scope.setTooltipText();
                     element.tooltip('hide')
                         .attr('data-placement', 'right')
                         .attr('data-original-title', scope.tooltipText)
+                        .attr('title', scope.tooltipText)
                         .tooltip('fixTitle')
                         .tooltip('show');
                 })
@@ -116,14 +143,32 @@ moduleIndex.directive('ngEnter', function() {
 	return function(scope, element, attrs) {
 		element.bind("keydown keypress", function(event) {
 			if (event.which === 13) {
-        if (!scope.isDisabled()) {
-          scope.$apply(function(){
-            scope.$eval(attrs.ngEnter);
-          });
-          
-          event.preventDefault();
-        }
+                if (!scope.isDisabled()) {
+                  scope.$apply(function(){
+                    scope.$eval(attrs.ngEnter);
+                  });
+                  
+                  event.preventDefault();
+                }
 			}
 		});
 	};
 });
+
+moduleIndex.directive('ngKeySelect', ['$timeout', 'patientData', function($timeout, patientData) {
+	return function(scope, element, attrs) {
+		element.bind("keydown keypress", function(event) {
+			if (event.which === 40) {
+                $timeout(function() {
+                    var input = angular.element('#input-patient').scope();
+                    input.patientText = scope.filteredPatientList[0];
+
+                    scope.dataToShare = input.patientText;
+                    patientData.setData(scope.dataToShare);
+
+                    event.preventDefault();
+                }, 0);
+			}
+		});
+	};
+}]);

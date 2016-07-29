@@ -28,17 +28,17 @@
 
                 <div class="right-inner-addon" style="margin-bottom:10px;">
                     <i class="glyphicon glyphicon-search"></i>
-                    <input type="text" id="input-patient" class="form-control" placeholder="Procurar..." ng-model="patientText" ng-enter="gotoViews($event, patientText)">
+                    <input type="text" id="input-patient" class="form-control" placeholder="Procurar..." ng-model="patientText" ng-enter="gotoViews($event, patientText)" ng-key-select autofocus tabindex=1>
                 </div>
                 <p></p>
-				<div id="patient-table" class="table table-condensed table-bordered">
-                    <div directive-patient-text ng-repeat="patient in patientList | filter:patientText" ng-click="selectPatient($event, patient)">
+                <div id="patient-table" class="table table-condensed table-bordered">
+                    <div directive-patient-text ng-repeat="patient in filteredPatientList = (patientList | filter:patientText)" ng-click="selectPatient($event, patient)">
                         <div class="patient-table-entry">{{patient}}</div>
                     </div>
-				</div>
+                </div>
                 <p></p>
                 <div class="tooltip-wrapper disabled" title="{{tooltipText}}" directive-tooltip>
-                  <button class="btn btn-primary" data-id='gotoViews' ng-click="gotoViews($event, patientText)" ng-disabled="isDisabled($event)">Consultar Dados</button>
+                  <button class="btn btn-primary" id='button-goto-views' ng-click="gotoViews($event, patientText)" ng-disabled="isDisabled($event)" tabindex=2>Consultar Dados</button>
                 </div>
             </div>
             </div>
