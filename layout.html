@@ -10,11 +10,14 @@
         <!-- Bootstrap core CSS -->
         <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 
-        <!-- Custom styles for this template -->
+        <!-- Other style dependencies -->
         <link rel="stylesheet" href="modules/angular-split-pane/node_modules/@shagstrom/split-pane/split-pane.css" />
         <link rel="stylesheet" href="modules/angular-split-pane/node_modules/@shagstrom/split-pane/pretty-split-pane.css" />
+
+        <!-- Our styles  -->
         <link href="styles/dashboard.css" rel="stylesheet">
         <link href="styles/controls.css" rel="stylesheet">
+        <link href="styles/matrix.css" rel="stylesheet">
 	</head>
 	<body class="panes" data-ng-app="moduleCombined">
     <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -78,6 +81,9 @@
     <!-- Angular -->
     <script src="node_modules/angular/angular.js"></script>
 
+    <!-- D3 -->
+		<script src="https://d3js.org/d3.v4.min.js"></script>
+
     <!-- Other Dependencies -->
     <script src="node_modules/tree-model/dist/TreeModel.js"></script>
     <script src="node_modules/node-uuid/uuid.js"></script>
@@ -86,6 +92,7 @@
 
     <!-- Our scripts -->
     <script src="scripts/index.js"></script>
+    <script src="scripts/visualizations.js"></script>
     <script src="scripts/layout.js"></script>
 	</body>
 </html>

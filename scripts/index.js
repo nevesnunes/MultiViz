@@ -10,26 +10,27 @@ moduleIndex.factory('retrievePatientData', ['$http',
     return { retrieveData: retrieveData };
 }]);
 
-moduleIndex.service('patientData', function($window) {
-    var KEY = 'App.patientData';
+moduleIndex.factory('patientData', function($window) {
+    var KEY_PATIENT = 'App.patient';
+    var KEY_PATIENTS = 'App.patients';
 
-    var addData = function(newObj) {
-      var mydata = $window.sessionStorage.getItem(KEY);
-      if (mydata) {
-        mydata = JSON.parse(mydata);
-      } else {
-        mydata = [];
-      }
-      mydata.push(newObj);
-      $window.sessionStorage.setItem(KEY, JSON.stringify(mydata));
+    var addData = function(key, newObj) {
+        var mydata = $window.sessionStorage.getItem(key);
+        if (mydata) {
+            mydata = JSON.parse(mydata);
+        } else {
+            mydata = [];
+        }
+        mydata.push(newObj);
+        $window.sessionStorage.setItem(key, JSON.stringify(mydata));
     };
 
-    var setData = function(newObj) {
-        $window.sessionStorage.setItem(KEY, JSON.stringify(newObj));
+    var setData = function(key, newObj) {
+        $window.sessionStorage.setItem(key, JSON.stringify(newObj));
     };
 
-    var getData = function(){
-        var mydata = $window.sessionStorage.getItem(KEY);
+    var getData = function(key){
+        var mydata = $window.sessionStorage.getItem(key);
         if (mydata) {
             mydata = JSON.parse(mydata);
         }
@@ -37,6 +38,8 @@ moduleIndex.service('patientData', function($window) {
     };
 
     return {
+        KEY_PATIENT: KEY_PATIENT,
+        KEY_PATIENTS: KEY_PATIENTS,
         addData: addData,
         setData: setData,
         getData: getData
@@ -51,6 +54,7 @@ moduleIndex.controller('controllerAddData',
       $scope.patientList = result.map(function(data) {
           return data.name;
       });
+      patientData.setData(patientData.KEY_PATIENTS, result);
 
       $scope.isDisabled = function (button) {
         var input = angular.element('#input-patient').scope();
@@ -81,7 +85,7 @@ moduleIndex.controller('controllerAddData',
 
   $scope.gotoViews = function (button, patient) {
     $scope.dataToShare = patient;
-    patientData.setData($scope.dataToShare);
+    patientData.setData(patientData.KEY_PATIENT, $scope.dataToShare);
     
     window.location.href = "layout.html";
   };
@@ -91,12 +95,12 @@ moduleIndex.controller('controllerAddData',
     input.patientText = patient;
 
     $scope.dataToShare = input.patientText;
-    patientData.setData($scope.dataToShare);
+    patientData.setData(patientData.KEY_PATIENT, $scope.dataToShare);
   };
 }]);
 
 moduleIndex.controller('controllerGetData', ['$scope', 'patientData', function($scope, patientData){
-    $scope.patient = patientData.getData();
+    $scope.patient = patientData.getData(patientData.KEY_PATIENT);
 }]);
 
 moduleIndex.controller('controllerGoToIndex', ['$scope', 'patientData', function($scope, patientData){
@@ -142,6 +146,7 @@ moduleIndex.directive('directiveTooltip', [function() {
 moduleIndex.directive('ngEnter', function() {
 	return function(scope, element, attrs) {
 		element.bind("keydown keypress", function(event) {
+            /* enter */
 			if (event.which === 13) {
                 if (!scope.isDisabled()) {
                   scope.$apply(function(){
@@ -158,13 +163,14 @@ moduleIndex.directive('ngEnter', function() {
 moduleIndex.directive('ngKeySelect', ['$timeout', 'patientData', function($timeout, patientData) {
 	return function(scope, element, attrs) {
 		element.bind("keydown keypress", function(event) {
+            /* arrow down */
 			if (event.which === 40) {
                 $timeout(function() {
                     var input = angular.element('#input-patient').scope();
                     input.patientText = scope.filteredPatientList[0];
 
                     scope.dataToShare = input.patientText;
-                    patientData.setData(scope.dataToShare);
+                    patientData.setData(patientData.KEY_PATIENT, scope.dataToShare);
 
                     event.preventDefault();
                 }, 0);

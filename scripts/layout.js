@@ -1,5 +1,6 @@
 var moduleIndex = angular.module('moduleIndex');
-var moduleLayout = angular.module('moduleLayout',['moduleIndex']);
+var moduleVisualizations = angular.module('moduleVisualizations');
+var moduleLayout = angular.module('moduleLayout',['moduleIndex', 'moduleVisualizations']);
 
 moduleLayout.controller('controllerPanes', ['$scope', function($scope){
     $scope.splitType = Object.freeze({
@@ -19,7 +20,8 @@ moduleLayout.controller('controllerPanes', ['$scope', function($scope){
     $scope.currentNode = $scope.treeRoot;
 }]);
 
-moduleLayout.directive("directivePanes", function($compile, $timeout){
+moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'makeVisualization',
+    function($compile, $timeout, makeVisualization){
 	return { 
         scope: true,
         link: function(scope, element, attrs) {
@@ -45,6 +47,13 @@ moduleLayout.directive("directivePanes", function($compile, $timeout){
                 var node = scope.treeRoot.first(function (node1) {
                     return node1.model.id === id;
                 });
+
+                // FIXME: Just for testing a viz
+                var visualization = '';
+                if (node.isRoot()) {
+                  visualization = '<div id=viz-heatmap>viz</div>'; 
+                }
+
                 var viewportButton = '';
                 if (!node.isRoot()) {
                     if (scope.currentNode.model.id === id) {
@@ -59,6 +68,7 @@ moduleLayout.directive("directivePanes", function($compile, $timeout){
                     viewportButton +
                     '<button class="btn btn-primary" data-id=' + id + ' ng-click="paneSplitVertical($event)">Separar na Vertical</button>' +
                     '<button class="btn btn-primary" data-id=' + id + ' ng-click="paneSplitHorizontal($event)">Separar na Horizontal</button>' +
+                    visualization +
                     '</div>';
             }
 
@@ -83,6 +93,7 @@ moduleLayout.directive("directivePanes", function($compile, $timeout){
                 element.html($compile(
                     makeChildrenLayout(scope.currentNode)
                 )(scope));
+                makeVisualization.makeHeatMap();
             };
 
             scope.paneRemove = function(button) {
@@ -186,7 +197,7 @@ moduleLayout.directive("directivePanes", function($compile, $timeout){
             scope.updateLayout();
         } //link
     }; //return
-});
+}]);
 
 var moduleSplits = angular.module('moduleSplits', ['shagstrom.angular-split-pane']);
 
