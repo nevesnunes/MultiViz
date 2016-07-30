@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,42 +15,42 @@
     <!-- Custom styles for this template -->
     <link href="styles/dashboard.css" rel="stylesheet">
     <link href="styles/controls.css" rel="stylesheet">
-  </head>
+</head>
 
-  <body data-ng-app="moduleIndex">
+<body data-ng-app="moduleIndex">
     <div class="container-fluid">
-      <div class="row">
-        <div class="col-sm-6 col-sm-offset-3 col-md-8 col-md-offset-2">
-            <div class="container-fluid">
-              <div class="col-md-8 col-md-offset-2">
-                    <h1 class="page-header">Bem-Vindo</h1>
-                    <p> Escolha um paciente:</p>
-                    <div ng-controller="controllerAddData">
-                        <div class="right-inner-addon" style="margin-bottom:10px;">
-                            <i class="glyphicon glyphicon-search"></i>
-                            <input type="text" id="input-patient" class="form-control" placeholder="Procurar..." ng-model="patientText.name" ng-key-select autofocus tabindex=1>
-                        </div>
-                        <p></p>
-                        <div id="patient-table" class="table table-condensed table-bordered">
-                            <div ng-repeat="patient in filteredPatientList = (patientList | filter:patientText)" ng-click="selectPatient($event, patient)">
-                                <div id="patient-table-entry-option-{{$index}}" class="patient-table-entry" ng-class="isSelected($index)">{{::patient.name}}</div>
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-3 col-md-8 col-md-offset-2">
+                <div class="container-fluid">
+                    <div class="col-md-8 col-md-offset-2">
+                        <h1 class="page-header">Bem-Vindo</h1>
+                        <p> Escolha um paciente:</p>
+                        <div ng-controller="controllerAddData">
+                            <div class="right-inner-addon" style="margin-bottom:10px;">
+                                <i class="glyphicon glyphicon-search"></i>
+                                <input type="text" id="input-patient" class="form-control" placeholder="Procurar..." ng-model="patientText.name" ng-key-select autofocus tabindex=1>
                             </div>
-                        </div>
+                            <p></p>
+                            <div id="patient-table" class="table table-condensed table-bordered">
+                                <div ng-repeat="patient in filteredPatientList = (patientList | filter:patientText)" ng-click="selectPatient($event, patient)">
+                                    <div id="patient-table-entry-option-{{$index}}" class="patient-table-entry" ng-class="isSelected($index)">{{::patient.name}}</div>
+                                </div>
+                            </div>
 
-                        <p></p>
-                        <div class="tooltip-wrapper disabled" title="{{::tooltipText}}" directive-tooltip>
-                          <button class="btn btn-primary" id='button-goto-views' ng-click="gotoViews($event, patientText)" ng-disabled="isDisabled($event)" tabindex=2>Consultar Dados</button>
+                            <p></p>
+                            <div class="tooltip-wrapper disabled" title="{{::tooltipText}}" directive-tooltip>
+                                <button class="btn btn-primary" id='button-goto-views' ng-click="gotoViews($event, patientText)" ng-disabled="isDisabled($event)" tabindex=2>Consultar Dados</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-              </div>
+            </div>
         </div>
-      </div>
     </div>
 
     <!-- Bootstrap -->
     <!-- NOTE: Loading jQuery compatible with angular-split-pane -->
-	<script src="modules/angular-split-pane/node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="modules/angular-split-pane/node_modules/jquery/dist/jquery.min.js"></script>
     <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 
     <!-- Angular -->
@@ -57,5 +58,6 @@
 
     <!-- Our scripts -->
     <script src="scripts/index.js"></script>
-  </body>
+</body>
+
 </html>
