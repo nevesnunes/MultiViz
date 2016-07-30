@@ -178,7 +178,9 @@ body {
     padding: 5px;
 }
 
-.patient-table-entry-selected {
+.patient-table-entry:hover,
+.patient-table-entry-selected,
+.entrySelected {
     background-color: #c4e3f3;
     color: #31708f;
 }

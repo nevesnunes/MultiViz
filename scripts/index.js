@@ -82,6 +82,7 @@ moduleIndex.controller('controllerAddData',
   });
 
   $scope.dataToShare = [];
+  $scope.selectedOption = -1;
 
   $scope.gotoViews = function (button, patient) {
     $scope.dataToShare = patient;
@@ -96,6 +97,8 @@ moduleIndex.controller('controllerAddData',
 
     $scope.dataToShare = input.patientText;
     patientData.setData(patientData.KEY_PATIENT, $scope.dataToShare);
+                    
+    $scope.selectedOption = -1;
   };
 }]);
 
@@ -109,27 +112,14 @@ moduleIndex.controller('controllerGoToIndex', ['$scope', 'patientData', function
   };
 }]);
 
-moduleIndex.directive('directivePatientText', [function() {
-    return {
-        link: function(scope, element, attributes) {
-            element
-                .on('mouseenter',function() {
-                    element.css({'background-color':'#c4e3f3', 'color':'#31708f'});
-                })
-                .on('mouseleave',function() {
-                    element.css({'background-color':'white', 'color':'black'});
-                });
-        }
-    };
-}]);
-
 moduleIndex.directive('directiveTooltip', [function() {
     return {
         link: function(scope, element, attributes) {
             element
                 .on('mouseenter',function() {
                     scope.setTooltipText();
-                    element.tooltip('hide')
+                    element
+                        .tooltip('hide')
                         .attr('data-placement', 'right')
                         .attr('data-original-title', scope.tooltipText)
                         .attr('title', scope.tooltipText)
@@ -143,27 +133,59 @@ moduleIndex.directive('directiveTooltip', [function() {
     };
 }]);
 
-moduleIndex.directive('ngKeySelect', ['$timeout', 'patientData', function($timeout, patientData) {
-	return function(scope, element, attrs) {
-		element.bind("keydown keypress", function(event) {
-            /* enter */
-			if (event.which === 13) {
-                if (!scope.isDisabled()) {
-                  scope.gotoViews(event, scope.patientText);          
-
-                  event.preventDefault();
-                }
-            /* arrow down */
-            } else if (event.which === 40) {
-                $timeout(function() {
-                    scope.patientText = scope.filteredPatientList[0];
-                    
-                    scope.dataToShare = scope.patientText;
-                    patientData.setData(patientData.KEY_PATIENT, scope.dataToShare);
-
+moduleIndex.directive('ngKeySelect',
+        ['$compile', '$timeout', 'patientData',
+        function($compile, $timeout, patientData) {
+	return {
+        scope: false, // Use the same scope to not break filter of ng-model
+        link: function(scope, element, attrs) {
+            element.bind("keyup", function(event) {
+                var elems = scope.filteredPatientList;
+                switch (event.which) {
+                  case 40: {
+                    if (scope.selectedOption === -1) {
+                      scope.selectedOption = 0;
+                    } else {
+                      scope.selectedOption = scope.selectedOption === elems.length - 1 ?
+                        scope.selectedOption :
+                        scope.selectedOption + 1;
+                    }
                     event.preventDefault();
-                }, 0);
-			}
-		});
-	};
+                    break;
+                  }
+                  case 38: {
+                    if (scope.selectedOption === -1) {
+                      scope.selectedOption = elems.length - 1;
+                    } else {
+                      scope.selectedOption = scope.selectedOption === 0 ?
+                        0 : scope.selectedOption - 1;
+                    }
+                    event.preventDefault();
+                    break;
+                  }
+                  case 13: {
+                    $timeout(function() {
+                        if (!scope.isDisabled() && (scope.selectedOption === -1)) {
+                            scope.gotoViews(event, scope.patientText);          
+                        } else {
+                            scope.patientText = scope.filteredPatientList[scope.selectedOption];
+                            
+                            scope.dataToShare = scope.patientText;
+                            patientData.setData(patientData.KEY_PATIENT, scope.dataToShare);
+  
+                            scope.selectedOption = -1;
+                        }
+
+                        event.preventDefault();
+                    }, 0);
+                    break;
+                  }
+                  default: {
+                    scope.selectedOption = -1;
+                  }
+                } //switch
+                console.log(scope.selectedOption + ": " + elems[scope.selectedOption]);
+              }); //bind
+        } //link
+    }; //return
 }]);
