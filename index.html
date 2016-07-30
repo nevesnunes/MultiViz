@@ -21,26 +21,26 @@
       <div class="row">
         <div class="col-sm-6 col-sm-offset-3 col-md-8 col-md-offset-2">
             <div ng-controller="controllerAddData">
-            <div class="container-fluid">
-              <div class="col-md-8 col-md-offset-2">
-                <h1 id="wellcome" class="page-header">Bem-Vindo</h1>
-                <p> Escolha um paciente:</p>
+                <div class="container-fluid">
+                  <div class="col-md-8 col-md-offset-2">
+                    <h1 id="wellcome" class="page-header">Bem-Vindo</h1>
+                    <p> Escolha um paciente:</p>
 
-                <div class="right-inner-addon" style="margin-bottom:10px;">
-                    <i class="glyphicon glyphicon-search"></i>
-                    <input type="text" id="input-patient" class="form-control" placeholder="Procurar..." ng-model="patientText" ng-key-select autofocus tabindex=1>
-                </div>
-                <p></p>
-                <div id="patient-table" class="table table-condensed table-bordered">
-                    <div directive-patient-text ng-repeat="patient in filteredPatientList = (patientList | filter:patientText)" ng-click="selectPatient($event, patient)">
-                        <div class="patient-table-entry">{{patient}}</div>
+                    <div class="right-inner-addon" style="margin-bottom:10px;">
+                        <i class="glyphicon glyphicon-search"></i>
+                        <input type="text" id="input-patient" class="form-control" placeholder="Procurar..." ng-model="patientText" ng-key-select autofocus tabindex=1>
+                    </div>
+                    <p></p>
+                    <div id="patient-table" class="table table-condensed table-bordered">
+                        <div directive-patient-text ng-repeat="patient in filteredPatientList = (patientList | filter:patientText)" ng-click="selectPatient($event, patient)">
+                            <div class="patient-table-entry">{{patient}}</div>
+                        </div>
+                    </div>
+                    <p></p>
+                    <div class="tooltip-wrapper disabled" title="{{tooltipText}}" directive-tooltip>
+                      <button class="btn btn-primary" id='button-goto-views' ng-click="gotoViews($event, patientText)" ng-disabled="isDisabled($event)" tabindex=2>Consultar Dados</button>
                     </div>
                 </div>
-                <p></p>
-                <div class="tooltip-wrapper disabled" title="{{tooltipText}}" directive-tooltip>
-                  <button class="btn btn-primary" id='button-goto-views' ng-click="gotoViews($event, patientText)" ng-disabled="isDisabled($event)" tabindex=2>Consultar Dados</button>
-                </div>
-            </div>
             </div>
         </div>
       </div>
