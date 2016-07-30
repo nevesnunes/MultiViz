@@ -58,11 +58,35 @@ moduleIndex.controller('controllerAddData',
         $scope.patientList = result.map(function(data, index) {
             return {
                 id: index,
-                isSelected: false,
                 name: data.name
             };
         });
         patientData.setData(patientData.KEY_PATIENTS, result);
+
+        $scope.clonePatient = function(obj) {
+            return (obj === undefined) ?
+                {} :
+                {
+                    id: obj.id,
+                    name: obj.name
+                };
+        };
+
+        $scope.getPatientByID = function(id) {
+            var result;
+            $scope.patientList.some(function(patient, i) {
+                return (patient.id === id) ? ((result = patient), true) : false;
+            });
+            return result;
+        };
+
+        $scope.getPatientByName = function(name) {
+            var result;
+            $scope.patientList.some(function(patient, i) {
+                return (patient.name === name) ? ((result = patient), true) : false;
+            });
+            return result;
+        };
 
         $scope.patientListContainsName = function(text) {
             return $scope.patientList.some(function(patient) {
@@ -72,19 +96,19 @@ moduleIndex.controller('controllerAddData',
 
         $scope.isDisabled = function(button) {
             var input = angular.element('#input-patient').scope();
-            var text = input.patientText && input.patientText.name;
+            var inputModel = input.patientModel;
 
-            var emptyText = ((text === undefined) || (text === ""));
-            var mismatchedText = !($scope.patientListContainsName(text));
+            var emptyText = (inputModel === undefined) || (inputModel.name === "");
+            var mismatchedText = (inputModel === undefined) || !($scope.patientListContainsName(inputModel.name));
             return emptyText || mismatchedText;
         };
 
         $scope.setTooltipText = function(button) {
             var input = angular.element('#input-patient').scope();
-            var text = input.patientText && input.patientText.name;
+            var inputModel = input.patientModel;
 
-            var emptyText = ((text === undefined) || (text === ""));
-            var mismatchedText = !($scope.patientListContainsName(text));
+            var emptyText = (inputModel === undefined) || (inputModel.name === "");
+            var mismatchedText = (inputModel === undefined) || !($scope.patientListContainsName(inputModel.name));
             if (emptyText) {
                 $scope.tooltipText = "Nenhum paciente foi escolhido";
             } else if (mismatchedText) {
@@ -98,24 +122,30 @@ moduleIndex.controller('controllerAddData',
     $scope.dataToShare = [];
     $scope.selectedOption = -1;
 
-    $scope.gotoViews = function(button, patient) {
-        $scope.dataToShare = patient;
+    $scope.gotoViews = function(button, patientModel) {
+        $scope.dataToShare = $scope.getPatientByID(patientModel.id);
+
+        // User only introduced text, thus no id was assigned;
+        // we have to search with this text
+        if ($scope.dataToShare === undefined) {
+            $scope.dataToShare = $scope.getPatientByName(patientModel.name);
+        } 
         patientData.setData(patientData.KEY_PATIENT, $scope.dataToShare);
 
         window.location.href = "layout.html";
     };
 
-    $scope.selectPatient = function(button, patient) {
+    $scope.selectEntry = function(button, patient) {
         var input = angular.element('#input-patient').scope();
-        input.patientText = patient;
+        input.patientModel = $scope.clonePatient(patient);
 
-        $scope.dataToShare = input.patientText;
+        $scope.dataToShare = $scope.clonePatient(patient);
         patientData.setData(patientData.KEY_PATIENT, $scope.dataToShare);
 
         $scope.selectedOption = -1;
     };
 
-    $scope.isSelected = function(id) {
+    $scope.isEntrySelected = function(id) {
         return (id === $scope.selectedOption) ? "entrySelected" : "";
     };
 }]);
@@ -191,11 +221,11 @@ moduleIndex.directive('ngKeySelect', ['$compile', '$timeout', 'patientData',
                             case 13: {
                                 $timeout(function() {
                                     if (!scope.isDisabled() && (scope.selectedOption === -1)) {
-                                        scope.gotoViews(event, scope.patientText);
+                                        scope.gotoViews(event, scope.patientModel);
                                     } else {
-                                        scope.patientText = scope.filteredPatientList[scope.selectedOption];
+                                        scope.patientModel = scope.clonePatient(elems[scope.selectedOption]);
 
-                                        scope.dataToShare = scope.patientText;
+                                        scope.dataToShare = scope.clonePatient(elems[scope.selectedOption]);
                                         patientData.setData(patientData.KEY_PATIENT, scope.dataToShare);
 
                                         scope.selectedOption = -1;
