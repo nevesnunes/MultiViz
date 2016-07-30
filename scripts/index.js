@@ -51,26 +51,36 @@ moduleIndex.controller('controllerAddData',
     function($scope, $http, patientData, retrievePatientData, $location) {
   var patientDataPromise = retrievePatientData.retrieveData();
   patientDataPromise.then(function(result) {  
-      $scope.patientList = result.map(function(data) {
-          return data.name;
+      $scope.patientList = result.map(function(data, index) {
+          return {
+            id: index,
+            isSelected: false,
+            name: data.name
+          };
       });
       patientData.setData(patientData.KEY_PATIENTS, result);
 
+      $scope.patientListContainsName = function(text) {
+        return $scope.patientList.some(function(patient) {
+            return patient.name === text;
+        });
+      };
+
       $scope.isDisabled = function (button) {
         var input = angular.element('#input-patient').scope();
-        var text = input.patientText;
+        var text = input.patientText && input.patientText.name;
 
         var emptyText = ((text === undefined) || (text === ""));
-        var mismatchedText = ($scope.patientList.indexOf(text) === -1);
+        var mismatchedText = !($scope.patientListContainsName(text));
         return emptyText || mismatchedText;
       };
 
       $scope.setTooltipText = function (button) {
         var input = angular.element('#input-patient').scope();
-        var text = input.patientText;
+        var text = input.patientText && input.patientText.name;
 
         var emptyText = ((text === undefined) || (text === ""));
-        var mismatchedText = ($scope.patientList.indexOf(text) === -1);
+        var mismatchedText = !($scope.patientListContainsName(text));
         if (emptyText) {
           $scope.tooltipText = "Nenhum paciente foi escolhido";
         } else if (mismatchedText) {
@@ -99,6 +109,10 @@ moduleIndex.controller('controllerAddData',
     patientData.setData(patientData.KEY_PATIENT, $scope.dataToShare);
                     
     $scope.selectedOption = -1;
+  };
+
+  $scope.isSelected = function (id) {
+      return (id === $scope.selectedOption) ? "entrySelected" : "";
   };
 }]);
 
@@ -143,6 +157,7 @@ moduleIndex.directive('ngKeySelect',
                 var elems = scope.filteredPatientList;
                 switch (event.which) {
                   case 40: {
+                    $timeout(function() {
                     if (scope.selectedOption === -1) {
                       scope.selectedOption = 0;
                     } else {
@@ -151,9 +166,12 @@ moduleIndex.directive('ngKeySelect',
                         scope.selectedOption + 1;
                     }
                     event.preventDefault();
+                    console.log(scope.selectedOption + ": " + elems[scope.selectedOption].name);
+                    }, 0);
                     break;
                   }
                   case 38: {
+                    $timeout(function() {
                     if (scope.selectedOption === -1) {
                       scope.selectedOption = elems.length - 1;
                     } else {
@@ -161,6 +179,8 @@ moduleIndex.directive('ngKeySelect',
                         0 : scope.selectedOption - 1;
                     }
                     event.preventDefault();
+                    console.log(scope.selectedOption + ": " + elems[scope.selectedOption].name);
+                    }, 0);
                     break;
                   }
                   case 13: {
@@ -181,10 +201,11 @@ moduleIndex.directive('ngKeySelect',
                     break;
                   }
                   default: {
+                    $timeout(function() {
                     scope.selectedOption = -1;
+                    }, 0);
                   }
                 } //switch
-                console.log(scope.selectedOption + ": " + elems[scope.selectedOption]);
               }); //bind
         } //link
     }; //return
