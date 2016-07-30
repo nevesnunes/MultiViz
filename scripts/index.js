@@ -143,33 +143,22 @@ moduleIndex.directive('directiveTooltip', [function() {
     };
 }]);
 
-moduleIndex.directive('ngEnter', function() {
+moduleIndex.directive('ngKeySelect', ['$timeout', 'patientData', function($timeout, patientData) {
 	return function(scope, element, attrs) {
 		element.bind("keydown keypress", function(event) {
             /* enter */
 			if (event.which === 13) {
                 if (!scope.isDisabled()) {
-                  scope.$apply(function(){
-                    scope.$eval(attrs.ngEnter);
-                  });
-                  
+                  scope.gotoViews(event, scope.patientText);          
+
                   event.preventDefault();
                 }
-			}
-		});
-	};
-});
-
-moduleIndex.directive('ngKeySelect', ['$timeout', 'patientData', function($timeout, patientData) {
-	return function(scope, element, attrs) {
-		element.bind("keydown keypress", function(event) {
             /* arrow down */
-			if (event.which === 40) {
+            } else if (event.which === 40) {
                 $timeout(function() {
-                    var input = angular.element('#input-patient').scope();
-                    input.patientText = scope.filteredPatientList[0];
-
-                    scope.dataToShare = input.patientText;
+                    scope.patientText = scope.filteredPatientList[0];
+                    
+                    scope.dataToShare = scope.patientText;
                     patientData.setData(patientData.KEY_PATIENT, scope.dataToShare);
 
                     event.preventDefault();

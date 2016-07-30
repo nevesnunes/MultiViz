@@ -174,8 +174,13 @@ body {
     line-height: 1.42857143;
     text-align: left;
     vertical-align: top;
-    border: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
     padding: 5px;
+}
+
+.patient-table-entry-selected {
+    background-color: #c4e3f3;
+    color: #31708f;
 }
 
 /* Tooltips */

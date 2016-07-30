@@ -23,12 +23,12 @@
             <div ng-controller="controllerAddData">
             <div class="container-fluid">
               <div class="col-md-8 col-md-offset-2">
-                <h1 class="page-header">Bem-Vindo</h1>
+                <h1 id="wellcome" class="page-header">Bem-Vindo</h1>
                 <p> Escolha um paciente:</p>
 
                 <div class="right-inner-addon" style="margin-bottom:10px;">
                     <i class="glyphicon glyphicon-search"></i>
-                    <input type="text" id="input-patient" class="form-control" placeholder="Procurar..." ng-model="patientText" ng-enter="gotoViews($event, patientText)" ng-key-select autofocus tabindex=1>
+                    <input type="text" id="input-patient" class="form-control" placeholder="Procurar..." ng-model="patientText" ng-key-select autofocus tabindex=1>
                 </div>
                 <p></p>
                 <div id="patient-table" class="table table-condensed table-bordered">
