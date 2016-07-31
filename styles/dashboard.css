@@ -187,6 +187,20 @@ body {
 
 /* Tooltips */
 
+
+.tooltip-element {
+    position: absolute;
+    text-align: center;
+    padding: .5em;
+    background: #000;
+    border: 0px;
+    border-radius: 6px;
+    font-size: 11px;
+    color: white;
+    opacity: 0.9; 
+    font-family: sans-serif;
+}
+
 .tooltip-wrapper {
   display: inline-block; /* display: block works as well */
 }

@@ -153,6 +153,7 @@ moduleIndex.controller('controllerAddData',
 moduleIndex.controller('controllerGetData',
         ['$scope', 'patientData', function($scope, patientData) {
     $scope.patient = patientData.getData(patientData.KEY_PATIENT);
+    $scope.patients = patientData.getData(patientData.KEY_PATIENTS);
 }]);
 
 moduleIndex.controller('controllerGoToIndex',

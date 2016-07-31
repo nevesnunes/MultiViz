@@ -2,31 +2,60 @@ var moduleIndex = angular.module('moduleIndex');
 var moduleVisualizations = angular.module('moduleVisualizations', ['moduleIndex']);
 
 moduleVisualizations.factory('makeVisualization', function() {
-    var makeHeatMap = function() {
-        var margin = {
-                top: 50,
-                right: 0,
-                bottom: 100,
-                left: 30
-            },
-            width = 960 - margin.left - margin.right,
-            height = 430 - margin.top - margin.bottom,
-            gridSize = Math.floor(width / 24),
-            legendElementWidth = gridSize * 2,
-            buckets = 9,
-            colors = ["#ffffd9", "#edf8b1", "#c7e9b4", "#7fcdbb", "#41b6c4", "#1d91c0", "#225ea8", "#253494", "#081d58"], // alternatively colorbrewer.YlGnBu[9]
-            days = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
-            times = ["1a", "2a", "3a", "4a", "5a", "6a", "7a", "8a", "9a", "10a", "11a", "12a", "1p", "2p", "3p", "4p", "5p", "6p", "7p", "8p", "9p", "10p", "11p", "12p"],
-            datasets = ["../data/data.tsv"];
+    var margin = {
+            top: 80,
+            right: 0,
+            bottom: 150,
+            left: 250
+        },
+        width = 960 - margin.left - margin.right,
+        height = 530 - margin.top - margin.bottom,
+        gridSize = Math.floor(width / 24),
+        legendElementWidth = gridSize * 2,
+        buckets = 9,
+        colors = colorbrewer.Greys[9];
 
+    var reduceDataArray = function(previous, current, i) {
+        current.forEach(function(element) {
+            if (previous.indexOf(element) === -1) {
+                previous.push(element);
+            }
+        });
+        return previous;
+    };
+
+    var arrayObjectIndexOf = function(myArray, searchTerm, property) {
+        for (var i = 0, len = myArray.length; i < len; i++) {
+            if (myArray[i][property] === searchTerm)
+                return i;
+        }
+        return -1;
+    };
+
+    var diseases = [];
+    var medications = [];
+    var setData = function(patients) {
+        diseases = patients
+            .map(function(patient) {
+                return patient.diseases;
+            })
+            .reduce(reduceDataArray, []);
+        medications = patients
+            .map(function(patient) {
+                return patient.medications;
+            })
+            .reduce(reduceDataArray, []);
+    };
+
+    var makeHeatMap = function(patientList) {
         var svg = d3.select("#viz-heatmap").append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-        var dayLabels = svg.selectAll(".dayLabel")
-            .data(days)
+        var diseaseLabels = svg.selectAll(".diseaseLabel")
+            .data(diseases)
             .enter().append("text")
             .text(function(d) {
                 return d;
@@ -37,65 +66,50 @@ moduleVisualizations.factory('makeVisualization', function() {
             })
             .style("text-anchor", "end")
             .attr("transform", "translate(-6," + gridSize / 1.5 + ")")
-            .attr("class", function(d, i) {
-                return ((i >= 0 && i <= 4) ? "dayLabel mono axis axis-workweek" : "dayLabel mono axis");
-            });
+            .attr("class", "diseaseLabel mono axis");
 
-        var timeLabels = svg.selectAll(".timeLabel")
-            .data(times)
+        var medicationLabels = svg.selectAll(".medicationLabel")
+            .data(medications)
             .enter().append("text")
             .text(function(d) {
                 return d;
             })
-            .attr("x", function(d, i) {
-                return i * gridSize;
-            })
-            .attr("y", 0)
             .style("text-anchor", "middle")
-            .attr("transform", "translate(" + gridSize / 2 + ", -6)")
-            .attr("class", function(d, i) {
-                return ((i >= 7 && i <= 16) ? "timeLabel mono axis axis-worktime" : "timeLabel mono axis");
-            });
+            .attr("transform", function(d, i) {
+                    return "translate(" + (i * gridSize * 2) + ", -25)rotate(20)";
+            })
+            .attr("class", "medicationLabel mono axis");
 
-        var heatmapChart = function(tsvFile) {
-            d3.tsv(tsvFile,
-                function(d) {
-                    return {
-                        day: +d.day,
-                        hour: +d.hour,
-                        value: +d.value
-                    };
-                },
-                function(error, data) {
+        var heatmapChart = function(file) {
+            d3.json("../data/incidences.json", function(error, treeData) {
+                console.log("[INFO] d3.js parsing results: " + error);
+                (function(data) {
                     var colorScale = d3.scaleQuantile()
                         .domain([0, buckets - 1, d3.max(data, function(d) {
-                            return d.value;
+                            return d.incidences;
                         })])
                         .range(colors);
 
-                    var cards = svg.selectAll(".hour")
+                    var cards = svg.selectAll(".medication")
                         .data(data, function(d) {
-                            return d.day + ':' + d.hour;
+                            return diseases.indexOf(d.disease) + ':' + medications.indexOf(d.medication);
                         });
 
                     cards.enter().append("rect")
                         .attr("x", function(d) {
-                            return (d.hour - 1) * gridSize;
+                            return medications.indexOf(d.medication) * gridSize * 2;
                         })
                         .attr("y", function(d) {
-                            return (d.day - 1) * gridSize;
+                            return diseases.indexOf(d.disease) * gridSize;
                         })
-                        .attr("rx", 4)
-                        .attr("ry", 4)
-                        .attr("class", "hour bordered")
-                        .attr("width", gridSize)
+                        .attr("class", "medication bordered")
+                        .attr("width", gridSize * 2)
                         .attr("height", gridSize)
                         .style("fill", function(d) {
-                            return colorScale(d.value);
+                            return colorScale(d.incidences);
                         })
-
                         .append("title").text(function(d) {
-                            return d.value;
+                            return "Número de pacientes: " + d.incidences;
                         });
 
                     // FIXME: transitions not working...
@@ -103,7 +117,7 @@ moduleVisualizations.factory('makeVisualization', function() {
                         .style("fill", colors[0]);
 
                     cards.transition().duration(1000)
-                        .style("fill", function(d) { return colorScale(d.value); });
+                        .style("fill", function(d) { return colorScale(d.incidences); });
                     */
 
                     cards.exit().remove();
@@ -111,12 +125,12 @@ moduleVisualizations.factory('makeVisualization', function() {
                     var legend = svg.selectAll(".legend")
                         .data([0].concat(colorScale.quantiles()), function(d) {
                             return d;
-                        });
-
-                    legend.enter().append("g")
+                        })
+                        .enter().append("g")
                         .attr("class", "legend");
 
                     legend.append("rect")
+                        .attr("class", "bordered")
                         .attr("x", function(d, i) {
                             return legendElementWidth * i;
                         })
@@ -138,13 +152,15 @@ moduleVisualizations.factory('makeVisualization', function() {
                         .attr("y", height + gridSize);
 
                     legend.exit().remove();
-                }); // d3.tsv
+                }(treeData));
+            }); //d3.json
         }; // heatmapChart
 
-        heatmapChart(datasets[0]);
+        heatmapChart();
     };
 
     return {
+        setData: setData,
         makeHeatMap: makeHeatMap
     };
 });

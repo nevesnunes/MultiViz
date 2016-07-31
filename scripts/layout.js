@@ -1,4 +1,3 @@
-var moduleIndex = angular.module('moduleIndex');
 var moduleVisualizations = angular.module('moduleVisualizations');
 var moduleLayout = angular.module('moduleLayout',['moduleIndex', 'moduleVisualizations']);
 
@@ -20,8 +19,8 @@ moduleLayout.controller('controllerPanes', ['$scope', function($scope){
     $scope.currentNode = $scope.treeRoot;
 }]);
 
-moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'makeVisualization',
-    function($compile, $timeout, makeVisualization){
+moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'patientData', 'makeVisualization',
+    function($compile, $timeout, patientData, makeVisualization) {
 	return { 
         scope: true,
         link: function(scope, element, attrs) {
@@ -51,7 +50,8 @@ moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'makeVisualiza
                 // FIXME: Just for testing a viz
                 var visualization = '';
                 if (node.isRoot()) {
-                  visualization = '<div id=viz-heatmap>viz</div>'; 
+                    visualization = '<h4>Comparação entre múltiplos pacientes</h4>' +
+                        '<div id=viz-heatmap></div>'; 
                 }
 
                 var viewportButton = '';
@@ -93,7 +93,7 @@ moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'makeVisualiza
                 element.html($compile(
                     makeChildrenLayout(scope.currentNode)
                 )(scope));
-                makeVisualization.makeHeatMap();
+                makeVisualization.makeHeatMap(scope.patientList);
             };
 
             scope.paneRemove = function(button) {
@@ -101,6 +101,11 @@ moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'makeVisualiza
                 var node = scope.treeRoot.first(function (node1) {
                     return node1.model.id === id;
                 });
+
+                // Colapse the view if it is maximized
+                if (scope.currentNode.model.id === id) {
+                    scope.currentNode = scope.treeRoot;
+                }
 
                 var parentNode = node.parent;
                 if (parentNode !== undefined) {
@@ -194,6 +199,9 @@ moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'makeVisualiza
             };
 
             // Make initial layout
+            makeVisualization.setData(
+                patientData.getData(patientData.KEY_PATIENTS)
+            );
             scope.updateLayout();
         } //link
     }; //return
