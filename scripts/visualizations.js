@@ -81,7 +81,7 @@ moduleVisualizations.factory('makeVisualization', function() {
             .attr("class", "medicationLabel mono axis");
 
         var heatmapChart = function(file) {
-            d3.json("../data/incidences.json", function(error, treeData) {
+            d3.json("data/incidences.json", function(error, treeData) {
                 console.log("[INFO] d3.js parsing results: " + error);
                 (function(data) {
                     var colorScale = d3.scaleQuantile()
