@@ -47,8 +47,13 @@ moduleVisualizations.factory('makeVisualization', function() {
             .reduce(reduceDataArray, []);
     };
 
-    var makeHeatMap = function(patientList) {
-        var svg = d3.select("#viz-heatmap").append("svg")
+    var makeHeatMap = function(elementID) {
+        if (elementID === undefined) {
+            console.log("[WARN] @makeHeatMap: undefined id.");
+            return;
+        }
+
+        var svg = d3.select("#" + elementID).append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
             .append("g")

@@ -1,3 +1,5 @@
+/* Input icon */
+
 .left-inner-addon {
     position: relative;
 }
@@ -10,15 +12,9 @@
     pointer-events: none;
 }
 
-.right-inner-addon {
-    position: relative;
-}
-.right-inner-addon input {
-    padding-right: 30px;    
-}
-.right-inner-addon i {
-    position: absolute;
-    right: 0px;
-    padding: 10px 12px;
-    pointer-events: none;
+/* Button icon */
+.btn-svg {
+    height: 16px;
+    width: 16px;
+    vertical-align: middle;
 }

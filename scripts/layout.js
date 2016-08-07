@@ -8,22 +8,50 @@ moduleLayout.controller('controllerPanes', ['$scope', function($scope){
         HORIZONTAL: "HORIZONTAL"
     });
 
-    // We will save our layout in a tree.
-    // It is initialized with a single view.
+    $scope.vizType = Object.freeze({
+        NONE: "NONE",
+        HEATMAP: "HEATMAP"
+    });
+
+    // Store our view layout in a tree
     $scope.treeModel = new TreeModel();
     $scope.treeRoot = $scope.treeModel.parse({
-        id: uuid.v1(),
+        id: "view-" + uuid.v1(),
         split: $scope.splitType.NONE,
+        viz: $scope.vizType.NONE,
         children: []
     });
     $scope.currentNode = $scope.treeRoot;
+
+    // Keep track of nodes with visualizations
+    $scope.nodeWithVizIDs = [];
+
+    $scope.chooseHeatmap = function() {
+        document.getElementById('view-chooser').innerHTML = '';
+
+        $scope.createPaneSplit($scope.vizType.HEATMAP);
+    };
+
+    // FIXME: Just for testing
+    $scope.chooseTODO = function() {
+        document.getElementById('view-chooser').innerHTML = '';
+
+        $scope.createPaneSplit($scope.vizType.NONE);
+    };
 }]);
 
 moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'patientData', 'makeVisualization',
     function($compile, $timeout, patientData, makeVisualization) {
 	return { 
-        scope: true,
+        scope: false, // Allow communication with view chooser
         link: function(scope, element, attrs) {
+            function makeImgButton(id, method, text, img) {
+                return '<button class="btn btn-primary" data-id=' + id +
+                        ' ng-click="' + method + '">' +                     
+                    '<img src="' + img + '" class="btn-svg">' +
+                    '<span>' + text + '</span></button>';
+            }
+
             function makeSplitPane(orientation, node1, node2) {
                 return '<div data-split-pane>' +
                     makeSplitComponent(orientation, node1) +
@@ -32,6 +60,7 @@ moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'patientData',
                     '</div>';
             }
 
+            // FIXME: Split size changes should be tracked
             function makeSplitComponent(orientation, node) {
                 return '<div data-split-pane-component data-' + orientation + '="50%">' +
                 makeChildrenLayout(node) +
@@ -43,31 +72,51 @@ moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'patientData',
             }
 
             function makeSplitInner(id) {
-                var node = scope.treeRoot.first(function (node1) {
+                var node = scope.treeRoot.first(function(node1) {
                     return node1.model.id === id;
                 });
 
-                // FIXME: Just for testing a viz
                 var visualization = '';
-                if (node.isRoot()) {
+                if (node.model.viz !== scope.vizType.NONE) {
+                    scope.nodeWithVizIDs.push(id);
                     visualization = '<h4>Comparação entre múltiplos pacientes</h4>' +
-                        '<div id=viz-heatmap></div>'; 
+                        '<div id=' + id + '></div>'; 
                 }
 
                 var viewportButton = '';
                 if (!node.isRoot()) {
                     if (scope.currentNode.model.id === id) {
-                        viewportButton = '<button class="btn btn-primary" data-id=' + id + ' ng-click="paneColapse($event)">Colapsar Vista</button>';
+                        viewportButton = makeImgButton(
+                            id,
+                            "paneColapse($event)",
+                            " Colapsar Vista",
+                            "../images/controls/colapse.svg");
                     } else {
-                        viewportButton = '<button class="btn btn-primary" data-id=' + id + ' ng-click="paneMaximize($event)">Maximizar Vista</button>';
+                        viewportButton = makeImgButton(
+                            id,
+                            "paneMaximize($event)",
+                            " Maximizar Vista",
+                            "../images/controls/maximize.svg");
                     }
                 }
 
                 return '<div class="pretty-split-pane-component-inner"><p>' + id + '</p>' +
-                    '<button class="btn btn-primary" data-id=' + id + ' ng-click="paneRemove($event)">Remover Vista</button>' +
+                    makeImgButton(
+                        id,
+                        "paneRemove($event)",
+                        " Remover Vista",
+                        "../images/controls/remove.svg") +
                     viewportButton +
-                    '<button class="btn btn-primary" data-id=' + id + ' ng-click="paneSplitVertical($event)">Separar na Vertical</button>' +
-                    '<button class="btn btn-primary" data-id=' + id + ' ng-click="paneSplitHorizontal($event)">Separar na Horizontal</button>' +
+                    makeImgButton(
+                        id,
+                        "paneSplitVertical($event)",
+                        " Separar na Vertical",
+                        "../images/controls/split-vertical.svg") +
+                    makeImgButton(
+                        id,
+                        "paneSplitHorizontal($event)",
+                        " Separar na Horizontal",
+                        "../images/controls/split-horizontal.svg") +
                     visualization +
                     '</div>';
             }
@@ -89,11 +138,29 @@ moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'patientData',
                 return "";
             }
 
+            function makeViewChooser() {
+                document.getElementById('view-chooser').innerHTML =
+                    '<h4>Escolha uma visualização:</h4>' +
+                    '<div class="view-choice" ng-click="chooseHeatmap()">' +
+                    '<img src="../images/views/heatmap.svg" class="view-choice-svg">Comparação entre múltiplos pacientes</img>' +
+                    '</div>' +
+                    '<div class="view-choice" ng-click="chooseTODO()">' +
+                    '<img src="../images/views/circular.svg" class="view-choice-svg">TODO</img>' +
+                    '</div>';
+                $compile(angular.element('#view-chooser'))(scope);
+            }
+
             scope.updateLayout = function() {
                 element.html($compile(
                     makeChildrenLayout(scope.currentNode)
                 )(scope));
-                makeVisualization.makeHeatMap(scope.patientList);
+
+                // FIXME: Only making heatmaps
+                scope.nodeWithVizIDs.forEach(function(nodeID) {
+                    makeVisualization.makeHeatMap(nodeID);
+                });
+
+                scope.nodeWithVizIDs = [];
             };
 
             scope.paneRemove = function(button) {
@@ -101,6 +168,14 @@ moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'patientData',
                 var node = scope.treeRoot.first(function (node1) {
                     return node1.model.id === id;
                 });
+
+                // Remove it from known nodes with visualizations
+                for (var i = 0; i < scope.nodeWithVizIDs.length; i++) {
+                    if (scope.nodeWithVizIDs[i] === id) {
+                        scope.nodeWithVizIDs.splice(i, 1);
+                        break;
+                     }
+                }
 
                 // Colapse the view if it is maximized
                 if (scope.currentNode.model.id === id) {
@@ -117,6 +192,7 @@ moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'patientData',
                         scope.treeRoot = scope.treeModel.parse({
                             id: otherChildNode.model.id,
                             split: otherChildNode.model.split,
+                            viz: otherChildNode.model.viz,
                             children: otherChildNode.model.children
                         });
                         scope.currentNode = scope.treeRoot;
@@ -150,6 +226,20 @@ moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'patientData',
                 scope.updateLayout();
             };
 
+            scope.createPaneSplit = function(vizType) {
+                if (scope.nodeForVizID !== undefined) {
+                    if (vizType !== scope.vizType.NONE) {
+                        var node = scope.treeRoot.first(function (node1) {
+                            return node1.model.id === scope.nodeForVizID;
+                        });
+
+                        node.model.viz = vizType;
+                    }
+                }
+
+                scope.updateLayout();
+            };
+
             scope.paneSplitVertical = function(button) {
                 var id = angular.element(button.target).data('id');
                 var node = scope.treeRoot.first(function (node1) {
@@ -157,21 +247,27 @@ moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'patientData',
                 });
 
                 console.log("[INFO] Splitting in Vertical " + node.model.id);
-                node.model.split = scope.splitType.VERTICAL;
                 node.addChild(
                     scope.treeModel.parse({
-                        id: uuid.v1(),
+                        id: "view-" + uuid.v1(),
                         split: scope.splitType.NONE,
+                        viz: node.model.viz,
                         children: []
                     }));
                 node.addChild(
                     scope.treeModel.parse({
-                        id: uuid.v1(),
+                        id: "view-" + uuid.v1(),
                         split: scope.splitType.NONE,
+                        viz: scope.vizType.NONE,
                         children: []
                     }));
 
-                scope.updateLayout();
+                node.model.split = scope.splitType.VERTICAL;
+                node.model.viz = scope.vizType.NONE;
+
+                scope.nodeForVizID = node.children[1].model.id;
+
+                makeViewChooser();
             };
 
             scope.paneSplitHorizontal = function(button) {
@@ -181,21 +277,27 @@ moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'patientData',
                 });
 
                 console.log("[INFO] Splitting in Horizontal " + node.model.id);
-                node.model.split = scope.splitType.HORIZONTAL;
                 node.addChild(
                     scope.treeModel.parse({
-                        id: uuid.v1(),
+                        id: "view-" + uuid.v1(),
                         split: scope.splitType.NONE,
+                        viz: node.model.viz,
                         children: []
                     }));
                 node.addChild(
                     scope.treeModel.parse({
-                        id: uuid.v1(),
+                        id: "view-" + uuid.v1(),
                         split: scope.splitType.NONE,
+                        viz: scope.vizType.NONE,
                         children: []
                     }));
 
-                scope.updateLayout();
+                node.model.split = scope.splitType.HORIZONTAL;
+                node.model.viz = scope.vizType.NONE;
+
+                scope.nodeForVizID = node.children[1].model.id;
+
+                makeViewChooser();
             };
 
             // Make initial layout

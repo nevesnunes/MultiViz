@@ -20,14 +20,14 @@
      id="defs4309" />
   <sodipodi:namedview
      id="base"
-     pagecolor="#ffffff"
+     pagecolor="#c8c8c8"
      bordercolor="#666666"
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="32"
-     inkscape:cx="5.754863"
-     inkscape:cy="9.2693559"
+     inkscape:cx="4.1751971"
+     inkscape:cy="9.2068559"
      inkscape:document-units="px"
      inkscape:current-layer="g4139"
      showgrid="true"
@@ -58,7 +58,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -77,21 +77,24 @@
         <g
            id="g4139"
            inkscape:label="new-vertical">
-          <ellipse
-             style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-             id="path8129"
-             cx="168.01321"
-             cy="495"
-             rx="8.0132189"
-             ry="8" />
           <rect
              style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#141414;stroke-width:0;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
              id="rect8861"
-             width="2"
-             height="10.01652"
-             x="494"
-             y="-173.02148"
-             transform="matrix(0,1,-1,0,0,0)" />
+             width="3.4879413"
+             height="18.559835"
+             x="248.87578"
+             y="-468.43335"
+             transform="matrix(-0.67812556,0.73494607,-0.7360609,-0.67691532,0,0)"
+             ry="0" />
+          <rect
+             ry="0"
+             transform="matrix(0.67812556,0.73494607,0.7360609,-0.67691532,0,0)"
+             y="-221.47169"
+             x="476.33755"
+             height="18.559835"
+             width="3.4879413"
+             id="rect8073"
+             style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#141414;stroke-width:0;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
         </g>
       </g>
     </g>

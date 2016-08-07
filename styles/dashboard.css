@@ -116,6 +116,31 @@ body {
   padding-left: 0; 
 }
 
+/* View Chooser */
+
+.view-choice {
+    border: 5px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    padding: 10px;
+    text-align: center;
+    width: 100%;
+}
+
+.view-choice:hover {
+    border-color: #286090;
+    color: #286090;
+}
+
+.view-choice-svg {
+    height: 50%;
+    width: 50%;
+    display: block;
+    margin: 0 auto;
+    padding-bottom: 10px;
+}
+
 /* Panes */
 
 /* Panes need all surrounding containers to impose minimum height */
