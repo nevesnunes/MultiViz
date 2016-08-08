@@ -26,6 +26,12 @@ moduleLayout.controller('controllerPanes', ['$scope', function($scope){
     // Keep track of nodes with visualizations
     $scope.nodeWithVizIDs = [];
 
+    $scope.cancelSplit = function() {
+        document.getElementById('view-chooser').innerHTML = '';
+
+        $scope.nodeForViz = undefined;
+    };
+
     $scope.chooseHeatmap = function() {
         document.getElementById('view-chooser').innerHTML = '';
 
@@ -48,7 +54,7 @@ moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'patientData',
             function makeImgButton(id, method, text, img) {
                 return '<button class="btn btn-primary" data-id=' + id +
                         ' ng-click="' + method + '">' +                     
-                    '<img src="' + img + '" class="btn-svg">' +
+                    '<img src="' + img + '" class="btn-custom-svg">' +
                     '<span>' + text + '</span></button>';
             }
 
@@ -140,6 +146,9 @@ moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'patientData',
 
             function makeViewChooser() {
                 document.getElementById('view-chooser').innerHTML =
+                    '<button class="btn btn-secondary btn-custom-cancel" ng-click="cancelSplit()">' +
+                        'Cancelar' +
+                    '</button>' +
                     '<h4>Escolha uma visualização:</h4>' +
                     '<div class="view-choice" ng-click="chooseHeatmap()">' +
                     '<img src="../images/views/heatmap.svg" class="view-choice-svg">Comparação entre múltiplos pacientes</img>' +
@@ -227,75 +236,56 @@ moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'patientData',
             };
 
             scope.createPaneSplit = function(vizType) {
-                if (scope.nodeForVizID !== undefined) {
-                    if (vizType !== scope.vizType.NONE) {
-                        var node = scope.treeRoot.first(function (node1) {
-                            return node1.model.id === scope.nodeForVizID;
-                        });
+                if (scope.nodeForViz !== undefined) {
+                    var node = scope.treeRoot.first(function (node1) {
+                        return node1.model.id === scope.nodeForViz.id;
+                    });
 
-                        node.model.viz = vizType;
-                    }
+                    console.log("[INFO] Splitting in " +
+                        scope.nodeForViz.split +
+                        " " +
+                        node.model.id);
+                    node.addChild(
+                        scope.treeModel.parse({
+                            id: "view-" + uuid.v1(),
+                            split: scope.splitType.NONE,
+                            viz: node.model.viz,
+                            children: []
+                        }));
+                    node.addChild(
+                        scope.treeModel.parse({
+                            id: "view-" + uuid.v1(),
+                            split: scope.splitType.NONE,
+                            viz: vizType,
+                            children: []
+                        }));
+
+                    // Update parent properties
+                    node.model.split = scope.nodeForViz.split;
+                    node.model.viz = scope.vizType.NONE;
                 }
 
                 scope.updateLayout();
             };
 
             scope.paneSplitVertical = function(button) {
-                var id = angular.element(button.target).data('id');
-                var node = scope.treeRoot.first(function (node1) {
-                    return node1.model.id === id;
-                });
+                var buttonID = angular.element(button.target).data('id');
 
-                console.log("[INFO] Splitting in Vertical " + node.model.id);
-                node.addChild(
-                    scope.treeModel.parse({
-                        id: "view-" + uuid.v1(),
-                        split: scope.splitType.NONE,
-                        viz: node.model.viz,
-                        children: []
-                    }));
-                node.addChild(
-                    scope.treeModel.parse({
-                        id: "view-" + uuid.v1(),
-                        split: scope.splitType.NONE,
-                        viz: scope.vizType.NONE,
-                        children: []
-                    }));
-
-                node.model.split = scope.splitType.VERTICAL;
-                node.model.viz = scope.vizType.NONE;
-
-                scope.nodeForVizID = node.children[1].model.id;
+                scope.nodeForViz = {
+                    id: buttonID,
+                    split: scope.splitType.VERTICAL
+                };
 
                 makeViewChooser();
             };
 
             scope.paneSplitHorizontal = function(button) {
-                var id = angular.element(button.target).data('id');
-                var node = scope.treeRoot.first(function (node1) {
-                    return node1.model.id === id;
-                });
+                var buttonID = angular.element(button.target).data('id');
 
-                console.log("[INFO] Splitting in Horizontal " + node.model.id);
-                node.addChild(
-                    scope.treeModel.parse({
-                        id: "view-" + uuid.v1(),
-                        split: scope.splitType.NONE,
-                        viz: node.model.viz,
-                        children: []
-                    }));
-                node.addChild(
-                    scope.treeModel.parse({
-                        id: "view-" + uuid.v1(),
-                        split: scope.splitType.NONE,
-                        viz: scope.vizType.NONE,
-                        children: []
-                    }));
-
-                node.model.split = scope.splitType.HORIZONTAL;
-                node.model.viz = scope.vizType.NONE;
-
-                scope.nodeForVizID = node.children[1].model.id;
+                scope.nodeForViz = {
+                    id: buttonID,
+                    split: scope.splitType.HORIZONTAL
+                };
 
                 makeViewChooser();
             };
