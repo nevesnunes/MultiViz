@@ -261,7 +261,6 @@ moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'patientData',
                         viz: vizType,
                         children: []
                     });
-                    scope.currentNode = scope.treeRoot;
                 } else {
                     if (scope.nodeForViz !== undefined) {
                         var node = scope.treeRoot.first(function (node1) {
@@ -298,25 +297,27 @@ moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'patientData',
 
             scope.paneSplitVertical = function(button) {
                 var buttonID = angular.element(button.target).data('id');
-
                 scope.nodeForViz = {
                     id: buttonID,
                     split: scope.splitType.VERTICAL
                 };
 
-                scope.paneColapse();
+                if (scope.currentNode.model.id !== scope.treeRoot.model.id) {
+                    scope.paneColapse();
+                }
                 scope.makeViewChooser();
             };
 
             scope.paneSplitHorizontal = function(button) {
                 var buttonID = angular.element(button.target).data('id');
-
                 scope.nodeForViz = {
                     id: buttonID,
                     split: scope.splitType.HORIZONTAL
                 };
 
-                scope.paneColapse();
+                if (scope.currentNode.model.id !== scope.treeRoot.model.id) {
+                    scope.paneColapse();
+                }
                 scope.makeViewChooser();
             };
 
