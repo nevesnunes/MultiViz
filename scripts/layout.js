@@ -88,13 +88,13 @@ moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'patientData',
                             id,
                             "paneColapse()",
                             " Colapsar Vista",
-                            "../images/controls/colapse.svg");
+                            "images/controls/colapse.svg");
                     } else {
                         viewportButton = makeImgButton(
                             id,
                             "paneMaximize($event)",
                             " Maximizar Vista",
-                            "../images/controls/maximize.svg");
+                            "images/controls/maximize.svg");
                     }
                 }
 
@@ -103,18 +103,18 @@ moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'patientData',
                         id,
                         "paneRemove($event)",
                         " Remover Vista",
-                        "../images/controls/remove.svg") +
+                        "images/controls/remove.svg") +
                     viewportButton +
                     makeImgButton(
                         id,
                         "paneSplitVertical($event)",
                         " Separar na Vertical",
-                        "../images/controls/split-vertical.svg") +
+                        "images/controls/split-vertical.svg") +
                     makeImgButton(
                         id,
                         "paneSplitHorizontal($event)",
                         " Separar na Horizontal",
-                        "../images/controls/split-horizontal.svg") +
+                        "images/controls/split-horizontal.svg") +
                     visualization +
                     '</div>';
             }
@@ -140,17 +140,17 @@ moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'patientData',
                 var cancelButton = '';
                 if (scope.treeRoot !== undefined) {
                     cancelButton = '<button class="tooltip-wrapper btn btn-secondary btn-custom-cancel" title="Cancelar" directive-static-tooltip custom-placement="left" ng-click="cancelSplit()">' +
-                    '<img src="../images/controls/black/remove.svg" class="btn-custom-svg">' +
+                    '<img src="images/controls/black/remove.svg" class="btn-custom-svg">' +
                     '</button>';
                 }
                 document.getElementById('view-chooser').innerHTML =
                     cancelButton +
                     '<h4>Escolha uma visualização:</h4>' +
                     '<div class="view-choice" ng-click="chooseHeatmap()">' +
-                    '<img src="../images/views/heatmap.svg" class="view-choice-svg">Comparação entre múltiplos pacientes</img>' +
+                    '<img src="images/views/heatmap.svg" class="view-choice-svg">Comparação entre múltiplos pacientes</img>' +
                     '</div>' +
                     '<div class="view-choice" ng-click="chooseTODO()">' +
-                    '<img src="../images/views/circular.svg" class="view-choice-svg">TODO</img>' +
+                    '<img src="images/views/circular.svg" class="view-choice-svg">TODO</img>' +
                     '</div>';
 
                 $compile(angular.element('#view-chooser'))(scope);
