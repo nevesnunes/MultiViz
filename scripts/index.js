@@ -163,6 +163,26 @@ moduleIndex.controller('controllerGoToIndex',
     };
 }]);
 
+moduleIndex.directive('directiveStaticTooltip', [function() {
+    return {
+        link: function(scope, element, attributes) {
+            element
+                .on('mouseenter', function() {
+                    element
+                        .tooltip('hide')
+                        
+                        // Avoid oclusion with custom placement
+                        .attr('data-placement', element.attr('custom-placement'))
+                        .tooltip('fixTitle')
+                        .tooltip('show');
+                })
+                .on('mouseleave', function() {
+                    element.tooltip('hide');
+                });
+        } //link
+    }; //return
+}]);
+
 moduleIndex.directive('directiveTooltip', [function() {
     return {
         link: function(scope, element, attributes) {

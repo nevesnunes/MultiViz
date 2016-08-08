@@ -17,6 +17,7 @@ moduleLayout.controller('controllerPanes', ['$scope', function($scope){
     $scope.treeModel = new TreeModel();
 
     // Keep track of nodes with visualizations
+    // TODO: Replace with tree traversal
     $scope.nodeWithVizIDs = [];
 
     $scope.cancelSplit = function() {
@@ -45,10 +46,9 @@ moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'patientData',
         scope: false, // Allow communication with view chooser
         link: function(scope, element, attrs) {
             function makeImgButton(id, method, text, img) {
-                return '<button class="btn btn-primary" data-id=' + id +
-                        ' ng-click="' + method + '">' +                     
+                return '<button class="tooltip-wrapper btn btn-primary" data-id="' + id + '" directive-static-tooltip custom-placement="top" ng-click="' + method + '" title="' + text + '">' +                     
                     '<img src="' + img + '" class="btn-custom-svg">' +
-                    '<span>' + text + '</span></button>';
+                    '</button>';
             }
 
             function makeSplitPane(orientation, node1, node2) {
@@ -78,8 +78,7 @@ moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'patientData',
                 var visualization = '';
                 if (node.model.viz !== scope.vizType.NONE) {
                     scope.nodeWithVizIDs.push(id);
-                    visualization = '<h4>Comparação entre múltiplos pacientes</h4>' +
-                        '<div id=' + id + '></div>'; 
+                    visualization = '<div id=' + id + '></div>'; 
                 }
 
                 var viewportButton = '';
@@ -87,7 +86,7 @@ moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'patientData',
                     if (scope.currentNode.model.id === id) {
                         viewportButton = makeImgButton(
                             id,
-                            "paneColapse($event)",
+                            "paneColapse()",
                             " Colapsar Vista",
                             "../images/controls/colapse.svg");
                     } else {
@@ -140,8 +139,8 @@ moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'patientData',
             scope.makeViewChooser = function() {
                 var cancelButton = '';
                 if (scope.treeRoot !== undefined) {
-                    cancelButton = '<button class="btn btn-secondary btn-custom-cancel" ng-click="cancelSplit()">' +
-                    'Cancelar' +
+                    cancelButton = '<button class="tooltip-wrapper btn btn-secondary btn-custom-cancel" title="Cancelar" directive-static-tooltip custom-placement="left" ng-click="cancelSplit()">' +
+                    '<img src="../images/controls/black/remove.svg" class="btn-custom-svg">' +
                     '</button>';
                 }
                 document.getElementById('view-chooser').innerHTML =
@@ -160,7 +159,8 @@ moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'patientData',
             scope.updateLayout = function() {
                 // No nodes available: make first view functionality
                 if (scope.currentNode === undefined) {
-                    // There may be a previous view, so nuke the layout
+
+                    // There may be a previous view: nuke the layout
                     element.html($compile('')(scope));
 
                     scope.makeViewChooser();
@@ -186,7 +186,7 @@ moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'patientData',
                     return node1.model.id === id;
                 });
 
-                // Remove it from known nodes with visualizations
+                // Remove node from known nodes with visualizations
                 for (var i = 0; i < scope.nodeWithVizIDs.length; i++) {
                     if (scope.nodeWithVizIDs[i] === id) {
                         scope.nodeWithVizIDs.splice(i, 1);
@@ -199,6 +199,10 @@ moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'patientData',
                     scope.currentNode = scope.treeRoot;
                 }
 
+                // Cancel any pending splits
+                scope.cancelSplit();
+
+                // Update parent
                 var parentNode = node.parent;
                 if (parentNode !== undefined) {
                     console.log("[INFO] Removing " + node.model.id);
@@ -242,7 +246,7 @@ moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'patientData',
                 scope.updateLayout();
             };
 
-            scope.paneColapse = function(button) {
+            scope.paneColapse = function() {
                 scope.currentNode = scope.treeRoot;
 
                 scope.updateLayout();
@@ -289,7 +293,7 @@ moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'patientData',
                     }
                 }
 
-                scope.updateLayout();
+                scope.paneColapse();
             };
 
             scope.paneSplitVertical = function(button) {
@@ -300,6 +304,7 @@ moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'patientData',
                     split: scope.splitType.VERTICAL
                 };
 
+                scope.paneColapse();
                 scope.makeViewChooser();
             };
 
@@ -311,6 +316,7 @@ moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'patientData',
                     split: scope.splitType.HORIZONTAL
                 };
 
+                scope.paneColapse();
                 scope.makeViewChooser();
             };
 

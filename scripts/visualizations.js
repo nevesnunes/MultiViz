@@ -52,6 +52,9 @@ moduleVisualizations.factory('makeVisualization', function() {
             console.log("[WARN] @makeHeatMap: undefined id.");
             return;
         }
+        
+        d3.select("#" + elementID).append("h4")
+            .text("Comparação entre múltiplos pacientes");
 
         var svg = d3.select("#" + elementID).append("svg")
             .attr("width", width + margin.left + margin.right)

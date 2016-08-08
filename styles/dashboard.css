@@ -212,7 +212,6 @@ body {
 
 /* Tooltips */
 
-
 .tooltip-element {
     position: absolute;
     text-align: center;
@@ -226,8 +225,16 @@ body {
     font-family: sans-serif;
 }
 
+.tooltip {
+  position: fixed; /* fix occlusion issues */
+}
+
 .tooltip-wrapper {
   display: inline-block; /* display: block works as well */
+}
+
+.fade {
+  transition: none;
 }
 
 .tooltip-wrapper .btn[disabled] {
