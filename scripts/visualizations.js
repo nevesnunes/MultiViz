@@ -15,36 +15,11 @@ moduleVisualizations.factory('makeVisualization', function() {
         buckets = 9,
         colors = colorbrewer.Greys[9];
 
-    var reduceDataArray = function(previous, current, i) {
-        current.forEach(function(element) {
-            if (previous.indexOf(element) === -1) {
-                previous.push(element);
-            }
-        });
-        return previous;
-    };
-
-    var arrayObjectIndexOf = function(myArray, searchTerm, property) {
-        for (var i = 0, len = myArray.length; i < len; i++) {
-            if (myArray[i][property] === searchTerm)
-                return i;
-        }
-        return -1;
-    };
-
     var diseases = [];
     var medications = [];
-    var setData = function(patients) {
-        diseases = patients
-            .map(function(patient) {
-                return patient.diseases;
-            })
-            .reduce(reduceDataArray, []);
-        medications = patients
-            .map(function(patient) {
-                return patient.medications;
-            })
-            .reduce(reduceDataArray, []);
+    var setData = function(argDiseases, argMedications) {
+        diseases = argDiseases;
+        medications = argMedications;
     };
 
     var makeHeatMap = function(elementID) {

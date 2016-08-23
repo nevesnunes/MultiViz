@@ -1,7 +1,7 @@
 var moduleVisualizations = angular.module('moduleVisualizations');
 var moduleLayout = angular.module('moduleLayout',['moduleIndex', 'moduleVisualizations']);
 
-moduleLayout.controller('controllerPanes', ['$scope', function($scope){
+moduleLayout.controller('controllerPanes', ['$scope', 'patientData', function($scope, patientData){
     $scope.splitType = Object.freeze({
         NONE: "NONE",
         VERTICAL: "VERTICAL",
@@ -10,7 +10,8 @@ moduleLayout.controller('controllerPanes', ['$scope', function($scope){
 
     $scope.vizType = Object.freeze({
         NONE: "NONE",
-        HEATMAP: "HEATMAP"
+        HEAT_MAP: "HEAT_MAP",
+        CIRCULAR_TIME: "CIRCULAR_TIME"
     });
 
     // Store our view layout in a tree
@@ -20,22 +21,50 @@ moduleLayout.controller('controllerPanes', ['$scope', function($scope){
     // TODO: Replace with tree traversal
     $scope.nodeWithVizIDs = [];
 
-    $scope.cancelSplit = function() {
-        document.getElementById('view-chooser').innerHTML = '';
+    $scope.check = function(iso) {
+        /*
+        for (i = 0; i < $scope.countryList.length; i++) {
+            if ($scope.countryList[i].iso2 == iso) {
+                if ($scope.countryList[i].selected) {
+                    $scope.countryList[i].selected = false;
+                } else {
+                    $scope.countryList[i].selected = true;
+                }
+            }
+        }
+        updateData($scope.data);
+        */
+    };
 
+    $scope.patients = patientData.getData(patientData.KEY_PATIENTS);
+    $scope.diseases = $scope.patients
+            .map(function(patient) {
+                return patient.diseases;
+            })
+            .reduce(patientData.reduceDataArray, []);
+    $scope.medications = $scope.patients
+            .map(function(patient) {
+                return patient.medications;
+            })
+            .reduce(patientData.reduceDataArray, []);
+    
+    $scope.cancelSplit = function() {
         $scope.nodeForViz = undefined;
+
+        // FIXME: Remember previous html to restore
+        document.getElementById('view-chooser').innerHTML = "";
+    };
+
+    $scope.chooseCircularTime = function() {
+        $scope.createPaneSplit($scope.vizType.NONE);
     };
 
     $scope.chooseHeatmap = function() {
-        document.getElementById('view-chooser').innerHTML = '';
-
-        $scope.createPaneSplit($scope.vizType.HEATMAP);
+        $scope.createPaneSplit($scope.vizType.HEAT_MAP);
     };
 
     // FIXME: Just for testing
     $scope.chooseTODO = function() {
-        document.getElementById('view-chooser').innerHTML = '';
-
         $scope.createPaneSplit($scope.vizType.NONE);
     };
 }]);
@@ -139,7 +168,7 @@ moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'patientData',
             scope.makeViewChooser = function() {
                 var cancelButton = '';
                 if (scope.treeRoot !== undefined) {
-                    cancelButton = '<button class="tooltip-wrapper btn btn-secondary btn-custom-cancel" title="Cancelar" directive-static-tooltip custom-placement="left" ng-click="cancelSplit()">' +
+                    cancelButton = '<button class="tooltip-wrapper btn btn-secondary btn-custom-secondary" title="Cancelar" directive-static-tooltip custom-placement="left" ng-click="cancelSplit()">' +
                     '<img src="images/controls/black/remove.svg" class="btn-custom-svg">' +
                     '</button>';
                 }
@@ -149,10 +178,66 @@ moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'patientData',
                     '<div class="view-choice" ng-click="chooseHeatmap()">' +
                     '<img src="images/views/heatmap.svg" class="view-choice-svg">Comparação entre múltiplos pacientes</img>' +
                     '</div>' +
+                    '<div class="view-choice" ng-click="chooseCircularTime()">' +
+                    '<img src="images/views/circulartime.svg" class="view-choice-svg">Análise temporal de atributos</img>' +
+                    '</div>' +
                     '<div class="view-choice" ng-click="chooseTODO()">' +
                     '<img src="images/views/circular.svg" class="view-choice-svg">TODO</img>' +
                     '</div>';
 
+                $compile(angular.element('#view-chooser'))(scope);
+            };
+
+            scope.attributeType = Object.freeze({
+                NONE: "NONE",
+                DISEASES: "DISEASES",
+                MEDICATIONS: "MEDICATIONS"
+            });
+            scope.currentAttributeType = scope.attributeType.DISEASES;
+            scope.setAttributeType = function(type) {
+                scope.currentAttributeType = type;
+                scope.panelDefaultActions();
+            };
+            scope.isAttributeTypeActive = function(type) {
+                return (type === scope.currentAttributeType) ?
+                    "entrySelected" :
+                    "";
+            };
+
+            scope.panelDefaultActions = function() {
+                var html = "";
+                if ((scope.currentNode === undefined) ||
+                        (scope.treeRoot !== undefined && (!scope.treeRoot.hasChildren())) ||
+                        (scope.currentNode.model.id !== scope.treeRoot.model.id)) {
+                    var list = "";
+                    if (scope.currentAttributeType === "DISEASES")
+                        list = "diseases";
+                    if (scope.currentAttributeType === "MEDICATIONS")
+                        list = "medications";
+                    html = '<div class="btn-group" role="group" aria-label="...">' +
+                        '    <button type="button" id="btnDiseases" class="btn btn-default" ng-class="isAttributeTypeActive(\'' + scope.attributeType.DISEASES + '\')" ng-click="setAttributeType(\'' + scope.attributeType.DISEASES + '\')">Doenças</button>' +
+                        '    <button type="button" id="btnMedications" class="btn btn-default" ng-class="isAttributeTypeActive(\'' + scope.attributeType.MEDICATIONS + '\')" ng-click="setAttributeType(\'' + scope.attributeType.MEDICATIONS + '\')">Medicações</button>' +
+                        '</div>' +
+                        '<p></p>' +
+                        '<div class="right-inner-addon" style="margin-bottom:10px;">' +
+                        '    <i class="glyphicon glyphicon-search"></i>' +
+                        '    <input type="text" id="input-diseases" class="form-control" placeholder="Procurar..." ng-model="name" ng-key-select autofocus tabindex=1>' +
+                        '</div>' +
+                        '<p></p>' +
+                        '<div id="patient-table" class="table table-condensed table-bordered">' +
+                        '    <div class="checkbox checkboxInTable patient-table-entry" ng-repeat="disease in filteredDiseases = (' + list + ' | filter:name)" ng-click="">' +
+                        '        <div style="display: inline-block" ng-class="isEntrySelected($index)">' +
+                        '           <input class="checkbox-custom" type="checkbox" ng-checked="" ng-click="">' +
+                        '           {{::disease}}' +
+                        '        </div>' +
+                        '    </div>' +
+                        '</div>'
+                        ;
+                } else {
+                    html = 'Pode <b>Maximizar</b> ( <img src="images/controls/black/maximize.svg" class="btn-custom-svg"> ) uma vista para configurar os atributos visíveis.';
+                }
+
+                document.getElementById('view-chooser').innerHTML = html;
                 $compile(angular.element('#view-chooser'))(scope);
             };
 
@@ -177,6 +262,8 @@ moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'patientData',
                     });
 
                     scope.nodeWithVizIDs = [];
+
+                    scope.panelDefaultActions();
                 }
             };
 
@@ -323,7 +410,9 @@ moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'patientData',
 
             // Make initial layout
             makeVisualization.setData(
-                patientData.getData(patientData.KEY_PATIENTS)
+                //patientData.getData(patientData.KEY_PATIENTS)
+                scope.diseases,
+                scope.medications
             );
             scope.updateLayout();
         } //link

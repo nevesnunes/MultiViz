@@ -33,8 +33,20 @@
     vertical-align: middle;
 }
 
-.btn-custom-cancel {
+.btn-custom-secondary {
     border: 1px solid #ccc;
     display: block;
     margin: 0 0 0 auto;
+}
+
+.checkbox-custom {
+    position: relative !important;
+    margin: 0 !important;
+}
+
+.checkboxInTable {
+    position: relative;
+    display: block;
+    margin-top: 0;
+    margin-bottom: 0;
 }
