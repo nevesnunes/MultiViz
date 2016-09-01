@@ -17,10 +17,7 @@ moduleLayout.controller('controllerPanes', ['$scope', 'patientData', function($s
     // Store our view layout in a tree
     $scope.treeModel = new TreeModel();
 
-    // Keep track of nodes with visualizations
-    // TODO: Replace with tree traversal
-    $scope.nodeWithVizIDs = [];
-
+    // Select a property from the view's active property list
     $scope.check = function(iso) {
         /*
         for (i = 0; i < $scope.countryList.length; i++) {
@@ -47,6 +44,8 @@ moduleLayout.controller('controllerPanes', ['$scope', 'patientData', function($s
                 return patient.medications;
             })
             .reduce(patientData.reduceDataArray, []);
+
+    // view-chooser methods
     
     $scope.cancelSplit = function() {
         $scope.nodeForViz = undefined;
@@ -89,14 +88,6 @@ moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'patientData',
                     '</button>';
             }
 
-            function makeSplitPane(orientation, node1, node2) {
-                return '<div data-split-pane>' +
-                    makeSplitComponent(orientation, node1) +
-                    makeSplitDivider(orientation) +
-                    makeSplitComponent(orientation, node2) +
-                    '</div>';
-            }
-
             // FIXME: Split size changes should be tracked
             function makeSplitComponent(orientation, node) {
                 return '<div data-split-pane-component data-' + orientation + '="50%">' +
@@ -108,6 +99,14 @@ moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'patientData',
 				return '<div data-split-pane-divider data-' + orientation + '="5px"></div>';
             }
 
+            function makeSplitPane(orientation, node1, node2) {
+                return '<div data-split-pane>' +
+                    makeSplitComponent(orientation, node1) +
+                    makeSplitDivider(orientation) +
+                    makeSplitComponent(orientation, node2) +
+                    '</div>';
+            }
+
             function makeSplitInner(id) {
                 var node = scope.treeRoot.first(function(node1) {
                     return node1.model.id === id;
@@ -115,7 +114,6 @@ moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'patientData',
 
                 var visualization = '';
                 if (node.model.viz !== scope.vizType.NONE) {
-                    scope.nodeWithVizIDs.push(id);
                     visualization = '<div id=' + id + '></div>'; 
                 }
 
@@ -266,11 +264,11 @@ moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'patientData',
                     )(scope));
 
                     // FIXME: Only making heatmaps
-                    scope.nodeWithVizIDs.forEach(function(nodeID) {
-                        makeVisualization.makeHeatMap(nodeID);
+                    scope.treeRoot.walk(function(node) {
+                        if (node.model.viz !== scope.vizType.NONE) {
+                            makeVisualization.makeHeatMap(node.model.id);
+                        }
                     });
-
-                    scope.nodeWithVizIDs = [];
 
                     scope.panelDefaultActions();
                 }
@@ -281,14 +279,6 @@ moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'patientData',
                 var node = scope.treeRoot.first(function (node1) {
                     return node1.model.id === id;
                 });
-
-                // Remove node from known nodes with visualizations
-                for (var i = 0; i < scope.nodeWithVizIDs.length; i++) {
-                    if (scope.nodeWithVizIDs[i] === id) {
-                        scope.nodeWithVizIDs.splice(i, 1);
-                        break;
-                     }
-                }
 
                 // Colapse the view if it is maximized
                 if (scope.currentNode.model.id === id) {
