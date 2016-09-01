@@ -75,8 +75,17 @@ moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'patientData',
         scope: false, // Allow communication with view chooser
         link: function(scope, element, attrs) {
             function makeImgButton(id, method, text, img) {
-                return '<button class="tooltip-wrapper btn btn-primary" data-id="' + id + '" directive-static-tooltip custom-placement="top" ng-click="' + method + '" title="' + text + '">' +                     
-                    '<img src="' + img + '" class="btn-custom-svg">' +
+                // Make sure all child elements have the id property, since the
+                // user may click on one of them and activate functions
+                // which expect the id to be present in the clicked element
+                return '<button class="tooltip-wrapper btn btn-primary" ' +
+                    'directive-static-tooltip custom-placement="top" ' +
+                    'data-id="' + id + '" ' +
+                    'ng-click="' + method + '" ' +
+                    'title="' + text + '">' +                     
+                    '<img src="' + img + '" ' +
+                        'data-id="' + id + '" ' +
+                        'class="btn-custom-svg">' +
                     '</button>';
             }
 
