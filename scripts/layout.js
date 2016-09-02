@@ -7,12 +7,6 @@ var moduleLayout = angular.module('moduleLayout',
 moduleLayout.controller('controllerPanes',
         ['$scope', 'patientData',
         function($scope, patientData) {
-    // Patient Data
-    $scope.diseases = patientData.getAttributeList(
-            patientData.KEY_PATIENTS, 'diseases');
-    $scope.medications = patientData.getAttributeList(
-            patientData.KEY_PATIENTS, 'medications');
-
     // Populated by directive panes
     $scope.APIPanes = {};
 
@@ -21,8 +15,8 @@ moduleLayout.controller('controllerPanes',
 }]);
 
 moduleLayout.directive("directiveActionPanel",
-        ['$compile', '$timeout', 
-        function($compile, $timeout) {
+        ['$compile', '$timeout', 'patientData',
+        function($compile, $timeout, patientData) {
 	return { 
         scope: true,
         link: function(scope, element, attrs) {
@@ -35,7 +29,8 @@ moduleLayout.directive("directiveActionPanel",
             };
 
             scope.chooseCircularTime = function() {
-                scope.APIPanes.makePaneSplit(scope.APIPanes.vizType.NONE);
+                scope.APIPanes.makePaneSplit(
+                    scope.APIPanes.vizType.CIRCULAR_TIME);
             };
 
             scope.chooseHeatmap = function() {
@@ -98,6 +93,10 @@ moduleLayout.directive("directiveActionPanel",
                     "entrySelected" :
                     "";
             };
+            scope.diseases = patientData.getAttributeList(
+                patientData.KEY_PATIENTS, 'diseases');
+            scope.medications = patientData.getAttributeList(
+                patientData.KEY_PATIENTS, 'medications');
 
             // Select a property from the view's active property list
             scope.check = function(iso) {
@@ -134,7 +133,7 @@ moduleLayout.directive("directiveActionPanel",
                         '    <input type="text" id="input-diseases" class="form-control" placeholder="Procurar..." ng-model="name" ng-key-select autofocus tabindex=1>' +
                         '</div>' +
                         '<p></p>' +
-                        '<div id="patient-table" class="table table-condensed table-bordered">' +
+                        '<div class="table table-condensed table-bordered patient-table">' +
                         '    <div class="checkboxInTable patient-table-entry" ng-repeat="disease in filteredDiseases = (' + list + ' | filter:name)" ng-click="">' +
                         '        <div style="display: inline-block" ng-class="isEntrySelected($index)">' +
                         '           <input class="checkbox-custom" type="checkbox" ng-checked="" ng-click="">' +
@@ -304,10 +303,13 @@ moduleLayout.directive("directivePanes",
                         makeChildrenLayout(scope.currentNode)
                     )(scope));
 
-                    // FIXME: Only making heatmaps
                     scope.treeRoot.walk(function(node) {
-                        if (node.model.viz !== scope.vizType.NONE) {
+                        if (node.model.viz ===
+                                scope.vizType.HEAT_MAP) {
                             makeVisualization.makeHeatMap(node.model.id);
+                        } else if (node.model.viz ===
+                                scope.vizType.CIRCULAR_TIME) {
+                            makeVisualization.makeCircularTime(node.model.id);
                         }
                     });
 
@@ -458,10 +460,6 @@ moduleLayout.directive("directivePanes",
             scope.APIPanes.makePaneSplit = scope.makePaneSplit; 
 
             // Initialize
-            makeVisualization.setData(
-                scope.diseases,
-                scope.medications
-            );
             updateLayout();
         } //link
     }; //return

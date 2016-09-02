@@ -2,7 +2,8 @@ var moduleIndex = angular.module('moduleIndex');
 var moduleVisualizations = angular.module('moduleVisualizations',
         ['moduleIndex']);
 
-moduleVisualizations.factory('makeVisualization', function() {
+moduleVisualizations.factory('makeVisualization',
+        ['patientData', function(patientData) {
     var margin = {
             top: 80,
             right: 0,
@@ -16,11 +17,19 @@ moduleVisualizations.factory('makeVisualization', function() {
         buckets = 9,
         colors = colorbrewer.Greys[9];
 
-    var diseases = [];
-    var medications = [];
-    var setData = function(argDiseases, argMedications) {
-        diseases = argDiseases;
-        medications = argMedications;
+    var diseases = patientData.getAttributeList(
+        patientData.KEY_PATIENTS, 'diseases');
+    var medications = patientData.getAttributeList(
+        patientData.KEY_PATIENTS, 'medications');
+
+    var makeCircularTime = function(elementID) {
+        if (elementID === undefined) {
+            console.log("[WARN] @makeHeatMap: undefined id.");
+            return;
+        }
+        
+        d3.select("#" + elementID).append("h4")
+            .text("Análise temporal de atributos");
     };
 
     var makeHeatMap = function(elementID) {
@@ -144,7 +153,7 @@ moduleVisualizations.factory('makeVisualization', function() {
     };
 
     return {
-        setData: setData,
+        makeCircularTime: makeCircularTime,
         makeHeatMap: makeHeatMap
     };
-});
+}]);
