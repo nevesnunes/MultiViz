@@ -17,6 +17,7 @@ moduleIndex.factory('retrievePatientData', ['$http', function($http) {
 moduleIndex.factory('patientData', function($window) {
     var KEY_PATIENT = 'App.patient';
     var KEY_PATIENTS = 'App.patients';
+    var attributes = {};
 
     var addData = function(key, newObj) {
         var mydata = $window.sessionStorage.getItem(key);
@@ -27,10 +28,12 @@ moduleIndex.factory('patientData', function($window) {
         }
         mydata.push(newObj);
         $window.sessionStorage.setItem(key, JSON.stringify(mydata));
+        attributes[key] = getData(key);
     };
 
     var setData = function(key, newObj) {
         $window.sessionStorage.setItem(key, JSON.stringify(newObj));
+        attributes[key] = getData(key);
     };
 
     var getData = function(key) {
@@ -39,6 +42,10 @@ moduleIndex.factory('patientData', function($window) {
             mydata = JSON.parse(mydata);
         }
         return mydata || [];
+    };
+
+    var getAttribute = function(key) {
+        return attributes[key];
     };
 
     var reduceDataArray = function(previous, current, i) {
@@ -58,13 +65,17 @@ moduleIndex.factory('patientData', function($window) {
         return -1;
     };
 
-    var getAttributeList = function(patients, attributeType) {
-        return patients
+    var getAttributeList = function(key, attributeType) {
+        return attributes[key]
             .map(function(patient) {
                 return patient[attributeType];
             })
             .reduce(reduceDataArray, []);
     };
+
+    // Initialize
+    attributes[KEY_PATIENT] = getData(KEY_PATIENT);
+    attributes[KEY_PATIENTS] = getData(KEY_PATIENTS);
 
     return {
         KEY_PATIENT: KEY_PATIENT,
@@ -72,6 +83,7 @@ moduleIndex.factory('patientData', function($window) {
         addData: addData,
         setData: setData,
         getData: getData,
+        getAttribute: getAttribute,
         getAttributeList: getAttributeList
     };
 });
@@ -233,61 +245,61 @@ moduleIndex.directive('ngKeySelect', ['$compile', '$timeout', 'patientData',
         return {
             scope: false, // Use the same scope to not break filter of ng-model
             link: function(scope, element, attrs) {
-                    element.bind("keyup", function(event) {
-                        var elems = scope.filteredPatientList;
-                        switch (event.which) {
-                            case 40: {
-                                $timeout(function() {
-                                    if (scope.selectedOption === -1) {
-                                        scope.selectedOption = 0;
-                                    } else {
-                                        scope.selectedOption = scope.selectedOption === elems.length - 1 ?
-                                            scope.selectedOption :
-                                            scope.selectedOption + 1;
-                                    }
-                                    event.preventDefault();
-                                    console.log(scope.selectedOption + ": " + elems[scope.selectedOption].name);
-                                }, 0);
-                                break;
-                            }
-                            case 38: {
-                                $timeout(function() {
-                                    if (scope.selectedOption === -1) {
-                                        scope.selectedOption = elems.length - 1;
-                                    } else {
-                                        scope.selectedOption = scope.selectedOption === 0 ?
-                                            0 : scope.selectedOption - 1;
-                                    }
-                                    event.preventDefault();
-                                    console.log(scope.selectedOption + ": " + elems[scope.selectedOption].name);
-                                }, 0);
-                                break;
-                            }
-                            case 13: {
-                                $timeout(function() {
-                                    if (!scope.isDisabled() && (scope.selectedOption === -1)) {
-                                        scope.gotoViews(event, scope.patientModel);
-                                    } else {
-                                        scope.patientModel = scope.clonePatient(elems[scope.selectedOption]);
+                element.bind("keyup", function(event) {
+                    var elems = scope.filteredPatientList;
+                    switch (event.which) {
+                        case 40: {
+                            $timeout(function() {
+                                if (scope.selectedOption === -1) {
+                                    scope.selectedOption = 0;
+                                } else {
+                                    scope.selectedOption = scope.selectedOption === elems.length - 1 ?
+                                        scope.selectedOption :
+                                        scope.selectedOption + 1;
+                                }
+                                event.preventDefault();
+                                console.log(scope.selectedOption + ": " + elems[scope.selectedOption].name);
+                            }, 0);
+                            break;
+                        }
+                        case 38: {
+                            $timeout(function() {
+                                if (scope.selectedOption === -1) {
+                                    scope.selectedOption = elems.length - 1;
+                                } else {
+                                    scope.selectedOption = scope.selectedOption === 0 ?
+                                        0 : scope.selectedOption - 1;
+                                }
+                                event.preventDefault();
+                                console.log(scope.selectedOption + ": " + elems[scope.selectedOption].name);
+                            }, 0);
+                            break;
+                        }
+                        case 13: {
+                            $timeout(function() {
+                                if (!scope.isDisabled() && (scope.selectedOption === -1)) {
+                                    scope.gotoViews(event, scope.patientModel);
+                                } else {
+                                    scope.patientModel = scope.clonePatient(elems[scope.selectedOption]);
 
-                                        scope.dataToShare = scope.clonePatient(elems[scope.selectedOption]);
-                                        patientData.setData(patientData.KEY_PATIENT, scope.dataToShare);
+                                    scope.dataToShare = scope.clonePatient(elems[scope.selectedOption]);
+                                    patientData.setData(patientData.KEY_PATIENT, scope.dataToShare);
 
-                                        scope.selectedOption = -1;
-                                    }
-
-                                    event.preventDefault();
-                                }, 0);
-                                break;
-                            }
-                            default: {
-                                $timeout(function() {
                                     scope.selectedOption = -1;
-                                }, 0);
-                            }
-                        } //switch
-                    }); //bind
-                } //link
+                                }
+
+                                event.preventDefault();
+                            }, 0);
+                            break;
+                        }
+                        default: {
+                            $timeout(function() {
+                                scope.selectedOption = -1;
+                            }, 0);
+                        }
+                    } //switch
+                }); //bind
+            } //link
         }; //return
     }
 ]);

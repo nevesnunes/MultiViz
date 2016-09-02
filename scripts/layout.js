@@ -7,97 +7,25 @@ var moduleLayout = angular.module('moduleLayout',
 moduleLayout.controller('controllerPanes',
         ['$scope', 'patientData',
         function($scope, patientData) {
-    //
-    // Node Tree
-    //
-
-    $scope.splitType = Object.freeze({
-        NONE: "none",
-        VERTICAL: "vertical",
-        HORIZONTAL: "horizontal"
-    });
-
-    $scope.vizType = Object.freeze({
-        NONE: "none",
-        HEAT_MAP: "heat_map",
-        CIRCULAR_TIME: "circular_time"
-    });
-
-    // Store our view layout in a tree
-    $scope.treeModel = new TreeModel();
-
-    //
     // Patient Data
-    //
-
-    $scope.patient = patientData.getData(patientData.KEY_PATIENT);
-    $scope.patients = patientData.getData(patientData.KEY_PATIENTS);
+    $scope.patient = patientData.getAttribute(patientData.KEY_PATIENT);
     $scope.diseases = patientData.getAttributeList(
-            $scope.patients, 'diseases');
+            patientData.KEY_PATIENTS, 'diseases');
     $scope.medications = patientData.getAttributeList(
-            $scope.patients, 'medications');
+            patientData.KEY_PATIENTS, 'medications');
 
-    $scope.attributeType = Object.freeze({
-        NONE: "none",
-        DISEASES: "diseases",
-        MEDICATIONS: "medications"
-    });
-    $scope.currentAttributeType = $scope.attributeType.DISEASES;
-    $scope.setAttributeType = function(type) {
-        $scope.currentAttributeType = type;
-        $scope.makeDefaultActions();
-    };
-    $scope.isAttributeTypeActive = function(type) {
-        return (type === $scope.currentAttributeType) ?
-            "entrySelected" :
-            "";
-    };
+    // Populated by directive panes
+    $scope.APIPanes = {};
 
-    // Select a property from the view's active property list
-    $scope.check = function(iso) {
-        /*
-        for (i = 0; i < $scope.countryList.length; i++) {
-            if ($scope.countryList[i].iso2 == iso) {
-                if ($scope.countryList[i].selected) {
-                    $scope.countryList[i].selected = false;
-                } else {
-                    $scope.countryList[i].selected = true;
-                }
-            }
-        }
-        updateData($scope.data); */
-    };
-
-    //
-    // Action Panel
-    //
-
-    $scope.cancelSplit = function() {
-        $scope.nodeForViz = undefined;
-
-        // FIXME: Remember previous html to restore
-        $scope.makeTODOActionPanel();
-    };
-
-    $scope.chooseCircularTime = function() {
-        $scope.makePaneSplit($scope.vizType.NONE);
-    };
-
-    $scope.chooseHeatmap = function() {
-        $scope.makePaneSplit($scope.vizType.HEAT_MAP);
-    };
-
-    // FIXME: Just for testing
-    $scope.chooseTODO = function() {
-        $scope.makePaneSplit($scope.vizType.NONE);
-    };
+    // Populated by directive actionPanel
+    $scope.APIActionPanel = {};
 }]);
 
 moduleLayout.directive("directiveActionPanel",
         ['$compile', '$timeout', 
         function($compile, $timeout) {
 	return { 
-        scope: false, // Allow communication between panes and action panel
+        scope: true,
         link: function(scope, element, attrs) {
             var html = "";
 
@@ -107,6 +35,19 @@ moduleLayout.directive("directiveActionPanel",
                 )(scope));
             };
 
+            scope.chooseCircularTime = function() {
+                scope.APIPanes.makePaneSplit(scope.APIPanes.vizType.NONE);
+            };
+
+            scope.chooseHeatmap = function() {
+                scope.APIPanes.makePaneSplit(scope.APIPanes.vizType.HEAT_MAP);
+            };
+
+            // FIXME: Just for testing
+            scope.chooseTODO = function() {
+                scope.APIPanes.makePaneSplit(scope.APIPanes.vizType.NONE);
+            };
+
             // FIXME: Just for testing
             scope.makeTODOActionPanel = function() {
                 html = "<span>TODO</span>";
@@ -114,9 +55,16 @@ moduleLayout.directive("directiveActionPanel",
                 updateActionPanel();
             };
 
+            scope.cancelSplit = function() {
+                scope.nodeToSplit = undefined;
+
+                // FIXME: Remember previous html to restore
+                scope.makeTODOActionPanel();
+            };
+
             scope.makeViewChooser = function() {
                 var cancelButton = '';
-                if (scope.treeRoot !== undefined) {
+                if (scope.APIPanes.getTreeRoot() !== undefined) {
                     cancelButton = '<button class="tooltip-wrapper btn btn-secondary btn-custom-secondary" title="Cancelar" directive-static-tooltip custom-placement="left" ng-click="cancelSplit()">' +
                     '<img src="images/controls/black/remove.svg" class="btn-custom-svg">' +
                     '</button>';
@@ -136,11 +84,46 @@ moduleLayout.directive("directiveActionPanel",
                 updateActionPanel();
             };
 
+            scope.attributeType = Object.freeze({
+                NONE: "none",
+                DISEASES: "diseases",
+                MEDICATIONS: "medications"
+            });
+            scope.currentAttributeType = scope.attributeType.DISEASES;
+            scope.setAttributeType = function(type) {
+                scope.currentAttributeType = type;
+                scope.makeDefaultActions();
+            };
+            scope.isAttributeTypeActive = function(type) {
+                return (type === scope.currentAttributeType) ?
+                    "entrySelected" :
+                    "";
+            };
+
+            // Select a property from the view's active property list
+            scope.check = function(iso) {
+                /*
+                for (i = 0; i < $scope.countryList.length; i++) {
+                    if ($scope.countryList[i].iso2 == iso) {
+                        if ($scope.countryList[i].selected) {
+                            $scope.countryList[i].selected = false;
+                        } else {
+                            $scope.countryList[i].selected = true;
+                        }
+                    }
+                }
+                updateData($scope.data); */
+            };
+
             scope.makeDefaultActions = function() {
                 html = "";
-                if ((scope.currentNode === undefined) ||
-                        (scope.treeRoot !== undefined && (!scope.treeRoot.hasChildren())) ||
-                        (scope.currentNode.model.id !== scope.treeRoot.model.id)) {
+                var rootHasNoChildren = 
+                    (scope.APIPanes.getTreeRoot() !== undefined) &&
+                    (!scope.APIPanes.getTreeRoot().hasChildren());
+                var viewNotRoot =
+                    scope.APIPanes.getCurrentNode().model.id !==
+                    scope.APIPanes.getTreeRoot().model.id;
+                if(rootHasNoChildren || viewNotRoot) {
                     var list = scope.currentAttributeType;
                     html = '<div class="btn-group" role="group" aria-label="...">' +
                         '    <button type="button" id="btnDiseases" class="btn btn-default" ng-class="isAttributeTypeActive(\'' + scope.attributeType.DISEASES + '\')" ng-click="setAttributeType(\'' + scope.attributeType.DISEASES + '\')">Doenças</button>' +
@@ -168,6 +151,14 @@ moduleLayout.directive("directiveActionPanel",
                 updateActionPanel();
             };
 
+            // Populate API
+            scope.APIActionPanel.makeTODOActionPanel = scope.makeTODOActionPanel;
+            scope.APIActionPanel.cancelSplit = scope.cancelSplit;
+            scope.APIActionPanel.makeViewChooser = scope.makeViewChooser;
+            scope.APIActionPanel.makeDefaultActions =
+                scope.makeDefaultActions;
+
+            // Initialize
             updateActionPanel();
         } //link
     }; //return
@@ -177,8 +168,26 @@ moduleLayout.directive("directivePanes",
         ['$compile', '$timeout', 'patientData', 'makeVisualization',
         function($compile, $timeout, patientData, makeVisualization) {
 	return { 
-        scope: false, // Allow communication between panes and action panel
+        scope: true,
         link: function(scope, element, attrs) {
+            scope.splitType = Object.freeze({
+                NONE: "none",
+                VERTICAL: "vertical",
+                HORIZONTAL: "horizontal"
+            });
+
+            scope.vizType = Object.freeze({
+                NONE: "none",
+                HEAT_MAP: "heat_map",
+                CIRCULAR_TIME: "circular_time"
+            });
+
+            scope.currentNode = undefined;
+            scope.treeRoot = undefined;
+
+            // Store our view layout in a tree
+            scope.treeModel = new TreeModel();
+
             function makeImgButton(id, method, text, img) {
                 // Make sure all child elements have the id property, since the
                 // user may click on one of them and activate functions
@@ -267,7 +276,10 @@ moduleLayout.directive("directivePanes",
                         console.log("[WARN] @makeChildrenLayout: less than 2 childs");
                     } else {
                         console.log("[INFO] @makeChildrenLayout: splitting children");
-                        var orientation = (node.model.split === scope.splitType.VERTICAL) ? "height" : "width";
+                        var orientation = 
+                            (node.model.split === scope.splitType.VERTICAL) ?
+                            "height" :
+                            "width";
 
                         return makeSplitPane(orientation, node.children[0], node.children[1]);
                     }
@@ -285,7 +297,7 @@ moduleLayout.directive("directivePanes",
                     // There may be a previous view: nuke the layout
                     element.html($compile('')(scope));
 
-                    scope.makeViewChooser();
+                    scope.APIActionPanel.makeViewChooser();
 
                 // Make html node layout
                 } else {
@@ -300,7 +312,7 @@ moduleLayout.directive("directivePanes",
                         }
                     });
 
-                    scope.makeDefaultActions();
+                    scope.APIActionPanel.makeDefaultActions();
                 }
             }
 
@@ -316,7 +328,7 @@ moduleLayout.directive("directivePanes",
                 }
 
                 // Cancel any pending splits
-                scope.cancelSplit();
+                scope.APIActionPanel.cancelSplit();
 
                 // Update parent
                 var parentNode = node.parent;
@@ -342,7 +354,6 @@ moduleLayout.directive("directivePanes",
                     // Children are garbage
                     node = undefined;
                     otherChildNode = undefined;
-
                 } else {
                     node = undefined;
                     scope.treeRoot = undefined;
@@ -368,6 +379,32 @@ moduleLayout.directive("directivePanes",
                 updateLayout();
             };
 
+            scope.paneSplitVertical = function(button) {
+                var buttonID = angular.element(button.target).data('id');
+                scope.nodeToSplit = {
+                    id: buttonID,
+                    split: scope.splitType.VERTICAL
+                };
+
+                if (scope.currentNode.model.id !== scope.treeRoot.model.id) {
+                    scope.paneColapse();
+                }
+                scope.APIActionPanel.makeViewChooser();
+            };
+
+            scope.paneSplitHorizontal = function(button) {
+                var buttonID = angular.element(button.target).data('id');
+                scope.nodeToSplit = {
+                    id: buttonID,
+                    split: scope.splitType.HORIZONTAL
+                };
+
+                if (scope.currentNode.model.id !== scope.treeRoot.model.id) {
+                    scope.paneColapse();
+                }
+                scope.APIActionPanel.makeViewChooser();
+            };
+
             scope.makePaneSplit = function(vizType) {
                 // First view
                 if (scope.treeRoot === undefined) {
@@ -378,13 +415,13 @@ moduleLayout.directive("directivePanes",
                         children: []
                     });
                 } else {
-                    if (scope.nodeForViz !== undefined) {
+                    if (scope.nodeToSplit !== undefined) {
                         var node = scope.treeRoot.first(function (node1) {
-                            return node1.model.id === scope.nodeForViz.id;
+                            return node1.model.id === scope.nodeToSplit.id;
                         });
 
                         console.log("[INFO] Splitting in " +
-                            scope.nodeForViz.split +
+                            scope.nodeToSplit.split +
                             " " +
                             node.model.id);
                         node.addChild(
@@ -403,7 +440,7 @@ moduleLayout.directive("directivePanes",
                             }));
 
                         // Update parent properties
-                        node.model.split = scope.nodeForViz.split;
+                        node.model.split = scope.nodeToSplit.split;
                         node.model.viz = scope.vizType.NONE;
                     }
                 }
@@ -411,33 +448,17 @@ moduleLayout.directive("directivePanes",
                 scope.paneColapse();
             };
 
-            scope.paneSplitVertical = function(button) {
-                var buttonID = angular.element(button.target).data('id');
-                scope.nodeForViz = {
-                    id: buttonID,
-                    split: scope.splitType.VERTICAL
-                };
-
-                if (scope.currentNode.model.id !== scope.treeRoot.model.id) {
-                    scope.paneColapse();
-                }
-                scope.makeViewChooser();
+            // Populate API
+            scope.APIPanes.vizType = scope.vizType;
+            scope.APIPanes.getCurrentNode = function() {
+                return scope.currentNode;
             };
-
-            scope.paneSplitHorizontal = function(button) {
-                var buttonID = angular.element(button.target).data('id');
-                scope.nodeForViz = {
-                    id: buttonID,
-                    split: scope.splitType.HORIZONTAL
-                };
-
-                if (scope.currentNode.model.id !== scope.treeRoot.model.id) {
-                    scope.paneColapse();
-                }
-                scope.makeViewChooser();
+            scope.APIPanes.getTreeRoot = function() {
+                return scope.treeRoot;
             };
+            scope.APIPanes.makePaneSplit = scope.makePaneSplit; 
 
-            // Make initial layout
+            // Initialize
             makeVisualization.setData(
                 scope.diseases,
                 scope.medications
