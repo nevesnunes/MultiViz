@@ -1,5 +1,6 @@
 var moduleIndex = angular.module('moduleIndex');
-var moduleVisualizations = angular.module('moduleVisualizations', ['moduleIndex']);
+var moduleVisualizations = angular.module('moduleVisualizations',
+        ['moduleIndex']);
 
 moduleVisualizations.factory('makeVisualization', function() {
     var margin = {

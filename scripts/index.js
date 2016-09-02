@@ -58,13 +58,21 @@ moduleIndex.factory('patientData', function($window) {
         return -1;
     };
 
+    var getAttributeList = function(patients, attributeType) {
+        return patients
+            .map(function(patient) {
+                return patient[attributeType];
+            })
+            .reduce(reduceDataArray, []);
+    };
+
     return {
         KEY_PATIENT: KEY_PATIENT,
         KEY_PATIENTS: KEY_PATIENTS,
         addData: addData,
         setData: setData,
         getData: getData,
-        reduceDataArray: reduceDataArray
+        getAttributeList: getAttributeList
     };
 });
 
@@ -116,8 +124,10 @@ moduleIndex.controller('controllerAddData',
             var input = angular.element('#input-patient').scope();
             var inputModel = input.patientModel;
 
-            var emptyText = (inputModel === undefined) || (inputModel.name === "");
-            var mismatchedText = (inputModel === undefined) || !($scope.patientListContainsName(inputModel.name));
+            var emptyText = (inputModel === undefined) ||
+                (inputModel.name === "");
+            var mismatchedText = (inputModel === undefined) ||
+                !($scope.patientListContainsName(inputModel.name));
             return emptyText || mismatchedText;
         };
 
@@ -125,8 +135,10 @@ moduleIndex.controller('controllerAddData',
             var input = angular.element('#input-patient').scope();
             var inputModel = input.patientModel;
 
-            var emptyText = (inputModel === undefined) || (inputModel.name === "");
-            var mismatchedText = (inputModel === undefined) || !($scope.patientListContainsName(inputModel.name));
+            var emptyText = (inputModel === undefined) ||
+                (inputModel.name === "");
+            var mismatchedText = (inputModel === undefined) ||
+                !($scope.patientListContainsName(inputModel.name));
             if (emptyText) {
                 $scope.tooltipText = "Nenhum paciente foi escolhido";
             } else if (mismatchedText) {
@@ -166,12 +178,6 @@ moduleIndex.controller('controllerAddData',
     $scope.isEntrySelected = function(id) {
         return (id === $scope.selectedOption) ? "entrySelected" : "";
     };
-}]);
-
-moduleIndex.controller('controllerGetData',
-        ['$scope', 'patientData', function($scope, patientData) {
-    $scope.patient = patientData.getData(patientData.KEY_PATIENT);
-    $scope.patients = patientData.getData(patientData.KEY_PATIENTS);
 }]);
 
 moduleIndex.controller('controllerGoToIndex',

@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html class="panes">
+<!DOCTYPE html> <html class="panes">
 
 <head>
     <meta charset="utf-8">
@@ -50,22 +49,20 @@
             </div>
         </div>
     </nav>
-    <div class="panes" ng-controller="controllerGetData">
-        <div class="panes" ng-controller="controllerPanes">
-            <nav class="navbar navbar-fixed-top infobar">
-                <div class="container-fluid">
-                    <div class="navbar-header bar-text">
-                        <div class="navbar-brand bar-text infobar-text">Paciente: {{ patient.name }}</div>
-                    </div>
+    <div class="panes" ng-controller="controllerPanes">
+        <nav class="navbar navbar-fixed-top infobar">
+            <div class="container-fluid">
+                <div class="navbar-header bar-text">
+                    <div class="navbar-brand bar-text infobar-text">Paciente: {{ patient.name }}</div>
                 </div>
-            </nav>
-            <div class="row panes">
-                <div class="col-sm-3 col-md-2 sidebar">
-                    <div id="view-chooser"></div>
-                </div>
-                <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main panes">
-                    <div class="panes" data-directive-panes treeRoot="treeRoot"></div>
-                </div>
+            </div>
+        </nav>
+        <div class="row panes">
+            <div class="col-sm-3 col-md-2 sidebar">
+                <div id="action-panel" data-directive-action-panel></div>
+            </div>
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main panes">
+                <div class="panes" data-directive-panes treeRoot="treeRoot"></div>
             </div>
         </div>
     </div>

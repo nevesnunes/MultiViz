@@ -1,21 +1,57 @@
+var moduleSplits = angular.module('moduleSplits',
+        ['shagstrom.angular-split-pane']);
 var moduleVisualizations = angular.module('moduleVisualizations');
-var moduleLayout = angular.module('moduleLayout',['moduleIndex', 'moduleVisualizations']);
+var moduleLayout = angular.module('moduleLayout',
+        ['moduleIndex', 'moduleVisualizations']);
 
-moduleLayout.controller('controllerPanes', ['$scope', 'patientData', function($scope, patientData){
+moduleLayout.controller('controllerPanes',
+        ['$scope', 'patientData',
+        function($scope, patientData) {
+    //
+    // Node Tree
+    //
+
     $scope.splitType = Object.freeze({
-        NONE: "NONE",
-        VERTICAL: "VERTICAL",
-        HORIZONTAL: "HORIZONTAL"
+        NONE: "none",
+        VERTICAL: "vertical",
+        HORIZONTAL: "horizontal"
     });
 
     $scope.vizType = Object.freeze({
-        NONE: "NONE",
-        HEAT_MAP: "HEAT_MAP",
-        CIRCULAR_TIME: "CIRCULAR_TIME"
+        NONE: "none",
+        HEAT_MAP: "heat_map",
+        CIRCULAR_TIME: "circular_time"
     });
 
     // Store our view layout in a tree
     $scope.treeModel = new TreeModel();
+
+    //
+    // Patient Data
+    //
+
+    $scope.patient = patientData.getData(patientData.KEY_PATIENT);
+    $scope.patients = patientData.getData(patientData.KEY_PATIENTS);
+    $scope.diseases = patientData.getAttributeList(
+            $scope.patients, 'diseases');
+    $scope.medications = patientData.getAttributeList(
+            $scope.patients, 'medications');
+
+    $scope.attributeType = Object.freeze({
+        NONE: "none",
+        DISEASES: "diseases",
+        MEDICATIONS: "medications"
+    });
+    $scope.currentAttributeType = $scope.attributeType.DISEASES;
+    $scope.setAttributeType = function(type) {
+        $scope.currentAttributeType = type;
+        $scope.makeDefaultActions();
+    };
+    $scope.isAttributeTypeActive = function(type) {
+        return (type === $scope.currentAttributeType) ?
+            "entrySelected" :
+            "";
+    };
 
     // Select a property from the view's active property list
     $scope.check = function(iso) {
@@ -29,49 +65,119 @@ moduleLayout.controller('controllerPanes', ['$scope', 'patientData', function($s
                 }
             }
         }
-        updateData($scope.data);
-        */
+        updateData($scope.data); */
     };
 
-    $scope.patients = patientData.getData(patientData.KEY_PATIENTS);
-    $scope.diseases = $scope.patients
-            .map(function(patient) {
-                return patient.diseases;
-            })
-            .reduce(patientData.reduceDataArray, []);
-    $scope.medications = $scope.patients
-            .map(function(patient) {
-                return patient.medications;
-            })
-            .reduce(patientData.reduceDataArray, []);
+    //
+    // Action Panel
+    //
 
-    // view-chooser methods
-    
     $scope.cancelSplit = function() {
         $scope.nodeForViz = undefined;
 
         // FIXME: Remember previous html to restore
-        document.getElementById('view-chooser').innerHTML = "";
+        $scope.makeTODOActionPanel();
     };
 
     $scope.chooseCircularTime = function() {
-        $scope.createPaneSplit($scope.vizType.NONE);
+        $scope.makePaneSplit($scope.vizType.NONE);
     };
 
     $scope.chooseHeatmap = function() {
-        $scope.createPaneSplit($scope.vizType.HEAT_MAP);
+        $scope.makePaneSplit($scope.vizType.HEAT_MAP);
     };
 
     // FIXME: Just for testing
     $scope.chooseTODO = function() {
-        $scope.createPaneSplit($scope.vizType.NONE);
+        $scope.makePaneSplit($scope.vizType.NONE);
     };
 }]);
 
-moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'patientData', 'makeVisualization',
-    function($compile, $timeout, patientData, makeVisualization) {
+moduleLayout.directive("directiveActionPanel",
+        ['$compile', '$timeout', 
+        function($compile, $timeout) {
 	return { 
-        scope: false, // Allow communication with view chooser
+        scope: false, // Allow communication between panes and action panel
+        link: function(scope, element, attrs) {
+            var html = "";
+
+            var updateActionPanel = function() {
+                element.html($compile(
+                    html
+                )(scope));
+            };
+
+            // FIXME: Just for testing
+            scope.makeTODOActionPanel = function() {
+                html = "<span>TODO</span>";
+
+                updateActionPanel();
+            };
+
+            scope.makeViewChooser = function() {
+                var cancelButton = '';
+                if (scope.treeRoot !== undefined) {
+                    cancelButton = '<button class="tooltip-wrapper btn btn-secondary btn-custom-secondary" title="Cancelar" directive-static-tooltip custom-placement="left" ng-click="cancelSplit()">' +
+                    '<img src="images/controls/black/remove.svg" class="btn-custom-svg">' +
+                    '</button>';
+                }
+                html = cancelButton +
+                    '<h4>Escolha uma visualização:</h4>' +
+                    '<div class="view-choice" ng-click="chooseHeatmap()">' +
+                    '<img src="images/views/heatmap.svg" class="view-choice-svg">Comparação entre múltiplos pacientes</img>' +
+                    '</div>' +
+                    '<div class="view-choice" ng-click="chooseCircularTime()">' +
+                    '<img src="images/views/circulartime.svg" class="view-choice-svg">Análise temporal de atributos</img>' +
+                    '</div>' +
+                    '<div class="view-choice" ng-click="chooseTODO()">' +
+                    '<img src="images/views/circular.svg" class="view-choice-svg">TODO</img>' +
+                    '</div>';
+                
+                updateActionPanel();
+            };
+
+            scope.makeDefaultActions = function() {
+                html = "";
+                if ((scope.currentNode === undefined) ||
+                        (scope.treeRoot !== undefined && (!scope.treeRoot.hasChildren())) ||
+                        (scope.currentNode.model.id !== scope.treeRoot.model.id)) {
+                    var list = scope.currentAttributeType;
+                    html = '<div class="btn-group" role="group" aria-label="...">' +
+                        '    <button type="button" id="btnDiseases" class="btn btn-default" ng-class="isAttributeTypeActive(\'' + scope.attributeType.DISEASES + '\')" ng-click="setAttributeType(\'' + scope.attributeType.DISEASES + '\')">Doenças</button>' +
+                        '    <button type="button" id="btnMedications" class="btn btn-default" ng-class="isAttributeTypeActive(\'' + scope.attributeType.MEDICATIONS + '\')" ng-click="setAttributeType(\'' + scope.attributeType.MEDICATIONS + '\')">Medicações</button>' +
+                        '</div>' +
+                        '<p></p>' +
+                        '<div class="right-inner-addon" style="margin-bottom:10px;">' +
+                        '    <i class="glyphicon glyphicon-search"></i>' +
+                        '    <input type="text" id="input-diseases" class="form-control" placeholder="Procurar..." ng-model="name" ng-key-select autofocus tabindex=1>' +
+                        '</div>' +
+                        '<p></p>' +
+                        '<div id="patient-table" class="table table-condensed table-bordered">' +
+                        '    <div class="checkbox checkboxInTable patient-table-entry" ng-repeat="disease in filteredDiseases = (' + list + ' | filter:name)" ng-click="">' +
+                        '        <div style="display: inline-block" ng-class="isEntrySelected($index)">' +
+                        '           <input class="checkbox-custom" type="checkbox" ng-checked="" ng-click="">' +
+                        '           {{::disease}}' +
+                        '        </div>' +
+                        '    </div>' +
+                        '</div>'
+                        ;
+                } else {
+                    html = '<span>Pode <b>Maximizar</b> ( <img src="images/controls/black/maximize.svg" class="btn-custom-svg"> ) uma vista para configurar os atributos visíveis.</span>';
+                }
+            
+                updateActionPanel();
+            };
+
+            updateActionPanel();
+        } //link
+    }; //return
+}]);
+
+moduleLayout.directive("directivePanes",
+        ['$compile', '$timeout', 'patientData', 'makeVisualization',
+        function($compile, $timeout, patientData, makeVisualization) {
+	return { 
+        scope: false, // Allow communication between panes and action panel
         link: function(scope, element, attrs) {
             function makeImgButton(id, method, text, img) {
                 // Make sure all child elements have the id property, since the
@@ -172,83 +278,7 @@ moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'patientData',
                 return "";
             }
 
-            scope.makeViewChooser = function() {
-                var cancelButton = '';
-                if (scope.treeRoot !== undefined) {
-                    cancelButton = '<button class="tooltip-wrapper btn btn-secondary btn-custom-secondary" title="Cancelar" directive-static-tooltip custom-placement="left" ng-click="cancelSplit()">' +
-                    '<img src="images/controls/black/remove.svg" class="btn-custom-svg">' +
-                    '</button>';
-                }
-                document.getElementById('view-chooser').innerHTML =
-                    cancelButton +
-                    '<h4>Escolha uma visualização:</h4>' +
-                    '<div class="view-choice" ng-click="chooseHeatmap()">' +
-                    '<img src="images/views/heatmap.svg" class="view-choice-svg">Comparação entre múltiplos pacientes</img>' +
-                    '</div>' +
-                    '<div class="view-choice" ng-click="chooseCircularTime()">' +
-                    '<img src="images/views/circulartime.svg" class="view-choice-svg">Análise temporal de atributos</img>' +
-                    '</div>' +
-                    '<div class="view-choice" ng-click="chooseTODO()">' +
-                    '<img src="images/views/circular.svg" class="view-choice-svg">TODO</img>' +
-                    '</div>';
-
-                $compile(angular.element('#view-chooser'))(scope);
-            };
-
-            scope.attributeType = Object.freeze({
-                NONE: "NONE",
-                DISEASES: "DISEASES",
-                MEDICATIONS: "MEDICATIONS"
-            });
-            scope.currentAttributeType = scope.attributeType.DISEASES;
-            scope.setAttributeType = function(type) {
-                scope.currentAttributeType = type;
-                scope.panelDefaultActions();
-            };
-            scope.isAttributeTypeActive = function(type) {
-                return (type === scope.currentAttributeType) ?
-                    "entrySelected" :
-                    "";
-            };
-
-            scope.panelDefaultActions = function() {
-                var html = "";
-                if ((scope.currentNode === undefined) ||
-                        (scope.treeRoot !== undefined && (!scope.treeRoot.hasChildren())) ||
-                        (scope.currentNode.model.id !== scope.treeRoot.model.id)) {
-                    var list = "";
-                    if (scope.currentAttributeType === "DISEASES")
-                        list = "diseases";
-                    if (scope.currentAttributeType === "MEDICATIONS")
-                        list = "medications";
-                    html = '<div class="btn-group" role="group" aria-label="...">' +
-                        '    <button type="button" id="btnDiseases" class="btn btn-default" ng-class="isAttributeTypeActive(\'' + scope.attributeType.DISEASES + '\')" ng-click="setAttributeType(\'' + scope.attributeType.DISEASES + '\')">Doenças</button>' +
-                        '    <button type="button" id="btnMedications" class="btn btn-default" ng-class="isAttributeTypeActive(\'' + scope.attributeType.MEDICATIONS + '\')" ng-click="setAttributeType(\'' + scope.attributeType.MEDICATIONS + '\')">Medicações</button>' +
-                        '</div>' +
-                        '<p></p>' +
-                        '<div class="right-inner-addon" style="margin-bottom:10px;">' +
-                        '    <i class="glyphicon glyphicon-search"></i>' +
-                        '    <input type="text" id="input-diseases" class="form-control" placeholder="Procurar..." ng-model="name" ng-key-select autofocus tabindex=1>' +
-                        '</div>' +
-                        '<p></p>' +
-                        '<div id="patient-table" class="table table-condensed table-bordered">' +
-                        '    <div class="checkbox checkboxInTable patient-table-entry" ng-repeat="disease in filteredDiseases = (' + list + ' | filter:name)" ng-click="">' +
-                        '        <div style="display: inline-block" ng-class="isEntrySelected($index)">' +
-                        '           <input class="checkbox-custom" type="checkbox" ng-checked="" ng-click="">' +
-                        '           {{::disease}}' +
-                        '        </div>' +
-                        '    </div>' +
-                        '</div>'
-                        ;
-                } else {
-                    html = 'Pode <b>Maximizar</b> ( <img src="images/controls/black/maximize.svg" class="btn-custom-svg"> ) uma vista para configurar os atributos visíveis.';
-                }
-
-                document.getElementById('view-chooser').innerHTML = html;
-                $compile(angular.element('#view-chooser'))(scope);
-            };
-
-            scope.updateLayout = function() {
+            function updateLayout() {
                 // No nodes available: make first view functionality
                 if (scope.currentNode === undefined) {
 
@@ -270,9 +300,9 @@ moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'patientData',
                         }
                     });
 
-                    scope.panelDefaultActions();
+                    scope.makeDefaultActions();
                 }
-            };
+            }
 
             scope.paneRemove = function(button) {
                 var id = angular.element(button.target).data('id');
@@ -319,7 +349,7 @@ moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'patientData',
                     scope.currentNode = undefined;
                 }
                 
-                scope.updateLayout();
+                updateLayout();
             };
 
             scope.paneMaximize = function(button) {
@@ -329,16 +359,16 @@ moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'patientData',
                 });
                 scope.currentNode = node;
 
-                scope.updateLayout();
+                updateLayout();
             };
 
             scope.paneColapse = function() {
                 scope.currentNode = scope.treeRoot;
 
-                scope.updateLayout();
+                updateLayout();
             };
 
-            scope.createPaneSplit = function(vizType) {
+            scope.makePaneSplit = function(vizType) {
                 // First view
                 if (scope.treeRoot === undefined) {
                     scope.treeRoot = scope.treeModel.parse({
@@ -409,15 +439,12 @@ moduleLayout.directive("directivePanes", ['$compile', '$timeout', 'patientData',
 
             // Make initial layout
             makeVisualization.setData(
-                //patientData.getData(patientData.KEY_PATIENTS)
                 scope.diseases,
                 scope.medications
             );
-            scope.updateLayout();
+            updateLayout();
         } //link
     }; //return
 }]);
-
-var moduleSplits = angular.module('moduleSplits', ['shagstrom.angular-split-pane']);
 
 angular.module("moduleCombined", ["moduleIndex", "moduleLayout", "moduleSplits"]);
