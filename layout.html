@@ -1,4 +1,5 @@
-<!DOCTYPE html> <html class="panes">
+<!DOCTYPE html>
+<html class="panes">
 
 <head>
     <meta charset="utf-8">
@@ -39,6 +40,7 @@
                 </ul>
                 <div ng-controller="controllerGoToIndex">
                     <ul class="nav navbar-nav navbar-right bold-text">
+                        <li><a href="#">Paciente: {{ patient.name }}</a></li>
                         <li><a href="#">Diário Clínico</a></li>
                         <li><a href="#" ng-click="gotoIndex($event)">Fechar Sessão</a></li>
                     </ul>
@@ -50,13 +52,6 @@
         </div>
     </nav>
     <div class="panes" ng-controller="controllerPanes">
-        <nav class="navbar navbar-fixed-top infobar">
-            <div class="container-fluid">
-                <div class="navbar-header bar-text">
-                    <div class="navbar-brand bar-text infobar-text">Paciente: {{ patient.name }}</div>
-                </div>
-            </div>
-        </nav>
         <div class="row panes">
             <div class="col-sm-3 col-md-2 sidebar">
                 <div id="action-panel" data-directive-action-panel></div>

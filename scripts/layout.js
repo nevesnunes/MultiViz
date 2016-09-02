@@ -8,7 +8,6 @@ moduleLayout.controller('controllerPanes',
         ['$scope', 'patientData',
         function($scope, patientData) {
     // Patient Data
-    $scope.patient = patientData.getAttribute(patientData.KEY_PATIENT);
     $scope.diseases = patientData.getAttributeList(
             patientData.KEY_PATIENTS, 'diseases');
     $scope.medications = patientData.getAttributeList(
@@ -136,7 +135,7 @@ moduleLayout.directive("directiveActionPanel",
                         '</div>' +
                         '<p></p>' +
                         '<div id="patient-table" class="table table-condensed table-bordered">' +
-                        '    <div class="checkbox checkboxInTable patient-table-entry" ng-repeat="disease in filteredDiseases = (' + list + ' | filter:name)" ng-click="">' +
+                        '    <div class="checkboxInTable patient-table-entry" ng-repeat="disease in filteredDiseases = (' + list + ' | filter:name)" ng-click="">' +
                         '        <div style="display: inline-block" ng-class="isEntrySelected($index)">' +
                         '           <input class="checkbox-custom" type="checkbox" ng-checked="" ng-click="">' +
                         '           {{::disease}}' +

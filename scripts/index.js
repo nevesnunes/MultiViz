@@ -194,6 +194,7 @@ moduleIndex.controller('controllerAddData',
 
 moduleIndex.controller('controllerGoToIndex',
         ['$scope', 'patientData', function($scope, patientData) {
+    $scope.patient = patientData.getAttribute(patientData.KEY_PATIENT);
     $scope.gotoIndex = function(button) {
         window.location.href = "index.html";
     };

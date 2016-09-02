@@ -21,7 +21,7 @@
 }
 .right-inner-addon i {
     position: absolute;
-    right: 0px;
+    right: 0;
     padding: 10px 12px;
     pointer-events: none;
 }
@@ -40,8 +40,8 @@
 }
 
 .checkbox-custom {
-    position: relative !important;
-    margin: 0 !important;
+    position: relative;
+    margin: 0;
 }
 
 .checkboxInTable {
