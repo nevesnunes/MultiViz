@@ -30,6 +30,26 @@ moduleVisualizations.factory('makeVisualization',
         
         d3.select("#" + elementID).append("h4")
             .text("Análise temporal de atributos");
+
+        var chart = circularHeatChart()
+	        .range(["white", "black"])
+            .numSegments(24)
+            .innerRadius(20);
+
+        var data = [];
+        for(var i=0; i<24*7; i++) {
+            data[i] = Math.random();
+        }
+
+        var svg = d3.select("#" + elementID).append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom);
+
+        svg.selectAll('svg')
+            .data([data])
+            .enter()
+            .append('svg')
+            .call(chart);
     };
 
     var makeHeatMap = function(elementID) {
@@ -45,7 +65,8 @@ moduleVisualizations.factory('makeVisualization',
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+            .attr("transform",
+                  "translate(" + margin.left + "," + margin.top + ")");
 
         var diseaseLabels = svg.selectAll(".diseaseLabel")
             .data(diseases)
@@ -69,7 +90,7 @@ moduleVisualizations.factory('makeVisualization',
             })
             .style("text-anchor", "middle")
             .attr("transform", function(d, i) {
-                    return "translate(" + (i * gridSize * 2) + ", -25)rotate(20)";
+                return "translate(" + (i * gridSize * 2) + ", -25)rotate(20)";
             })
             .attr("class", "medicationLabel mono axis");
 
