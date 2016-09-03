@@ -27,19 +27,23 @@
 }
 
 /* Button icon */
-.btn-custom-svg {
+.custom-btn-svg {
     height: 16px;
     width: 16px;
     vertical-align: middle;
 }
 
-.btn-custom-secondary {
+.custom-btn-secondary {
     border: 1px solid #ccc;
     display: block;
     margin: 0 0 0 auto;
 }
 
-.checkbox-custom {
+.custom-btn-link {
+    vertical-align: baseline;
+}
+
+.custom-checkbox {
     position: relative;
     margin: 0;
 }

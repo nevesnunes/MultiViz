@@ -2,7 +2,7 @@ var moduleIndex = angular.module('moduleIndex');
 var moduleVisualizations = angular.module('moduleVisualizations',
         ['moduleIndex']);
 
-moduleVisualizations.factory('makeVisualization',
+moduleVisualizations.factory('visualizations',
         ['patientData', function(patientData) {
     var margin = {
             top: 80,
@@ -17,10 +17,22 @@ moduleVisualizations.factory('makeVisualization',
         buckets = 9,
         colors = colorbrewer.Greys[9];
 
-    var diseases = patientData.getAttributeList(
-        patientData.KEY_PATIENTS, 'diseases');
-    var medications = patientData.getAttributeList(
-        patientData.KEY_PATIENTS, 'medications');
+    var diseases = [];
+    var medications = [];
+
+    var processSelectedList = function(list) {
+        return list.filter(function(obj) {
+            return obj.selected;
+        })
+        .map(function(obj) {
+            return obj.name;
+        });
+    };
+
+    var updateData = function(selectedDiseases, selectedMedications) {
+        diseases = processSelectedList(selectedDiseases);
+        medications = processSelectedList(selectedMedications);
+    };
 
     var makeCircularTime = function(elementID) {
         if (elementID === undefined) {
@@ -174,6 +186,7 @@ moduleVisualizations.factory('makeVisualization',
     };
 
     return {
+        updateData: updateData,
         makeCircularTime: makeCircularTime,
         makeHeatMap: makeHeatMap
     };

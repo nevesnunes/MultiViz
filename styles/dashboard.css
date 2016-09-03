@@ -203,11 +203,17 @@ body {
     padding: 5px;
 }
 
+.btn-group .btn-default:hover,
 .patient-table-entry:hover,
 .patient-table-entry-selected,
 .entrySelected {
     background-color: #c4e3f3;
     color: #31708f;
+}
+
+.buttonSelected {
+    background-color: #777;
+    color: white;
 }
 
 /* Tooltips */

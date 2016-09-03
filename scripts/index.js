@@ -57,14 +57,6 @@ moduleIndex.factory('patientData', function($window) {
         return previous;
     };
 
-    var arrayObjectIndexOf = function(myArray, searchTerm, property) {
-        for (var i = 0, len = myArray.length; i < len; i++) {
-            if (myArray[i][property] === searchTerm)
-                return i;
-        }
-        return -1;
-    };
-
     var getAttributeList = function(key, attributeType) {
         return attributes[key]
             .map(function(patient) {
