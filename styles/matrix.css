@@ -3,6 +3,10 @@ rect.bordered {
   stroke-width: 2px;   
 }
 
+rect.bordered:hover {
+  fill: #286090 !important;
+}
+
 text.mono {
   font-size: 9pt;
   font-family: monospace;

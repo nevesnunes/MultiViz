@@ -1,7 +1,11 @@
 /* SVG styling */
-path {
+.circular-heat path {
 	stroke: #777;
 	stroke-width: 0.1px;
+}
+
+.circular-heat path:hover {
+    fill: #286090 !important;
 }
 
 .labels {

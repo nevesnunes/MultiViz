@@ -65,9 +65,9 @@ moduleVisualizations.factory('visualizations',
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom);
 
-        svg.selectAll('svg')
-            .data([data])
-            .enter()
+        var cells = svg.selectAll('svg')
+            .data([data]);
+        cells.enter()
             .call(chart);
     };
 
@@ -120,16 +120,16 @@ moduleVisualizations.factory('visualizations',
             })])
             .range(colors);
 
-        var cards = svg.selectAll(".medication")
+        var cells = svg.selectAll(".medication")
             .data(filteredData, function(d) {
                 return diseases.indexOf(d.disease) + ':' +
                     medications.indexOf(d.medication);
             });
-        cards.enter().append("rect")
+        cells.enter().append("rect")
             .attr("class", "medication bordered")
             .attr("width", gridWidth)
             .attr("height", gridHeight)
-            .merge(cards)
+            .merge(cells)
                 .attr("x", function(d) {
                     return medications.indexOf(d.medication) * gridWidth;
                 })
@@ -144,7 +144,7 @@ moduleVisualizations.factory('visualizations',
                 .append("title").text(function(d) {
                     return "Número de pacientes: " + d.incidences;
                 });
-        cards.exit().remove();
+        cells.exit().remove();
 
         var legend = svg.selectAll(".legend")
             .data([0].concat(colorScale.quantiles()), function(d) {
