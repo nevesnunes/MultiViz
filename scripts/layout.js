@@ -1,12 +1,20 @@
 var moduleSplits = angular.module('moduleSplits',
         ['shagstrom.angular-split-pane']);
+
+var moduleUtils = angular.module('moduleUtils');
 var moduleVisualizations = angular.module('moduleVisualizations');
 var moduleLayout = angular.module('moduleLayout',
-        ['moduleIndex', 'moduleVisualizations']);
+        ['moduleIndex', 'moduleUtils', 'moduleVisualizations']);
 
 moduleLayout.controller('controllerPanes',
         ['$scope', 'patientData',
         function($scope, patientData) {
+    $scope.vizType = Object.freeze({
+        NONE: "none",
+        HEAT_MAP: "heat_map",
+        CIRCULAR_TIME: "circular_time"
+    });
+
     // Patient attribute lists
     $scope.diseases = patientData.getAttributeList(
         patientData.KEY_PATIENTS, 'diseases');
@@ -35,8 +43,8 @@ moduleLayout.controller('controllerPanes',
 }]);
 
 moduleLayout.directive("directiveActionPanel",
-        ['$compile', '$timeout', 'visualizations',
-        function($compile, $timeout, visualizations) {
+        ['$compile', '$timeout', 'visualizations', 'utils',
+        function($compile, $timeout, visualizations, utils) {
 	return { 
         scope: true,
         link: function(scope, element, attrs) {
@@ -113,12 +121,21 @@ moduleLayout.directive("directiveActionPanel",
                     "";
             };
 
-            var arrayObjectIndexOf = function(myArray, searchTerm, property) {
-                for (var i = 0, len = myArray.length; i < len; i++) {
-                    if (myArray[i][property] === searchTerm)
-                        return i;
+            // Redraw visualizations
+            var updateFromSelections = function() {
+                visualizations.updateData(
+                    scope.selectedDiseases,
+                    scope.selectedMedications
+                );
+
+                var node = scope.APIPanes.getCurrentNode();
+                if (node.model.viz ===
+                        scope.vizType.HEAT_MAP) {
+                    visualizations.updateHeatMap(node.model.id);
+                } else if (node.model.viz ===
+                        scope.vizType.CIRCULAR_TIME) {
+                    visualizations.updateCircularTime(node.model.id);
                 }
-                return -1;
             };
 
             // Select a property from the view's active property list
@@ -130,18 +147,13 @@ moduleLayout.directive("directiveActionPanel",
                     array = scope.selectedMedications;
                 }
 
-                var index = arrayObjectIndexOf(array, name, "name");
+                var index = utils.arrayObjectIndexOf(array, name, "name");
                 if (index === -1)
                     return;
 
                 array[index].selected = !(array[index].selected);
 
-                // Redraw visualizations
-                visualizations.updateData(
-                    scope.selectedDiseases,
-                    scope.selectedMedications
-                );
-                scope.APIPanes.updateLayout();
+                updateFromSelections();
             };
 
             scope.checkAll = function() {
@@ -155,12 +167,7 @@ moduleLayout.directive("directiveActionPanel",
                 for (var i = 0, len = array.length; i < len; i++)
                     array[i].selected = true;
 
-                // Redraw visualizations
-                visualizations.updateData(
-                    scope.selectedDiseases,
-                    scope.selectedMedications
-                );
-                scope.APIPanes.updateLayout();
+                updateFromSelections();
             };
 
             scope.checkNone = function() {
@@ -174,12 +181,7 @@ moduleLayout.directive("directiveActionPanel",
                 for (var i = 0, len = array.length; i < len; i++)
                     array[i].selected = false;
 
-                // Redraw visualizations
-                visualizations.updateData(
-                    scope.selectedDiseases,
-                    scope.selectedMedications
-                );
-                scope.APIPanes.updateLayout();
+                updateFromSelections();
             };
 
             scope.isSelected = function(name) {
@@ -190,7 +192,7 @@ moduleLayout.directive("directiveActionPanel",
                     array = scope.selectedMedications;
                 }
 
-                var index = arrayObjectIndexOf(array, name, "name");
+                var index = utils.arrayObjectIndexOf(array, name, "name");
                 if (index === -1)
                     return false;
 
@@ -258,12 +260,6 @@ moduleLayout.directive("directivePanes",
                 NONE: "none",
                 VERTICAL: "vertical",
                 HORIZONTAL: "horizontal"
-            });
-
-            scope.vizType = Object.freeze({
-                NONE: "none",
-                HEAT_MAP: "heat_map",
-                CIRCULAR_TIME: "circular_time"
             });
 
             scope.currentNode = undefined;
