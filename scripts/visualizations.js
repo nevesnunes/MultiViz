@@ -60,7 +60,6 @@ moduleVisualizations.factory('visualizations',
         svg.selectAll('svg')
             .data([data])
             .enter()
-            .append('svg')
             .call(chart);
     };
 
@@ -115,9 +114,15 @@ moduleVisualizations.factory('visualizations',
                     })])
                     .range(colors);
 
+                // json data contains all attributes, which need to be filtered
+                // first by user selected attributes
                 var cards = svg.selectAll(".medication")
-                    .data(data, function(d) {
-                        return diseases.indexOf(d.disease) + ':' + medications.indexOf(d.medication);
+                    .data(data.filter(function(d) {
+                        return (diseases.indexOf(d.disease) !== -1) &&
+                            (medications.indexOf(d.medication) !== -1);
+                    }), function(d) {
+                        return diseases.indexOf(d.disease) + ':' +
+                            medications.indexOf(d.medication);
                     });
 
                 cards.enter().append("rect")
