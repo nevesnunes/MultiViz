@@ -1,0 +1,18 @@
+/* SVG styling */
+path {
+	stroke: #777;
+	stroke-width: 0.1px;
+}
+
+.labels {
+	fill: #aaa;
+	font-weight: 200;
+	letter-spacing: -1px;
+}
+.labels.segment {
+	font-size: 10px;
+}
+
+#chart3 .labels {
+	fill: #555;
+}
