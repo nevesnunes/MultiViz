@@ -74,12 +74,7 @@ body {
 .main {
   padding: 20px;
 }
-@media (min-width: 768px) {
-  .main {
-    padding-right: 40px;
-    padding-left: 40px;
-  }
-}
+
 .main .page-header {
   margin-top: 0;
 }
@@ -112,11 +107,15 @@ body {
   font-weight: bold;
 }
 
-.container-fluid-padding-fix {
+.custom-container-padding {
   padding-left: 0; 
 }
 
-/* View Chooser */
+.custom-container-width {
+  width: 100%;
+}
+
+/* Action Panel */
 
 .view-choice {
     border: 5px solid #ccc;

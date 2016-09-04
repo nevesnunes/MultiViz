@@ -106,83 +106,79 @@ moduleVisualizations.factory('visualizations',
             })
             .attr("class", "medicationLabel mono axis");
 
-        var heatmapChart = function(file) {
-            d3.json("data/incidences.json", function(error, treeData) {
-                console.log("[INFO] d3.js parsing results: " + error);
-                (function(data) {
-                    var colorScale = d3.scaleQuantile()
-                        .domain([0, buckets - 1, d3.max(data, function(d) {
-                            return d.incidences;
-                        })])
-                        .range(colors);
+        d3.json("data/incidences.json", function(error, treeData) {
+            console.log("[INFO] d3.js parsing results: " + error);
+            (function(data) {
+                var colorScale = d3.scaleQuantile()
+                    .domain([0, buckets - 1, d3.max(data, function(d) {
+                        return d.incidences;
+                    })])
+                    .range(colors);
 
-                    var cards = svg.selectAll(".medication")
-                        .data(data, function(d) {
-                            return diseases.indexOf(d.disease) + ':' + medications.indexOf(d.medication);
-                        });
+                var cards = svg.selectAll(".medication")
+                    .data(data, function(d) {
+                        return diseases.indexOf(d.disease) + ':' + medications.indexOf(d.medication);
+                    });
 
-                    cards.enter().append("rect")
-                        .attr("x", function(d) {
-                            return medications.indexOf(d.medication) * gridSize * 2;
-                        })
-                        .attr("y", function(d) {
-                            return diseases.indexOf(d.disease) * gridSize;
-                        })
-                        .attr("class", "medication bordered")
-                        .attr("width", gridSize * 2)
-                        .attr("height", gridSize)
-                        .style("fill", function(d) {
-                            return colorScale(d.incidences);
-                        })
-                        .append("title").text(function(d) {
-                            return "Número de pacientes: " + d.incidences;
-                        });
+                cards.enter().append("rect")
+                    .attr("x", function(d) {
+                        return medications.indexOf(d.medication) * gridSize * 2;
+                    })
+                    .attr("y", function(d) {
+                        return diseases.indexOf(d.disease) * gridSize;
+                    })
+                    .attr("class", "medication bordered")
+                    .attr("width", gridSize * 2)
+                    .attr("height", gridSize)
+                    .style("fill", function(d) {
+                        return colorScale(d.incidences);
+                    })
+                    .append("title").text(function(d) {
+                        return "Número de pacientes: " + d.incidences;
+                    });
 
-                    // FIXME: transitions not working...
-                    /*
-                        .style("fill", colors[0]);
+                // FIXME: transitions not working...
+                /*
+                    .style("fill", colors[0]);
 
-                    cards.transition().duration(1000)
-                        .style("fill", function(d) { return colorScale(d.incidences); });
-                    */
+                cards.transition().duration(1000)
+                    .style("fill", function(d) { return colorScale(d.incidences); });
+                */
 
-                    cards.exit().remove();
+                cards.exit().remove();
 
-                    var legend = svg.selectAll(".legend")
-                        .data([0].concat(colorScale.quantiles()), function(d) {
-                            return d;
-                        })
-                        .enter().append("g")
-                        .attr("class", "legend");
+                var legend = svg.selectAll(".legend")
+                    .data([0].concat(colorScale.quantiles()), function(d) {
+                        return d;
+                    })
+                    .enter().append("g")
+                    .attr("class", "legend");
 
-                    legend.append("rect")
-                        .attr("class", "bordered")
-                        .attr("x", function(d, i) {
-                            return legendElementWidth * i;
-                        })
-                        .attr("y", height)
-                        .attr("width", legendElementWidth)
-                        .attr("height", gridSize / 2)
-                        .style("fill", function(d, i) {
-                            return colors[i];
-                        });
+                legend.append("rect")
+                    .attr("class", "bordered")
+                    .attr("x", function(d, i) {
+                        return legendElementWidth * i;
+                    })
+                    .attr("y", height)
+                    .attr("width", legendElementWidth)
+                    .attr("height", gridSize / 2)
+                    .style("fill", function(d, i) {
+                        return colors[i];
+                    });
 
-                    legend.append("text")
-                        .attr("class", "mono")
-                        .text(function(d) {
-                            return "≥ " + Math.round(d);
-                        })
-                        .attr("x", function(d, i) {
-                            return legendElementWidth * i;
-                        })
-                        .attr("y", height + gridSize);
+                legend.append("text")
+                    .attr("class", "mono")
+                    .text(function(d) {
+                        return "≥ " + Math.round(d);
+                    })
+                    .attr("x", function(d, i) {
+                        return legendElementWidth * i;
+                    })
+                    .attr("y", height + gridSize);
 
-                    legend.exit().remove();
-                }(treeData));
-            }); //d3.json
-        }; // heatmapChart
-
-        heatmapChart();
+                legend.exit().remove();
+            }(treeData));
+        }); //d3.json
     };
 
     return {

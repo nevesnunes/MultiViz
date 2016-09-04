@@ -24,7 +24,7 @@
 
 <body class="panes" data-ng-app="moduleCombined">
     <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container-fluid container-fluid-padding-fix">
+        <div class="container-fluid custom-container-padding">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
                     <span class="sr-only">Toggle navigation</span>
@@ -63,12 +63,14 @@
         </div>
     </nav>
     <div class="panes" ng-controller="controllerPanes">
-        <div class="row panes">
-            <div class="col-sm-3 col-md-2 sidebar">
-                <div id="action-panel" data-directive-action-panel></div>
-            </div>
-            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main panes">
-                <div class="panes" data-directive-panes treeRoot="treeRoot"></div>
+        <div class="container custom-container-width panes">
+            <div class="row panes">
+                <div class="col-sm-3 col-md-2 sidebar">
+                    <div id="action-panel" data-directive-action-panel></div>
+                </div>
+                <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main panes">
+                    <div class="panes" data-directive-panes treeRoot="treeRoot"></div>
+                </div>
             </div>
         </div>
     </div>
