@@ -207,29 +207,34 @@ moduleLayout.directive("directiveActionPanel",
                 var viewNotRoot =
                     scope.APIPanes.getCurrentNode().model.id !==
                     scope.APIPanes.getTreeRoot().model.id;
-                if(rootHasNoChildren || viewNotRoot) {
-                    var list = scope.currentAttributeType;
-                    html = '<div class="btn-group" role="group" aria-label="...">' +
-                        '    <button type="button" id="btnDiseases" class="btn btn-default" ng-class="isAttributeTypeActive(\'' + scope.attributeType.DISEASES + '\')" ng-click="setAttributeType(\'' + scope.attributeType.DISEASES + '\')">Doenças</button>' +
-                        '    <button type="button" id="btnMedications" class="btn btn-default" ng-class="isAttributeTypeActive(\'' + scope.attributeType.MEDICATIONS + '\')" ng-click="setAttributeType(\'' + scope.attributeType.MEDICATIONS + '\')">Medicações</button>' +
-                        '</div>' +
-                        '<p/>' +
-                        '<div class="right-inner-addon">' +
-                        '    <i class="glyphicon glyphicon-search"></i>' +
-                        '    <input type="text" id="input-attribute" class="form-control" placeholder="Procurar..." ng-model="attributeModel" ng-key-select autofocus tabindex=1>' +
-                        '</div>' +
-                        '<span>Selecionar:</span>' +
-                            '<button class="btn btn-link custom-btn-link" ng-click="checkAll()">Todos</button>' +
-                            '|' +
-                            '<button class="btn btn-link custom-btn-link" ng-click="checkNone()">Nenhum</button>' +
-                        '<div class="table table-condensed table-bordered patient-table">' +
-                        '    <div class="checkboxInTable patient-table-entry" ng-repeat="attribute in filteredAttributes = (' + list + ' | filter:attributeModel)"  ng-click="check(attribute)">' +
-                        '        <div style="display: inline-block" ng-class="isEntrySelected($index)">' +
-                        '           <input class="custom-checkbox" type="checkbox" ng-checked="isSelected(attribute)" ng-click="check(attribute)">' +
-                        '           {{::attribute}}' +
-                        '        </div>' +
-                        '    </div>' +
-                        '</div>';
+                if (rootHasNoChildren || viewNotRoot) {
+                    if (scope.APIPanes.getCurrentNode().model.viz ===
+                            scope.vizType.HEAT_MAP) {
+                        var list = scope.currentAttributeType;
+                        html = '<div class="btn-group" role="group" aria-label="...">' +
+                            '    <button type="button" id="btnDiseases" class="btn btn-default" ng-class="isAttributeTypeActive(\'' + scope.attributeType.DISEASES + '\')" ng-click="setAttributeType(\'' + scope.attributeType.DISEASES + '\')">Doenças</button>' +
+                            '    <button type="button" id="btnMedications" class="btn btn-default" ng-class="isAttributeTypeActive(\'' + scope.attributeType.MEDICATIONS + '\')" ng-click="setAttributeType(\'' + scope.attributeType.MEDICATIONS + '\')">Medicações</button>' +
+                            '</div>' +
+                            '<p/>' +
+                            '<div class="right-inner-addon">' +
+                            '    <i class="glyphicon glyphicon-search"></i>' +
+                            '    <input type="text" id="input-attribute" class="form-control" placeholder="Procurar..." ng-model="attributeModel" ng-key-select autofocus tabindex=1>' +
+                            '</div>' +
+                            '<span>Selecionar:</span>' +
+                                '<button class="btn btn-link custom-btn-link" ng-click="checkAll()">Todos</button>' +
+                                '|' +
+                                '<button class="btn btn-link custom-btn-link" ng-click="checkNone()">Nenhum</button>' +
+                            '<div class="table table-condensed table-bordered patient-table">' +
+                            '    <div class="checkboxInTable patient-table-entry" ng-repeat="attribute in filteredAttributes = (' + list + ' | filter:attributeModel)"  ng-click="check(attribute)">' +
+                            '        <div style="display: inline-block" ng-class="isEntrySelected($index)">' +
+                            '           <input class="custom-checkbox" type="checkbox" ng-checked="isSelected(attribute)" ng-click="check(attribute)">' +
+                            '           {{::attribute}}' +
+                            '        </div>' +
+                            '    </div>' +
+                            '</div>';
+                    } else {
+                        html = "<span>TODO</span>";
+                    }
                 } else {
                     html = '<span>Pode <b>Maximizar</b> ( <img src="images/controls/black/maximize.svg" class="custom-btn-svg"> ) uma vista para configurar os atributos visíveis.</span>';
                 }

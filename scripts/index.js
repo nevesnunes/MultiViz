@@ -197,8 +197,7 @@ moduleIndex.directive('directiveStaticTooltip', [function() {
         link: function(scope, element, attributes) {
             element
                 .on('mouseenter', function() {
-                    element
-                        .tooltip('hide')
+                    element.tooltip('hide')
                         
                         // Avoid oclusion with custom placement
                         .attr('data-placement', element.attr('custom-placement'))
@@ -218,8 +217,7 @@ moduleIndex.directive('directiveTooltip', [function() {
             element
                 .on('mouseenter', function() {
                     scope.setTooltipText();
-                    element
-                        .tooltip('hide')
+                    element.tooltip('hide')
                         .attr('data-placement', 'right')
                         .attr('data-original-title', scope.tooltipText)
                         .attr('title', scope.tooltipText)
