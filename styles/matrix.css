@@ -7,9 +7,9 @@ rect.bordered:hover {
   fill: #286090 !important;
 }
 
-text.mono {
-  font-size: 9pt;
-  font-family: monospace;
+text.viz-label {
+  font-size: 0.9em;
+  font-family: sans-serif;
   fill: #000;
 }
 

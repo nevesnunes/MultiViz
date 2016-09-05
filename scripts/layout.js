@@ -93,7 +93,7 @@ moduleLayout.directive("directiveActionPanel",
                 html = cancelButton +
                     '<h4>Escolha uma visualização:</h4>' +
                     '<div class="view-choice" ng-click="chooseHeatmap()">' +
-                    '<img src="images/views/heatmap.svg" class="view-choice-svg">Comparação entre múltiplos pacientes</img>' +
+                    '<img src="images/views/heatmap.svg" class="view-choice-svg">Relação entre doenças e medicações</img>' +
                     '</div>' +
                     '<div class="view-choice" ng-click="chooseCircularTime()">' +
                     '<img src="images/views/circulartime.svg" class="view-choice-svg">Análise temporal de atributos</img>' +
@@ -312,9 +312,22 @@ moduleLayout.directive("directivePanes",
                     return node1.model.id === id;
                 });
 
+                // Create initial elements for visualization
                 var visualization = '';
                 if (node.model.viz !== scope.vizType.NONE) {
-                    visualization = '<div id=' + id + '></div>'; 
+                    visualization = '<div id=' + id + '>';
+                    var vizTooltipHTML = "";
+                    if (node.model.viz ===
+                            scope.vizType.HEAT_MAP) {
+                        vizTooltipHTML =
+                            visualizations.makeTooltipHeatMap(node.model.id);
+                    } else if (node.model.viz ===
+                            scope.vizType.CIRCULAR_TIME) {
+                        vizTooltipHTML =
+                            visualizations.makeTooltipCircularTime(node.model.id);
+                    }
+                    visualization += vizTooltipHTML; 
+                    visualization += '</div>'; 
                 }
 
                 var viewportButton = '';

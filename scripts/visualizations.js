@@ -3,6 +3,28 @@ var moduleUtils = angular.module('moduleUtils');
 var moduleVisualizations = angular.module('moduleVisualizations',
         ['moduleIndex', 'moduleUtils']);
 
+moduleVisualizations.directive('directiveHeatMapTooltip',
+        function() {
+    return {
+        link: function (scope, element, attrs) {
+            scope.setTooltipText = function(button) {
+                scope.tooltipText = "info heatmap";
+            };
+        }
+    };
+});
+
+moduleVisualizations.directive('directiveCircularTimeTooltip',
+        function() {
+    return {
+        link: function (scope, element, attrs) {
+            scope.setTooltipText = function(button) {
+                scope.tooltipText = "info circulartime";
+            };
+        }
+    };
+});
+
 moduleVisualizations.factory('visualizations',
         ['patientData', 'utils', function(patientData, utils) {
     var margin = {
@@ -42,14 +64,25 @@ moduleVisualizations.factory('visualizations',
         medications = processSelectedList(selectedMedications);
     };
 
-    var makeCircularTime = function(elementID) {
+    var makeTooltipCircularTime = function(elementID) {
         if (elementID === undefined) {
             console.log("[WARN] @makeHeatMap: undefined id.");
             return;
         }
         
-        d3.select("#" + elementID).append("h4")
-            .text("Análise temporal de atributos");
+        return '<p class="viz-title">' +
+                'Análise temporal de atributos' +
+                '  ' +
+                '<span class="tooltip-wrapper" title="{{tooltipText}}" directive-tooltip directive-circular-time-tooltip>' +
+                    '<img src="images/controls/info.svg">' +
+                '</span>' +
+                '</p>';
+    };
+    var makeCircularTime = function(elementID) {
+        if (elementID === undefined) {
+            console.log("[WARN] @makeHeatMap: undefined id.");
+            return;
+        }
 
         var chart = circularHeatChart()
 	        .range(["white", "black"])
@@ -70,7 +103,6 @@ moduleVisualizations.factory('visualizations',
         cells.enter()
             .call(chart);
     };
-
     var updateCircularTime = function(elementID) {
         // FIXME
     };
@@ -87,7 +119,7 @@ moduleVisualizations.factory('visualizations',
             })
             .style("text-anchor", "end")
             .attr("transform", "translate(-6," + gridHeight / 1.5 + ")")
-            .attr("class", "diseaseLabel mono axis")
+            .attr("class", "diseaseLabel viz-label axis")
             .merge(diseaseLabels)
                 .text(function(d) {
                     return d;
@@ -101,7 +133,7 @@ moduleVisualizations.factory('visualizations',
             .attr("transform", function(d, i) {
                 return "translate(" + (i * gridWidth) + ", -25)rotate(20)";
             })
-            .attr("class", "medicationLabel mono axis")
+            .attr("class", "medicationLabel viz-label axis")
             .merge(medicationLabels)
                 .text(function(d) {
                     return d;
@@ -164,7 +196,7 @@ moduleVisualizations.factory('visualizations',
                 return colors[i];
             });
         legend.append("text")
-            .attr("class", "mono")
+            .attr("class", "viz-label")
             .text(function(d) {
                 return "≥ " + Math.round(d);
             })
@@ -192,15 +224,26 @@ moduleVisualizations.factory('visualizations',
     };
 
     var heatMaps = [];
+    var makeTooltipHeatMap = function(elementID) {
+        if (elementID === undefined) {
+            console.log("[WARN] @makeHeatMap: undefined id.");
+            return;
+        }
+        
+        return '<p class="viz-title">' +
+                'Comparação entre múltiplos pacientes' +
+                '  ' +
+                '<span class="tooltip-wrapper" title="{{tooltipText}}" directive-tooltip directive-heat-map-tooltip>' +
+                    '<img src="images/controls/info.svg">' +
+                '</span>' +
+                '</p>';
+    };
     var makeHeatMap = function(elementID) {
         if (elementID === undefined) {
             console.log("[WARN] @makeHeatMap: undefined id.");
             return;
         }
         
-        d3.select("#" + elementID).append("h4")
-            .text("Comparação entre múltiplos pacientes");
-
         var svg = d3.select("#" + elementID).append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
@@ -225,8 +268,10 @@ moduleVisualizations.factory('visualizations',
     return {
         updateData: updateData,
         makeCircularTime: makeCircularTime,
+        makeTooltipCircularTime: makeTooltipCircularTime,
         updateCircularTime: updateCircularTime,
         makeHeatMap: makeHeatMap,
+        makeTooltipHeatMap: makeTooltipHeatMap,
         updateHeatMap: updateHeatMap
     };
 }]);
