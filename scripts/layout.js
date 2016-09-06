@@ -12,7 +12,7 @@ moduleLayout.controller('controllerPanes',
     $scope.vizType = Object.freeze({
         NONE: "none",
         HEAT_MAP: "heat_map",
-        CIRCULAR_TIME: "circular_time"
+        SPIRAL: "spiral"
     });
 
     // Patient attribute lists
@@ -56,9 +56,9 @@ moduleLayout.directive("directiveActionPanel",
                 )(scope));
             };
 
-            scope.chooseCircularTime = function() {
+            scope.chooseSpiral = function() {
                 scope.APIPanes.makePaneSplit(
-                    scope.APIPanes.vizType.CIRCULAR_TIME);
+                    scope.APIPanes.vizType.SPIRAL);
             };
 
             scope.chooseHeatmap = function() {
@@ -95,7 +95,7 @@ moduleLayout.directive("directiveActionPanel",
                     '<div class="view-choice" ng-click="chooseHeatmap()">' +
                     '<img src="images/views/heatmap.svg" class="view-choice-svg">Relação entre doenças e medicações</img>' +
                     '</div>' +
-                    '<div class="view-choice" ng-click="chooseCircularTime()">' +
+                    '<div class="view-choice" ng-click="chooseSpiral()">' +
                     '<img src="images/views/circulartime.svg" class="view-choice-svg">Análise temporal de atributos</img>' +
                     '</div>' +
                     '<div class="view-choice" ng-click="chooseTODO()">' +
@@ -133,8 +133,8 @@ moduleLayout.directive("directiveActionPanel",
                         scope.vizType.HEAT_MAP) {
                     visualizations.updateHeatMap(node.model.id);
                 } else if (node.model.viz ===
-                        scope.vizType.CIRCULAR_TIME) {
-                    visualizations.updateCircularTime(node.model.id);
+                        scope.vizType.SPIRAL) {
+                    visualizations.updateSpiral(node.model.id);
                 }
             };
 
@@ -273,18 +273,20 @@ moduleLayout.directive("directivePanes",
             // Store our view layout in a tree
             scope.treeModel = new TreeModel();
 
-            function makeImgButton(id, method, text, img) {
+            function makeImgButton(style, id, method, title, text, img) {
                 // Make sure all child elements have the id property, since the
                 // user may click on one of them and activate functions
                 // which expect the id to be present in the clicked element
                 return '<button class="tooltip-wrapper btn btn-primary" ' +
+                    'style="' + style + '" ' +
                     'directive-static-tooltip custom-placement="top" ' +
                     'data-id="' + id + '" ' +
                     'ng-click="' + method + '" ' +
-                    'title="' + text + '">' +                     
+                    'title="' + title + '">' +
                     '<img src="' + img + '" ' +
                         'data-id="' + id + '" ' +
                         'class="custom-btn-svg">' +
+                    text +
                     '</button>';
             }
 
@@ -316,17 +318,26 @@ moduleLayout.directive("directivePanes",
                 var visualization = '';
                 if (node.model.viz !== scope.vizType.NONE) {
                     visualization = '<div id=' + id + '>';
-                    var vizTooltipHTML = "";
+                    var descriptionHTML = "";
                     if (node.model.viz ===
                             scope.vizType.HEAT_MAP) {
-                        vizTooltipHTML =
-                            visualizations.makeTooltipHeatMap(node.model.id);
+                        descriptionHTML =
+                            visualizations.makeDescriptionHeatMap(node.model.id);
                     } else if (node.model.viz ===
-                            scope.vizType.CIRCULAR_TIME) {
-                        vizTooltipHTML =
-                            visualizations.makeTooltipCircularTime(node.model.id);
+                            scope.vizType.SPIRAL) {
+                        descriptionHTML =
+                            visualizations.makeDescriptionSpiral(node.model.id);
                     }
-                    visualization += vizTooltipHTML; 
+                    visualization += descriptionHTML; 
+                    if (node.model.viz === scope.vizType.SPIRAL) {
+                        visualization += makeImgButton(
+                            'display: block',
+                            id,
+                            "addSpiral($event)",
+                            "",
+                            " Adicionar atributo",
+                            "images/controls/add.svg");
+                    }
                     visualization += '</div>'; 
                 }
 
@@ -334,35 +345,45 @@ moduleLayout.directive("directivePanes",
                 if (!node.isRoot()) {
                     if (scope.currentNode.model.id === id) {
                         viewportButton = makeImgButton(
+                            "",
                             id,
                             "paneColapse()",
                             " Colapsar Vista",
+                            "",
                             "images/controls/colapse.svg");
                     } else {
                         viewportButton = makeImgButton(
+                            "",
                             id,
                             "paneMaximize($event)",
                             " Maximizar Vista",
+                            "",
                             "images/controls/maximize.svg");
                     }
                 }
 
                 return '<div class="pretty-split-pane-component-inner"><p>' + id + '</p>' +
                     makeImgButton(
+                        "",
                         id,
                         "paneRemove($event)",
                         " Remover Vista",
+                        "",
                         "images/controls/remove.svg") +
                     viewportButton +
                     makeImgButton(
+                        "",
                         id,
                         "paneSplitVertical($event)",
                         " Separar na Vertical",
+                        "",
                         "images/controls/split-vertical.svg") +
                     makeImgButton(
+                        "",
                         id,
                         "paneSplitHorizontal($event)",
                         " Separar na Horizontal",
+                        "",
                         "images/controls/split-horizontal.svg") +
                     visualization +
                     '</div>';
@@ -388,6 +409,37 @@ moduleLayout.directive("directivePanes",
                 return "";
             }
 
+            scope.addSpiral = function(button) {
+                var id = angular.element(button.target).data('id');
+                var node = scope.treeRoot.first(function (node1) {
+                    return node1.model.id === id;
+                });
+
+                makeSpiral(node.model.id);
+            };
+
+            // Two step creation: 
+            // - first, angular elements we need to compile;
+            // - then, d3 elements
+            var makeSpiral = function(id) {
+                var spiralID = visualizations.makeSpiralID();
+                var html = '<div ' +
+                    'id="spiral-' + spiralID + '" ' +
+                    'class="viz-spiral ">' +
+                    makeImgButton(
+                        "display: block",
+                        id,
+                        "dragSpiral()",
+                        " Arrastar Espiral",
+                        "",
+                        "images/controls/drag.svg") +
+                    '</div>';
+                var target = angular.element('#' + id);
+                target.append($compile(html)(scope));
+                visualizations.makeSpiral(
+                    id, spiralID);
+            };
+
             scope.updateLayout = function() {
                 // No nodes available: make first view functionality
                 if (scope.currentNode === undefined) {
@@ -408,8 +460,8 @@ moduleLayout.directive("directivePanes",
                                 scope.vizType.HEAT_MAP) {
                             visualizations.makeHeatMap(node.model.id);
                         } else if (node.model.viz ===
-                                scope.vizType.CIRCULAR_TIME) {
-                            visualizations.makeCircularTime(node.model.id);
+                                scope.vizType.SPIRAL) {
+                            makeSpiral(node.model.id);
                         }
                     });
 

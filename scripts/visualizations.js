@@ -14,12 +14,12 @@ moduleVisualizations.directive('directiveHeatMapTooltip',
     };
 });
 
-moduleVisualizations.directive('directiveCircularTimeTooltip',
+moduleVisualizations.directive('directiveSpiralTooltip',
         function() {
     return {
         link: function (scope, element, attrs) {
             scope.setTooltipText = function(button) {
-                scope.tooltipText = "info circulartime";
+                scope.tooltipText = "info spiral";
             };
         }
     };
@@ -64,7 +64,12 @@ moduleVisualizations.factory('visualizations',
         medications = processSelectedList(selectedMedications);
     };
 
-    var makeTooltipCircularTime = function(elementID) {
+    var spiralID = 0;
+    var makeSpiralID = function() {
+        spiralID++;
+        return spiralID;
+    };
+    var makeDescriptionSpiral = function(elementID) {
         if (elementID === undefined) {
             console.log("[WARN] @makeHeatMap: undefined id.");
             return;
@@ -73,37 +78,60 @@ moduleVisualizations.factory('visualizations',
         return '<p class="viz-title">' +
                 'Análise temporal de atributos' +
                 '  ' +
-                '<span class="tooltip-wrapper" title="{{tooltipText}}" directive-tooltip directive-circular-time-tooltip>' +
+                '<span class="tooltip-wrapper" title="{{tooltipText}}" directive-tooltip directive-spiral-tooltip>' +
                     '<img src="images/controls/info.svg">' +
                 '</span>' +
                 '</p>';
     };
-    var makeCircularTime = function(elementID) {
+    var makeSpiral = function(elementID, spiralID) {
         if (elementID === undefined) {
             console.log("[WARN] @makeHeatMap: undefined id.");
             return;
         }
 
+        var countSegments = 24;
+        var heightSegment = 20;
+        var innerRadius = 20;
+        var rings = 7;
+        var margin = 20;
         var chart = circularHeatChart()
 	        .range(["white", "black"])
-            .numSegments(24)
-            .innerRadius(20);
+            .numSegments(countSegments)
+            .segmentHeight(heightSegment)
+            .innerRadius(innerRadius)
+            .margin({
+                top: margin,
+                right: margin,
+                bottom: margin,
+                left: margin
+            });
 
         var data = [];
-        for(var i=0; i<24*7; i++) {
+        for(var i=0; i<countSegments*rings; i++) {
             data[i] = Math.random();
         }
 
-        var svg = d3.select("#" + elementID).append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom);
+        /*
+        var svg = d3.select("#" + elementID)
+            .append("div")
+            .attr("id", "spiral-" + makeSpiralID())
+            .attr("class", "viz-spiral")
+        */
+        var svg = d3.select("#spiral-" + spiralID)
+            .append("svg")
+            .attr("width", 2 * rings * heightSegment +
+                2 * innerRadius +
+                2 * margin)
+            .attr("height", 2 * rings * heightSegment +
+                2 * innerRadius +
+                2 * margin);
 
         var cells = svg.selectAll('svg')
             .data([data]);
         cells.enter()
             .call(chart);
     };
-    var updateCircularTime = function(elementID) {
+    var updateSpiral = function(elementID) {
         // FIXME
     };
 
@@ -224,14 +252,14 @@ moduleVisualizations.factory('visualizations',
     };
 
     var heatMaps = [];
-    var makeTooltipHeatMap = function(elementID) {
+    var makeDescriptionHeatMap = function(elementID) {
         if (elementID === undefined) {
             console.log("[WARN] @makeHeatMap: undefined id.");
             return;
         }
         
         return '<p class="viz-title">' +
-                'Comparação entre múltiplos pacientes' +
+                'Relação entre doenças e medicações' +
                 '  ' +
                 '<span class="tooltip-wrapper" title="{{tooltipText}}" directive-tooltip directive-heat-map-tooltip>' +
                     '<img src="images/controls/info.svg">' +
@@ -267,11 +295,12 @@ moduleVisualizations.factory('visualizations',
 
     return {
         updateData: updateData,
-        makeCircularTime: makeCircularTime,
-        makeTooltipCircularTime: makeTooltipCircularTime,
-        updateCircularTime: updateCircularTime,
+        makeSpiral: makeSpiral,
+        makeSpiralID: makeSpiralID,
+        makeDescriptionSpiral: makeDescriptionSpiral,
+        updateSpiral: updateSpiral,
         makeHeatMap: makeHeatMap,
-        makeTooltipHeatMap: makeTooltipHeatMap,
+        makeDescriptionHeatMap: makeDescriptionHeatMap,
         updateHeatMap: updateHeatMap
     };
 }]);
