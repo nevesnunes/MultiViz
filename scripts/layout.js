@@ -86,20 +86,31 @@ moduleLayout.directive("directiveActionPanel",
             scope.makeViewChooser = function() {
                 var cancelButton = '';
                 if (scope.APIPanes.getTreeRoot() !== undefined) {
-                    cancelButton = '<button class="tooltip-wrapper btn btn-secondary custom-btn-secondary" title="Cancelar" directive-static-tooltip custom-placement="left" ng-click="cancelSplit()">' +
-                    '<img src="images/controls/black/remove.svg" class="custom-btn-svg">' +
+                    cancelButton = '<button class="tooltip-wrapper btn btn-secondary custom-btn-secondary" ' +
+                            'title="Cancelar" ' +
+                            'directive-static-tooltip ' +
+                            'custom-placement="left" ' +
+                            'ng-click="cancelSplit()">' +
+                    '<img src="images/controls/black/remove.svg" ' +
+                        'class="custom-btn-svg">' +
                     '</button>';
                 }
                 html = cancelButton +
                     '<h4>Escolha uma visualização:</h4>' +
                     '<div class="view-choice" ng-click="chooseHeatmap()">' +
-                    '<img src="images/views/heatmap.svg" class="view-choice-svg">Relação entre doenças e medicações</img>' +
+                    '<img src="images/views/heatmap.svg" ' +
+                        'class="view-choice-svg">' +
+                        'Relação entre doenças e medicações</img>' +
                     '</div>' +
                     '<div class="view-choice" ng-click="chooseSpiral()">' +
-                    '<img src="images/views/circulartime.svg" class="view-choice-svg">Análise temporal de atributos</img>' +
+                    '<img src="images/views/circulartime.svg" ' +
+                        'class="view-choice-svg">' +
+                        'Análise temporal de atributos</img>' +
                     '</div>' +
                     '<div class="view-choice" ng-click="chooseTODO()">' +
-                    '<img src="images/views/circular.svg" class="view-choice-svg">TODO</img>' +
+                    '<img src="images/views/circular.svg" ' +
+                        'class="view-choice-svg">' +
+                        'TODO</img>' +
                     '</div>';
                 
                 updateActionPanel();
@@ -211,26 +222,59 @@ moduleLayout.directive("directiveActionPanel",
                     if (scope.APIPanes.getCurrentNode().model.viz ===
                             scope.vizType.HEAT_MAP) {
                         var list = scope.currentAttributeType;
-                        html = '<div class="btn-group" role="group" aria-label="...">' +
-                            '    <button type="button" id="btnDiseases" class="btn btn-default" ng-class="isAttributeTypeActive(\'' + scope.attributeType.DISEASES + '\')" ng-click="setAttributeType(\'' + scope.attributeType.DISEASES + '\')">Doenças</button>' +
-                            '    <button type="button" id="btnMedications" class="btn btn-default" ng-class="isAttributeTypeActive(\'' + scope.attributeType.MEDICATIONS + '\')" ng-click="setAttributeType(\'' + scope.attributeType.MEDICATIONS + '\')">Medicações</button>' +
+                        // Attribute lists
+                        html = '<div class="btn-group" ' +
+                            'role="group" aria-label="...">' +
+                            '<button type="button" ' +
+                                'id="btnDiseases" ' +
+                                'class="btn btn-default" ' +
+                                'ng-class="isAttributeTypeActive(\'' + 
+                                    scope.attributeType.DISEASES + '\')" ' +
+                                'ng-click="setAttributeType(\'' + 
+                                    scope.attributeType.DISEASES + '\')">' +
+                                'Doenças</button>' +
+                            '<button type="button" ' +
+                                'id="btnMedications" ' +
+                                'class="btn btn-default" ' +
+                                'ng-class="isAttributeTypeActive(\'' + 
+                                    scope.attributeType.MEDICATIONS + '\')" ' +
+                                'ng-click="setAttributeType(\'' + 
+                                    scope.attributeType.MEDICATIONS + '\')">' +
+                                'Medicações</button>' +
                             '</div>' +
                             '<p/>' +
+                            // Search
                             '<div class="right-inner-addon">' +
-                            '    <i class="glyphicon glyphicon-search"></i>' +
-                            '    <input type="text" id="input-attribute" class="form-control" placeholder="Procurar..." ng-model="attributeModel" ng-key-select autofocus tabindex=1>' +
+                                '<i class="glyphicon glyphicon-search"></i>' +
+                                '<input type="text" ' +
+                                    'id="input-attribute" ' +
+                                    'class="form-control" ' +
+                                    'placeholder="Procurar..." ' +
+                                    'ng-model="attributeModel" ' +
+                                    'ng-key-select autofocus tabindex=1>' +
                             '</div>' +
+                            // Selection choices
                             '<span>Selecionar:</span>' +
-                                '<button class="btn btn-link custom-btn-link" ng-click="checkAll()">Todos</button>' +
+                                '<button class="btn btn-link custom-btn-link" ' +
+                                    'ng-click="checkAll()">Todos</button>' +
                                 '|' +
-                                '<button class="btn btn-link custom-btn-link" ng-click="checkNone()">Nenhum</button>' +
+                                '<button class="btn btn-link custom-btn-link" ' +
+                                    'ng-click="checkNone()">Nenhum</button>' +
+                            // List
                             '<div class="table table-condensed table-bordered patient-table">' +
-                            '    <div class="checkboxInTable patient-table-entry" ng-repeat="attribute in filteredAttributes = (' + list + ' | filter:attributeModel)"  ng-click="check(attribute)">' +
-                            '        <div style="display: inline-block" ng-class="isEntrySelected($index)">' +
-                            '           <input class="custom-checkbox" type="checkbox" ng-checked="isSelected(attribute)" ng-click="check(attribute)">' +
-                            '           {{::attribute}}' +
-                            '        </div>' +
-                            '    </div>' +
+                                '<div class="checkboxInTable patient-table-entry" ' +
+                                    'ng-repeat="attribute in filteredAttributes = (' + list + ' | filter:attributeModel)"' +
+                                    'ng-click="check(attribute)">' +
+                                    '<div style="display: inline-block" ' +
+                                        'ng-class="isEntrySelected($index)">' +
+                                        '<input ' +
+                                            'class="custom-checkbox" ' +
+                                            'type="checkbox" ' +
+                                            'ng-checked="isSelected(attribute)" ' +
+                                            'ng-click="check(attribute)">' +
+                                        '{{::attribute}}' +
+                                    '</div>' +
+                                '</div>' +
                             '</div>';
                     } else {
                         html = "<span>TODO</span>";
@@ -292,13 +336,15 @@ moduleLayout.directive("directivePanes",
 
             // FIXME: Split size changes should be tracked
             function makeSplitComponent(orientation, node) {
-                return '<div data-split-pane-component data-' + orientation + '="50%">' +
-                makeChildrenLayout(node) +
-                '</div>';
+                return '<div data-split-pane-component data-' + 
+                    orientation + '="50%">' +
+                    makeChildrenLayout(node) +
+                    '</div>';
             }
 
             function makeSplitDivider(orientation) {
-				return '<div data-split-pane-divider data-' + orientation + '="5px"></div>';
+				return '<div data-split-pane-divider data-' + 
+                    orientation + '="5px"></div>';
             }
 
             function makeSplitPane(orientation, node1, node2) {
@@ -335,7 +381,7 @@ moduleLayout.directive("directivePanes",
                             id,
                             "addSpiral($event)",
                             "",
-                            " Adicionar atributo",
+                            " Adicionar espiral",
                             "images/controls/add.svg");
                     }
                     visualization += '</div>'; 
@@ -362,14 +408,8 @@ moduleLayout.directive("directivePanes",
                     }
                 }
 
-                return '<div class="pretty-split-pane-component-inner"><p>' + id + '</p>' +
-                    makeImgButton(
-                        "",
-                        id,
-                        "paneRemove($event)",
-                        " Remover Vista",
-                        "",
-                        "images/controls/remove.svg") +
+                return '<div class="pretty-split-pane-component-inner"><p>' + 
+                    id + '</p>' +
                     viewportButton +
                     makeImgButton(
                         "",
@@ -385,6 +425,13 @@ moduleLayout.directive("directivePanes",
                         " Separar na Horizontal",
                         "",
                         "images/controls/split-horizontal.svg") +
+                    makeImgButton(
+                        "",
+                        id,
+                        "paneRemove($event)",
+                        " Remover Vista",
+                        "",
+                        "images/controls/remove.svg") +
                     visualization +
                     '</div>';
             }
@@ -400,7 +447,10 @@ moduleLayout.directive("directivePanes",
                             "height" :
                             "width";
 
-                        return makeSplitPane(orientation, node.children[0], node.children[1]);
+                        return makeSplitPane(
+                                orientation, 
+                                node.children[0], 
+                                node.children[1]);
                     }
                 } else {
                     return makeSplitInner(node.model.id);
@@ -418,21 +468,40 @@ moduleLayout.directive("directivePanes",
                 makeSpiral(node.model.id);
             };
 
+            scope.removeSpiral = function(button) {
+                var id = angular.element(button.target).data('id');
+                var node = scope.treeRoot.first(function (node1) {
+                    return node1.model.id === id;
+                });
+
+                // FIXME: Untrack in visualizations
+                angular.element('#' + id).remove();
+            };
+
             // Two step creation: 
             // - first, angular elements we need to compile;
             // - then, d3 elements
             var makeSpiral = function(id) {
                 var spiralID = visualizations.makeSpiralID();
                 var html = '<div ' +
-                    'id="spiral-' + spiralID + '" ' +
-                    'class="viz-spiral ">' +
-                    makeImgButton(
-                        "display: block",
-                        id,
-                        "dragSpiral()",
-                        " Arrastar Espiral",
-                        "",
-                        "images/controls/drag.svg") +
+                    'id="' + spiralID + '" ' +
+                    'class="viz-spiral">' +
+                    '<div style="display: block">' + 
+                        makeImgButton(
+                            "",
+                            spiralID,
+                            "dragSpiral($event)",
+                            " Arrastar Espiral",
+                            "",
+                            "images/controls/drag.svg") +
+                        makeImgButton(
+                            "",
+                            spiralID,
+                            "removeSpiral($event)",
+                            " Remover Espiral",
+                            "",
+                            "images/controls/remove.svg") +
+                    '</div>' +
                     '</div>';
                 var target = angular.element('#' + id);
                 target.append($compile(html)(scope));
@@ -487,7 +556,9 @@ moduleLayout.directive("directivePanes",
                 var parentNode = node.parent;
                 if (parentNode !== undefined) {
                     console.log("[INFO] Removing " + node.model.id);
-                    var otherChildNode = (parentNode.children[0].model.id === id) ? parentNode.children[1] : parentNode.children[0];
+                    var otherChildNode = (parentNode.children[0].model.id === id) ?
+                        parentNode.children[1] : 
+                        parentNode.children[0];
 
                     // Copy relevant child properties
                     if (parentNode.isRoot()) {

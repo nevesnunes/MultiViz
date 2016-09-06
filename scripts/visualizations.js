@@ -41,8 +41,11 @@ moduleVisualizations.factory('visualizations',
         buckets = 9,
         colors = colorbrewer.Greys[9];
 
-    var diseases = [];
-    var medications = [];
+    var dataIncidences = [];
+    d3.json("data/incidences.json", function(error, data) {
+        console.log("[INFO] d3.js parsing results: " + error);
+        dataIncidences = data;
+    });
 
     var processSelectedList = function(list) {
         return list.filter(function(obj) {
@@ -53,22 +56,22 @@ moduleVisualizations.factory('visualizations',
         });
     };
 
-    var dataIncidences = [];
-    d3.json("data/incidences.json", function(error, data) {
-        console.log("[INFO] d3.js parsing results: " + error);
-        dataIncidences = data;
-    });
-
+    var diseases = [];
+    var medications = [];
     var updateData = function(selectedDiseases, selectedMedications) {
         diseases = processSelectedList(selectedDiseases);
         medications = processSelectedList(selectedMedications);
     };
 
+    // Unique identifier for spiral elements
     var spiralID = 0;
     var makeSpiralID = function() {
         spiralID++;
-        return spiralID;
+        return "spiral-" + spiralID;
     };
+
+    // Spiral to be displayed on single/maximized view
+    var currentSpiral;
     var makeDescriptionSpiral = function(elementID) {
         if (elementID === undefined) {
             console.log("[WARN] @makeHeatMap: undefined id.");
@@ -111,13 +114,7 @@ moduleVisualizations.factory('visualizations',
             data[i] = Math.random();
         }
 
-        /*
-        var svg = d3.select("#" + elementID)
-            .append("div")
-            .attr("id", "spiral-" + makeSpiralID())
-            .attr("class", "viz-spiral")
-        */
-        var svg = d3.select("#spiral-" + spiralID)
+        var svg = d3.select("#" + spiralID)
             .append("svg")
             .attr("width", 2 * rings * heightSegment +
                 2 * innerRadius +
