@@ -72,6 +72,7 @@ moduleVisualizations.factory('visualizations',
 
     // Spiral to be displayed on single/maximized view
     var currentSpiral;
+
     var makeDescriptionSpiral = function(elementID) {
         if (elementID === undefined) {
             console.log("[WARN] @makeHeatMap: undefined id.");

@@ -100,17 +100,24 @@ moduleLayout.directive("directiveActionPanel",
                     '<div class="view-choice" ng-click="chooseHeatmap()">' +
                     '<img src="images/views/heatmap.svg" ' +
                         'class="view-choice-svg">' +
-                        'Relação entre doenças e medicações</img>' +
+                        '<a class="discrete-link" href="#">' +
+                            'Relação entre doenças e medicações' +
+                        '</a>' +
+                    '</img>' +
                     '</div>' +
                     '<div class="view-choice" ng-click="chooseSpiral()">' +
                     '<img src="images/views/circulartime.svg" ' +
                         'class="view-choice-svg">' +
-                        'Análise temporal de atributos</img>' +
+                        '<a class="discrete-link" href="#">' +
+                            'Análise temporal de atributos' +
+                        '</a>' +
                     '</div>' +
                     '<div class="view-choice" ng-click="chooseTODO()">' +
                     '<img src="images/views/circular.svg" ' +
                         'class="view-choice-svg">' +
-                        'TODO</img>' +
+                        '<a class="discrete-link" href="#">' +
+                            'TODO' +
+                        '</a>' +
                     '</div>';
                 
                 updateActionPanel();
@@ -270,9 +277,8 @@ moduleLayout.directive("directiveActionPanel",
                                         '<input ' +
                                             'class="custom-checkbox" ' +
                                             'type="checkbox" ' +
-                                            'ng-checked="isSelected(attribute)" ' +
-                                            'ng-click="check(attribute)">' +
-                                        '{{::attribute}}' +
+                                            'ng-checked="isSelected(attribute)">' +
+                                            '{{::attribute}}' +
                                     '</div>' +
                                 '</div>' +
                             '</div>';

@@ -103,6 +103,10 @@ body {
  * Custom elements
  */
 
+.discrete-link {
+    color: inherit;
+}
+
 .viz-title {
     font-size: 1.4em;
     line-height: 1.1;
