@@ -26,14 +26,14 @@ moduleLayout.controller('controllerPanes',
                 name: attribute,
                 selected: true
             };
-    });
+        });
     $scope.selectedMedications = $scope.medications
         .map(function(attribute) {
             return {
                 name: attribute,
                 selected: true
             };
-    });
+        });
 
     // Populated by directive panes
     $scope.APIPanes = {};
@@ -86,13 +86,13 @@ moduleLayout.directive("directiveActionPanel",
             scope.makeViewChooser = function() {
                 var cancelButton = '';
                 if (scope.APIPanes.getTreeRoot() !== undefined) {
-                    cancelButton = '<button class="tooltip-wrapper btn btn-secondary custom-btn-secondary" ' +
-                            'title="Cancelar" ' +
-                            'directive-static-tooltip ' +
-                            'custom-placement="left" ' +
-                            'ng-click="cancelSplit()">' +
-                    '<img src="images/controls/black/remove.svg" ' +
-                        'class="custom-btn-svg">' +
+                    cancelButton = utils.makeImgButton({
+                        clazz:  "btn-secondary custom-btn-secondary",
+                        placement: "left",
+                        method: "cancelSplit()",
+                        title:  "Cancelar",
+                        img:    "images/controls/black/remove.svg"
+                    }) +
                     '</button>';
                 }
                 html = cancelButton +
@@ -306,8 +306,8 @@ moduleLayout.directive("directiveActionPanel",
 }]);
 
 moduleLayout.directive("directivePanes",
-        ['$compile', '$timeout', 'patientData', 'visualizations',
-        function($compile, $timeout, patientData, visualizations) {
+        ['$compile', '$timeout', 'utils', 'patientData', 'visualizations',
+        function($compile, $timeout, utils, patientData, visualizations) {
 	return { 
         scope: true,
         link: function(scope, element, attrs) {
@@ -322,23 +322,6 @@ moduleLayout.directive("directivePanes",
 
             // Store our view layout in a tree
             scope.treeModel = new TreeModel();
-
-            function makeImgButton(style, id, method, title, text, img) {
-                // Make sure all child elements have the id property, since the
-                // user may click on one of them and activate functions
-                // which expect the id to be present in the clicked element
-                return '<button class="tooltip-wrapper btn btn-primary" ' +
-                    'style="' + style + '" ' +
-                    'directive-static-tooltip custom-placement="top" ' +
-                    'data-id="' + id + '" ' +
-                    'ng-click="' + method + '" ' +
-                    'title="' + title + '">' +
-                    '<img src="' + img + '" ' +
-                        'data-id="' + id + '" ' +
-                        'class="custom-btn-svg">' +
-                    text +
-                    '</button>';
-            }
 
             // FIXME: Split size changes should be tracked
             function makeSplitComponent(orientation, node) {
@@ -382,13 +365,13 @@ moduleLayout.directive("directivePanes",
                     }
                     visualization += descriptionHTML; 
                     if (node.model.viz === scope.vizType.SPIRAL) {
-                        visualization += makeImgButton(
-                            'display: block',
-                            id,
-                            "addSpiral($event)",
-                            "",
-                            " Adicionar espiral",
-                            "images/controls/add.svg");
+                        visualization += utils.makeImgButton({
+                            style:  'display: block',
+                            id:     id,
+                            method: "addSpiral($event)",
+                            text:   "Adicionar espiral",
+                            img:    "images/controls/add.svg"
+                        });
                     }
                     visualization += '</div>'; 
                 }
@@ -396,48 +379,43 @@ moduleLayout.directive("directivePanes",
                 var viewportButton = '';
                 if (!node.isRoot()) {
                     if (scope.currentNode.model.id === id) {
-                        viewportButton = makeImgButton(
-                            "",
-                            id,
-                            "paneColapse()",
-                            " Colapsar Vista",
-                            "",
-                            "images/controls/colapse.svg");
+                        viewportButton = utils.makeImgButton({
+                            id:     id,
+                            method: "paneColapse()",
+                            title:  "Colapsar Vista",
+                            img:    "images/controls/colapse.svg"
+                        });
                     } else {
-                        viewportButton = makeImgButton(
-                            "",
-                            id,
-                            "paneMaximize($event)",
-                            " Maximizar Vista",
-                            "",
-                            "images/controls/maximize.svg");
+                        viewportButton = utils.makeImgButton({
+                            id:     id,
+                            method: "paneMaximize($event)",
+                            title:  "Maximizar Vista",
+                            img:    "images/controls/maximize.svg"
+                        });
                     }
                 }
 
                 return '<div class="pretty-split-pane-component-inner"><p>' + 
                     id + '</p>' +
                     viewportButton +
-                    makeImgButton(
-                        "",
-                        id,
-                        "paneSplitVertical($event)",
-                        " Separar na Vertical",
-                        "",
-                        "images/controls/split-vertical.svg") +
-                    makeImgButton(
-                        "",
-                        id,
-                        "paneSplitHorizontal($event)",
-                        " Separar na Horizontal",
-                        "",
-                        "images/controls/split-horizontal.svg") +
-                    makeImgButton(
-                        "",
-                        id,
-                        "paneRemove($event)",
-                        " Remover Vista",
-                        "",
-                        "images/controls/remove.svg") +
+                    utils.makeImgButton({
+                        id:     id,
+                        method: "paneSplitVertical($event)",
+                        title:  "Separar na Vertical",
+                        img:    "images/controls/split-vertical.svg"
+                    }) +
+                    utils.makeImgButton({
+                        id:     id,
+                        method: "paneSplitHorizontal($event)",
+                        title:  "Separar na Horizontal",
+                        img:    "images/controls/split-horizontal.svg"
+                    }) +
+                    utils.makeImgButton({
+                        id:     id,
+                        method: "paneRemove($event)",
+                        title:  "Remover Vista",
+                        img:    "images/controls/remove.svg"
+                    }) +
                     visualization +
                     '</div>';
             }
@@ -484,6 +462,10 @@ moduleLayout.directive("directivePanes",
                 angular.element('#' + id).remove();
             };
 
+            scope.pinSpiral = function(button) {
+                // FIXME
+            };
+
             // Two step creation: 
             // - first, angular elements we need to compile;
             // - then, d3 elements
@@ -493,20 +475,26 @@ moduleLayout.directive("directivePanes",
                     'id="' + spiralID + '" ' +
                     'class="viz-spiral">' +
                     '<div style="display: block">' + 
-                        makeImgButton(
-                            "",
-                            spiralID,
-                            "dragSpiral($event)",
-                            " Arrastar Espiral",
-                            "",
-                            "images/controls/drag.svg") +
-                        makeImgButton(
-                            "",
-                            spiralID,
-                            "removeSpiral($event)",
-                            " Remover Espiral",
-                            "",
-                            "images/controls/remove.svg") +
+                        utils.makeImgButton({
+                            id:     spiralID,
+                            method: "dragSpiral($event)",
+                            title:  "Arrastar Espiral",
+                            img:    "images/controls/drag.svg"
+                        }) +
+                        utils.makeImgButton({
+                            id:     spiralID,
+                            method: "pinSpiral($event)",
+                            title:  "Marcar Espiral como visualização principal",
+                            img:    "images/controls/pin.svg"
+                        }) +
+                        utils.makeImgButton({
+                            id:     spiralID,
+                            method: "removeSpiral($event)",
+                            title:  "Remover Espiral",
+                            img:    "images/controls/remove.svg"
+                        }) +
+                    // FIXME: remove
+                    spiralID +
                     '</div>' +
                     '</div>';
                 var target = angular.element('#' + id);
