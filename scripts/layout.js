@@ -38,7 +38,7 @@ moduleLayout.controller('controllerPanes',
     // Populated by directive panes
     $scope.APIPanes = {};
 
-    // Populated by directive actionPanel
+    // Populated by directive action-panel
     $scope.APIActionPanel = {};
 }]);
 
@@ -277,7 +277,7 @@ moduleLayout.directive("directiveActionPanel",
                                         '<input ' +
                                             'class="custom-checkbox" ' +
                                             'type="checkbox" ' +
-                                            'ng-checked="isSelected(attribute)">' +
+                                            'ng-checked="isSelected(attribute)"> ' +
                                             '{{::attribute}}' +
                                     '</div>' +
                                 '</div>' +
@@ -285,6 +285,8 @@ moduleLayout.directive("directiveActionPanel",
                     } else {
                         html = "<span>TODO</span>";
                     }
+                // No specific options to be displayed;
+                // describe possible actions
                 } else {
                     html = '<span>Pode <b>Maximizar</b> ( <img src="images/controls/black/maximize.svg" class="custom-btn-svg"> ) uma vista para configurar os atributos visíveis.</span>';
                 }
@@ -317,11 +319,14 @@ moduleLayout.directive("directivePanes",
                 HORIZONTAL: "horizontal"
             });
 
-            scope.currentNode = undefined;
-            scope.treeRoot = undefined;
-
             // Store our view layout in a tree
             scope.treeModel = new TreeModel();
+            scope.treeRoot = undefined;
+
+            // Points to the node from which view layout is generated:
+            // In an overview, it is the root node; 
+            // In a maximized view, it is the maximized node.
+            scope.currentNode = undefined;
 
             // FIXME: Split size changes should be tracked
             function makeSplitComponent(orientation, node) {
@@ -397,6 +402,7 @@ moduleLayout.directive("directivePanes",
 
                 return '<div class="pretty-split-pane-component-inner"><p>' + 
                     id + '</p>' +
+                    '<div style="display: block">' + 
                     viewportButton +
                     utils.makeImgButton({
                         id:     id,
@@ -417,6 +423,7 @@ moduleLayout.directive("directivePanes",
                         img:    "images/controls/remove.svg"
                     }) +
                     visualization +
+                    '</div>' +
                     '</div>';
             }
 
@@ -425,7 +432,6 @@ moduleLayout.directive("directivePanes",
                     if (node.children.length < 2) {
                         console.log("[WARN] @makeChildrenLayout: less than 2 childs");
                     } else {
-                        console.log("[INFO] @makeChildrenLayout: splitting children");
                         var orientation = 
                             (node.model.split === scope.splitType.VERTICAL) ?
                             "height" :
@@ -460,6 +466,10 @@ moduleLayout.directive("directivePanes",
 
                 // FIXME: Untrack in visualizations
                 angular.element('#' + id).remove();
+            };
+
+            scope.dragSpiral = function(button) {
+                // FIXME
             };
 
             scope.pinSpiral = function(button) {
@@ -499,10 +509,30 @@ moduleLayout.directive("directivePanes",
                     '</div>';
                 var target = angular.element('#' + id);
                 target.append($compile(html)(scope));
+
                 visualizations.makeSpiral(
                     id, spiralID);
             };
 
+            // Print node layout
+            var treePrint = function() {
+                var nodesToPrint = [];
+                scope.treeRoot.walk(function(node) {
+                    var string = "- ";
+                    for (var i = node.model.level; i > 0; i--)
+                        string += "- ";
+                    nodesToPrint.push(string + node.model.id +
+                            " parent: " + 
+                            (((node.parent !== undefined) && 
+                              (node.parent.model !== undefined)) ?
+                                node.parent.model.id :
+                                "NONE"));
+                });
+                for (var i = 0; i < nodesToPrint.length; i++)
+                    console.log(nodesToPrint[i]);
+            };
+
+            // Make html node layout
             scope.updateLayout = function() {
                 // No nodes available: make first view functionality
                 if (scope.currentNode === undefined) {
@@ -512,7 +542,6 @@ moduleLayout.directive("directivePanes",
 
                     scope.APIActionPanel.makeViewChooser();
 
-                // Make html node layout
                 } else {
                     element.html($compile(
                         makeChildrenLayout(scope.currentNode)
@@ -529,6 +558,8 @@ moduleLayout.directive("directivePanes",
                     });
 
                     scope.APIActionPanel.makeDefaultActions();
+
+                    //treePrint();
                 }
             };
 
@@ -550,30 +581,48 @@ moduleLayout.directive("directivePanes",
                 var parentNode = node.parent;
                 if (parentNode !== undefined) {
                     console.log("[INFO] Removing " + node.model.id);
-                    var otherChildNode = (parentNode.children[0].model.id === id) ?
-                        parentNode.children[1] : 
-                        parentNode.children[0];
+                    var otherChildIndex =
+                        (parentNode.children[0].model.id === id) ? 1 : 0;
+                    var otherChildNode = parentNode.children[otherChildIndex];
+
+                    // Update child properties
+                    otherChildNode.walk(function(node) {
+                        node.model.level -= 1;
+                    });
 
                     // Copy relevant child properties
                     if (parentNode.isRoot()) {
                         scope.treeRoot = scope.treeModel.parse({
                             id: otherChildNode.model.id,
+                            level: otherChildNode.model.level,
                             split: otherChildNode.model.split,
                             viz: otherChildNode.model.viz,
                             children: otherChildNode.model.children
                         });
+
                         scope.currentNode = scope.treeRoot;
                     } else {
-                        node.parent.config = otherChildNode.config;
-                        node.parent.model = otherChildNode.model;
-                        node.parent.children = otherChildNode.children;
+                        // Grandparent also needs updating
+                        if (parentNode.parent !== undefined) {
+                            var parentIndex = 
+                                (parentNode.parent.children[0].model.id === 
+                                 parentNode.model.id) ? 0 : 1;
+                            parentNode.parent.children[parentIndex] = 
+                                otherChildNode;
+                            otherChildNode.parent = parentNode.parent;
+                        } else {
+                            node.parent = scope.treeModel.parse({
+                                id: otherChildNode.model.id,
+                                level: otherChildNode.model.level,
+                                split: otherChildNode.model.split,
+                                viz: otherChildNode.model.viz,
+                                children: otherChildNode.model.children
+                            });
+                        }
                     }
-
-                    // Children are garbage
-                    node = undefined;
-                    otherChildNode = undefined;
+                // Nuke our tracked nodes, since a
+                // new layout will be created later
                 } else {
-                    node = undefined;
                     scope.treeRoot = undefined;
                     scope.currentNode = undefined;
                 }
@@ -624,10 +673,11 @@ moduleLayout.directive("directivePanes",
             };
 
             scope.makePaneSplit = function(vizType) {
-                // First view
+                // First view of the layout
                 if (scope.treeRoot === undefined) {
                     scope.treeRoot = scope.treeModel.parse({
                         id: "view-" + uuid.v1(),
+                        level: 0,
                         split: scope.splitType.NONE,
                         viz: vizType,
                         children: []
@@ -638,13 +688,10 @@ moduleLayout.directive("directivePanes",
                             return node1.model.id === scope.nodeToSplit.id;
                         });
 
-                        console.log("[INFO] Splitting in " +
-                            scope.nodeToSplit.split +
-                            " " +
-                            node.model.id);
                         node.addChild(
                             scope.treeModel.parse({
                                 id: "view-" + uuid.v1(),
+                                level: node.model.level + 1,
                                 split: scope.splitType.NONE,
                                 viz: node.model.viz,
                                 children: []
@@ -652,6 +699,7 @@ moduleLayout.directive("directivePanes",
                         node.addChild(
                             scope.treeModel.parse({
                                 id: "view-" + uuid.v1(),
+                                level: node.model.level + 1,
                                 split: scope.splitType.NONE,
                                 viz: vizType,
                                 children: []

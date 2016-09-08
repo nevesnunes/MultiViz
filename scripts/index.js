@@ -58,6 +58,13 @@ moduleIndex.factory('patientData', function($window) {
     };
 
     var getAttributeList = function(key, attributeType) {
+        // FIXME:
+        // Invalid lists, due to loading url without stored attributes
+        // Will probably change to some REST API
+        if (attributes[key].length === 0) {
+            window.location.href = "index.html";
+        }
+
         return attributes[key]
             .map(function(patient) {
                 return patient[attributeType];
