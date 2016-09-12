@@ -33,6 +33,22 @@
     vertical-align: middle;
 }
 
+.custom-btn-checked {
+    color: #fff;
+    background-color: #33b77a;
+    border-color: #2ea46d;
+}
+
+.custom-btn-checked:focus {
+    color: #fff;
+    background-color: #289060;
+    border-color: #12402b;
+}
+.custom-btn-checked:hover {
+    color: #fff;
+    background-color: #289060;
+    border-color: #20744d;
+}
 .custom-btn-secondary {
     border: 1px solid #ccc;
     display: block;

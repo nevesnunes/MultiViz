@@ -48,9 +48,7 @@ moduleLayout.directive("directiveActionPanel",
 	return { 
         scope: true,
         link: function(scope, element, attrs) {
-            var html = "";
-
-            var updateActionPanel = function() {
+            var updateActionPanel = function(html) {
                 element.html($compile(
                     html
                 )(scope));
@@ -72,9 +70,7 @@ moduleLayout.directive("directiveActionPanel",
 
             // FIXME: Just for testing
             scope.makeTODOActionPanel = function() {
-                html = "<span>TODO</span>";
-
-                updateActionPanel();
+                updateActionPanel("<span>TODO</span>");
             };
 
             scope.cancelSplit = function() {
@@ -95,7 +91,7 @@ moduleLayout.directive("directiveActionPanel",
                     }) +
                     '</button>';
                 }
-                html = cancelButton +
+                var html = cancelButton +
                     '<h4>Escolha uma visualização:</h4>' +
                     '<div class="view-choice" ng-click="chooseHeatmap()">' +
                     '<img src="images/views/heatmap.svg" ' +
@@ -120,7 +116,7 @@ moduleLayout.directive("directiveActionPanel",
                         '</a>' +
                     '</div>';
                 
-                updateActionPanel();
+                updateActionPanel(html);
             };
 
             scope.attributeType = Object.freeze({
@@ -218,7 +214,7 @@ moduleLayout.directive("directiveActionPanel",
             };
 
             scope.makeDefaultActions = function() {
-                html = "";
+                var html = "";
                 var rootHasNoChildren = 
                     (scope.APIPanes.getTreeRoot() !== undefined) &&
                     (!scope.APIPanes.getTreeRoot().hasChildren());
@@ -291,7 +287,7 @@ moduleLayout.directive("directiveActionPanel",
                     html = '<span>Pode <b>Maximizar</b> ( <img src="images/controls/black/maximize.svg" class="custom-btn-svg"> ) uma vista para configurar os atributos visíveis.</span>';
                 }
             
-                updateActionPanel();
+                updateActionPanel(html);
             };
 
             // Populate API
@@ -300,9 +296,6 @@ moduleLayout.directive("directiveActionPanel",
             scope.APIActionPanel.makeViewChooser = scope.makeViewChooser;
             scope.APIActionPanel.makeDefaultActions =
                 scope.makeDefaultActions;
-
-            // Initialize
-            updateActionPanel();
         } //link
     }; //return
 }]);
@@ -472,8 +465,43 @@ moduleLayout.directive("directivePanes",
                 // FIXME
             };
 
+            scope.currentSpiralID = "";
+            scope.toggleButtonChecked = function(button) {
+                var target = angular.element(button.target);
+                var isCheckable = target.data('checkable');
+                if (isCheckable) {
+                    var toggledCheck = !target.data('checked');
+                    target.data('checked', toggledCheck);
+                    target.attr('data-checked', toggledCheck);
+
+                    var spiralID = target.data('id');
+                    var img = "";
+                    var html = "";
+                    if (toggledCheck) {
+                        target.addClass('custom-btn-checked');
+                        img = "images/controls/pin-checked.svg";
+                        html = '<img src="' + img + '" ' +
+                            'data-id="' + spiralID + '" ' +
+                            'class="custom-btn-svg"> ';
+                    } else {
+                        target.removeClass('custom-btn-checked');
+                        img = "images/controls/pin.svg";
+                        html = '<img src="' + img + '" ' +
+                            'data-id="' + spiralID + '" ' +
+                            'class="custom-btn-svg"> ';
+                    }
+
+                    target.html($compile(
+                        html
+                    )(scope));
+
+                    scope.currentSpiralID = spiralID;
+                }
+            };
+
             scope.pinSpiral = function(button) {
                 // FIXME
+                scope.toggleButtonChecked(button);
             };
 
             // Two step creation: 
@@ -492,10 +520,12 @@ moduleLayout.directive("directivePanes",
                             img:    "images/controls/drag.svg"
                         }) +
                         utils.makeImgButton({
-                            id:     spiralID,
-                            method: "pinSpiral($event)",
-                            title:  "Marcar Espiral como visualização principal",
-                            img:    "images/controls/pin.svg"
+                            id:        spiralID,
+                            checkable: true,
+                            directive: "directive-button",
+                            method:    "pinSpiral($event)",
+                            title:     "Marcar Espiral como visualização principal",
+                            img:       "images/controls/pin.svg"
                         }) +
                         utils.makeImgButton({
                             id:     spiralID,
