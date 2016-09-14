@@ -18,6 +18,7 @@ moduleUtils.factory('utils', function() {
         options.clazz = options.clazz || "btn-primary";
         options.directive = options.directive || "";
         options.id = options.id || "";
+        options.nodeID = options.nodeID || "";
         options.placement = options.placement || "top";
         options.style = options.style || "";
         options.text = options.text || "";
@@ -34,6 +35,7 @@ moduleUtils.factory('utils', function() {
             options.directive + ' ' +
             'directive-static-tooltip custom-placement="' + options.placement + '" ' +
             'data-id="' + options.id + '" ' +
+            'data-node-id="' + options.nodeID + '" ' +
             'data-checkable="' + options.checkable + '" ' +
             'data-checked="false" ' +
             'ng-click="' + options.method + '" ' +

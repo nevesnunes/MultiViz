@@ -143,10 +143,10 @@ moduleLayout.directive("directiveActionPanel",
                 );
 
                 var node = scope.APIPanes.getCurrentNode();
-                if (node.model.viz ===
+                if (node.model.vizType ===
                         scope.vizType.HEAT_MAP) {
                     visualizations.updateHeatMap(node.model.id);
-                } else if (node.model.viz ===
+                } else if (node.model.vizType ===
                         scope.vizType.SPIRAL) {
                     visualizations.updateSpiral(node.model.id);
                 }
@@ -222,7 +222,7 @@ moduleLayout.directive("directiveActionPanel",
                     scope.APIPanes.getCurrentNode().model.id !==
                     scope.APIPanes.getTreeRoot().model.id;
                 if (rootHasNoChildren || viewNotRoot) {
-                    if (scope.APIPanes.getCurrentNode().model.viz ===
+                    if (scope.APIPanes.getCurrentNode().model.vizType ===
                             scope.vizType.HEAT_MAP) {
                         var list = scope.currentAttributeType;
                         // Attribute lists
@@ -312,10 +312,22 @@ moduleLayout.directive("directivePanes",
                 HORIZONTAL: "horizontal"
             });
 
-            // Store our view layout in a tree
+            /**
+             * Store our view layout in a tree.
+             * We keep track of each node's html to display on layout updates.
+             * @typedef {Object} TreeModel
+             * @property {string} id - unique node id
+             * @property {number} level - node depth in tree
+             * @property {string} splitType - type of split
+             * @property {string} vizType - type of visualization
+             * @property {{id:string, html:string}[]} vizs - one or more visualization html, identified by a unique id in the context of the node
+             * @property {string} currentVizID - id of visualization to be displayed on single/maximized view
+             * @property {boolean} isValid - whether visualization html should be reused
+             * @property {string[]} children - two child nodes
+             */
             scope.treeModel = new TreeModel();
             scope.treeRoot = undefined;
-
+            
             // Points to the node from which view layout is generated:
             // In an overview, it is the root node; 
             // In a maximized view, it is the maximized node.
@@ -349,20 +361,20 @@ moduleLayout.directive("directivePanes",
 
                 // Create initial elements for visualization
                 var visualization = '';
-                if (node.model.viz !== scope.vizType.NONE) {
+                if (node.model.vizType !== scope.vizType.NONE) {
                     visualization = '<div id=' + id + '>';
                     var descriptionHTML = "";
-                    if (node.model.viz ===
+                    if (node.model.vizType ===
                             scope.vizType.HEAT_MAP) {
                         descriptionHTML =
                             visualizations.makeDescriptionHeatMap(node.model.id);
-                    } else if (node.model.viz ===
+                    } else if (node.model.vizType ===
                             scope.vizType.SPIRAL) {
                         descriptionHTML =
                             visualizations.makeDescriptionSpiral(node.model.id);
                     }
                     visualization += descriptionHTML; 
-                    if (node.model.viz === scope.vizType.SPIRAL) {
+                    if (node.model.vizType === scope.vizType.SPIRAL) {
                         visualization += utils.makeImgButton({
                             style:  'display: block',
                             id:     id,
@@ -394,6 +406,7 @@ moduleLayout.directive("directivePanes",
                 }
 
                 return '<div class="pretty-split-pane-component-inner"><p>' + 
+                    // FIXME: remove
                     id + '</p>' +
                     '<div style="display: block">' + 
                     viewportButton +
@@ -426,7 +439,7 @@ moduleLayout.directive("directivePanes",
                         console.log("[WARN] @makeChildrenLayout: less than 2 childs");
                     } else {
                         var orientation = 
-                            (node.model.split === scope.splitType.VERTICAL) ?
+                            (node.model.splitType === scope.splitType.VERTICAL) ?
                             "height" :
                             "width";
 
@@ -444,11 +457,7 @@ moduleLayout.directive("directivePanes",
 
             scope.addSpiral = function(button) {
                 var id = angular.element(button.target).data('id');
-                var node = scope.treeRoot.first(function (node1) {
-                    return node1.model.id === id;
-                });
-
-                makeSpiral(node.model.id);
+                makeSpiral(id);
             };
 
             scope.removeSpiral = function(button) {
@@ -465,8 +474,7 @@ moduleLayout.directive("directivePanes",
                 // FIXME
             };
 
-            scope.currentSpiralID = "";
-            scope.toggleButtonChecked = function(button) {
+            scope.togglePinned = function(button) {
                 var target = angular.element(button.target);
                 var isCheckable = target.data('checkable');
                 if (isCheckable) {
@@ -474,6 +482,7 @@ moduleLayout.directive("directivePanes",
                     target.data('checked', toggledCheck);
                     target.attr('data-checked', toggledCheck);
 
+                    var nodeID = target.data('node-id');
                     var spiralID = target.data('id');
                     var img = "";
                     var html = "";
@@ -495,13 +504,16 @@ moduleLayout.directive("directivePanes",
                         html
                     )(scope));
 
-                    scope.currentSpiralID = spiralID;
+                    var node = scope.treeRoot.first(function (node1) {
+                        return node1.model.id === nodeID;
+                    });
+                    node.model.currentVizID = spiralID;
                 }
             };
 
             scope.pinSpiral = function(button) {
                 // FIXME
-                scope.toggleButtonChecked(button);
+                scope.togglePinned(button);
             };
 
             // Two step creation: 
@@ -511,16 +523,19 @@ moduleLayout.directive("directivePanes",
                 var spiralID = visualizations.makeSpiralID();
                 var html = '<div ' +
                     'id="' + spiralID + '" ' +
+                    'data-node-id="' + id + '" ' +
                     'class="viz-spiral">' +
                     '<div style="display: block">' + 
                         utils.makeImgButton({
                             id:     spiralID,
+                            nodeID: id,
                             method: "dragSpiral($event)",
                             title:  "Arrastar Espiral",
                             img:    "images/controls/drag.svg"
                         }) +
                         utils.makeImgButton({
                             id:        spiralID,
+                            nodeID:    id,
                             checkable: true,
                             directive: "directive-button",
                             method:    "pinSpiral($event)",
@@ -529,6 +544,7 @@ moduleLayout.directive("directivePanes",
                         }) +
                         utils.makeImgButton({
                             id:     spiralID,
+                            nodeID: id,
                             method: "removeSpiral($event)",
                             title:  "Remover Espiral",
                             img:    "images/controls/remove.svg"
@@ -578,10 +594,10 @@ moduleLayout.directive("directivePanes",
                     )(scope));
 
                     scope.treeRoot.walk(function(node) {
-                        if (node.model.viz ===
+                        if (node.model.vizType ===
                                 scope.vizType.HEAT_MAP) {
                             visualizations.makeHeatMap(node.model.id);
-                        } else if (node.model.viz ===
+                        } else if (node.model.vizType ===
                                 scope.vizType.SPIRAL) {
                             makeSpiral(node.model.id);
                         }
@@ -625,8 +641,11 @@ moduleLayout.directive("directivePanes",
                         scope.treeRoot = scope.treeModel.parse({
                             id: otherChildNode.model.id,
                             level: otherChildNode.model.level,
-                            split: otherChildNode.model.split,
-                            viz: otherChildNode.model.viz,
+                            splitType: otherChildNode.model.splitType,
+                            vizType: otherChildNode.model.vizType,
+                            vizs: otherChildNode.model.vizs,
+                            currentVizID: otherChildNode.model.currentVizID,
+                            isValid: otherChildNode.model.isValid,
                             children: otherChildNode.model.children
                         });
 
@@ -644,8 +663,11 @@ moduleLayout.directive("directivePanes",
                             node.parent = scope.treeModel.parse({
                                 id: otherChildNode.model.id,
                                 level: otherChildNode.model.level,
-                                split: otherChildNode.model.split,
-                                viz: otherChildNode.model.viz,
+                                splitType: otherChildNode.model.splitType,
+                                vizType: otherChildNode.model.vizType,
+                                vizs: otherChildNode.model.vizs,
+                                currentVizID: otherChildNode.model.currentVizID,
+                                isValid: otherChildNode.model.isValid,
                                 children: otherChildNode.model.children
                             });
                         }
@@ -708,8 +730,11 @@ moduleLayout.directive("directivePanes",
                     scope.treeRoot = scope.treeModel.parse({
                         id: "view-" + uuid.v1(),
                         level: 0,
-                        split: scope.splitType.NONE,
-                        viz: vizType,
+                        splitType: scope.splitType.NONE,
+                        vizType: vizType,
+                        vizs: [],
+                        currentVizID: undefined,
+                        isValid: false,
                         children: []
                     });
                 } else {
@@ -722,22 +747,28 @@ moduleLayout.directive("directivePanes",
                             scope.treeModel.parse({
                                 id: "view-" + uuid.v1(),
                                 level: node.model.level + 1,
-                                split: scope.splitType.NONE,
-                                viz: node.model.viz,
+                                splitType: scope.splitType.NONE,
+                                vizType: node.model.vizType,
+                                vizs: [],
+                                currentVizID: undefined,
+                                isValid: false,
                                 children: []
                             }));
                         node.addChild(
                             scope.treeModel.parse({
                                 id: "view-" + uuid.v1(),
                                 level: node.model.level + 1,
-                                split: scope.splitType.NONE,
-                                viz: vizType,
+                                splitType: scope.splitType.NONE,
+                                vizType: vizType,
+                                vizs: [],
+                                currentVizID: undefined,
+                                isValid: false,
                                 children: []
                             }));
 
                         // Update parent properties
-                        node.model.split = scope.nodeToSplit.split;
-                        node.model.viz = scope.vizType.NONE;
+                        node.model.splitType = scope.nodeToSplit.split;
+                        node.model.vizType = scope.vizType.NONE;
                     }
                 }
 
