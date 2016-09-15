@@ -70,9 +70,6 @@ moduleVisualizations.factory('visualizations',
         return "spiral-" + spiralID;
     };
 
-    // Spiral to be displayed on single/maximized view
-    var currentSpiral;
-
     var makeDescriptionSpiral = function(elementID) {
         if (elementID === undefined) {
             console.log("[WARN] @makeHeatMap: undefined id.");
@@ -82,7 +79,9 @@ moduleVisualizations.factory('visualizations',
         return '<p class="viz-title">' +
                 'Análise temporal de atributos' +
                 '  ' +
-                '<span class="tooltip-wrapper" title="{{tooltipText}}" directive-tooltip directive-spiral-tooltip>' +
+                '<span class="tooltip-wrapper" ' +
+                    'title="{{tooltipText}}" ' + 
+                    'directive-tooltip directive-spiral-tooltip>' +
                     '<img src="images/controls/info.svg">' +
                 '</span>' +
                 '</p>';
@@ -259,7 +258,9 @@ moduleVisualizations.factory('visualizations',
         return '<p class="viz-title">' +
                 'Relação entre doenças e medicações' +
                 '  ' +
-                '<span class="tooltip-wrapper" title="{{tooltipText}}" directive-tooltip directive-heat-map-tooltip>' +
+                '<span class="tooltip-wrapper" ' +
+                    'title="{{tooltipText}}" ' + 
+                    'directive-tooltip directive-heat-map-tooltip>' +
                     '<img src="images/controls/info.svg">' +
                 '</span>' +
                 '</p>';
