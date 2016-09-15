@@ -10,7 +10,7 @@ moduleLayout.factory("nodes",
         ['utils', function(utils) {
     // Store our view layout in a tree.
     var treeModel = new TreeModel();
-    var treeRoot;
+    var rootNode;
     
     // Points to the node from which view layout is generated:
     // In an overview, it is the root node; 
@@ -19,12 +19,22 @@ moduleLayout.factory("nodes",
 
     /**
      * @property {string} id - unique node id
+     *
      * @property {number} level - node depth in tree
+     *
      * @property {string} splitType - type of split
+     *
      * @property {string} vizType - type of visualization
-     * @property {{id:string, html:string}[]} vizs - one or more visualization html, identified by a unique id in the context of the node; it will be used in layout updates
-     * @property {string} currentVizID - id of visualization to be displayed on single/maximized view
-     * @property {boolean} isValid - whether visualization html should be reused
+     *
+     * @property {{id:string, isValid:bool, html:string}[]} vizs -
+     * one or more visualization html, identified by a unique id
+     * in the context of the node; when the view only supports
+     * a single visualization, the id will be equal to the node id;
+     * a visualization will be reused in layout updates when isValid is true
+     *
+     * @property {string} currentVizID - id of visualization to be displayed 
+     * on single/maximized view
+     *
      * @property {string[]} children - two child nodes
      */
     var makeNode = function(model) {
@@ -35,53 +45,69 @@ moduleLayout.factory("nodes",
             vizType: model.vizType,
             vizs: model.vizs,
             currentVizID: model.currentVizID,
-            isValid: model.isValid,
             children: model.children
         });
     };
 
-    var getViz = function(id) {
-        var node = nodes.treeRoot.first(function(node1) {
-            return node1.model.id === id;
+    var getViz = function(nodeID, vizID) {
+        vizID = vizID || nodeID;
+
+        var node = rootNode.first(function(node1) {
+            return node1.model.id === nodeID;
         });
-        var index = utils.arrayObjectIndexOf(node.vizs, id, "id");
+        var index = utils.arrayObjectIndexOf(node.model.vizs, vizID, "id");
         if (index === -1) {
-            console.log("[WARN] @getVizByID: id not found.");
+            console.log("[WARN] @getViz: id not found.");
             return null;
         }
-        return node.vizs[index].viz;
+        return node.model.vizs[index].viz;
     };
 
-    var removeViz = function(id) {
-        var node = nodes.treeRoot.first(function(node1) {
-            return node1.model.id === id;
+    var removeViz = function(nodeID, vizID) {
+        vizID = vizID || nodeID;
+        var node = rootNode.first(function(node1) {
+            return node1.model.id === nodeID;
         });
-        var index = utils.arrayObjectIndexOf(node.vizs, id, "id");
+        var index = utils.arrayObjectIndexOf(node.model.vizs, vizID, "id");
         if (index > -1) {
-            console.log("[INFO] @removeByID: removed " + id);
+            console.log("[INFO] @removeViz: removed " + vizID);
             array.splice(index, 1);
         }
     };
 
-    var updateViz = function(id, viz) {
-        var node = nodes.treeRoot.first(function(node1) {
-            return node1.model.id === id;
+    var updateViz = function(data) {
+        data.vizID = data.vizID || data.nodeID;
+        var node = rootNode.first(function(node1) {
+            return node1.model.id === data.nodeID;
         });
-        var index = utils.arrayObjectIndexOf(node.vizs, id, "id");
+        var index = utils.arrayObjectIndexOf(node.model.vizs, data.vizID, "id");
         if (index > -1) {
-            node.vizs[index].viz = viz;
+            node.model.vizs[index].isValid = true;
+            node.model.vizs[index].viz = data.viz;
         } else {
-            node.vizs.push({
-                id: id,
-                viz: viz
+            node.model.vizs.push({
+                id: data.vizID,
+                isValid: true,
+                viz: data.viz
             });
         }
     };
 
+    var getCurrentNode = function() { return currentNode; };
+    var setCurrentNode = function(node) { currentNode = node; };
+
+    var getRootNode = function() { return rootNode; };
+    var setRootNode = function(node) { rootNode = node; };
+
     return {
-        currentNode: currentNode,
-        treeRoot: treeRoot,
-        makeNode: makeNode
+        getCurrentNode: getCurrentNode,
+        setCurrentNode: setCurrentNode,
+        getRootNode: getRootNode,
+        setRootNode: setRootNode,
+        makeNode: makeNode,
+        getViz: getViz,
+        removeViz: removeViz,
+        updateViz: updateViz
     };
 }]);
 
@@ -160,7 +186,7 @@ moduleLayout.directive("directiveActionPanel",
 
             scope.makeViewChooser = function() {
                 var cancelButton = '';
-                if (nodes.treeRoot !== undefined) {
+                if (nodes.getRootNode() !== undefined) {
                     cancelButton = utils.makeImgButton({
                         clazz:  "btn-secondary custom-btn-secondary",
                         placement: "left",
@@ -221,7 +247,7 @@ moduleLayout.directive("directiveActionPanel",
                     scope.selectedMedications
                 );
 
-                var node = nodes.currentNode;
+                var node = nodes.getCurrentNode();
                 if (node.model.vizType ===
                         scope.vizType.HEAT_MAP) {
                     visualizations.updateHeatMap(node.model.id);
@@ -295,13 +321,13 @@ moduleLayout.directive("directiveActionPanel",
             scope.makeDefaultActions = function() {
                 var html = "";
                 var rootHasNoChildren = 
-                    (nodes.treeRoot !== undefined) &&
-                    (!nodes.treeRoot.hasChildren());
+                    (nodes.getRootNode() !== undefined) &&
+                    (!nodes.getRootNode().hasChildren());
                 var viewNotRoot =
-                    nodes.currentNode.model.id !==
-                    nodes.treeRoot.model.id;
+                    nodes.getCurrentNode().model.id !==
+                    nodes.getRootNode().model.id;
                 if (rootHasNoChildren || viewNotRoot) {
-                    if (nodes.currentNode.model.vizType ===
+                    if (nodes.getCurrentNode().model.vizType ===
                             scope.vizType.HEAT_MAP) {
                         var list = scope.currentAttributeType;
                         // Attribute lists
@@ -413,7 +439,7 @@ moduleLayout.directive("directivePanes",
             }
 
             function makeSplitInner(id) {
-                var node = nodes.treeRoot.first(function(node1) {
+                var node = nodes.getRootNode().first(function(node1) {
                     return node1.model.id === id;
                 });
 
@@ -446,7 +472,7 @@ moduleLayout.directive("directivePanes",
 
                 var viewportButton = '';
                 if (!node.isRoot()) {
-                    if (nodes.currentNode.model.id === id) {
+                    if (nodes.getCurrentNode().model.id === id) {
                         viewportButton = utils.makeImgButton({
                             id:     id,
                             method: "paneColapse()",
@@ -520,7 +546,7 @@ moduleLayout.directive("directivePanes",
 
             scope.removeSpiral = function(button) {
                 var id = angular.element(button.target).data('id');
-                var node = nodes.treeRoot.first(function (node1) {
+                var node = nodes.getRootNode().first(function (node1) {
                     return node1.model.id === id;
                 });
 
@@ -562,7 +588,7 @@ moduleLayout.directive("directivePanes",
                         html
                     )(scope));
 
-                    var node = nodes.treeRoot.first(function (node1) {
+                    var node = nodes.getRootNode().first(function (node1) {
                         return node1.model.id === nodeID;
                     });
                     node.model.currentVizID = spiralID;
@@ -621,7 +647,7 @@ moduleLayout.directive("directivePanes",
             // Print node layout
             var treePrint = function() {
                 var nodesToPrint = [];
-                nodes.treeRoot.walk(function(node) {
+                nodes.getRootNode().walk(function(node) {
                     var string = "- ";
                     for (var i = node.model.level; i > 0; i--)
                         string += "- ";
@@ -639,7 +665,7 @@ moduleLayout.directive("directivePanes",
             // Make html node layout
             scope.updateLayout = function() {
                 // No nodes available: make first view functionality
-                if (nodes.currentNode === undefined) {
+                if (nodes.getCurrentNode() === undefined) {
 
                     // There may be a previous view: nuke the layout
                     element.html($compile('')(scope));
@@ -648,10 +674,10 @@ moduleLayout.directive("directivePanes",
 
                 } else {
                     element.html($compile(
-                        makeChildrenLayout(nodes.currentNode)
+                        makeChildrenLayout(nodes.getCurrentNode())
                     )(scope));
 
-                    nodes.treeRoot.walk(function(node) {
+                    nodes.getRootNode().walk(function(node) {
                         if (node.model.vizType ===
                                 scope.vizType.HEAT_MAP) {
                             visualizations.makeHeatMap(node.model.id);
@@ -669,13 +695,13 @@ moduleLayout.directive("directivePanes",
 
             scope.paneRemove = function(button) {
                 var id = angular.element(button.target).data('id');
-                var node = nodes.treeRoot.first(function (node1) {
+                var node = nodes.getRootNode().first(function (node1) {
                     return node1.model.id === id;
                 });
 
                 // Colapse the view if it is maximized
-                if (nodes.currentNode.model.id === id) {
-                    nodes.currentNode = nodes.treeRoot;
+                if (nodes.getCurrentNode().model.id === id) {
+                    nodes.setCurrentNode(nodes.getRootNode());
                 }
 
                 // Cancel any pending splits
@@ -696,9 +722,8 @@ moduleLayout.directive("directivePanes",
 
                     // Copy relevant child properties
                     if (parentNode.isRoot()) {
-                        nodes.treeRoot = nodes.makeNode(otherChildNode.model);
-
-                        nodes.currentNode = nodes.treeRoot;
+                        nodes.setRootNode(nodes.makeNode(otherChildNode.model));
+                        nodes.setCurrentNode(nodes.getRootNode());
                     } else {
                         // Grandparent also needs updating
                         if (parentNode.parent !== undefined) {
@@ -715,8 +740,8 @@ moduleLayout.directive("directivePanes",
                 // Nuke our tracked nodes, since a
                 // new layout will be created later
                 } else {
-                    nodes.treeRoot = undefined;
-                    nodes.currentNode = undefined;
+                    nodes.setRootNode(undefined);
+                    nodes.setCurrentNode(undefined);
                 }
                 
                 scope.updateLayout();
@@ -724,16 +749,16 @@ moduleLayout.directive("directivePanes",
 
             scope.paneMaximize = function(button) {
                 var id = angular.element(button.target).data('id');
-                var node = nodes.treeRoot.first(function (node1) {
+                var node = nodes.getRootNode().first(function (node1) {
                     return node1.model.id === id;
                 });
-                nodes.currentNode = node;
+                nodes.setCurrentNode(node);
 
                 scope.updateLayout();
             };
 
             scope.paneColapse = function() {
-                nodes.currentNode = nodes.treeRoot;
+                nodes.setCurrentNode(nodes.getRootNode());
 
                 scope.updateLayout();
             };
@@ -745,7 +770,8 @@ moduleLayout.directive("directivePanes",
                     split: scope.splitType.VERTICAL
                 };
 
-                if (nodes.currentNode.model.id !== nodes.treeRoot.model.id) {
+                if (nodes.getCurrentNode().model.id !==
+                        nodes.getRootNode().model.id) {
                     scope.paneColapse();
                 }
                 scope.APIActionPanel.makeViewChooser();
@@ -758,7 +784,8 @@ moduleLayout.directive("directivePanes",
                     split: scope.splitType.HORIZONTAL
                 };
 
-                if (nodes.currentNode.model.id !== nodes.treeRoot.model.id) {
+                if (nodes.getCurrentNode().model.id !==
+                        nodes.getRootNode().model.id) {
                     scope.paneColapse();
                 }
                 scope.APIActionPanel.makeViewChooser();
@@ -766,20 +793,19 @@ moduleLayout.directive("directivePanes",
 
             scope.makePaneSplit = function(vizType) {
                 // First view of the layout
-                if (nodes.treeRoot === undefined) {
-                    nodes.treeRoot = nodes.makeNode({
+                if (nodes.getRootNode() === undefined) {
+                    nodes.setRootNode(nodes.makeNode({
                         id: "view-" + uuid.v1(),
                         level: 0,
                         splitType: scope.splitType.NONE,
                         vizType: vizType,
                         vizs: [],
                         currentVizID: undefined,
-                        isValid: false,
                         children: []
-                    });
+                    }));
                 } else {
                     if (scope.nodeToSplit !== undefined) {
-                        var node = nodes.treeRoot.first(function (node1) {
+                        var node = nodes.getRootNode().first(function (node1) {
                             return node1.model.id === scope.nodeToSplit.id;
                         });
 
@@ -790,7 +816,6 @@ moduleLayout.directive("directivePanes",
                                 vizType: node.model.vizType,
                                 vizs: [],
                                 currentVizID: undefined,
-                                isValid: false,
                                 children: []
                         }));
                         node.addChild(nodes.makeNode({
@@ -800,7 +825,6 @@ moduleLayout.directive("directivePanes",
                                 vizType: vizType,
                                 vizs: [],
                                 currentVizID: undefined,
-                                isValid: false,
                                 children: []
                         }));
 

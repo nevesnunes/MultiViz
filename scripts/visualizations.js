@@ -26,7 +26,7 @@ moduleVisualizations.directive('directiveSpiralTooltip',
 });
 
 moduleVisualizations.factory('visualizations',
-        ['patientData', 'utils', function(patientData, utils) {
+        ['patientData', 'utils', 'nodes', function(patientData, utils, nodes) {
     var margin = {
             top: 80,
             right: 0,
@@ -133,7 +133,7 @@ moduleVisualizations.factory('visualizations',
     };
 
     var populateHeatMap = function(data, id) {
-        var svg = getVizByID(heatMaps, id);
+        var svg = nodes.getViz(id);
 
         var diseaseLabels = svg.selectAll(".diseaseLabel")
             .data(diseases);
@@ -232,23 +232,6 @@ moduleVisualizations.factory('visualizations',
         legend.exit().remove();
     };
 
-    var getVizByID = function(array, id) {
-        var index = utils.arrayObjectIndexOf(array, id, "id");
-        if (index === -1) {
-            console.log("[WARN] @getVizByID: id not found.");
-            return null;
-        }
-        return array[index].viz;
-    };
-    var removeByID = function(array, id) {
-        var index = utils.arrayObjectIndexOf(array, id, "id");
-        if (index > -1) {
-            console.log("[INFO] @removeByID: removed " + id);
-            array.splice(index, 1);
-        }
-    };
-
-    var heatMaps = [];
     var makeDescriptionHeatMap = function(elementID) {
         if (elementID === undefined) {
             console.log("[WARN] @makeHeatMap: undefined id.");
@@ -278,10 +261,9 @@ moduleVisualizations.factory('visualizations',
             .attr("transform",
                   "translate(" + margin.left + "," + margin.top + ")");
 
-        // Save svg for later updates
-        removeByID(heatMaps, elementID);
-        heatMaps.push({
-            id: elementID,
+        // Save svg for d3 updates
+        nodes.updateViz({
+            nodeID: elementID,
             viz: svg
         });
 
