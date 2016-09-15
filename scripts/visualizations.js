@@ -86,6 +86,33 @@ moduleVisualizations.factory('visualizations',
                 '</span>' +
                 '</p>';
     };
+
+    var populateSpiral = function(data, id) {
+        var svg = nodes.getViz(id);
+
+        var countSegments = 24;
+        var heightSegment = 20;
+        var innerRadius = 20;
+        var rings = 7;
+        var margin = 20;
+        var chart = circularHeatChart()
+	        .range(["white", "black"])
+            .numSegments(countSegments)
+            .segmentHeight(heightSegment)
+            .innerRadius(innerRadius)
+            .margin({
+                top: margin,
+                right: margin,
+                bottom: margin,
+                left: margin
+            });
+
+        var cells = svg.selectAll('svg')
+            .data([data]);
+        cells.enter()
+            .call(chart);
+    };
+
     var makeSpiral = function(elementID, spiralID) {
         if (elementID === undefined) {
             console.log("[WARN] @makeHeatMap: undefined id.");
@@ -123,13 +150,25 @@ moduleVisualizations.factory('visualizations',
                 2 * innerRadius +
                 2 * margin);
 
-        var cells = svg.selectAll('svg')
-            .data([data]);
-        cells.enter()
-            .call(chart);
+        // Save svg for d3 updates
+        nodes.updateViz({
+            nodeID: elementID,
+            viz: svg
+        });
+
+        populateSpiral(data, elementID);
     };
+
     var updateSpiral = function(elementID) {
-        // FIXME
+        var data = [];
+        for(var i=0; i<countSegments*rings; i++) {
+            data[i] = Math.random();
+        }
+
+        var spirals = nodes.getVizs(id);
+        for (var j = 0; j < spirals.length; j++) {
+            populateSpiral(data, spirals[j].id);
+        }
     };
 
     var populateHeatMap = function(data, id) {

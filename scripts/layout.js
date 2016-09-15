@@ -49,6 +49,14 @@ moduleLayout.factory("nodes",
         });
     };
 
+    var getVizs = function(nodeID) {
+        var node = rootNode.first(function(node1) {
+            return node1.model.id === nodeID;
+        });
+
+        return node.model.vizs;
+    };
+
     var getViz = function(nodeID, vizID) {
         vizID = vizID || nodeID;
 
@@ -105,6 +113,7 @@ moduleLayout.factory("nodes",
         getRootNode: getRootNode,
         setRootNode: setRootNode,
         makeNode: makeNode,
+        getVizs: getVizs,
         getViz: getViz,
         removeViz: removeViz,
         updateViz: updateViz
