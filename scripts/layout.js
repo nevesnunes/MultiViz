@@ -552,13 +552,20 @@ moduleLayout.directive("directivePanes",
             };
 
             scope.removeSpiral = function(button) {
-                var id = angular.element(button.target).data('id');
+                var nodeID = angular.element(button.target).data('node-id');
+                var spiralID = angular.element(button.target).data('id');
                 var node = nodes.getRootNode().first(function (node1) {
-                    return node1.model.id === id;
+                    return node1.model.id === nodeID;
                 });
 
-                // FIXME: Untrack in visualizations
-                angular.element('#' + id).remove();
+                // Remove from DOM
+                angular.element('#' + spiralID).remove();
+
+                // Untrack in node visualizations
+                nodes.removeViz({
+                    nodeID: nodeID,
+                    vizID: spiralID
+                });
             };
 
             scope.dragSpiral = function(button) {
@@ -602,12 +609,12 @@ moduleLayout.directive("directivePanes",
                 }
             };
 
-            scope.pinSpiral = function(button) {
+            scope.togglePinnedSpiral = function(button) {
                 // FIXME
                 scope.togglePinned(button);
             };
 
-            var makeSpiral = function(node) {
+            var makeSpirals = function(node) {
                 var id = node.model.id;
                 var spirals = node.model.vizs;
                 if (spirals.length === 0) {
@@ -640,7 +647,7 @@ moduleLayout.directive("directivePanes",
                             nodeID:    id,
                             checkable: true,
                             directive: "directive-button",
-                            method:    "pinSpiral($event)",
+                            method:    "togglePinnedSpiral($event)",
                             title:     "Marcar Espiral como visualização principal",
                             img:       "images/controls/pin.svg"
                         }) +
@@ -730,7 +737,7 @@ moduleLayout.directive("directivePanes",
                             makeHeatMap(node);
                         } else if (node.model.vizType ===
                                 scope.vizType.SPIRAL) {
-                            makeSpiral(node);
+                            makeSpirals(node);
                         }
                     });
 
