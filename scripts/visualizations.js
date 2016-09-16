@@ -63,6 +63,13 @@ moduleVisualizations.factory('visualizations',
         medications = processSelectedList(selectedMedications);
     };
 
+    // Unique identifier for heatmap elements
+    var heatmapID = 0;
+    var makeHeatMapID = function() {
+        heatmapID++;
+        return "heatmap-" + heatmapID;
+    };
+
     // Unique identifier for spiral elements
     var spiralID = 0;
     var makeSpiralID = function() {
@@ -87,9 +94,7 @@ moduleVisualizations.factory('visualizations',
                 '</p>';
     };
 
-    var populateSpiral = function(data, id) {
-        var svg = nodes.getViz(id);
-
+    var populateSpiral = function(data, svg) {
         var countSegments = 24;
         var heightSegment = 20;
         var innerRadius = 20;
@@ -153,10 +158,11 @@ moduleVisualizations.factory('visualizations',
         // Save svg for d3 updates
         nodes.updateViz({
             nodeID: elementID,
+            vizID: spiralID,
             viz: svg
         });
 
-        populateSpiral(data, elementID);
+        populateSpiral(data, svg);
     };
 
     var updateSpiral = function(elementID) {
@@ -165,15 +171,13 @@ moduleVisualizations.factory('visualizations',
             data[i] = Math.random();
         }
 
-        var spirals = nodes.getVizs(id);
+        var spirals = nodes.getVizs(elementID);
         for (var j = 0; j < spirals.length; j++) {
-            populateSpiral(data, spirals[j].id);
+            populateSpiral(data, spirals[j].viz);
         }
     };
 
-    var populateHeatMap = function(data, id) {
-        var svg = nodes.getViz(id);
-
+    var populateHeatMap = function(data, svg) {
         var diseaseLabels = svg.selectAll(".diseaseLabel")
             .data(diseases);
         diseaseLabels.enter().append("text")
@@ -287,13 +291,13 @@ moduleVisualizations.factory('visualizations',
                 '</span>' +
                 '</p>';
     };
-    var makeHeatMap = function(elementID) {
+    var makeHeatMap = function(elementID, heatMapID) {
         if (elementID === undefined) {
             console.log("[WARN] @makeHeatMap: undefined id.");
             return;
         }
         
-        var svg = d3.select("#" + elementID).append("svg")
+        var svg = d3.select("#" + heatMapID).append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
@@ -303,14 +307,16 @@ moduleVisualizations.factory('visualizations',
         // Save svg for d3 updates
         nodes.updateViz({
             nodeID: elementID,
+            vizID: heatMapID,
             viz: svg
         });
 
-        populateHeatMap(dataIncidences, elementID);
+        populateHeatMap(dataIncidences, svg);
     };
 
     var updateHeatMap = function(elementID) {
-        populateHeatMap(dataIncidences, elementID);
+        var heatMap = nodes.getVizs(elementID)[0];
+        populateHeatMap(dataIncidences, heatMap.viz);
     };
 
     return {
@@ -320,6 +326,7 @@ moduleVisualizations.factory('visualizations',
         makeDescriptionSpiral: makeDescriptionSpiral,
         updateSpiral: updateSpiral,
         makeHeatMap: makeHeatMap,
+        makeHeatMapID: makeHeatMapID,
         makeDescriptionHeatMap: makeDescriptionHeatMap,
         updateHeatMap: updateHeatMap
     };

@@ -38,7 +38,7 @@ moduleLayout.factory("nodes",
      * @property {string[]} children - two child nodes
      */
     var makeNode = function(model) {
-        return treeModel.parse({
+        var node = treeModel.parse({
             id: model.id,
             level: model.level,
             splitType: model.splitType,
@@ -47,6 +47,8 @@ moduleLayout.factory("nodes",
             currentVizID: model.currentVizID,
             children: model.children
         });
+
+        return node;
     };
 
     var getVizs = function(nodeID) {
@@ -58,8 +60,6 @@ moduleLayout.factory("nodes",
     };
 
     var getViz = function(nodeID, vizID) {
-        vizID = vizID || nodeID;
-
         var node = rootNode.first(function(node1) {
             return node1.model.id === nodeID;
         });
@@ -71,20 +71,18 @@ moduleLayout.factory("nodes",
         return node.model.vizs[index].viz;
     };
 
-    var removeViz = function(nodeID, vizID) {
-        vizID = vizID || nodeID;
+    var removeViz = function(data) {
         var node = rootNode.first(function(node1) {
-            return node1.model.id === nodeID;
+            return node1.model.id === data.nodeID;
         });
-        var index = utils.arrayObjectIndexOf(node.model.vizs, vizID, "id");
+        var index = utils.arrayObjectIndexOf(node.model.vizs, data.vizID, "id");
         if (index > -1) {
-            console.log("[INFO] @removeViz: removed " + vizID);
-            array.splice(index, 1);
+            console.log("[INFO] @removeViz: removed " + data.vizID);
+            node.model.vizs.splice(index, 1);
         }
     };
 
     var updateViz = function(data) {
-        data.vizID = data.vizID || data.nodeID;
         var node = rootNode.first(function(node1) {
             return node1.model.id === data.nodeID;
         });
@@ -550,7 +548,7 @@ moduleLayout.directive("directivePanes",
 
             scope.addSpiral = function(button) {
                 var id = angular.element(button.target).data('id');
-                makeSpiral(id);
+                makeSpiralHTML(id, visualizations.makeSpiralID());
             };
 
             scope.removeSpiral = function(button) {
@@ -609,11 +607,22 @@ moduleLayout.directive("directivePanes",
                 scope.togglePinned(button);
             };
 
+            var makeSpiral = function(node) {
+                var id = node.model.id;
+                var spirals = node.model.vizs;
+                if (spirals.length === 0) {
+                    makeSpiralHTML(id, visualizations.makeSpiralID());
+                } else {
+                    for (var i = 0; i < spirals.length; i++) {
+                        makeSpiralHTML(id, spirals[i].id);
+                    }
+                }
+            };
+
             // Two step creation: 
             // - first, angular elements we need to compile;
             // - then, d3 elements
-            var makeSpiral = function(id) {
-                var spiralID = visualizations.makeSpiralID();
+            var makeSpiralHTML = function(id, spiralID) {
                 var html = '<div ' +
                     'id="' + spiralID + '" ' +
                     'data-node-id="' + id + '" ' +
@@ -646,11 +655,41 @@ moduleLayout.directive("directivePanes",
                     spiralID +
                     '</div>' +
                     '</div>';
+
                 var target = angular.element('#' + id);
                 target.append($compile(html)(scope));
 
                 visualizations.makeSpiral(
                     id, spiralID);
+            };
+
+            // Two step creation: 
+            // - first, angular elements we need to compile;
+            // - then, d3 elements
+            var makeHeatMap = function(node) {
+                var id = node.model.id;
+                var heatMap = node.model.vizs[0];
+                var heatMapID;
+                if (!heatMap) {
+                    heatMapID = visualizations.makeHeatMapID();
+                } else {
+                    heatMapID = heatMap.id;
+                }
+
+                var html = '<div ' +
+                    'id="' + heatMapID + '" ' +
+                    'data-node-id="' + id + '">' +
+                    // FIXME: remove
+                    '<div style="display: block">' + 
+                    heatMapID +
+                    '</div>' +
+                    '</div>';
+
+                var target = angular.element('#' + id);
+                target.append($compile(html)(scope));
+
+                visualizations.makeHeatMap(
+                    id, heatMapID);
             };
 
             // Print node layout
@@ -661,9 +700,9 @@ moduleLayout.directive("directivePanes",
                     for (var i = node.model.level; i > 0; i--)
                         string += "- ";
                     nodesToPrint.push(string + node.model.id +
-                            " parent: " + 
-                            (((node.parent !== undefined) && 
-                              (node.parent.model !== undefined)) ?
+                        " parent: " + 
+                        (((node.parent !== undefined) && 
+                            (node.parent.model !== undefined)) ?
                                 node.parent.model.id :
                                 "NONE"));
                 });
@@ -675,7 +714,6 @@ moduleLayout.directive("directivePanes",
             scope.updateLayout = function() {
                 // No nodes available: make first view functionality
                 if (nodes.getCurrentNode() === undefined) {
-
                     // There may be a previous view: nuke the layout
                     element.html($compile('')(scope));
 
@@ -689,10 +727,10 @@ moduleLayout.directive("directivePanes",
                     nodes.getRootNode().walk(function(node) {
                         if (node.model.vizType ===
                                 scope.vizType.HEAT_MAP) {
-                            visualizations.makeHeatMap(node.model.id);
+                            makeHeatMap(node);
                         } else if (node.model.vizType ===
                                 scope.vizType.SPIRAL) {
-                            makeSpiral(node.model.id);
+                            makeSpiral(node);
                         }
                     });
 
@@ -746,6 +784,7 @@ moduleLayout.directive("directivePanes",
                             node.parent = nodes.makeNode(otherChildNode.model);
                         }
                     }
+
                 // Nuke our tracked nodes, since a
                 // new layout will be created later
                 } else {
@@ -823,8 +862,8 @@ moduleLayout.directive("directivePanes",
                                 level: node.model.level + 1,
                                 splitType: scope.splitType.NONE,
                                 vizType: node.model.vizType,
-                                vizs: [],
-                                currentVizID: undefined,
+                                vizs: node.model.vizs,
+                                currentVizID: node.model.currentVizID,
                                 children: []
                         }));
                         node.addChild(nodes.makeNode({
