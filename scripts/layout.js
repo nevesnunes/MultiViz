@@ -74,7 +74,7 @@ moduleLayout.factory("nodes",
         var viz = null;
         nodes.getRootNode().walk(function(node) {
             var index = utils.arrayObjectIndexOf(
-                    node.model.vizs, vizID, "id");
+                node.model.vizs, vizID, "id");
             if ((index !== -1) && (viz === null)) {
                 viz = node.model.vizs[index];
             }
@@ -82,6 +82,10 @@ moduleLayout.factory("nodes",
         return viz;
     };
 
+    /**
+     * @param {nodeID:string, vizID:string} data - contains the
+     * node id and visualization id that identify a certain visualization
+     */
     var removeViz = function(data) {
         var node = rootNode.first(function(node1) {
             return node1.model.id === data.nodeID;
@@ -93,7 +97,14 @@ moduleLayout.factory("nodes",
         }
     };
 
+    /**
+     * @param {nodeID:string, vizID:string, isChecked:bool, html:object} data -
+     * contains the updated html of a visualization identified by 
+     * node id and visualization id
+     */
     var updateViz = function(data) {
+        data.isChecked = data.isChecked || false;
+
         var node = rootNode.first(function(node1) {
             return node1.model.id === data.nodeID;
         });
@@ -104,11 +115,29 @@ moduleLayout.factory("nodes",
         } else {
             node.model.vizs.push({
                 id: data.vizID,
-                isChecked: false,
+                isChecked: data.isChecked,
                 isValid: true,
                 html: data.html
             });
         }
+    };
+
+    // Print node layout to console
+    var treePrint = function() {
+        var nodesToPrint = [];
+        getRootNode().walk(function(node) {
+            var string = "- ";
+            for (var i = node.model.level; i > 0; i--)
+                string += "- ";
+            nodesToPrint.push(string + node.model.id +
+                " parent: " + 
+                (((node.parent !== undefined) && 
+                    (node.parent.model !== undefined)) ?
+                        node.parent.model.id :
+                        "NONE"));
+        });
+        for (var i = 0; i < nodesToPrint.length; i++)
+            console.log(nodesToPrint[i]);
     };
 
     var getCurrentNode = function() { return currentNode; };
@@ -118,6 +147,7 @@ moduleLayout.factory("nodes",
     var setRootNode = function(node) { rootNode = node; };
 
     return {
+        treePrint: treePrint,
         getCurrentNode: getCurrentNode,
         setCurrentNode: setCurrentNode,
         getRootNode: getRootNode,
@@ -295,6 +325,7 @@ moduleLayout.directive("directiveActionPanel",
                 updateFromSelections();
             };
 
+            // Select all properties from the view's active property list
             scope.checkAll = function() {
                 var array = [];
                 if (scope.currentAttributeType === 'diseases') {
@@ -309,6 +340,7 @@ moduleLayout.directive("directiveActionPanel",
                 updateFromSelections();
             };
 
+            // Select no properties from the view's active property list
             scope.checkNone = function() {
                 var array = [];
                 if (scope.currentAttributeType === 'diseases') {
@@ -468,12 +500,10 @@ moduleLayout.directive("directivePanes",
                 if (node.model.vizType !== scope.vizType.NONE) {
                     visualization = '<div id=' + id + '>';
                     var descriptionHTML = "";
-                    if (node.model.vizType ===
-                            scope.vizType.HEAT_MAP) {
+                    if (node.model.vizType === scope.vizType.HEAT_MAP) {
                         descriptionHTML =
                             visualizations.makeDescriptionHeatMap(node.model.id);
-                    } else if (node.model.vizType ===
-                            scope.vizType.SPIRAL) {
+                    } else if (node.model.vizType === scope.vizType.SPIRAL) {
                         descriptionHTML =
                             visualizations.makeDescriptionSpiral(node.model.id);
                     }
@@ -590,11 +620,10 @@ moduleLayout.directive("directivePanes",
             };
 
             scope.togglePinned = function(button) {
-                var target = angular.element(button.target);
-                var isCheckable = target.data('checkable');
-
                 // Make sure we are targeting the button element, not 
                 // one of it's children
+                var target = angular.element(button.target);
+                var isCheckable = target.data('checkable');
                 if (isCheckable === undefined) {
                     target = target.parent();
                     isCheckable = target.data('checkable');
@@ -646,12 +675,17 @@ moduleLayout.directive("directivePanes",
             var makeSpirals = function(node) {
                 var id = node.model.id;
                 var spirals = node.model.vizs;
-                var isOnlySpiral = true;
                 if (spirals.length === 0) {
                     makeSpiralHTML(id, visualizations.makeSpiralID());
                 } else {
                     for (var i = 0; i < spirals.length; i++) {
-                        makeSpiralHTML(id, spirals[i].id);
+                        // Draw all spirals
+                        if (nodes.getCurrentNode().model.id === id) {
+                            makeSpiralHTML(id, spirals[i].id);
+                        // Draw checked spirals
+                        } else if (spirals[i].isChecked) {
+                            makeSpiralHTML(id, spirals[i].id);
+                        }
                     }
                 }
             };
@@ -660,10 +694,12 @@ moduleLayout.directive("directivePanes",
             // - first, angular elements we need to compile;
             // - then, d3 elements
             var makeSpiralHTML = function(id, spiralID) {
-                var isChecked = false;
+                // If it's the only visualization in the view,
+                // consider it checked
+                var isChecked = (nodes.getVizs(id).length === 0);
                 var viz = nodes.getVizByIDs(id, spiralID);
                 if (viz) {
-                    isChecked = viz.isChecked;
+                    isChecked = isChecked || viz.isChecked;
                 }
 
                 var html = '<div ' +
@@ -706,7 +742,7 @@ moduleLayout.directive("directivePanes",
                 target.append($compile(html)(scope));
 
                 visualizations.makeSpiral(
-                    id, spiralID);
+                    id, spiralID, isChecked);
             };
 
             // Two step creation: 
@@ -738,24 +774,6 @@ moduleLayout.directive("directivePanes",
                     id, heatMapID);
             };
 
-            // Print node layout
-            var treePrint = function() {
-                var nodesToPrint = [];
-                nodes.getRootNode().walk(function(node) {
-                    var string = "- ";
-                    for (var i = node.model.level; i > 0; i--)
-                        string += "- ";
-                    nodesToPrint.push(string + node.model.id +
-                        " parent: " + 
-                        (((node.parent !== undefined) && 
-                            (node.parent.model !== undefined)) ?
-                                node.parent.model.id :
-                                "NONE"));
-                });
-                for (var i = 0; i < nodesToPrint.length; i++)
-                    console.log(nodesToPrint[i]);
-            };
-
             // Make html node layout
             scope.updateLayout = function() {
                 // No nodes available: make first view functionality
@@ -766,10 +784,12 @@ moduleLayout.directive("directivePanes",
                     scope.APIActionPanel.makeViewChooser();
 
                 } else {
+                    // Generate views
                     element.html($compile(
                         makeChildrenLayout(nodes.getCurrentNode())
                     )(scope));
 
+                    // Insert visualizations into generated views
                     nodes.getRootNode().walk(function(node) {
                         if (node.model.vizType ===
                                 scope.vizType.HEAT_MAP) {
@@ -782,7 +802,7 @@ moduleLayout.directive("directivePanes",
 
                     scope.APIActionPanel.makeDefaultActions();
 
-                    //treePrint();
+                    //nodes.treePrint();
                 }
             };
 
@@ -818,7 +838,7 @@ moduleLayout.directive("directivePanes",
                         nodes.setRootNode(nodes.makeNode(otherChildNode.model));
                         nodes.setCurrentNode(nodes.getRootNode());
                     } else {
-                        // Grandparent also needs updating
+                        // Grandparent also needs to update it's child references
                         if (parentNode.parent !== undefined) {
                             var parentIndex = 
                                 (parentNode.parent.children[0].model.id === 
@@ -841,6 +861,7 @@ moduleLayout.directive("directivePanes",
                 scope.updateLayout();
             };
 
+            // Generate a single view layout from the current node
             scope.paneMaximize = function(button) {
                 var id = angular.element(button.target).data('id');
                 var node = nodes.getRootNode().first(function (node1) {
@@ -851,6 +872,7 @@ moduleLayout.directive("directivePanes",
                 scope.updateLayout();
             };
 
+            // Generate a multiple view layout from the root node
             scope.paneColapse = function() {
                 nodes.setCurrentNode(nodes.getRootNode());
 

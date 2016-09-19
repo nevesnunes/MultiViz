@@ -118,7 +118,7 @@ moduleVisualizations.factory('visualizations',
             .call(chart);
     };
 
-    var makeSpiral = function(elementID, spiralID) {
+    var makeSpiral = function(elementID, spiralID, isChecked) {
         if (elementID === undefined) {
             console.log("[WARN] @makeHeatMap: undefined id.");
             return;
@@ -159,6 +159,7 @@ moduleVisualizations.factory('visualizations',
         nodes.updateViz({
             nodeID: elementID,
             vizID: spiralID,
+            isChecked: isChecked,
             html: svg
         });
 
