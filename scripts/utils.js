@@ -24,20 +24,27 @@ moduleUtils.factory('utils', function() {
         options.text = options.text || "";
         options.title = options.title || "";
         options.checkable = options.checkable || false;
+        options.isChecked = options.isChecked || false;
+
+        // Apply styling for existing checked visualizations
+        if (options.isChecked) {
+            options.clazz = options.clazz + " " + options.clazzChecked;
+            options.img = options.imgChecked;
+        }
 
         // Make sure all child elements have the id property, since the
         // user may click on one of them and activate functions
-        // which expect the id to be present in the clicked element
+        // which require the id to be present in the clicked element
         return '<button class="tooltip-wrapper btn ' +
             options.clazz + '" ' +
             'ng-class="isButtonChecked()" ' +
             'style="' + options.style + '" ' +
             options.directive + ' ' +
-            'directive-static-tooltip custom-placement="' + options.placement + '" ' +
+            'directive-static-tooltip ' +
+            'custom-placement="' + options.placement + '" ' +
             'data-id="' + options.id + '" ' +
             'data-node-id="' + options.nodeID + '" ' +
             'data-checkable="' + options.checkable + '" ' +
-            'data-checked="false" ' +
             'ng-click="' + options.method + '" ' +
             'title="' + options.title + '">' +
             '<img src="' + options.img + '" ' +

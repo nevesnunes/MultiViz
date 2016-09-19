@@ -159,7 +159,7 @@ moduleVisualizations.factory('visualizations',
         nodes.updateViz({
             nodeID: elementID,
             vizID: spiralID,
-            viz: svg
+            html: svg
         });
 
         populateSpiral(data, svg);
@@ -173,7 +173,7 @@ moduleVisualizations.factory('visualizations',
 
         var spirals = nodes.getVizs(elementID);
         for (var j = 0; j < spirals.length; j++) {
-            populateSpiral(data, spirals[j].viz);
+            populateSpiral(data, spirals[j].html);
         }
     };
 
@@ -308,7 +308,7 @@ moduleVisualizations.factory('visualizations',
         nodes.updateViz({
             nodeID: elementID,
             vizID: heatMapID,
-            viz: svg
+            html: svg
         });
 
         populateHeatMap(dataIncidences, svg);
@@ -316,7 +316,7 @@ moduleVisualizations.factory('visualizations',
 
     var updateHeatMap = function(elementID) {
         var heatMap = nodes.getVizs(elementID)[0];
-        populateHeatMap(dataIncidences, heatMap.viz);
+        populateHeatMap(dataIncidences, heatMap.html);
     };
 
     return {

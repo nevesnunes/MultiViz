@@ -26,11 +26,10 @@ moduleLayout.factory("nodes",
      *
      * @property {string} vizType - type of visualization
      *
-     * @property {{id:string, isValid:bool, html:string}[]} vizs -
-     * one or more visualization html, identified by a unique id
-     * in the context of the node; when the view only supports
-     * a single visualization, the id will be equal to the node id;
-     * a visualization will be reused in layout updates when isValid is true
+     * @property {{id:string, isValid:bool, isChecked:bool, html:string}[]} vizs -
+     * one or more visualizations, identified by a unique id
+     * in the context of the node; a visualization's html will be reused in
+     * layout updates when isValid is true
      *
      * @property {string} currentVizID - id of visualization to be displayed 
      * on single/maximized view
@@ -59,7 +58,7 @@ moduleLayout.factory("nodes",
         return node.model.vizs;
     };
 
-    var getViz = function(nodeID, vizID) {
+    var getVizByIDs = function(nodeID, vizID) {
         var node = rootNode.first(function(node1) {
             return node1.model.id === nodeID;
         });
@@ -68,7 +67,19 @@ moduleLayout.factory("nodes",
             console.log("[WARN] @getViz: id not found.");
             return null;
         }
-        return node.model.vizs[index].viz;
+        return node.model.vizs[index];
+    };
+
+    var getVizByID = function(vizID) {
+        var viz = null;
+        nodes.getRootNode().walk(function(node) {
+            var index = utils.arrayObjectIndexOf(
+                    node.model.vizs, vizID, "id");
+            if ((index !== -1) && (viz === null)) {
+                viz = node.model.vizs[index];
+            }
+        });
+        return viz;
     };
 
     var removeViz = function(data) {
@@ -89,12 +100,13 @@ moduleLayout.factory("nodes",
         var index = utils.arrayObjectIndexOf(node.model.vizs, data.vizID, "id");
         if (index > -1) {
             node.model.vizs[index].isValid = true;
-            node.model.vizs[index].viz = data.viz;
+            node.model.vizs[index].html = data.html;
         } else {
             node.model.vizs.push({
                 id: data.vizID,
+                isChecked: false,
                 isValid: true,
-                viz: data.viz
+                html: data.html
             });
         }
     };
@@ -112,7 +124,8 @@ moduleLayout.factory("nodes",
         setRootNode: setRootNode,
         makeNode: makeNode,
         getVizs: getVizs,
-        getViz: getViz,
+        getVizByID: getVizByID,
+        getVizByIDs: getVizByIDs,
         removeViz: removeViz,
         updateViz: updateViz
     };
@@ -552,20 +565,24 @@ moduleLayout.directive("directivePanes",
             };
 
             scope.removeSpiral = function(button) {
-                var nodeID = angular.element(button.target).data('node-id');
-                var spiralID = angular.element(button.target).data('id');
-                var node = nodes.getRootNode().first(function (node1) {
-                    return node1.model.id === nodeID;
-                });
-
-                // Remove from DOM
-                angular.element('#' + spiralID).remove();
+                // Make sure we are targeting the button element, not 
+                // one of it's children
+                var target = angular.element(button.target);
+                var nodeID = target.data('node-id');
+                if (nodeID === undefined) {
+                    target = target.parent();
+                    nodeID = target.data('node-id');
+                }
+                var spiralID = target.data('id');
 
                 // Untrack in node visualizations
                 nodes.removeViz({
                     nodeID: nodeID,
                     vizID: spiralID
                 });
+
+                // Remove from DOM
+                angular.element('#' + spiralID).remove();
             };
 
             scope.dragSpiral = function(button) {
@@ -575,16 +592,33 @@ moduleLayout.directive("directivePanes",
             scope.togglePinned = function(button) {
                 var target = angular.element(button.target);
                 var isCheckable = target.data('checkable');
-                if (isCheckable) {
-                    var toggledCheck = !target.data('checked');
-                    target.data('checked', toggledCheck);
-                    target.attr('data-checked', toggledCheck);
 
+                // Make sure we are targeting the button element, not 
+                // one of it's children
+                if (isCheckable === undefined) {
+                    target = target.parent();
+                    isCheckable = target.data('checkable');
+                }
+
+                // We have the right element, now we test it
+                if (isCheckable) {
                     var nodeID = target.data('node-id');
                     var spiralID = target.data('id');
+
+                    // Update node properties
+                    var node = nodes.getRootNode().first(function (node1) {
+                        return node1.model.id === nodeID;
+                    });
+                    node.model.currentVizID = spiralID;
+
+                    // Update visualization properties
+                    var viz = nodes.getVizByIDs(nodeID, spiralID);
+                    viz.isChecked = !viz.isChecked;
+
+                    // Update DOM
                     var img = "";
                     var html = "";
-                    if (toggledCheck) {
+                    if (viz.isChecked) {
                         target.addClass('custom-btn-checked');
                         img = "images/controls/pin-checked.svg";
                         html = '<img src="' + img + '" ' +
@@ -601,11 +635,6 @@ moduleLayout.directive("directivePanes",
                     target.html($compile(
                         html
                     )(scope));
-
-                    var node = nodes.getRootNode().first(function (node1) {
-                        return node1.model.id === nodeID;
-                    });
-                    node.model.currentVizID = spiralID;
                 }
             };
 
@@ -617,6 +646,7 @@ moduleLayout.directive("directivePanes",
             var makeSpirals = function(node) {
                 var id = node.model.id;
                 var spirals = node.model.vizs;
+                var isOnlySpiral = true;
                 if (spirals.length === 0) {
                     makeSpiralHTML(id, visualizations.makeSpiralID());
                 } else {
@@ -630,6 +660,12 @@ moduleLayout.directive("directivePanes",
             // - first, angular elements we need to compile;
             // - then, d3 elements
             var makeSpiralHTML = function(id, spiralID) {
+                var isChecked = false;
+                var viz = nodes.getVizByIDs(id, spiralID);
+                if (viz) {
+                    isChecked = viz.isChecked;
+                }
+
                 var html = '<div ' +
                     'id="' + spiralID + '" ' +
                     'data-node-id="' + id + '" ' +
@@ -643,13 +679,16 @@ moduleLayout.directive("directivePanes",
                             img:    "images/controls/drag.svg"
                         }) +
                         utils.makeImgButton({
-                            id:        spiralID,
-                            nodeID:    id,
-                            checkable: true,
-                            directive: "directive-button",
-                            method:    "togglePinnedSpiral($event)",
-                            title:     "Marcar Espiral como visualização principal",
-                            img:       "images/controls/pin.svg"
+                            id:           spiralID,
+                            nodeID:       id,
+                            checkable:    true,
+                            directive:    "directive-button",
+                            method:       "togglePinnedSpiral($event)",
+                            title:        "Marcar Espiral como visualização principal",
+                            img:          "images/controls/pin.svg",
+                            isChecked:    isChecked,
+                            clazzChecked: "custom-btn-checked",
+                            imgChecked:   "images/controls/pin-checked.svg"
                         }) +
                         utils.makeImgButton({
                             id:     spiralID,
