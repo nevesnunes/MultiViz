@@ -59,7 +59,7 @@ moduleIndex.factory('patientData', function($window) {
 
     var getAttributeList = function(key, attributeType) {
         // FIXME:
-        // Invalid lists, due to loading url without stored attributes
+        // Invalid lists, due to loading url without stored attributes;
         // Will probably change to some REST API
         if (attributes[key].length === 0) {
             window.location.href = "index.html";
@@ -95,7 +95,10 @@ moduleIndex.controller('controllerAddData',
         $scope.patientList = result.map(function(data, index) {
             return {
                 id: index,
-                name: data.name
+                patientID: data.id,
+                name: data.name,
+                diseases: data.diseases,
+                medications: data.medications
             };
         });
         patientData.setData(patientData.KEY_PATIENTS, result);
@@ -191,7 +194,7 @@ moduleIndex.controller('controllerAddData',
     };
 }]);
 
-moduleIndex.controller('controllerGoToIndex',
+moduleIndex.controller('controllerMainPanel',
         ['$scope', 'patientData', function($scope, patientData) {
     $scope.patient = patientData.getAttribute(patientData.KEY_PATIENT);
     $scope.gotoIndex = function(button) {

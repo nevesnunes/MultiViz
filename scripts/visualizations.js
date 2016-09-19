@@ -56,12 +56,18 @@ moduleVisualizations.factory('visualizations',
         });
     };
 
+    // Selected attribute lists shared among multiple patients
     var diseases = [];
     var medications = [];
     var updateData = function(selectedDiseases, selectedMedications) {
         diseases = processSelectedList(selectedDiseases);
         medications = processSelectedList(selectedMedications);
     };
+
+    // Patient attribute lists
+    var patient = patientData.getAttribute(patientData.KEY_PATIENT);
+    var patientDiseases = patient.diseases;
+    var patientMedications = patient.medications;
 
     // Unique identifier for heatmap elements
     var heatmapID = 0;
@@ -184,7 +190,7 @@ moduleVisualizations.factory('visualizations',
         diseaseLabels.enter().append("text")
             .attr("x", 0)
             .attr("y", function(d, i) {
-                return i * gridHeight;
+                return (1 + i) * gridHeight;
             })
             .style("text-anchor", "end")
             .attr("transform", "translate(-6," + gridHeight / 1.5 + ")")
@@ -200,7 +206,7 @@ moduleVisualizations.factory('visualizations',
         medicationLabels.enter().append("text")
             .style("text-anchor", "middle")
             .attr("transform", function(d, i) {
-                return "translate(" + (i * gridWidth) + ", -25)rotate(20)";
+                return "translate(" + ((1 + i) * gridWidth) + ", -25)rotate(20)";
             })
             .attr("class", "medicationLabel viz-label axis")
             .merge(medicationLabels)
@@ -232,10 +238,10 @@ moduleVisualizations.factory('visualizations',
             .attr("height", gridHeight)
             .merge(cells)
                 .attr("x", function(d) {
-                    return medications.indexOf(d.medication) * gridWidth;
+                    return (1 + medications.indexOf(d.medication)) * gridWidth;
                 })
                 .attr("y", function(d) {
-                    return diseases.indexOf(d.disease) * gridHeight;
+                    return (1 + diseases.indexOf(d.disease)) * gridHeight;
                 })
                 // FIXME: transitions not working...
                 // .transition().duration(1000)
@@ -247,6 +253,56 @@ moduleVisualizations.factory('visualizations',
                 });
         cells.exit().remove();
 
+        var filteredPatientMedicationsData = data.filter(function(d) {
+            return (patientMedications.indexOf(d.medication) !== -1);
+        }); 
+        var patientMedicationsCells = svg.selectAll(".patientMedications")
+            .data(filteredPatientMedicationsData, function(d) {
+                return medications.indexOf(d.medication);
+            });
+        patientMedicationsCells.enter().append("rect")
+            .attr("class", "medication bordered")
+            .attr("width", gridWidth)
+            .attr("height", gridHeight)
+            .merge(cells)
+                .attr("x", function(d) {
+                    return (1 + medications.indexOf(d.medication)) * gridWidth;
+                })
+                .attr("y", function(d) {
+                    return 0;
+                })
+                // FIXME: transitions not working...
+                // .transition().duration(1000)
+                .style("fill", function(d) {
+                    return "#ff0000";
+                });
+        patientMedicationsCells.exit().remove();
+
+        var filteredPatientDiseasesData = data.filter(function(d) {
+            return (patientDiseases.indexOf(d.disease) !== -1);
+        }); 
+        var patientDiseasesCells = svg.selectAll(".patientDiseases")
+            .data(filteredPatientDiseasesData, function(d) {
+                return diseases.indexOf(d.disease);
+            });
+        patientDiseasesCells.enter().append("rect")
+            .attr("class", "medication bordered")
+            .attr("width", gridWidth)
+            .attr("height", gridHeight)
+            .merge(cells)
+                .attr("x", function(d) {
+                    return 0;
+                })
+                .attr("y", function(d) {
+                    return (1 + diseases.indexOf(d.disease)) * gridHeight;
+                })
+                // FIXME: transitions not working...
+                // .transition().duration(1000)
+                .style("fill", function(d) {
+                    return "#ff0000";
+                });
+        patientDiseasesCells.exit().remove();
+
         var legend = svg.selectAll(".legend")
             .data([0].concat(colorScale.quantiles()), function(d) {
                 return d;
@@ -256,9 +312,9 @@ moduleVisualizations.factory('visualizations',
         legend.append("rect")
             .attr("class", "bordered")
             .attr("x", function(d, i) {
-                return legendWidth * i;
+                return legendWidth * (1 + i);
             })
-            .attr("y", height)
+            .attr("y", height + gridHeight)
             .attr("width", legendWidth)
             .attr("height", gridHeight / 2)
             .style("fill", function(d, i) {
@@ -270,9 +326,9 @@ moduleVisualizations.factory('visualizations',
                 return "≥ " + Math.round(d);
             })
             .attr("x", function(d, i) {
-                return legendWidth * i;
+                return legendWidth * (1 + i);
             })
-            .attr("y", height + gridHeight);
+            .attr("y", height + (2 * gridHeight));
         legend.exit().remove();
     };
 

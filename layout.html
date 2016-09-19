@@ -35,12 +35,12 @@
                 </button>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
-                <ul class="nav navbar-nav navbar-left bold-text">
-                    <li><a href="#">Carregar Layout</a></li>
-                    <li><a href="#">Guardar Layout</a></li>
-                    <li><a href="#">Novo Layout</a></li>
-                </ul>
-                <div ng-controller="controllerGoToIndex">
+                <div ng-controller="controllerMainPanel">
+                    <ul class="nav navbar-nav navbar-left bold-text">
+                        <li><a href="#">Carregar Layout</a></li>
+                        <li><a href="#">Guardar Layout</a></li>
+                        <li><a href="#">Novo Layout</a></li>
+                    </ul>
                     <ul class="nav navbar-nav navbar-right bold-text">
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Paciente: {{ patient.name }}<span class="caret"></span></a>
@@ -58,7 +58,7 @@
                     <div class="right-inner-addon">
                         <i class="glyphicon glyphicon-search"></i>
                         <input type="text" class="form-control" placeholder="Procurar paciente...">
-                    </777>
+                    </div>
                 </form>
             </div>
         </div>

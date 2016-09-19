@@ -161,6 +161,15 @@ moduleLayout.factory("nodes",
     };
 }]);
 
+moduleLayout.controller('controllerMainPanel',
+        ['$scope', 'patientData',
+        function($scope, patientData) {
+    $scope.patient = patientData.getAttribute(patientData.KEY_PATIENT);
+    $scope.gotoIndex = function(button) {
+        window.location.href = "index.html";
+    };
+}]);
+
 moduleLayout.controller('controllerPanes',
         ['$scope', 'patientData',
         function($scope, patientData) {
@@ -170,7 +179,7 @@ moduleLayout.controller('controllerPanes',
         SPIRAL: "spiral"
     });
 
-    // Patient attribute lists
+    // Attribute lists shared among multiple patients
     $scope.diseases = patientData.getAttributeList(
         patientData.KEY_PATIENTS, 'diseases');
     $scope.medications = patientData.getAttributeList(
