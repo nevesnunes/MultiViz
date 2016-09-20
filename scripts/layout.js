@@ -822,7 +822,7 @@ moduleLayout.directive("directivePanes",
                     )(scope));
 
                     // Insert visualizations into generated views
-                    nodes.getRootNode().walk(function(node) {
+                    nodes.getCurrentNode().walk(function(node) {
                         if (node.model.vizType ===
                                 scope.vizType.HEAT_MAP) {
                             makeHeatMap(node);
