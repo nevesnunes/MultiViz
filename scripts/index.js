@@ -230,6 +230,7 @@ moduleIndex.directive('directiveTooltip', [function() {
                     scope.setTooltipText();
                     element.tooltip('hide')
                         .attr('data-html', true)
+                        .attr('data-container', 'body')
                         .attr('data-placement', 'right')
                         .attr('data-original-title', scope.tooltipText)
                         .attr('title', scope.tooltipText)

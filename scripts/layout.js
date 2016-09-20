@@ -676,16 +676,20 @@ moduleLayout.directive("directivePanes",
                     var html = "";
                     if (viz.isChecked) {
                         target.addClass('custom-btn-checked');
-                        img = "images/controls/pin-checked.svg";
+                        img = "images/controls/pin.svg";
+                        imgChecked = "images/controls/checked.svg";
                         html = '<img src="' + img + '" ' +
-                            'data-id="' + spiralID + '" ' +
-                            'class="custom-btn-svg"> ';
+                                'data-id="' + spiralID + '" ' +
+                                'class="custom-btn-svg"> ' +
+                            '<img src="' + imgChecked + '" ' +
+                                'data-id="' + spiralID + '" ' +
+                                'class="custom-btn-svg custom-btn-svg-checked"> ';
                     } else {
                         target.removeClass('custom-btn-checked');
                         img = "images/controls/pin.svg";
                         html = '<img src="' + img + '" ' +
-                            'data-id="' + spiralID + '" ' +
-                            'class="custom-btn-svg"> ';
+                                'data-id="' + spiralID + '" ' +
+                                'class="custom-btn-svg"> ';
                     }
 
                     target.html($compile(
@@ -751,7 +755,8 @@ moduleLayout.directive("directivePanes",
                             img:          "images/controls/pin.svg",
                             isChecked:    isChecked,
                             clazzChecked: "custom-btn-checked",
-                            imgChecked:   "images/controls/pin-checked.svg"
+                            titleChecked: "Desmarcar Espiral como visualização principal",
+                            imgChecked:   "images/controls/checked.svg"
                         }) +
                         utils.makeImgButton({
                             id:     spiralID,

@@ -10,7 +10,7 @@ moduleVisualizations.directive('directiveHeatMapTooltip',
             scope.setTooltipText = function(button) {
                 var text = "<div style=\"text-align: left\" class=\"p\">" +
                         "Encontre relações entre atributos " +
-                        "presentes em múltiplos pacientes." +
+                        "partilhados por múltiplos pacientes." +
                     "</div>" +
                     "</br>" +
                     "<div style=\"text-align: left\" class=\"p\">" +
@@ -356,11 +356,11 @@ moduleVisualizations.factory('visualizations',
         return '<p class="viz-title">' +
                 'Relação entre doenças e medicações' +
                 '  ' +
-                '<span class="tooltip-wrapper" ' +
+                '<img class="tooltip-wrapper" ' +
                     'title="{{tooltipText}}" ' + 
-                    'directive-tooltip directive-heat-map-tooltip>' +
-                    '<img src="images/controls/info.svg">' +
-                '</span>' +
+                    'directive-tooltip directive-heat-map-tooltip ' +
+                    'src="images/controls/info.svg">' +
+                '</img>' +
                 '</p>';
     };
     var makeHeatMap = function(elementID, heatMapID) {

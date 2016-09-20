@@ -246,11 +246,11 @@ body {
 }
 
 .tooltip > p {
-  text-align: left !important;
+  text-align: left;
 }
 
 .tooltip-inner {
-  max-width: 300px;
+  max-width: 20em;
 }
 
 .tooltip-wrapper {

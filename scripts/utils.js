@@ -26,10 +26,17 @@ moduleUtils.factory('utils', function() {
         options.checkable = options.checkable || false;
         options.isChecked = options.isChecked || false;
 
+        var img = '<img src="' + options.img + '" ' +
+                'data-id="' + options.id + '" ' +
+                'class="custom-btn-svg"> ';
+        var imgChecked = "";
+
         // Apply styling for existing checked visualizations
         if (options.isChecked) {
             options.clazz = options.clazz + " " + options.clazzChecked;
-            options.img = options.imgChecked;
+            imgChecked = '<img src="' + options.imgChecked + '" ' +
+                'data-id="' + options.id + '" ' +
+                'class="custom-btn-svg custom-btn-svg-checked"> ';
         }
 
         // Make sure all child elements have the id property, since the
@@ -47,9 +54,8 @@ moduleUtils.factory('utils', function() {
             'data-checkable="' + options.checkable + '" ' +
             'ng-click="' + options.method + '" ' +
             'title="' + options.title + '">' +
-            '<img src="' + options.img + '" ' +
-                'data-id="' + options.id + '" ' +
-                'class="custom-btn-svg"> ' +
+            img +
+            imgChecked +
             options.text +
             '</button>';
     };

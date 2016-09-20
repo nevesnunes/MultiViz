@@ -28,12 +28,21 @@
 
 /* Button icon */
 .custom-btn-svg {
+    position: relative;
     height: 16px;
     width: 16px;
     vertical-align: middle;
 }
 
+/* Off-centered to the bottom-right corner of the button */
+.custom-btn-svg-checked {
+    position: absolute;
+    right: 4px;
+    bottom: 4px;
+}
+
 .custom-btn-checked {
+    position: relative;
     color: #fff;
     background-color: #33b77a;
     border-color: #2ea46d;
