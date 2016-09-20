@@ -1,0 +1,102 @@
+digraph dependencies {
+  node[shape="component",style="filled",colorscheme=paired12]
+
+
+    node[shape="component"]
+    "moduleIndex"[label="moduleIndex", color=1]
+
+    
+
+
+    node[shape="ellipse"]
+    
+
+
+    
+      "controllerAddData"[label="controllerAddData", color=4]
+      "moduleIndex" -> "controllerAddData"
+    
+      "controllerMainPanel"[label="controllerMainPanel", color=4]
+      "moduleIndex" -> "controllerMainPanel"
+    
+
+    
+
+    
+      "retrievePatientData"[label="retrievePatientData", color=6]
+      "moduleIndex" -> "retrievePatientData"
+    
+      "patientData"[label="patientData", color=6]
+      "moduleIndex" -> "patientData"
+    
+
+    node[shape="cds"]
+    
+
+    
+      "directiveStaticTooltip"[label="directiveStaticTooltip", color=3]
+      "moduleIndex" -> "directiveStaticTooltip"
+    
+      "directiveTooltip"[label="directiveTooltip", color=3]
+      "moduleIndex" -> "directiveTooltip"
+    
+      "ngKeySelect"[label="ngKeySelect", color=3]
+      "moduleIndex" -> "ngKeySelect"
+    
+
+
+
+
+
+
+
+
+
+    node[shape="ellipse",style="filled", color=9]
+    
+
+    
+      
+    
+      
+    
+      
+        "patientData"[label="patientData"]
+        "patientData" -> "ngKeySelect"
+      
+    
+
+
+    
+      
+        "$scope"[label="$scope"]
+        "$scope" -> "controllerAddData"
+      
+        "patientData"[label="patientData"]
+        "patientData" -> "controllerAddData"
+      
+        "retrievePatientData"[label="retrievePatientData"]
+        "retrievePatientData" -> "controllerAddData"
+      
+    
+      
+        "$scope"[label="$scope"]
+        "$scope" -> "controllerMainPanel"
+      
+        "patientData"[label="patientData"]
+        "patientData" -> "controllerMainPanel"
+      
+    
+
+    
+
+    
+      
+    
+      
+    
+
+    
+
+
+}

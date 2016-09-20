@@ -1,0 +1,79 @@
+digraph dependencies {
+  node[shape="component",style="filled",colorscheme=paired12]
+
+
+    node[shape="component"]
+    "moduleVisualizations"[label="moduleVisualizations", color=1]
+
+    
+      "moduleIndex"[label="moduleIndex", color=1]
+      "moduleIndex" -> "moduleVisualizations"
+    
+      "moduleUtils"[label="moduleUtils", color=1]
+      "moduleUtils" -> "moduleVisualizations"
+    
+
+
+    node[shape="ellipse"]
+    
+
+
+    
+
+    
+
+    
+      "visualizations"[label="visualizations", color=6]
+      "moduleVisualizations" -> "visualizations"
+    
+
+    node[shape="cds"]
+    
+
+    
+      "directiveHeatMapTooltip"[label="directiveHeatMapTooltip", color=3]
+      "moduleVisualizations" -> "directiveHeatMapTooltip"
+    
+      "directiveSpiralTooltip"[label="directiveSpiralTooltip", color=3]
+      "moduleVisualizations" -> "directiveSpiralTooltip"
+    
+
+
+
+
+
+
+
+
+
+    node[shape="ellipse",style="filled", color=9]
+    
+
+    
+      
+    
+      
+    
+
+
+    
+
+    
+
+    
+      
+        "patientData"[label="patientData"]
+        "patientData" -> "visualizations"
+      
+        "utils"[label="utils"]
+        "utils" -> "visualizations"
+      
+        "nodes"[label="nodes"]
+        "nodes" -> "visualizations"
+      
+    
+
+    
+
+
+}

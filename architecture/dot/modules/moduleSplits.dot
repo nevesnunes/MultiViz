@@ -1,0 +1,52 @@
+digraph dependencies {
+  node[shape="component",style="filled",colorscheme=paired12]
+
+
+    node[shape="component"]
+    "moduleSplits"[label="moduleSplits", color=1]
+
+    
+      "shagstrom.angular-split-pane"[label="shagstrom.angular-split-pane", color=1]
+      "shagstrom.angular-split-pane" -> "moduleSplits"
+    
+
+
+    node[shape="ellipse"]
+    
+
+
+    
+
+    
+
+    
+
+    node[shape="cds"]
+    
+
+    
+
+
+
+
+
+
+
+
+
+    node[shape="ellipse",style="filled", color=9]
+    
+
+    
+
+
+    
+
+    
+
+    
+
+    
+
+
+}

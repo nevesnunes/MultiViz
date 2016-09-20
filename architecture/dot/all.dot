@@ -1,0 +1,550 @@
+digraph dependencies {
+  node[shape="component",style="filled",colorscheme=paired12]
+
+    node[shape="component"]
+    
+      "moduleIndex"[label="moduleIndex", color=1]
+    
+      "moduleSplits"[label="moduleSplits", color=1]
+    
+      "moduleUtils"[label="moduleUtils", color=1]
+    
+      "moduleVisualizations"[label="moduleVisualizations", color=1]
+    
+      "moduleLayout"[label="moduleLayout", color=1]
+    
+      "moduleCombined"[label="moduleCombined", color=1]
+    
+
+    
+      
+    
+      
+        "moduleSplits" -> "shagstrom.angular-split-pane"
+      
+    
+      
+    
+      
+        "moduleVisualizations" -> "moduleIndex"
+      
+        "moduleVisualizations" -> "moduleUtils"
+      
+    
+      
+        "moduleLayout" -> "moduleIndex"
+      
+        "moduleLayout" -> "moduleUtils"
+      
+        "moduleLayout" -> "moduleVisualizations"
+      
+    
+      
+        "moduleCombined" -> "moduleIndex"
+      
+        "moduleCombined" -> "moduleLayout"
+      
+        "moduleCombined" -> "moduleSplits"
+      
+    
+
+    node[shape="ellipse"]
+
+
+    
+      
+
+      
+        "controllerAddData"[label="controllerAddData", color=4]
+      
+        "controllerMainPanel"[label="controllerMainPanel", color=4]
+      
+
+      
+
+      
+        "retrievePatientData"[label="retrievePatientData", color=6]
+      
+        "patientData"[label="patientData", color=6]
+      
+
+
+      node[shape="cds"]
+
+      
+
+      
+        "directiveStaticTooltip"[label="directiveStaticTooltip", color=3]
+      
+        "directiveTooltip"[label="directiveTooltip", color=3]
+      
+        "ngKeySelect"[label="ngKeySelect", color=3]
+      
+
+
+
+
+
+      node[shape="ellipse"]
+      
+
+      
+        "moduleIndex" -> "directiveStaticTooltip"
+      
+        "moduleIndex" -> "directiveTooltip"
+      
+        "moduleIndex" -> "ngKeySelect"
+      
+
+      
+        "moduleIndex" -> "controllerAddData"
+      
+        "moduleIndex" -> "controllerMainPanel"
+      
+
+      
+
+      
+        "moduleIndex" -> "retrievePatientData"
+      
+        "moduleIndex" -> "patientData"
+      
+
+      
+
+
+
+
+
+
+
+
+
+
+
+      node[shape="ellipse",style="filled", color=8]
+      
+
+      
+        
+      
+        
+      
+        
+          "patientData"[label="patientData"]
+          "patientData" -> "ngKeySelect"
+        
+      
+
+      
+        
+          "$scope"[label="$scope"]
+          "$scope" -> "controllerAddData"
+        
+          "patientData"[label="patientData"]
+          "patientData" -> "controllerAddData"
+        
+          "retrievePatientData"[label="retrievePatientData"]
+          "retrievePatientData" -> "controllerAddData"
+        
+      
+        
+          "$scope"[label="$scope"]
+          "$scope" -> "controllerMainPanel"
+        
+          "patientData"[label="patientData"]
+          "patientData" -> "controllerMainPanel"
+        
+      
+
+      
+
+      
+        
+      
+        
+      
+
+      
+
+    
+      
+
+      
+
+      
+
+      
+
+
+      node[shape="cds"]
+
+      
+
+      
+
+
+
+
+
+      node[shape="ellipse"]
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+
+
+
+
+
+
+
+
+
+
+      node[shape="ellipse",style="filled", color=8]
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+    
+      
+
+      
+
+      
+
+      
+        "utils"[label="utils", color=6]
+      
+
+
+      node[shape="cds"]
+
+      
+
+      
+
+
+
+
+
+      node[shape="ellipse"]
+      
+
+      
+
+      
+
+      
+
+      
+        "moduleUtils" -> "utils"
+      
+
+      
+
+
+
+
+
+
+
+
+
+
+
+      node[shape="ellipse",style="filled", color=8]
+      
+
+      
+
+      
+
+      
+
+      
+        
+      
+
+      
+
+    
+      
+
+      
+
+      
+
+      
+        "visualizations"[label="visualizations", color=6]
+      
+
+
+      node[shape="cds"]
+
+      
+
+      
+        "directiveHeatMapTooltip"[label="directiveHeatMapTooltip", color=3]
+      
+        "directiveSpiralTooltip"[label="directiveSpiralTooltip", color=3]
+      
+
+
+
+
+
+      node[shape="ellipse"]
+      
+
+      
+        "moduleVisualizations" -> "directiveHeatMapTooltip"
+      
+        "moduleVisualizations" -> "directiveSpiralTooltip"
+      
+
+      
+
+      
+
+      
+        "moduleVisualizations" -> "visualizations"
+      
+
+      
+
+
+
+
+
+
+
+
+
+
+
+      node[shape="ellipse",style="filled", color=8]
+      
+
+      
+        
+      
+        
+      
+
+      
+
+      
+
+      
+        
+          "patientData"[label="patientData"]
+          "patientData" -> "visualizations"
+        
+          "utils"[label="utils"]
+          "utils" -> "visualizations"
+        
+          "nodes"[label="nodes"]
+          "nodes" -> "visualizations"
+        
+      
+
+      
+
+    
+      
+
+      
+        "controllerMainPanel"[label="controllerMainPanel", color=4]
+      
+        "controllerPanes"[label="controllerPanes", color=4]
+      
+
+      
+
+      
+        "nodes"[label="nodes", color=6]
+      
+
+
+      node[shape="cds"]
+
+      
+
+      
+        "directiveActionPanel"[label="directiveActionPanel", color=3]
+      
+        "directivePanes"[label="directivePanes", color=3]
+      
+
+
+
+
+
+      node[shape="ellipse"]
+      
+
+      
+        "moduleLayout" -> "directiveActionPanel"
+      
+        "moduleLayout" -> "directivePanes"
+      
+
+      
+        "moduleLayout" -> "controllerMainPanel"
+      
+        "moduleLayout" -> "controllerPanes"
+      
+
+      
+
+      
+        "moduleLayout" -> "nodes"
+      
+
+      
+
+
+
+
+
+
+
+
+
+
+
+      node[shape="ellipse",style="filled", color=8]
+      
+
+      
+        
+          "visualizations"[label="visualizations"]
+          "visualizations" -> "directiveActionPanel"
+        
+          "utils"[label="utils"]
+          "utils" -> "directiveActionPanel"
+        
+          "nodes"[label="nodes"]
+          "nodes" -> "directiveActionPanel"
+        
+      
+        
+          "utils"[label="utils"]
+          "utils" -> "directivePanes"
+        
+          "nodes"[label="nodes"]
+          "nodes" -> "directivePanes"
+        
+          "patientData"[label="patientData"]
+          "patientData" -> "directivePanes"
+        
+          "visualizations"[label="visualizations"]
+          "visualizations" -> "directivePanes"
+        
+      
+
+      
+        
+          "$scope"[label="$scope"]
+          "$scope" -> "controllerMainPanel"
+        
+          "patientData"[label="patientData"]
+          "patientData" -> "controllerMainPanel"
+        
+      
+        
+          "$scope"[label="$scope"]
+          "$scope" -> "controllerPanes"
+        
+          "patientData"[label="patientData"]
+          "patientData" -> "controllerPanes"
+        
+      
+
+      
+
+      
+        
+          "utils"[label="utils"]
+          "utils" -> "nodes"
+        
+      
+
+      
+
+    
+      
+
+      
+
+      
+
+      
+
+
+      node[shape="cds"]
+
+      
+
+      
+
+
+
+
+
+      node[shape="ellipse"]
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+
+
+
+
+
+
+
+
+
+
+      node[shape="ellipse",style="filled", color=8]
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+    
+}

@@ -1,0 +1,50 @@
+digraph dependencies {
+  node[shape="ellipse",style="filled",colorscheme=paired12]
+
+  
+    "moduleIndex"[label="moduleIndex", color=1]
+  
+    "moduleSplits"[label="moduleSplits", color=1]
+  
+    "moduleUtils"[label="moduleUtils", color=1]
+  
+    "moduleVisualizations"[label="moduleVisualizations", color=1]
+  
+    "moduleLayout"[label="moduleLayout", color=1]
+  
+    "moduleCombined"[label="moduleCombined", color=1]
+  
+
+  node[shape="ellipse",style="filled",color=2]
+  
+    
+  
+    
+      "shagstrom.angular-split-pane" -> "moduleSplits"
+    
+  
+    
+  
+    
+      "moduleIndex" -> "moduleVisualizations"
+    
+      "moduleUtils" -> "moduleVisualizations"
+    
+  
+    
+      "moduleIndex" -> "moduleLayout"
+    
+      "moduleUtils" -> "moduleLayout"
+    
+      "moduleVisualizations" -> "moduleLayout"
+    
+  
+    
+      "moduleIndex" -> "moduleCombined"
+    
+      "moduleLayout" -> "moduleCombined"
+    
+      "moduleSplits" -> "moduleCombined"
+    
+  
+}

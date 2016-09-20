@@ -1,0 +1,58 @@
+digraph dependencies {
+  node[shape="component",style="filled",colorscheme=paired12]
+
+
+    node[shape="component"]
+    "moduleCombined"[label="moduleCombined", color=1]
+
+    
+      "moduleIndex"[label="moduleIndex", color=1]
+      "moduleIndex" -> "moduleCombined"
+    
+      "moduleLayout"[label="moduleLayout", color=1]
+      "moduleLayout" -> "moduleCombined"
+    
+      "moduleSplits"[label="moduleSplits", color=1]
+      "moduleSplits" -> "moduleCombined"
+    
+
+
+    node[shape="ellipse"]
+    
+
+
+    
+
+    
+
+    
+
+    node[shape="cds"]
+    
+
+    
+
+
+
+
+
+
+
+
+
+    node[shape="ellipse",style="filled", color=9]
+    
+
+    
+
+
+    
+
+    
+
+    
+
+    
+
+
+}

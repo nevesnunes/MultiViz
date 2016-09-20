@@ -1,0 +1,119 @@
+digraph dependencies {
+  node[shape="component",style="filled",colorscheme=paired12]
+
+
+    node[shape="component"]
+    "moduleLayout"[label="moduleLayout", color=1]
+
+    
+      "moduleIndex"[label="moduleIndex", color=1]
+      "moduleIndex" -> "moduleLayout"
+    
+      "moduleUtils"[label="moduleUtils", color=1]
+      "moduleUtils" -> "moduleLayout"
+    
+      "moduleVisualizations"[label="moduleVisualizations", color=1]
+      "moduleVisualizations" -> "moduleLayout"
+    
+
+
+    node[shape="ellipse"]
+    
+
+
+    
+      "controllerMainPanel"[label="controllerMainPanel", color=4]
+      "moduleLayout" -> "controllerMainPanel"
+    
+      "controllerPanes"[label="controllerPanes", color=4]
+      "moduleLayout" -> "controllerPanes"
+    
+
+    
+
+    
+      "nodes"[label="nodes", color=6]
+      "moduleLayout" -> "nodes"
+    
+
+    node[shape="cds"]
+    
+
+    
+      "directiveActionPanel"[label="directiveActionPanel", color=3]
+      "moduleLayout" -> "directiveActionPanel"
+    
+      "directivePanes"[label="directivePanes", color=3]
+      "moduleLayout" -> "directivePanes"
+    
+
+
+
+
+
+
+
+
+
+    node[shape="ellipse",style="filled", color=9]
+    
+
+    
+      
+        "visualizations"[label="visualizations"]
+        "visualizations" -> "directiveActionPanel"
+      
+        "utils"[label="utils"]
+        "utils" -> "directiveActionPanel"
+      
+        "nodes"[label="nodes"]
+        "nodes" -> "directiveActionPanel"
+      
+    
+      
+        "utils"[label="utils"]
+        "utils" -> "directivePanes"
+      
+        "nodes"[label="nodes"]
+        "nodes" -> "directivePanes"
+      
+        "patientData"[label="patientData"]
+        "patientData" -> "directivePanes"
+      
+        "visualizations"[label="visualizations"]
+        "visualizations" -> "directivePanes"
+      
+    
+
+
+    
+      
+        "$scope"[label="$scope"]
+        "$scope" -> "controllerMainPanel"
+      
+        "patientData"[label="patientData"]
+        "patientData" -> "controllerMainPanel"
+      
+    
+      
+        "$scope"[label="$scope"]
+        "$scope" -> "controllerPanes"
+      
+        "patientData"[label="patientData"]
+        "patientData" -> "controllerPanes"
+      
+    
+
+    
+
+    
+      
+        "utils"[label="utils"]
+        "utils" -> "nodes"
+      
+    
+
+    
+
+
+}
