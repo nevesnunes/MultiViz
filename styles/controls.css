@@ -70,3 +70,20 @@
     margin-top: 0;
     margin-bottom: 0;
 }
+
+.markPatientAttribute {
+    background: transparent;
+    width: 0.25em;
+    height: 1em;
+    margin-right: 0.25em;
+}
+
+.markPresent {
+    background: red;
+}
+
+.markSquare {
+    min-width: 1em;
+    min-height: 1em;
+    margin: 0 0.25em;
+}

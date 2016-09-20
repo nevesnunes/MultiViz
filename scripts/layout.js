@@ -207,8 +207,8 @@ moduleLayout.controller('controllerPanes',
 }]);
 
 moduleLayout.directive("directiveActionPanel",
-        ['$compile', '$timeout', 'visualizations', 'utils', 'nodes',
-        function($compile, $timeout, visualizations, utils, nodes) {
+        ['$compile', '$timeout', 'visualizations', 'patientData', 'utils', 'nodes',
+        function($compile, $timeout, visualizations, patientData, utils, nodes) {
 	return { 
         scope: true,
         link: function(scope, element, attrs) {
@@ -378,6 +378,21 @@ moduleLayout.directive("directiveActionPanel",
 
                 return array[index].selected;
             };
+            
+            scope.isEntryCurrentPatientAttribute = function(name) {
+                var array = [];
+                var patient = patientData.getAttribute(patientData.KEY_PATIENT);
+                if (scope.currentAttributeType === 'diseases') {
+                    array = patient.diseases;
+                } else if (scope.currentAttributeType === 'medications') {
+                    array = patient.medications;
+                }
+
+                var index = array.indexOf(name);
+                return (index === -1) ?
+                    "markPatientAttribute" :
+                    "markPatientAttribute markPresent";
+            };
 
             scope.makeDefaultActions = function() {
                 var html = "";
@@ -436,6 +451,9 @@ moduleLayout.directive("directiveActionPanel",
                                     'ng-click="check(attribute)">' +
                                     '<div style="display: inline-block" ' +
                                         'ng-class="isEntrySelected($index)">' +
+                                        '<div style="display: inline-block" ' +
+                                            'ng-class="isEntryCurrentPatientAttribute(attribute)">' +
+                                        '</div>' +
                                         '<input ' +
                                             'class="custom-checkbox" ' +
                                             'type="checkbox" ' +

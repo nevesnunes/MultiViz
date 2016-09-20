@@ -8,7 +8,19 @@ moduleVisualizations.directive('directiveHeatMapTooltip',
     return {
         link: function (scope, element, attrs) {
             scope.setTooltipText = function(button) {
-                scope.tooltipText = "info heatmap";
+                var text = "<div style=\"text-align: left\" class=\"p\">" +
+                        "Encontre relações entre atributos " +
+                        "presentes em múltiplos pacientes." +
+                    "</div>" +
+                    "</br>" +
+                    "<div style=\"text-align: left\" class=\"p\">" +
+                        "Os atributos presentes no paciente actual " +
+                        "são assinalados (" +
+                        "<div style=\"display: inline-block\" class=\"" +
+                            "markPatientAttribute markPresent markSquare\" />" +
+                        ")." +
+                    "</div>";
+                scope.tooltipText = text;
             };
         }
     };
@@ -254,7 +266,8 @@ moduleVisualizations.factory('visualizations',
         cells.exit().remove();
 
         var filteredPatientMedicationsData = data.filter(function(d) {
-            return (patientMedications.indexOf(d.medication) !== -1);
+            return (patientMedications.indexOf(d.medication) !== -1) &&
+                (medications.indexOf(d.medication) !== -1);
         }); 
         var patientMedicationsCells = svg.selectAll(".patientMedications")
             .data(filteredPatientMedicationsData, function(d) {
@@ -279,7 +292,8 @@ moduleVisualizations.factory('visualizations',
         patientMedicationsCells.exit().remove();
 
         var filteredPatientDiseasesData = data.filter(function(d) {
-            return (patientDiseases.indexOf(d.disease) !== -1);
+            return (patientDiseases.indexOf(d.disease) !== -1) &&
+                (diseases.indexOf(d.disease) !== -1);
         }); 
         var patientDiseasesCells = svg.selectAll(".patientDiseases")
             .data(filteredPatientDiseasesData, function(d) {
