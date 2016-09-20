@@ -247,13 +247,13 @@ moduleVisualizations.factory('visualizations',
                 return "Número de pacientes: " + d.incidences;
             });
         svg.call(cellsTip);
-        var cells = svg.selectAll(".medication")
+        var cells = svg.selectAll(".attribute-pair")
             .data(filteredData, function(d) {
                 return diseases.indexOf(d.disease) + ':' +
                     medications.indexOf(d.medication);
             });
         cells.enter().append("rect")
-            .attr("class", "medication bordered")
+            .attr("class", "attribute-pair bordered")
             .attr("width", gridWidth)
             .attr("height", gridHeight)
             .merge(cells)
@@ -279,7 +279,7 @@ moduleVisualizations.factory('visualizations',
                 return medications.indexOf(d.medication);
             });
         patientMedicationsCells.enter().append("rect")
-            .attr("class", "bordered")
+            .attr("class", "attribute-pair bordered")
             .attr("width", gridWidth)
             .attr("height", gridHeight)
             .merge(cells)
@@ -303,7 +303,7 @@ moduleVisualizations.factory('visualizations',
                 return diseases.indexOf(d.disease);
             });
         patientDiseasesCells.enter().append("rect")
-            .attr("class", "bordered")
+            .attr("class", "attribute-pair bordered")
             .attr("width", gridWidth)
             .attr("height", gridHeight)
             .merge(cells)
@@ -318,33 +318,39 @@ moduleVisualizations.factory('visualizations',
                 });
         patientDiseasesCells.exit().remove();
 
-        var legend = svg.selectAll(".legend")
+        var legendRect = svg.selectAll(".legend-rect")
             .data([0].concat(colorScale.quantiles()), function(d) {
                 return d;
-            })
-            .enter().append("g")
-            .attr("class", "legend");
-        legend.append("rect")
-            .attr("class", "bordered")
-            .attr("x", function(d, i) {
-                return legendWidth * (1 + i);
-            })
-            .attr("y", height + gridHeight)
-            .attr("width", legendWidth)
-            .attr("height", gridHeight / 2)
-            .style("fill", function(d, i) {
-                return colors[i];
             });
-        legend.append("text")
-            .attr("class", "viz-label")
-            .text(function(d) {
-                return "≥ " + Math.round(d);
-            })
-            .attr("x", function(d, i) {
-                return legendWidth * (1 + i);
-            })
-            .attr("y", height + (2 * gridHeight));
-        legend.exit().remove();
+        legendRect.enter().append("rect")
+            .attr("class", "legend-rect bordered")
+            .merge(legendRect)
+                .attr("x", function(d, i) {
+                    return legendWidth * (1 + i);
+                })
+                .attr("y", (diseases.length + 1.5) * gridHeight)
+                .attr("width", legendWidth)
+                .attr("height", gridHeight / 2)
+                .style("fill", function(d, i) {
+                    return colors[i];
+                });
+        legendRect.exit().remove();
+
+        var legendText = svg.selectAll(".legend-text")
+            .data([0].concat(colorScale.quantiles()), function(d) {
+                return d;
+            });
+        legendText.enter().append("text")
+            .attr("class", "legend-text viz-label")
+            .merge(legendText)
+                .text(function(d) {
+                    return "≥ " + Math.round(d);
+                })
+                .attr("x", function(d, i) {
+                    return legendWidth * (1 + i);
+                })
+                .attr("y", (diseases.length + 2.5) * gridHeight);
+        legendText.exit().remove();
     };
 
     var makeDescriptionHeatMap = function(elementID) {
