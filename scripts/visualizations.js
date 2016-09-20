@@ -263,8 +263,6 @@ moduleVisualizations.factory('visualizations',
                 .attr("y", function(d) {
                     return (1 + diseases.indexOf(d.disease)) * gridHeight;
                 })
-                // FIXME: transitions not working...
-                // .transition().duration(1000)
                 .style("fill", function(d) {
                     return colorScale(d.incidences);
                 })
@@ -281,7 +279,7 @@ moduleVisualizations.factory('visualizations',
                 return medications.indexOf(d.medication);
             });
         patientMedicationsCells.enter().append("rect")
-            .attr("class", "medication bordered")
+            .attr("class", "bordered")
             .attr("width", gridWidth)
             .attr("height", gridHeight)
             .merge(cells)
@@ -291,8 +289,6 @@ moduleVisualizations.factory('visualizations',
                 .attr("y", function(d) {
                     return 0;
                 })
-                // FIXME: transitions not working...
-                // .transition().duration(1000)
                 .style("fill", function(d) {
                     return "#ff0000";
                 });
@@ -307,7 +303,7 @@ moduleVisualizations.factory('visualizations',
                 return diseases.indexOf(d.disease);
             });
         patientDiseasesCells.enter().append("rect")
-            .attr("class", "medication bordered")
+            .attr("class", "bordered")
             .attr("width", gridWidth)
             .attr("height", gridHeight)
             .merge(cells)
@@ -317,8 +313,6 @@ moduleVisualizations.factory('visualizations',
                 .attr("y", function(d) {
                     return (1 + diseases.indexOf(d.disease)) * gridHeight;
                 })
-                // FIXME: transitions not working...
-                // .transition().duration(1000)
                 .style("fill", function(d) {
                     return "#ff0000";
                 });
