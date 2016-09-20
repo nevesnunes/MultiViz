@@ -270,3 +270,34 @@ body {
   /* OPTIONAL pointer-events setting above blocks cursor setting, so set it here */
   cursor: not-allowed;
 }
+
+/* Creates a small triangle extender for the tooltip */
+
+.tooltip-d3 {
+    border: 1px solid #333 !important;
+}
+
+.tooltip-d3:after {
+    box-sizing: border-box;
+    display: inline;
+    width: 100%;
+    color: #333;
+    position: absolute;
+}
+
+/* Eastward tooltips */
+.tooltip-d3.e:after {
+    content: "\25C0";
+    margin: -4px 0 0 0;
+    top: 50%;
+    left: -8px;
+}
+
+/* Northward tooltips */
+.tooltip-d3.n:after {
+    content: "\25BC";
+    margin: -4px 0 0 0;
+    top: 100%;
+    left: 0;
+    text-align: center;
+}

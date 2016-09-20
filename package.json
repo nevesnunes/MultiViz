@@ -17,6 +17,7 @@
   "dependencies": {
     "angular": "^1.5.7",
     "bootstrap": "3.3.5",
+    "d3-tip": "^0.7.1",
     "jquery": "2.2.4",
     "node-uuid": "^1.4.7",
     "tree-model": "^1.0.4"

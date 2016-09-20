@@ -239,6 +239,14 @@ moduleVisualizations.factory('visualizations',
             })])
             .range(colors);
 
+        var cellsTip = d3.tip()
+            .attr('class', 'tooltip tooltip-element tooltip-d3')
+            .offset([-15, 0])
+            .direction('n')
+            .html(function(d) {
+                return "Número de pacientes: " + d.incidences;
+            });
+        svg.call(cellsTip);
         var cells = svg.selectAll(".medication")
             .data(filteredData, function(d) {
                 return diseases.indexOf(d.disease) + ':' +
@@ -260,9 +268,8 @@ moduleVisualizations.factory('visualizations',
                 .style("fill", function(d) {
                     return colorScale(d.incidences);
                 })
-                .append("title").text(function(d) {
-                    return "Número de pacientes: " + d.incidences;
-                });
+                .on("mouseover", cellsTip.show)
+                .on("mouseout", cellsTip.hide);
         cells.exit().remove();
 
         var filteredPatientMedicationsData = data.filter(function(d) {
