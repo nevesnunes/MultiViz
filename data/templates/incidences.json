@@ -1,8 +1,6 @@
 [
     '{{repeat(50, 80)}}',
     {
-banana: 1,
-        apple: banana,
         incidences: function() { return Math.floor(Math.random() * 80);},
         disease: function () {
             var attribute = ['Artrite', 'Candidiase Oral', 'Doença Cardíaca Congénita', 'Doença da Tiroide', 'Doença Venérea', 'Enfarte Miocárdio', 'Febre Reumática', 'Gânglios aumentados de volume', 'Glaucoma', 'Osteoporose'];
