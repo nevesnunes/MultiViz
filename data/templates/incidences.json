@@ -1,7 +1,7 @@
 [
     '{{repeat(50, 80)}}',
     {
-        incidences: function() { return Math.floor(Math.random() * 80);},
+        incidences: function() { return Math.floor(Math.random() * 80) + 1;},
         disease: function () {
             var attribute = ['Artrite', 'Candidiase Oral', 'Doença Cardíaca Congénita', 'Doença da Tiroide', 'Doença Venérea', 'Enfarte Miocárdio', 'Febre Reumática', 'Gânglios aumentados de volume', 'Glaucoma', 'Osteoporose'];
             var max = attribute.length - 1;
