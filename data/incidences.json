@@ -1,392 +1,272 @@
 [
-  {
-    "incidences": 47,
-    "disease": "Artrite",
-    "medication": "Aspirina"
-  },
-  {
-    "incidences": 2,
-    "disease": "Doença Venérea",
-    "medication": "Broncodilatador"
-  },
-  {
-    "incidences": 13,
-    "disease": "Candidiase Oral",
-    "medication": "Anti-depressor"
-  },
-  {
-    "incidences": 15,
-    "disease": "Gânglios aumentados de volume",
-    "medication": "Análgésicos"
-  },
-  {
-    "incidences": 54,
-    "disease": "Gânglios aumentados de volume",
-    "medication": "Anti-ácidos"
-  },
-  {
-    "incidences": 53,
-    "disease": "Doença Cardíaca Congénita",
-    "medication": "Estatinas"
-  },
-  {
-    "incidences": 13,
-    "disease": "Glaucoma",
-    "medication": "Broncodilatador"
-  },
-  {
-    "incidences": 70,
-    "disease": "Doença Venérea",
-    "medication": "Anti-diabéticos"
-  },
-  {
-    "incidences": 54,
-    "disease": "Doença Venérea",
-    "medication": "Anti-depressor"
-  },
-  {
-    "incidences": 4,
-    "disease": "Artrite",
-    "medication": "Estatinas"
-  },
-  {
-    "incidences": 63,
-    "disease": "Glaucoma",
-    "medication": "Anti-hipertensor"
-  },
-  {
-    "incidences": 27,
-    "disease": "Artrite",
-    "medication": "Estatinas"
-  },
-  {
-    "incidences": 16,
-    "disease": "Artrite",
-    "medication": "Anti-hipertensor"
-  },
-  {
-    "incidences": 29,
-    "disease": "Glaucoma",
-    "medication": "Anti-hipertensor"
-  },
-  {
-    "incidences": 35,
-    "disease": "Doença da Tiroide",
-    "medication": "Anti-diabéticos"
-  },
-  {
-    "incidences": 58,
-    "disease": "Glaucoma",
-    "medication": "Anti-hipertensor"
-  },
-  {
-    "incidences": 50,
-    "disease": "Doença Venérea",
-    "medication": "Anti-hipertensor"
-  },
-  {
-    "incidences": 30,
-    "disease": "Febre Reumática",
-    "medication": "Estatinas"
-  },
-  {
-    "incidences": 46,
-    "disease": "Doença Cardíaca Congénita",
-    "medication": "Anti-depressor"
-  },
-  {
-    "incidences": 72,
-    "disease": "Candidiase Oral",
-    "medication": "Anti-ácidos"
-  },
-  {
-    "incidences": 59,
-    "disease": "Gânglios aumentados de volume",
-    "medication": "Anti-depressor"
-  },
-  {
-    "incidences": 40,
-    "disease": "Enfarte Miocárdio",
-    "medication": "Anti-hipertensor"
-  },
-  {
-    "incidences": 37,
-    "disease": "Doença Venérea",
-    "medication": "Anti-depressor"
-  },
-  {
-    "incidences": 64,
-    "disease": "Doença Venérea",
-    "medication": "Análgésicos"
-  },
-  {
-    "incidences": 1,
-    "disease": "Glaucoma",
-    "medication": "Broncodilatador"
-  },
-  {
-    "incidences": 58,
-    "disease": "Artrite",
-    "medication": "Anti-depressor"
-  },
-  {
-    "incidences": 73,
-    "disease": "Doença Cardíaca Congénita",
-    "medication": "Broncodilatador"
-  },
-  {
-    "incidences": 74,
-    "disease": "Gânglios aumentados de volume",
-    "medication": "Anti-ácidos"
-  },
-  {
-    "incidences": 4,
-    "disease": "Candidiase Oral",
-    "medication": "Análgésicos"
-  },
-  {
-    "incidences": 44,
-    "disease": "Gânglios aumentados de volume",
-    "medication": "Anti-ácidos"
-  },
-  {
-    "incidences": 8,
-    "disease": "Gânglios aumentados de volume",
-    "medication": "Anti-diabéticos"
-  },
-  {
-    "incidences": 35,
-    "disease": "Doença da Tiroide",
-    "medication": "Aspirina"
-  },
-  {
-    "incidences": 50,
-    "disease": "Enfarte Miocárdio",
-    "medication": "Anti-hipertensor"
-  },
-  {
-    "incidences": 46,
-    "disease": "Doença da Tiroide",
-    "medication": "Aspirina"
-  },
-  {
-    "incidences": 29,
-    "disease": "Doença Cardíaca Congénita",
-    "medication": "Aspirina"
-  },
-  {
-    "incidences": 51,
-    "disease": "Doença da Tiroide",
-    "medication": "Aspirina"
-  },
-  {
-    "incidences": 73,
-    "disease": "Doença Cardíaca Congénita",
-    "medication": "Anti-hipertensor"
-  },
-  {
-    "incidences": 25,
-    "disease": "Enfarte Miocárdio",
-    "medication": "Análgésicos"
-  },
-  {
-    "incidences": 60,
-    "disease": "Artrite",
-    "medication": "Anti-depressor"
-  },
-  {
-    "incidences": 51,
-    "disease": "Candidiase Oral",
-    "medication": "Anti-hipertensor"
-  },
-  {
-    "incidences": 30,
-    "disease": "Enfarte Miocárdio",
-    "medication": "Broncodilatador"
-  },
-  {
-    "incidences": 46,
-    "disease": "Enfarte Miocárdio",
-    "medication": "Anti-diabéticos"
-  },
-  {
-    "incidences": 77,
-    "disease": "Febre Reumática",
-    "medication": "Anti-hipertensor"
-  },
-  {
-    "incidences": 64,
-    "disease": "Enfarte Miocárdio",
-    "medication": "Anti-depressor"
-  },
-  {
-    "incidences": 25,
-    "disease": "Gânglios aumentados de volume",
-    "medication": "Anti-ácidos"
-  },
-  {
-    "incidences": 64,
-    "disease": "Febre Reumática",
-    "medication": "Análgésicos"
-  },
-  {
-    "incidences": 11,
-    "disease": "Febre Reumática",
-    "medication": "Anti-ácidos"
-  },
-  {
-    "incidences": 61,
-    "disease": "Enfarte Miocárdio",
-    "medication": "Anti-depressor"
-  },
-  {
-    "incidences": 70,
-    "disease": "Enfarte Miocárdio",
-    "medication": "Anti-diabéticos"
-  },
-  {
-    "incidences": 11,
-    "disease": "Artrite",
-    "medication": "Aspirina"
-  },
-  {
-    "incidences": 74,
-    "disease": "Gânglios aumentados de volume",
-    "medication": "Aspirina"
-  },
-  {
-    "incidences": 17,
-    "disease": "Artrite",
-    "medication": "Aspirina"
-  },
-  {
-    "incidences": 62,
-    "disease": "Enfarte Miocárdio",
-    "medication": "Anti-ácidos"
-  },
-  {
-    "incidences": 65,
-    "disease": "Doença da Tiroide",
-    "medication": "Anti-ácidos"
-  },
-  {
-    "incidences": 20,
-    "disease": "Doença Cardíaca Congénita",
-    "medication": "Anti-diabéticos"
-  },
-  {
-    "incidences": 45,
-    "disease": "Febre Reumática",
-    "medication": "Anti-ácidos"
-  },
-  {
-    "incidences": 25,
-    "disease": "Enfarte Miocárdio",
-    "medication": "Anti-depressor"
-  },
-  {
-    "incidences": 28,
-    "disease": "Gânglios aumentados de volume",
-    "medication": "Broncodilatador"
-  },
-  {
-    "incidences": 51,
-    "disease": "Enfarte Miocárdio",
-    "medication": "Aspirina"
-  },
-  {
-    "incidences": 10,
-    "disease": "Doença da Tiroide",
-    "medication": "Análgésicos"
-  },
-  {
-    "incidences": 74,
-    "disease": "Doença Venérea",
-    "medication": "Anti-ácidos"
-  },
-  {
-    "incidences": 23,
-    "disease": "Enfarte Miocárdio",
-    "medication": "Anti-depressor"
-  },
-  {
-    "incidences": 71,
-    "disease": "Febre Reumática",
-    "medication": "Broncodilatador"
-  },
-  {
-    "incidences": 76,
-    "disease": "Enfarte Miocárdio",
-    "medication": "Anti-depressor"
-  },
-  {
-    "incidences": 65,
-    "disease": "Gânglios aumentados de volume",
-    "medication": "Anti-diabéticos"
-  },
-  {
-    "incidences": 8,
-    "disease": "Doença Venérea",
-    "medication": "Anti-depressor"
-  },
-  {
-    "incidences": 17,
-    "disease": "Doença Venérea",
-    "medication": "Anti-diabéticos"
-  },
-  {
-    "incidences": 59,
-    "disease": "Glaucoma",
-    "medication": "Anti-hipertensor"
-  },
-  {
-    "incidences": 67,
-    "disease": "Febre Reumática",
-    "medication": "Anti-hipertensor"
-  },
-  {
-    "incidences": 74,
-    "disease": "Doença da Tiroide",
-    "medication": "Anti-diabéticos"
-  },
-  {
-    "incidences": 22,
-    "disease": "Candidiase Oral",
-    "medication": "Aspirina"
-  },
-  {
-    "incidences": 53,
-    "disease": "Glaucoma",
-    "medication": "Estatinas"
-  },
-  {
-    "incidences": 52,
-    "disease": "Doença Venérea",
-    "medication": "Estatinas"
-  },
-  {
-    "incidences": 48,
-    "disease": "Glaucoma",
-    "medication": "Anti-hipertensor"
-  },
-  {
-    "incidences": 53,
-    "disease": "Enfarte Miocárdio",
-    "medication": "Anti-diabéticos"
-  },
-  {
-    "incidences": 2,
-    "disease": "Doença da Tiroide",
-    "medication": "Aspirina"
-  },
-  {
-    "incidences": 67,
-    "disease": "Doença Cardíaca Congénita",
-    "medication": "Anti-hipertensor"
-  },
-  {
-    "incidences": 36,
-    "disease": "Glaucoma",
-    "medication": "Aspirina"
-  }
+    {
+        "incidences": 25,
+        "disease": "Doença Cardíaca Congénita",
+        "medication": "Estatinas"
+    },
+    {
+        "incidences": 11,
+        "disease": "Doença Venérea",
+        "medication": "Estatinas"
+    },
+    {
+        "incidences": 20,
+        "disease": "Enfarte Miocárdio",
+        "medication": "Aspirina"
+    },
+    {
+        "incidences": 34,
+        "disease": "Candidiase Oral",
+        "medication": "Broncodilatador"
+    },
+    {
+        "incidences": 78,
+        "disease": "Doença Cardíaca Congénita",
+        "medication": "Anti-diabéticos"
+    },
+    {
+        "incidences": 57,
+        "disease": "Doença Cardíaca Congénita",
+        "medication": "Anti-ácidos"
+    },
+    {
+        "incidences": 36,
+        "disease": "Doença da Tiroide",
+        "medication": "Anti-diabéticos"
+    },
+    {
+        "incidences": 17,
+        "disease": "Doença Venérea",
+        "medication": "Análgésicos"
+    },
+    {
+        "incidences": 1,
+        "disease": "Osteoporose",
+        "medication": "Esteróides"
+    },
+    {
+        "incidences": 52,
+        "disease": "Enfarte Miocárdio",
+        "medication": "Análgésicos"
+    },
+    {
+        "incidences": 79,
+        "disease": "Artrite",
+        "medication": "Estatinas"
+    },
+    {
+        "incidences": 18,
+        "disease": "Candidiase Oral",
+        "medication": "Aspirina"
+    },
+    {
+        "incidences": 5,
+        "disease": "Doença da Tiroide",
+        "medication": "Anti-ácidos"
+    },
+    {
+        "incidences": 2,
+        "disease": "Osteoporose",
+        "medication": "Anti-diabéticos"
+    },
+    {
+        "incidences": 77,
+        "disease": "Candidiase Oral",
+        "medication": "Estatinas"
+    },
+    {
+        "incidences": 16,
+        "disease": "Osteoporose",
+        "medication": "Análgésicos"
+    },
+    {
+        "incidences": 77,
+        "disease": "Candidiase Oral",
+        "medication": "Anti-ácidos"
+    },
+    {
+        "incidences": 14,
+        "disease": "Doença Cardíaca Congénita",
+        "medication": "Esteróides"
+    },
+    {
+        "incidences": 26,
+        "disease": "Artrite",
+        "medication": "Esteróides"
+    },
+    {
+        "incidences": 7,
+        "disease": "Doença Venérea",
+        "medication": "Esteróides"
+    },
+    {
+        "incidences": 12,
+        "disease": "Artrite",
+        "medication": "Aspirina"
+    },
+    {
+        "incidences": 7,
+        "disease": "Doença Venérea",
+        "medication": "Aspirina"
+    },
+    {
+        "incidences": 34,
+        "disease": "Osteoporose",
+        "medication": "Broncodilatador"
+    },
+    {
+        "incidences": 51,
+        "disease": "Artrite",
+        "medication": "Análgésicos"
+    },
+    {
+        "incidences": 77,
+        "disease": "Artrite",
+        "medication": "Anti-diabéticos"
+    },
+    {
+        "incidences": 44,
+        "disease": "Doença da Tiroide",
+        "medication": "Aspirina"
+    },
+    {
+        "incidences": 49,
+        "disease": "Doença Venérea",
+        "medication": "Anti-diabéticos"
+    },
+    {
+        "incidences": 72,
+        "disease": "Febre Reumática",
+        "medication": "Aspirina"
+    },
+    {
+        "incidences": 48,
+        "disease": "Febre Reumática",
+        "medication": "Análgésicos"
+    },
+    {
+        "incidences": 50,
+        "disease": "Doença da Tiroide",
+        "medication": "Análgésicos"
+    },
+    {
+        "incidences": 38,
+        "disease": "Artrite",
+        "medication": "Anti-ácidos"
+    },
+    {
+        "incidences": 50,
+        "disease": "Artrite",
+        "medication": "Broncodilatador"
+    },
+    {
+        "incidences": 45,
+        "disease": "Doença da Tiroide",
+        "medication": "Esteróides"
+    },
+    {
+        "incidences": 58,
+        "disease": "Candidiase Oral",
+        "medication": "Anti-diabéticos"
+    },
+    {
+        "incidences": 10,
+        "disease": "Candidiase Oral",
+        "medication": "Anti-depressor"
+    },
+    {
+        "incidences": 52,
+        "disease": "Osteoporose",
+        "medication": "Aspirina"
+    },
+    {
+        "incidences": 66,
+        "disease": "Osteoporose",
+        "medication": "Estatinas"
+    },
+    {
+        "incidences": 7,
+        "disease": "Gânglios aumentados de volume",
+        "medication": "Aspirina"
+    },
+    {
+        "incidences": 12,
+        "disease": "Osteoporose",
+        "medication": "Anti-hipertensor"
+    },
+    {
+        "incidences": 28,
+        "disease": "Enfarte Miocárdio",
+        "medication": "Anti-diabéticos"
+    },
+    {
+        "incidences": 59,
+        "disease": "Artrite",
+        "medication": "Anti-hipertensor"
+    },
+    {
+        "incidences": 61,
+        "disease": "Doença Cardíaca Congénita",
+        "medication": "Análgésicos"
+    },
+    {
+        "incidences": 53,
+        "disease": "Gânglios aumentados de volume",
+        "medication": "Esteróides"
+    },
+    {
+        "incidences": 70,
+        "disease": "Doença Cardíaca Congénita",
+        "medication": "Aspirina"
+    },
+    {
+        "incidences": 42,
+        "disease": "Doença da Tiroide",
+        "medication": "Estatinas"
+    },
+    {
+        "incidences": 52,
+        "disease": "Osteoporose",
+        "medication": "Anti-depressor"
+    },
+    {
+        "incidences": 29,
+        "disease": "Artrite",
+        "medication": "Anti-depressor"
+    },
+    {
+        "incidences": 46,
+        "disease": "Candidiase Oral",
+        "medication": "Análgésicos"
+    },
+    {
+        "incidences": 51,
+        "disease": "Glaucoma",
+        "medication": "Esteróides"
+    },
+    {
+        "incidences": 68,
+        "disease": "Enfarte Miocárdio",
+        "medication": "Esteróides"
+    },
+    {
+        "incidences": 1,
+        "disease": "Candidiase Oral",
+        "medication": "Esteróides"
+    },
+    {
+        "incidences": 44,
+        "disease": "Febre Reumática",
+        "medication": "Esteróides"
+    },
+    {
+        "incidences": 60,
+        "disease": "Osteoporose",
+        "medication": "Anti-ácidos"
+    },
+    {
+        "incidences": 32,
+        "disease": "Doença Cardíaca Congénita",
+        "medication": "Anti-depressor"
+    }
 ]
