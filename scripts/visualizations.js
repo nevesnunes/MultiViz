@@ -50,8 +50,9 @@ moduleVisualizations.factory('visualizations',
         gridHeight = Math.floor(width / 24),
         gridWidth = gridHeight * 2,
         legendWidth = gridWidth,
-        buckets = 9,
-        colors = colorbrewer.Greys[9];
+        buckets = 6,
+        customDarkGreys = ["#bdbdbd","#969696","#737373","#525252","#252525","#000000"],
+        colors = customDarkGreys;
 
     var dataIncidences = [];
     d3.json("data/incidences.json", function(error, data) {
@@ -119,7 +120,7 @@ moduleVisualizations.factory('visualizations',
         var rings = 7;
         var margin = 20;
         var chart = circularHeatChart()
-	        .range(["white", "black"])
+	        .range(["#bdbdbd", "black"])
             .numSegments(countSegments)
             .segmentHeight(heightSegment)
             .innerRadius(innerRadius)
@@ -148,7 +149,7 @@ moduleVisualizations.factory('visualizations',
         var rings = 7;
         var margin = 20;
         var chart = circularHeatChart()
-	        .range(["white", "black"])
+	        .range(["#bdbdbd", "black"])
             .numSegments(countSegments)
             .segmentHeight(heightSegment)
             .innerRadius(innerRadius)
@@ -267,10 +268,7 @@ moduleVisualizations.factory('visualizations',
             });
         svg.call(cellsTip);
         var cells = svg.selectAll(".attribute-pair")
-            .data(filteredData, function(d) {
-                return diseases.indexOf(d.disease) + ':' +
-                    medications.indexOf(d.medication);
-            });
+            .data(filteredData);
         cells.enter().append("rect")
             .attr("class", "attribute-pair bordered")
             .attr("width", gridWidth)
