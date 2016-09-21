@@ -94,8 +94,8 @@ moduleIndex.controller('controllerAddData',
     patientDataPromise.then(function(result) {
         $scope.patientList = result.map(function(data, index) {
             return {
-                id: index,
-                patientID: data.id,
+                index: index,
+                id: data.id,
                 name: data.name,
                 diseases: data.diseases,
                 medications: data.medications
@@ -107,6 +107,7 @@ moduleIndex.controller('controllerAddData',
             return (obj === undefined) ?
                 {} :
                 {
+                    index: obj.index,
                     id: obj.id,
                     name: obj.name
                 };
@@ -163,18 +164,17 @@ moduleIndex.controller('controllerAddData',
         };
     });
 
-    $scope.dataToShare = [];
     $scope.selectedOption = -1;
 
     $scope.gotoViews = function(button, patientModel) {
-        $scope.dataToShare = $scope.getPatientByID(patientModel.id);
+        var dataToShare = $scope.getPatientByID(patientModel.id);
 
         // User only introduced text, thus no id was assigned;
         // we have to search with this text
-        if ($scope.dataToShare === undefined) {
-            $scope.dataToShare = $scope.getPatientByName(patientModel.name);
+        if (dataToShare === undefined) {
+            dataToShare = $scope.getPatientByName(patientModel.name);
         } 
-        patientData.setData(patientData.KEY_PATIENT, $scope.dataToShare);
+        patientData.setData(patientData.KEY_PATIENT, dataToShare);
 
         window.location.href = "layout.html";
     };
@@ -183,14 +183,13 @@ moduleIndex.controller('controllerAddData',
         var input = angular.element('#input-patient').scope();
         input.patientModel = $scope.clonePatient(patient);
 
-        $scope.dataToShare = $scope.clonePatient(patient);
-        patientData.setData(patientData.KEY_PATIENT, $scope.dataToShare);
+        patientData.setData(patientData.KEY_PATIENT, input.patientModel);
 
-        $scope.selectedOption = -1;
+        $scope.selectedOption = 0;
     };
 
-    $scope.isEntrySelected = function(id) {
-        return (id === $scope.selectedOption) ? "entrySelected" : "";
+    $scope.isEntrySelected = function(index) {
+        return (index === $scope.selectedOption) ? "entrySelected" : "";
     };
 }]);
 
@@ -251,57 +250,56 @@ moduleIndex.directive('ngKeySelect', ['$compile', '$timeout', 'patientData',
             link: function(scope, element, attrs) {
                 element.bind("keyup", function(event) {
                     var elems = scope.filteredPatientList;
-                    switch (event.which) {
-                        case 40: {
-                            $timeout(function() {
+                    $timeout(function() {
+                        switch (event.which) {
+                            // Arrow Up
+                            case 40: {
                                 if (scope.selectedOption === -1) {
                                     scope.selectedOption = 0;
                                 } else {
-                                    scope.selectedOption = scope.selectedOption === elems.length - 1 ?
-                                        scope.selectedOption :
-                                        scope.selectedOption + 1;
+                                    scope.selectedOption =
+                                        scope.selectedOption === elems.length - 1 ?
+                                            scope.selectedOption :
+                                            scope.selectedOption + 1;
                                 }
                                 event.preventDefault();
-                                console.log(scope.selectedOption + ": " + elems[scope.selectedOption].name);
-                            }, 0);
-                            break;
-                        }
-                        case 38: {
-                            $timeout(function() {
+
+                                break;
+                            }
+                            // Arrow Down
+                            case 38: {
                                 if (scope.selectedOption === -1) {
                                     scope.selectedOption = elems.length - 1;
                                 } else {
-                                    scope.selectedOption = scope.selectedOption === 0 ?
-                                        0 : scope.selectedOption - 1;
+                                    scope.selectedOption =
+                                        scope.selectedOption === 0 ?
+                                            0 :
+                                            scope.selectedOption - 1;
                                 }
                                 event.preventDefault();
-                                console.log(scope.selectedOption + ": " + elems[scope.selectedOption].name);
-                            }, 0);
-                            break;
-                        }
-                        case 13: {
-                            $timeout(function() {
-                                if (!scope.isDisabled() && (scope.selectedOption === -1)) {
+
+                                break;
+                            }
+                            // Enter
+                            case 13: {
+                                // Input matches an existing entry
+                                if (!scope.isDisabled()) {
                                     scope.gotoViews(event, scope.patientModel);
+                                // Either fill in the selected entry or
+                                // clear the input when no entry is available
                                 } else {
                                     scope.patientModel = scope.clonePatient(elems[scope.selectedOption]);
-
-                                    scope.dataToShare = scope.clonePatient(elems[scope.selectedOption]);
-                                    patientData.setData(patientData.KEY_PATIENT, scope.dataToShare);
-
-                                    scope.selectedOption = -1;
+                                    scope.selectedOption = 0;
                                 }
-
                                 event.preventDefault();
-                            }, 0);
-                            break;
-                        }
-                        default: {
-                            $timeout(function() {
-                                scope.selectedOption = -1;
-                            }, 0);
-                        }
-                    } //switch
+
+                                break;
+                            }
+                            default: {
+                                scope.selectedOption = 0;
+                            }
+                        } //switch
+                    }, 0);
                 }); //bind
             } //link
         }; //return

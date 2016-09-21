@@ -32,7 +32,7 @@
                             </div>
                             <p></p>
                             <div class="table table-condensed table-bordered patient-table">
-                                <div ng-repeat="patient in filteredPatientList = (patientList | filter:patientModel)" ng-click="selectEntry($event, patient)">
+                                <div ng-repeat="patient in filteredPatientList = (patientList | filter:patientModel.name)" ng-click="selectEntry($event, patient)">
                                     <div class="patient-table-entry" ng-class="isEntrySelected($index)">{{::patient.name}}</div>
                                 </div>
                             </div>
