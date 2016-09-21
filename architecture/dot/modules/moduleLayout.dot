@@ -63,6 +63,9 @@ digraph dependencies {
         "visualizations"[label="visualizations"]
         "visualizations" -> "directiveActionPanel"
       
+        "patientData"[label="patientData"]
+        "patientData" -> "directiveActionPanel"
+      
         "utils"[label="utils"]
         "utils" -> "directiveActionPanel"
       
