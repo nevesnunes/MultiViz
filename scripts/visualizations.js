@@ -197,6 +197,31 @@ moduleVisualizations.factory('visualizations',
     };
 
     var populateHeatMap = function(data, svg) {
+        // json data contains all attributes, which need to be filtered
+        // first by user selected attributes
+        var filteredData = data.filter(function(d) {
+            return (diseases.indexOf(d.disease) !== -1) &&
+                (medications.indexOf(d.medication) !== -1);
+        }); 
+
+        // We now remove attributes from the lists that don't have
+        // matches in filteredData (i.e. no cells for that attribute
+        // have values)
+        diseases = (function(list, filteredMatrix) {
+            return list.filter(function(name) {
+                var index = utils.arrayObjectIndexOf(
+                    filteredMatrix, name, "disease");
+                return index !== -1;
+            });
+        })(diseases, filteredData);
+        medications = (function(list, filteredMatrix) {
+            return list.filter(function(name) {
+                var index = utils.arrayObjectIndexOf(
+                    filteredMatrix, name, "medication");
+                return index !== -1;
+            });
+        })(medications, filteredData);
+
         var diseaseLabels = svg.selectAll(".diseaseLabel")
             .data(diseases);
         diseaseLabels.enter().append("text")
@@ -227,12 +252,6 @@ moduleVisualizations.factory('visualizations',
                 });
         medicationLabels.exit().remove();
 
-        // json data contains all attributes, which need to be filtered
-        // first by user selected attributes
-        var filteredData = data.filter(function(d) {
-            return (diseases.indexOf(d.disease) !== -1) &&
-                (medications.indexOf(d.medication) !== -1);
-        }); 
         var colorScale = d3.scaleQuantile()
             .domain([0, buckets - 1, d3.max(filteredData, function(d) {
                 return d.incidences;
