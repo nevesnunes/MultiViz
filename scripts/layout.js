@@ -162,8 +162,13 @@ moduleLayout.factory("nodes",
 }]);
 
 moduleLayout.controller('controllerMainPanel',
-        ['$scope', 'patientData',
-        function($scope, patientData) {
+        ['$document', '$scope', 'patientData',
+        function($document, $scope, patientData) {
+    // Load polyfills
+    $document.ready(function(){
+        PointerEventsPolyfill.initialize({});
+    });
+
     $scope.patient = patientData.getAttribute(patientData.KEY_PATIENT);
     $scope.gotoIndex = function(button) {
         window.location.href = "index.html";

@@ -275,6 +275,7 @@ body {
 
 .tooltip-d3 {
     border: 1px solid #333 !important;
+    pointer-events: none;
 }
 
 .tooltip-d3:after {
@@ -283,6 +284,7 @@ body {
     width: 100%;
     color: #333;
     position: absolute;
+    pointer-events: none;
 }
 
 /* Eastward tooltips */
@@ -291,6 +293,7 @@ body {
     margin: -4px 0 0 0;
     top: 50%;
     left: -8px;
+    pointer-events: none;
 }
 
 /* Northward tooltips */
@@ -300,4 +303,5 @@ body {
     top: 100%;
     left: 0;
     text-align: center;
+    pointer-events: none;
 }

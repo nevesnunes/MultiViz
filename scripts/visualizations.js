@@ -241,7 +241,7 @@ moduleVisualizations.factory('visualizations',
 
         var cellsTip = d3.tip()
             .attr('class', 'tooltip tooltip-element tooltip-d3')
-            .offset([-15, 0])
+            .offset([-10, 0])
             .direction('n')
             .html(function(d) {
                 return "Número de pacientes: " + d.incidences;
