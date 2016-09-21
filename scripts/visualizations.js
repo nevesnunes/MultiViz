@@ -267,6 +267,8 @@ moduleVisualizations.factory('visualizations',
                 return "Número de pacientes: " + d.incidences;
             });
         svg.call(cellsTip);
+        for (var i = 0; i < filteredData.length; i++)
+            console.log(i + " " + filteredData[i].disease + " " + filteredData[i].medication);
         var cells = svg.selectAll(".attribute-pair")
             .data(filteredData);
         cells.enter().append("rect")
@@ -284,6 +286,20 @@ moduleVisualizations.factory('visualizations',
                     return colorScale(d.incidences);
                 })
                 .on("mouseover", cellsTip.show)
+                /* FIXME: this iterates through elements, tip.show doesn't
+                .on("mouseover", function(d) {
+                    // select the parent and sort the path's
+                    svg.selectAll("rect").sort(function (a, b) {
+                        // a is not the hovered element, send "a" to the back
+                        if (a != d) return -1;
+                        // a is the hovered element, bring "a" to the front
+                        else return 1;                             
+                    });
+                    d3.select(this)
+                        .style("stroke-width", 8)
+                        .style("stroke", "#ff0000");
+                })
+                */
                 .on("mouseout", cellsTip.hide);
         cells.exit().remove();
 
