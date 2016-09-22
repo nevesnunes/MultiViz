@@ -624,6 +624,9 @@ moduleLayout.directive("directivePanes",
             scope.addSpiral = function(button) {
                 var id = angular.element(button.target).data('id');
                 makeSpiralHTML(id, visualizations.makeSpiralID());
+            
+                // Maximize view, in order for added visualizations to be seen
+                scope.paneMaximize(button);
             };
 
             scope.removeSpiral = function(button) {
