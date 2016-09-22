@@ -1,0 +1,436 @@
+[
+  {
+    "id": "f2f69017-5ec6-457c-9cc2-d0a448144d03",
+    "name": "Jacqueline Ball",
+    "diseases": [
+      "Febre Reumática",
+      "Osteoporose"
+    ],
+    "medications": [
+      "Esteróides",
+      "Aspirina",
+      "Estatinas",
+      "Anti-ácidos",
+      "Anti-hipertensor"
+    ]
+  },
+  {
+    "id": "393c3246-725f-4a2f-a1f7-3a769cd0d62b",
+    "name": "Best Aguilar",
+    "diseases": [
+      "Doença Venérea",
+      "Osteoporose",
+      "Doença Cardíaca Congénita"
+    ],
+    "medications": [
+      "Anti-ácidos",
+      "Análgésicos",
+      "Esteróides"
+    ]
+  },
+  {
+    "id": "c34f0a4c-30e4-4192-84b2-ece1a538bcd2",
+    "name": "Gabrielle Hood",
+    "diseases": [
+      "Enfarte Miocárdio",
+      "Gânglios aumentados de volume",
+      "Doença Cardíaca Congénita",
+      "Artrite",
+      "Glaucoma"
+    ],
+    "medications": [
+      "Anti-hipertensor",
+      "Anti-depressor",
+      "Análgésicos",
+      "Esteróides"
+    ]
+  },
+  {
+    "id": "bb13979c-99a9-41fb-9f87-2a61eee155a9",
+    "name": "Muriel Burgess",
+    "diseases": [],
+    "medications": [
+      "Anti-hipertensor",
+      "Anti-depressor"
+    ]
+  },
+  {
+    "id": "d3da60b5-ef12-4b51-9756-6c3266bedf42",
+    "name": "Saundra Gaines",
+    "diseases": [
+      "Doença Venérea",
+      "Doença da Tiroide"
+    ],
+    "medications": [
+      "Estatinas"
+    ]
+  },
+  {
+    "id": "6c00e347-e668-402d-b2a5-c34b9a89bd5d",
+    "name": "Nadia Dickson",
+    "diseases": [],
+    "medications": [
+      "Aspirina",
+      "Estatinas",
+      "Anti-depressor",
+      "Esteróides",
+      "Análgésicos"
+    ]
+  },
+  {
+    "id": "e0fef4c7-5112-49e9-a97a-a19a496537c7",
+    "name": "Powell Walters",
+    "diseases": [
+      "Gânglios aumentados de volume",
+      "Glaucoma",
+      "Osteoporose",
+      "Doença Venérea",
+      "Enfarte Miocárdio"
+    ],
+    "medications": [
+      "Estatinas",
+      "Análgésicos",
+      "Anti-diabéticos"
+    ]
+  },
+  {
+    "id": "d370d057-9868-4998-882f-65d9b7fb9e93",
+    "name": "Bobbie Landry",
+    "diseases": [],
+    "medications": [
+      "Análgésicos",
+      "Esteróides",
+      "Anti-diabéticos",
+      "Estatinas",
+      "Anti-ácidos",
+      "Anti-depressor"
+    ]
+  },
+  {
+    "id": "f36b1894-bada-4842-902e-302d6d490c1f",
+    "name": "Francisca Conrad",
+    "diseases": [
+      "Artrite"
+    ],
+    "medications": [
+      "Estatinas",
+      "Aspirina",
+      "Análgésicos"
+    ]
+  },
+  {
+    "id": "eb8c8dcd-08b3-4f1c-8b8a-7c283c41933c",
+    "name": "Bond Mccall",
+    "diseases": [
+      "Enfarte Miocárdio",
+      "Doença Venérea",
+      "Glaucoma",
+      "Artrite",
+      "Doença Cardíaca Congénita",
+      "Candidiase Oral"
+    ],
+    "medications": [
+      "Broncodilatador",
+      "Anti-hipertensor",
+      "Aspirina",
+      "Estatinas",
+      "Anti-diabéticos",
+      "Esteróides"
+    ]
+  },
+  {
+    "id": "af6dd75b-aa61-46f0-8e43-ac8b0c29a188",
+    "name": "Marlene Bright",
+    "diseases": [
+      "Enfarte Miocárdio"
+    ],
+    "medications": [
+      "Anti-diabéticos",
+      "Anti-depressor",
+      "Anti-ácidos"
+    ]
+  },
+  {
+    "id": "68d3a98b-c2d9-42d5-afb4-f7799089328f",
+    "name": "Mckinney Herman",
+    "diseases": [],
+    "medications": [
+      "Anti-depressor",
+      "Aspirina",
+      "Anti-hipertensor"
+    ]
+  },
+  {
+    "id": "554816f9-7688-4a1f-9fd1-b05f96bd62b4",
+    "name": "Christa Leonard",
+    "diseases": [
+      "Gânglios aumentados de volume",
+      "Febre Reumática",
+      "Doença da Tiroide",
+      "Doença Venérea",
+      "Enfarte Miocárdio"
+    ],
+    "medications": [
+      "Anti-ácidos",
+      "Anti-hipertensor",
+      "Estatinas"
+    ]
+  },
+  {
+    "id": "d69eb026-a1c9-43be-b4ae-74fe41183ca1",
+    "name": "Downs Price",
+    "diseases": [
+      "Doença da Tiroide",
+      "Enfarte Miocárdio",
+      "Febre Reumática",
+      "Doença Cardíaca Congénita"
+    ],
+    "medications": [
+      "Broncodilatador",
+      "Aspirina",
+      "Estatinas",
+      "Anti-hipertensor"
+    ]
+  },
+  {
+    "id": "a6c5c725-fdbd-4ad0-bb08-67fb72eafcb5",
+    "name": "Velma Guthrie",
+    "diseases": [
+      "Osteoporose",
+      "Enfarte Miocárdio",
+      "Gânglios aumentados de volume",
+      "Artrite"
+    ],
+    "medications": [
+      "Anti-hipertensor",
+      "Esteróides",
+      "Anti-depressor"
+    ]
+  },
+  {
+    "id": "7d3c2f00-fdc4-4a07-9a05-380876d0c550",
+    "name": "Margarita Barker",
+    "diseases": [
+      "Doença da Tiroide",
+      "Gânglios aumentados de volume"
+    ],
+    "medications": [
+      "Anti-ácidos",
+      "Aspirina",
+      "Anti-depressor"
+    ]
+  },
+  {
+    "id": "d43ffa99-a8d2-4465-9162-2f6885674c3f",
+    "name": "Conway Calhoun",
+    "diseases": [
+      "Artrite",
+      "Enfarte Miocárdio",
+      "Candidiase Oral",
+      "Doença Cardíaca Congénita",
+      "Glaucoma",
+      "Doença Venérea"
+    ],
+    "medications": []
+  },
+  {
+    "id": "a39da8f1-0eb8-4192-9f1d-44a09d09c17c",
+    "name": "Conley Keller",
+    "diseases": [
+      "Osteoporose",
+      "Febre Reumática"
+    ],
+    "medications": [
+      "Anti-diabéticos",
+      "Anti-hipertensor",
+      "Aspirina",
+      "Anti-ácidos",
+      "Esteróides"
+    ]
+  },
+  {
+    "id": "11c11f40-e177-4d0c-8fe2-ebc54edc9336",
+    "name": "Lucile Barber",
+    "diseases": [
+      "Candidiase Oral",
+      "Glaucoma"
+    ],
+    "medications": []
+  },
+  {
+    "id": "b4b79255-6fe5-4fa0-8962-32c491862b67",
+    "name": "Carolina Malone",
+    "diseases": [
+      "Doença Venérea"
+    ],
+    "medications": [
+      "Broncodilatador",
+      "Aspirina",
+      "Anti-hipertensor",
+      "Anti-ácidos",
+      "Anti-depressor"
+    ]
+  },
+  {
+    "id": "e6e5441f-378e-41af-a2c3-8e33fd5dc7b7",
+    "name": "Wall Hendricks",
+    "diseases": [
+      "Candidiase Oral",
+      "Artrite",
+      "Osteoporose",
+      "Enfarte Miocárdio",
+      "Febre Reumática"
+    ],
+    "medications": [
+      "Anti-hipertensor",
+      "Anti-depressor",
+      "Broncodilatador",
+      "Análgésicos",
+      "Aspirina"
+    ]
+  },
+  {
+    "id": "58635588-f722-4f51-b9c9-183c086019c9",
+    "name": "Romero Rivers",
+    "diseases": [
+      "Gânglios aumentados de volume",
+      "Enfarte Miocárdio",
+      "Febre Reumática"
+    ],
+    "medications": [
+      "Estatinas",
+      "Anti-ácidos",
+      "Broncodilatador",
+      "Esteróides",
+      "Anti-diabéticos",
+      "Análgésicos",
+      "Anti-depressor"
+    ]
+  },
+  {
+    "id": "3e255e1c-45c2-4749-bb97-7fa15095a443",
+    "name": "Jimmie Albert",
+    "diseases": [
+      "Doença Venérea",
+      "Doença Cardíaca Congénita",
+      "Gânglios aumentados de volume"
+    ],
+    "medications": [
+      "Anti-hipertensor",
+      "Anti-diabéticos",
+      "Análgésicos",
+      "Anti-depressor",
+      "Anti-ácidos"
+    ]
+  },
+  {
+    "id": "06f548f0-496b-4d06-9973-a6b9f35261be",
+    "name": "Warren Martin",
+    "diseases": [
+      "Febre Reumática",
+      "Enfarte Miocárdio",
+      "Candidiase Oral",
+      "Doença Cardíaca Congénita",
+      "Gânglios aumentados de volume"
+    ],
+    "medications": [
+      "Análgésicos",
+      "Estatinas",
+      "Anti-ácidos",
+      "Esteróides"
+    ]
+  },
+  {
+    "id": "17981eff-ed75-4c91-b33d-3fe9006396f6",
+    "name": "Parker Clark",
+    "diseases": [
+      "Doença da Tiroide",
+      "Gânglios aumentados de volume",
+      "Febre Reumática"
+    ],
+    "medications": []
+  },
+  {
+    "id": "f5ea5cc0-aacc-48c5-9273-1bf546f21736",
+    "name": "Willie Salazar",
+    "diseases": [
+      "Enfarte Miocárdio",
+      "Doença Venérea",
+      "Artrite"
+    ],
+    "medications": [
+      "Esteróides",
+      "Anti-depressor",
+      "Anti-diabéticos",
+      "Broncodilatador",
+      "Aspirina"
+    ]
+  },
+  {
+    "id": "ef34c6d0-58d5-4937-8d24-767756eae479",
+    "name": "Burton Gallegos",
+    "diseases": [
+      "Artrite",
+      "Glaucoma"
+    ],
+    "medications": [
+      "Esteróides",
+      "Broncodilatador",
+      "Anti-diabéticos",
+      "Anti-depressor"
+    ]
+  },
+  {
+    "id": "3d5b0ee3-5887-4ddb-93a3-67fc9c4f35ac",
+    "name": "Kramer Kent",
+    "diseases": [
+      "Enfarte Miocárdio",
+      "Candidiase Oral",
+      "Doença da Tiroide",
+      "Gânglios aumentados de volume",
+      "Osteoporose",
+      "Febre Reumática",
+      "Artrite"
+    ],
+    "medications": [
+      "Aspirina",
+      "Anti-depressor",
+      "Análgésicos"
+    ]
+  },
+  {
+    "id": "1fd93852-6391-43eb-942f-d35a3672d753",
+    "name": "Dejesus Mccray",
+    "diseases": [
+      "Candidiase Oral",
+      "Artrite",
+      "Glaucoma",
+      "Doença Venérea"
+    ],
+    "medications": [
+      "Esteróides",
+      "Anti-depressor",
+      "Broncodilatador",
+      "Anti-diabéticos",
+      "Anti-hipertensor"
+    ]
+  },
+  {
+    "id": "69fe920d-717d-42e1-8a10-5d81fde60a2a",
+    "name": "Leonor Hendrix",
+    "diseases": [
+      "Doença Venérea",
+      "Febre Reumática",
+      "Doença Cardíaca Congénita",
+      "Enfarte Miocárdio",
+      "Gânglios aumentados de volume",
+      "Glaucoma",
+      "Doença da Tiroide"
+    ],
+    "medications": [
+      "Anti-depressor",
+      "Anti-diabéticos",
+      "Anti-ácidos"
+    ]
+  }
+]
