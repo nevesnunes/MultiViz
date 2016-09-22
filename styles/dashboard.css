@@ -224,6 +224,7 @@ body {
 .buttonSelected {
     background-color: #777;
     color: white;
+    font-weight: bold;
 }
 
 /* Tooltips */

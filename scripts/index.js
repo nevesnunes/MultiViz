@@ -164,10 +164,6 @@ moduleIndex.controller('controllerAddData',
         };
     });
 
-    $scope.selectedOption = 0;
-    $scope.setSelectedOption = function(index) { $scope.selectedOption = index; };
-    $scope.getSelectedOption = function() { return $scope.selectedOption; };
-
     $scope.gotoViews = function(button, patientModel) {
         var dataToShare = $scope.getPatientByID(patientModel.id);
 
@@ -181,21 +177,11 @@ moduleIndex.controller('controllerAddData',
         window.location.href = "layout.html";
     };
 
-    $scope.focusedEntry = function(button, patient) {
-        $scope.selectedOption = patient.index;
-    };
-
     $scope.selectEntry = function(button, patient) {
         var input = angular.element('#input-patient').scope();
         input.patientModel = $scope.clonePatient(patient);
 
         patientData.setData(patientData.KEY_PATIENT, input.patientModel);
-
-        $scope.selectedOption = 0;
-    };
-
-    $scope.isEntrySelected = function(index) {
-        return (index === $scope.selectedOption) ? "entrySelected" : "";
     };
 }]);
 
@@ -249,7 +235,22 @@ moduleIndex.directive('directiveTooltip', [function() {
     }; //return
 }]);
 
-moduleIndex.directive('ngKeySelect', ['$compile', '$timeout', 'patientData',
+moduleIndex.controller('controllerOptionList',
+        ['$scope', function($scope) {
+    $scope.selectedOption = 0;
+    $scope.setSelectedOption = function(index) { $scope.selectedOption = index; };
+    $scope.getSelectedOption = function() { return $scope.selectedOption; };
+
+    $scope.focusedEntry = function(button, patient) {
+        $scope.selectedOption = patient.index;
+    };
+
+    $scope.isEntrySelected = function(index) {
+        return (index === $scope.selectedOption) ? "entrySelected" : "";
+    };
+}]);
+
+moduleIndex.directive('directiveOptionList', ['$compile', '$timeout', 'patientData',
     function($compile, $timeout, patientData) {
         return {
             scope: false, // Use the same scope to not break filter of ng-model
@@ -277,7 +278,7 @@ moduleIndex.directive('ngKeySelect', ['$compile', '$timeout', 'patientData',
                 };
 
                 element.bind("keyup", function(event) {
-                    var elems = scope.filteredPatientList;
+                    var elems = scope.filteredAttributes;
                     $timeout(function() {
                         switch (event.which) {
                             // Arrow Up

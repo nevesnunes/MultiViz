@@ -24,46 +24,46 @@
 </head>
 
 <body class="panes" data-ng-app="moduleCombined">
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container-fluid custom-container-padding">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-            </div>
-            <div id="navbar" class="navbar-collapse collapse">
-                <div ng-controller="controllerMainPanel">
-                    <ul class="nav navbar-nav navbar-left bold-text">
-                        <li><a href="#">Carregar Layout</a></li>
-                        <li><a href="#">Guardar Layout</a></li>
-                        <li><a href="#">Novo Layout</a></li>
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right bold-text">
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Paciente: {{ patient.name }}<span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">id: {{ patient.id }}</a></li>
-                                <li role="separator" class="divider"></li>
-                                <li><a href="#">TODO</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="#">Diário Clínico</a></li>
-                        <li><a href="#" ng-click="gotoIndex($event)">Fechar Sessão</a></li>
-                    </ul>
+    <div class="panes" ng-controller="controllerLayout">
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container-fluid custom-container-padding" data-directive-main-panel>
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
                 </div>
-                <form class="navbar-form navbar-right">
-                    <div class="right-inner-addon">
-                        <i class="glyphicon glyphicon-search"></i>
-                        <input type="text" class="form-control" placeholder="Procurar paciente...">
+                <div id="navbar" class="navbar-collapse collapse">
+                    <div ng-controller="controllerMainPanel">
+                        <ul class="nav navbar-nav navbar-left bold-text">
+                            <li><a href="#">Carregar Layout</a></li>
+                            <li><a href="#">Guardar Layout</a></li>
+                            <li><a href="#" ng-click="newLayout($event)">Novo Layout</a></li>
+                        </ul>
+                        <ul class="nav navbar-nav navbar-right bold-text">
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Paciente: {{ patient.name }}<span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">id: {{ patient.id }}</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="#">TODO</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#">Diário Clínico</a></li>
+                            <li><a href="#" ng-click="gotoIndex($event)">Fechar Sessão</a></li>
+                        </ul>
                     </div>
-                </form>
+                    <form class="navbar-form navbar-right">
+                        <div class="right-inner-addon">
+                            <i class="glyphicon glyphicon-search"></i>
+                            <input type="text" class="form-control" placeholder="Procurar paciente...">
+                        </div>
+                    </form>
+                </div>
             </div>
-        </div>
-    </nav>
-    <div class="panes" ng-controller="controllerPanes">
+        </nav>
         <div class="container custom-container-width panes">
             <div class="row panes">
                 <div class="col-sm-3 col-md-2 sidebar">
