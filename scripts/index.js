@@ -136,8 +136,8 @@ moduleIndex.controller('controllerAddData',
         };
 
         $scope.isDisabled = function(button) {
-            var input = angular.element('#input-patient').scope();
-            var inputModel = input.patientModel;
+            var input = angular.element('#input-patient');
+            var inputModel = input.scope().patientModel;
 
             var emptyText = (inputModel === undefined) ||
                 (inputModel.name === "");
@@ -147,8 +147,8 @@ moduleIndex.controller('controllerAddData',
         };
 
         $scope.setTooltipText = function(button) {
-            var input = angular.element('#input-patient').scope();
-            var inputModel = input.patientModel;
+            var input = angular.element('#input-patient');
+            var inputModel = input.scope().patientModel;
 
             var emptyText = (inputModel === undefined) ||
                 (inputModel.name === "");
@@ -164,7 +164,9 @@ moduleIndex.controller('controllerAddData',
         };
     });
 
-    $scope.selectedOption = -1;
+    $scope.selectedOption = 0;
+    $scope.setSelectedOption = function(index) { $scope.selectedOption = index; };
+    $scope.getSelectedOption = function() { return $scope.selectedOption; };
 
     $scope.gotoViews = function(button, patientModel) {
         var dataToShare = $scope.getPatientByID(patientModel.id);
@@ -177,6 +179,10 @@ moduleIndex.controller('controllerAddData',
         patientData.setData(patientData.KEY_PATIENT, dataToShare);
 
         window.location.href = "layout.html";
+    };
+
+    $scope.focusedEntry = function(button, patient) {
+        $scope.selectedOption = patient.index;
     };
 
     $scope.selectEntry = function(button, patient) {
@@ -248,34 +254,42 @@ moduleIndex.directive('ngKeySelect', ['$compile', '$timeout', 'patientData',
         return {
             scope: false, // Use the same scope to not break filter of ng-model
             link: function(scope, element, attrs) {
+                var selectOptionDown = function(elems) {
+                    if (scope.getSelectedOption() === -1) {
+                        scope.setSelectedOption(elems.length - 1);
+                    } else {
+                        scope.setSelectedOption(
+                            (scope.getSelectedOption() === 0) ?
+                                0 :
+                                scope.getSelectedOption() - 1);
+                    }
+                };
+
+                var selectOptionUp = function(elems) {
+                    if (scope.getSelectedOption() === -1) {
+                        scope.setSelectedOption(0);
+                    } else {
+                        scope.setSelectedOption(
+                            (scope.getSelectedOption() === elems.length - 1) ?
+                                scope.getSelectedOption() :
+                                scope.getSelectedOption() + 1);
+                    }
+                };
+
                 element.bind("keyup", function(event) {
                     var elems = scope.filteredPatientList;
                     $timeout(function() {
                         switch (event.which) {
                             // Arrow Up
                             case 40: {
-                                if (scope.selectedOption === -1) {
-                                    scope.selectedOption = 0;
-                                } else {
-                                    scope.selectedOption =
-                                        scope.selectedOption === elems.length - 1 ?
-                                            scope.selectedOption :
-                                            scope.selectedOption + 1;
-                                }
+                                selectOptionUp(elems);
                                 event.preventDefault();
 
                                 break;
                             }
                             // Arrow Down
                             case 38: {
-                                if (scope.selectedOption === -1) {
-                                    scope.selectedOption = elems.length - 1;
-                                } else {
-                                    scope.selectedOption =
-                                        scope.selectedOption === 0 ?
-                                            0 :
-                                            scope.selectedOption - 1;
-                                }
+                                selectOptionDown(elems);
                                 event.preventDefault();
 
                                 break;
@@ -288,15 +302,20 @@ moduleIndex.directive('ngKeySelect', ['$compile', '$timeout', 'patientData',
                                 // Either fill in the selected entry or
                                 // clear the input when no entry is available
                                 } else {
-                                    scope.patientModel = scope.clonePatient(elems[scope.selectedOption]);
-                                    scope.selectedOption = 0;
+                                    var input = angular.element('#input-patient');
+                                    input.scope().patientModel = scope.clonePatient(
+                                        elems[scope.getSelectedOption()]
+                                    );
+                                    input.focus();
+
+                                    scope.setSelectedOption(0);
                                 }
                                 event.preventDefault();
 
                                 break;
                             }
                             default: {
-                                scope.selectedOption = 0;
+                                scope.setSelectedOption(0);
                             }
                         } //switch
                     }, 0);
