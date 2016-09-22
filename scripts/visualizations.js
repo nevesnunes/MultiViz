@@ -286,15 +286,42 @@ moduleVisualizations.factory('visualizations',
                 .on("mouseover", function(d) {
                     cellsTip.show(d);
 
-                    // select the parent and sort the paths
-                    svg.selectAll(".attribute-pair").sort(function (a, b) {
-                        // a is not the hovered element, send "a" to the back
-                        if (a != d) return -1;
-                        // a is the hovered element, bring "a" to the front
-                        else return 1;                             
-                    });
+                    // Style column labels
+                    svg.selectAll(".medication-label")
+                        .attr("class", function(a) {
+                            return (a == d.medication) ? 
+                                "medication-label axis viz-label-selected" :
+                                "medication-label viz-label axis ";
+                        });
+
+                    // Style line labels
+                    svg.selectAll(".disease-label")
+                        .attr("class", function(a) {
+                            return (a == d.disease) ? 
+                                "disease-label axis viz-label-selected" :
+                                "disease-label viz-label axis ";
+                        });
+
+                    // Sort paths for correct hover styling
+                    svg.selectAll(".attribute-pair")
+                        .sort(function (a, b) {
+                            // a is not the hovered element, send "a" to the back
+                            if (a != d) return -1;
+                            // a is the hovered element, bring "a" to the front
+                            else return 1;                             
+                        });
                 })
-                .on("mouseout", cellsTip.hide);
+                .on("mouseout", function(d) {
+                    cellsTip.hide(d);
+                    
+                    // Style column labels
+                    svg.selectAll(".medication-label")
+                        .attr("class", "medication-label viz-label axis");
+
+                    // Style line labels
+                    svg.selectAll(".disease-label")
+                        .attr("class", "disease-label viz-label axis");
+                });
         cells.exit().remove();
 
         var filteredPatientMedicationsData = data
