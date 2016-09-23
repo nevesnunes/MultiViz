@@ -54,7 +54,6 @@ Spiral.prototype.render = function() {
           .attr("cx", function(d) { return d[0]; })
           .attr("cy", function(d) { return d[1]; });
   } else if (option.graphType === "custom-path") {
-      /*
     option.data.forEach(function(datum, t){
       t = t + 2 * (option.lineWidth / option.spacing);
       var start = startAngle(t, option.period);
@@ -85,22 +84,15 @@ Spiral.prototype.render = function() {
       datum[1] = arcPath
     });
 
-    */
-
-var customData = [ -90, -50, 0, 50, 100, 125, 175, 230, 270, 310, 350, 390];
-    var line = d3.radialLine()
-      .radius(function(d, i){ return 120 + i * 2; })
-      .angle(function(d){
-              return d.angle;
-              });
-svg.append('path')
-  .datum(option.data)
-  .attr('d', line(option.data))
-  .attr('stroke', 'green')
-  .attr('stroke-width', 10)
-  .attr('fill', 'white')
-  .attr('transform', 'translate(' + option.svgWidth / 2 +','+ option.svgHeight / 2 +')');
-
+    svg.append("g")
+      .attr("transform", "translate(" + option.margin.left + "," + option.margin.top + ")");
+    svg.selectAll("g").selectAll("path")
+      //.data(option.data.slice(100))
+      .data(option.data)
+      .enter().append("path")
+        .style("fill", function(d) { return colorSelector(d); })
+        .style("opacity", function(d) {return colorSelector(d, true)})
+        .attr("d", function(d) { return d[1]});
   } else if (option.graphType === "non-spiral") {
     // --------------------vvv Standard Line Graph vvv---------------------------
     var x2 = d3.scaleLinear().range([0, 730]);
@@ -169,8 +161,7 @@ Spiral.prototype.randomData = function() {
     if (option.graphType === 'non-spiral') {
       option.data.push([i, size*option.period, 2])
     } else {
-      //option.data.push(this.cartesian(rad, angle, size));
-      option.data.push({radian:rad, angle:angle, size:size});
+      option.data.push(this.cartesian(rad, angle, size));
     }
   }
 };
