@@ -87,29 +87,19 @@ Spiral.prototype.render = function() {
 
     */
 
+var customData = [ -90, -50, 0, 50, 100, 125, 175, 230, 270, 310, 350, 390];
     var line = d3.radialLine()
-      .radius(function(d, i){ return 20 + d.i * 4; })
+      .radius(function(d, i){ return 120 + i * 2; })
       .angle(function(d){
               return d.angle;
-              })
-.curve(d3.curveBundle.beta(0.5));
-
-// Produce an array of two-element arrays [x, y] for each segment of values.
-var segments = function(values) {
-  var i = 0, n = values.length, segments = new Array(n - 1);
-  while (++i < n)
-      segments[i - 1] = [values[i - 1], values[i]];
-  return segments;
-}
-
-  var path = svg.selectAll("cenas")
-      .data(segments(option.data))
-      .enter().append("path")
-          .attr('d', line)
-          .attr('stroke', 'green')
-          .attr('stroke-width', 20)
-          .attr('fill', 'white')
-          .attr('transform', 'translate(' + option.svgWidth / 2 +','+ option.svgHeight / 2 +')');
+              });
+svg.append('path')
+  .datum(option.data)
+  .attr('d', line(option.data))
+  .attr('stroke', 'green')
+  .attr('stroke-width', 10)
+  .attr('fill', 'white')
+  .attr('transform', 'translate(' + option.svgWidth / 2 +','+ option.svgHeight / 2 +')');
 
   } else if (option.graphType === "non-spiral") {
     // --------------------vvv Standard Line Graph vvv---------------------------
@@ -180,7 +170,7 @@ Spiral.prototype.randomData = function() {
       option.data.push([i, size*option.period, 2])
     } else {
       //option.data.push(this.cartesian(rad, angle, size));
-      option.data.push({i:i, radian:rad, angle:angle, size:size});
+      option.data.push({radian:rad, angle:angle, size:size});
     }
   }
 };
