@@ -84,14 +84,41 @@ Spiral.prototype.render = function() {
       datum[1] = arcPath
     });
 
+
+    var customDarkGreys = ["#bdbdbd","#969696","#737373","#525252","#252525","#000000"];
+    var buckets = customDarkGreys.length;
+    var colors = customDarkGreys;
+    var colorScale = d3.scaleQuantile()
+        .domain([0, buckets - 1, d3.max(option.data, function(d) {
+            return d[2];
+        })])
+        .range(colors);
+
+        var cellsTip = d3.tip()
+            .attr('class', 'tooltip tooltip-element tooltip-d3')
+            .offset([-10, 0])
+            .direction('n')
+            .html(function(d) {
+                return "Value: " + d[2];
+            });
+        svg.call(cellsTip);
     svg.append("g")
+      .classed("circular-heat", true)
       .attr("transform", "translate(" + option.margin.left + "," + option.margin.top + ")");
     svg.selectAll("g").selectAll("path")
-      //.data(option.data.slice(100))
       .data(option.data)
       .enter().append("path")
-        .style("fill", function(d) { return colorSelector(d); })
-        .style("opacity", function(d) {return colorSelector(d, true)})
+        .style("fill", function(d) {
+            return colorScale(d[2]);
+        })
+                .on("mouseover", function(d) {
+                    cellsTip.show(d);
+                })
+                .on("mouseout", function(d) {
+                    cellsTip.hide(d);
+                })
+                    
+
         .attr("d", function(d) { return d[1]});
   } else if (option.graphType === "non-spiral") {
     // --------------------vvv Standard Line Graph vvv---------------------------

@@ -50,8 +50,8 @@ moduleVisualizations.factory('visualizations',
         gridHeight = Math.floor(width / 24),
         gridWidth = gridHeight * 2,
         legendWidth = gridWidth,
-        buckets = 6,
         customDarkGreys = ["#bdbdbd","#969696","#737373","#525252","#252525","#000000"],
+        buckets = customDarkGreys.length,
         colors = customDarkGreys;
 
     var dataIncidences = [];
