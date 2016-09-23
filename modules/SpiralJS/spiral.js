@@ -15,8 +15,8 @@ function Spiral(graphType) {
     lineWidth: 50,
     targetElement: '#chart',
     data: [],
-    x: d3.scale.linear().range([0, 730]).domain([-750, 750]),
-    y: d3.scale.linear().range([480, 0]).domain([-500, 500]),
+    x: d3.scaleLinear().range([0, 730]).domain([-750, 750]),
+    y: d3.scaleLinear().range([480, 0]).domain([-500, 500]),
     tickMarkNumber: [],
     tickMarkLabels: [],
     color: 'black',
@@ -54,7 +54,9 @@ Spiral.prototype.render = function() {
           .attr("cx", function(d) { return d[0]; })
           .attr("cy", function(d) { return d[1]; });
   } else if (option.graphType === "custom-path") {
-    option.data.forEach(function(datum, t, dataSet){
+      /*
+    option.data.forEach(function(datum, t){
+      t = t + 2 * (option.lineWidth / option.spacing);
       var start = startAngle(t, option.period);
       var end = endAngle(t, option.period);
 
@@ -83,33 +85,51 @@ Spiral.prototype.render = function() {
       datum[1] = arcPath
     });
 
-    svg.append("g")
-      .attr("transform", "translate(" + option.margin.left + "," + option.margin.top + ")");
-    svg.selectAll("g").selectAll("path")
-      .data(option.data.slice(100))
+    */
+
+    var line = d3.radialLine()
+      .radius(function(d, i){ return 20 + d.i * 4; })
+      .angle(function(d){
+              return d.angle;
+              })
+.curve(d3.curveBundle.beta(0.5));
+
+// Produce an array of two-element arrays [x, y] for each segment of values.
+var segments = function(values) {
+  var i = 0, n = values.length, segments = new Array(n - 1);
+  while (++i < n)
+      segments[i - 1] = [values[i - 1], values[i]];
+  return segments;
+}
+
+  var path = svg.selectAll("cenas")
+      .data(segments(option.data))
       .enter().append("path")
-        .style("fill", function(d) { return colorSelector(d); })
-        .style("opacity", function(d) {return colorSelector(d, true)})
-        .attr("d", function(d) { return d[1]});
+          .attr('d', line)
+          .attr('stroke', 'green')
+          .attr('stroke-width', 20)
+          .attr('fill', 'white')
+          .attr('transform', 'translate(' + option.svgWidth / 2 +','+ option.svgHeight / 2 +')');
+
   } else if (option.graphType === "non-spiral") {
     // --------------------vvv Standard Line Graph vvv---------------------------
-    var x2 = d3.scale.linear().range([0, 730]);
-    var y2 = d3.scale.linear().range([480, 0]);
+    var x2 = d3.scaleLinear().range([0, 730]);
+    var y2 = d3.scaleLinear().range([480, 0]);
     x2.domain(d3.extent(option.data, function(d) { return d[0]; }));
     y2.domain(d3.extent(option.data, function(d) { return d[1]; }));
+    var line = d3.line()
+      .x(function(d) { return x2(d[0]); })
+      .y(function(d) { return y2(d[1]); });
 
+/*
     var xAxis = d3.svg.axis().scale(x2)
       .orient("bottom").ticks(5);
 
     var yAxis = d3.svg.axis().scale(y2)
       .orient("left").ticks(5);
 
-    var line = d3.svg.line()
-      .x(function(d) { return x2(d[0]); })
-      .y(function(d) { return y2(d[1]); });
-
     svg.append("g")
-      .attr("class", "x axis")
+      .attr("class", "x axis viz-spiral-axis")
       .attr("transform", "translate("+option.margin.left+"," + 480 + ")")
       .call(xAxis)
       .append("text")
@@ -120,7 +140,7 @@ Spiral.prototype.render = function() {
         .text("time");
 
     svg.append("g")
-      .attr("class", "y axis")
+      .attr("class", "y axis viz-spiral-axis")
       .attr("transform", "translate("+option.margin.left+",0)")
       .call(yAxis)
       .append("text")
@@ -129,7 +149,7 @@ Spiral.prototype.render = function() {
         .attr("dy", ".71em")
         .style("text-anchor", "end")
         .text("Signal (a.u.)");
-
+*/
     svg.append("path")
       .datum(option.data)
       .attr("class", "line")
@@ -139,6 +159,8 @@ Spiral.prototype.render = function() {
       .attr("stroke", option.color)
       .attr("transform", "translate("+option.margin.left+",0)")
   }
+
+  return svg;
 };
 
 Spiral.prototype.randomData = function() {
@@ -157,7 +179,8 @@ Spiral.prototype.randomData = function() {
     if (option.graphType === 'non-spiral') {
       option.data.push([i, size*option.period, 2])
     } else {
-      option.data.push(this.cartesian(rad, angle, size));
+      //option.data.push(this.cartesian(rad, angle, size));
+      option.data.push({i:i, radian:rad, angle:angle, size:size});
     }
   }
 };
@@ -171,8 +194,8 @@ Spiral.prototype.setParam = function(param, value) {
   if (['svgHeight', 'svgWidth', 'margin.top', 'margin.right', 'margin.bottom', 'margin.left'].indexOf(param) > -1) {
     var width = option.svgWidth - option.margin.left - option.margin.right;
     var height = option.svgHeight - option.margin.top - option.margin.bottom;
-    option.x = d3.scale.linear().range([0, width]).domain([-option.svgWidth, option.svgWidth]);
-    option.y = d3.scale.linear().range([height, 0]).domain([-option.svgHeight, option.svgHeight]);
+    option.x = d3.scaleLinear().range([0, width]).domain([-option.svgWidth, option.svgWidth]);
+    option.y = d3.scaleLinear().range([height, 0]).domain([-option.svgHeight, option.svgHeight]);
   }
 };
 

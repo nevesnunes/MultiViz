@@ -114,6 +114,7 @@ moduleVisualizations.factory('visualizations',
     };
 
     var populateSpiral = function(data, svg) {
+        /*
         var countSegments = 24;
         var heightSegment = 20;
         var innerRadius = 20;
@@ -135,6 +136,7 @@ moduleVisualizations.factory('visualizations',
             .data([data]);
         cells.enter()
             .call(chart);
+        */
     };
 
     var makeSpiral = function(elementID, spiralID, isChecked) {
@@ -143,6 +145,7 @@ moduleVisualizations.factory('visualizations',
             return;
         }
 
+        /*
         var countSegments = 24;
         var heightSegment = 20;
         var innerRadius = 20;
@@ -173,6 +176,21 @@ moduleVisualizations.factory('visualizations',
             .attr("height", 2 * rings * heightSegment +
                 2 * innerRadius +
                 2 * margin);
+        */
+
+        var data = [];
+        var countPoints = 100;
+        var spacing = 5;
+        var spiral2 = new Spiral('custom-path');
+        spiral2.setParam('numberOfPoints', countPoints);
+        spiral2.setParam('period', 7);
+        spiral2.setParam('svgHeight', 500);
+        spiral2.setParam('svgWidth', 500);
+        spiral2.setParam('spacing', spacing);
+        spiral2.setParam('lineWidth', spacing*6);
+        spiral2.setParam('targetElement', '#' + spiralID);
+        spiral2.randomData();
+        var svg = spiral2.render();
 
         // Save svg for d3 updates
         nodes.updateViz({
