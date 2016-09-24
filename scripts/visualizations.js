@@ -50,8 +50,8 @@ moduleVisualizations.factory('visualizations',
         gridHeight = Math.floor(width / 24),
         gridWidth = gridHeight * 2,
         legendWidth = gridWidth,
-        buckets = 6,
         customDarkGreys = ["#bdbdbd","#969696","#737373","#525252","#252525","#000000"],
+        buckets = customDarkGreys.length,
         colors = customDarkGreys;
 
     var dataIncidences = [];
@@ -114,6 +114,7 @@ moduleVisualizations.factory('visualizations',
     };
 
     var populateSpiral = function(data, svg) {
+        /*
         var countSegments = 24;
         var heightSegment = 20;
         var innerRadius = 20;
@@ -135,6 +136,7 @@ moduleVisualizations.factory('visualizations',
             .data([data]);
         cells.enter()
             .call(chart);
+        */
     };
 
     var makeSpiral = function(elementID, spiralID, isChecked) {
@@ -143,6 +145,7 @@ moduleVisualizations.factory('visualizations',
             return;
         }
 
+        /*
         var countSegments = 24;
         var heightSegment = 20;
         var innerRadius = 20;
@@ -173,6 +176,21 @@ moduleVisualizations.factory('visualizations',
             .attr("height", 2 * rings * heightSegment +
                 2 * innerRadius +
                 2 * margin);
+        */
+
+        var data = [];
+        var countPoints = 100;
+        var spacing = 5;
+        var spiral2 = new Spiral('custom-path');
+        spiral2.setParam('numberOfPoints', countPoints);
+        spiral2.setParam('period', 7);
+        spiral2.setParam('svgHeight', 500);
+        spiral2.setParam('svgWidth', 500);
+        spiral2.setParam('spacing', spacing);
+        spiral2.setParam('lineWidth', spacing*6);
+        spiral2.setParam('targetElement', '#' + spiralID);
+        spiral2.randomData();
+        var svg = spiral2.render();
 
         // Save svg for d3 updates
         nodes.updateViz({
@@ -223,7 +241,7 @@ moduleVisualizations.factory('visualizations',
             });
         })(medications, filteredData);
 
-        var diseaseLabels = svg.selectAll(".diseaseLabel")
+        var diseaseLabels = svg.selectAll(".disease-label")
             .data(diseases);
         diseaseLabels.enter().append("text")
             .attr("x", 0)
@@ -232,21 +250,21 @@ moduleVisualizations.factory('visualizations',
             })
             .style("text-anchor", "end")
             .attr("transform", "translate(-6," + gridHeight / 1.5 + ")")
-            .attr("class", "diseaseLabel viz-label axis")
+            .attr("class", "disease-label viz-label axis")
             .merge(diseaseLabels)
                 .text(function(d) {
                     return d;
                 });
         diseaseLabels.exit().remove();
 
-        var medicationLabels = svg.selectAll(".medicationLabel")
+        var medicationLabels = svg.selectAll(".medication-label")
             .data(medications);
         medicationLabels.enter().append("text")
             .style("text-anchor", "middle")
             .attr("transform", function(d, i) {
                 return "translate(" + ((1 + i) * gridWidth) + ", -25)rotate(20)";
             })
-            .attr("class", "medicationLabel viz-label axis")
+            .attr("class", "medication-label viz-label axis")
             .merge(medicationLabels)
                 .text(function(d) {
                     return d;
@@ -267,8 +285,6 @@ moduleVisualizations.factory('visualizations',
                 return "Número de pacientes: " + d.incidences;
             });
         svg.call(cellsTip);
-        for (var i = 0; i < filteredData.length; i++)
-            console.log(i + " " + filteredData[i].disease + " " + filteredData[i].medication);
         var cells = svg.selectAll(".attribute-pair")
             .data(filteredData);
         cells.enter().append("rect")
@@ -285,34 +301,58 @@ moduleVisualizations.factory('visualizations',
                 .style("fill", function(d) {
                     return colorScale(d.incidences);
                 })
-                .on("mouseover", cellsTip.show)
-                /* FIXME: this iterates through elements, tip.show doesn't
                 .on("mouseover", function(d) {
-                    // select the parent and sort the path's
-                    svg.selectAll("rect").sort(function (a, b) {
-                        // a is not the hovered element, send "a" to the back
-                        if (a != d) return -1;
-                        // a is the hovered element, bring "a" to the front
-                        else return 1;                             
-                    });
-                    d3.select(this)
-                        .style("stroke-width", 8)
-                        .style("stroke", "#ff0000");
+                    cellsTip.show(d);
+
+                    // Style column labels
+                    svg.selectAll(".medication-label")
+                        .attr("class", function(a) {
+                            return (a == d.medication) ? 
+                                "medication-label axis viz-label-selected" :
+                                "medication-label viz-label axis ";
+                        });
+
+                    // Style line labels
+                    svg.selectAll(".disease-label")
+                        .attr("class", function(a) {
+                            return (a == d.disease) ? 
+                                "disease-label axis viz-label-selected" :
+                                "disease-label viz-label axis ";
+                        });
+
+                    // Sort paths for correct hover styling
+                    svg.selectAll(".attribute-pair")
+                        .sort(function (a, b) {
+                            // a is not the hovered element, send "a" to the back
+                            if (a != d) return -1;
+                            // a is the hovered element, bring "a" to the front
+                            else return 1;                             
+                        });
                 })
-                */
-                .on("mouseout", cellsTip.hide);
+                .on("mouseout", function(d) {
+                    cellsTip.hide(d);
+                    
+                    // Style column labels
+                    svg.selectAll(".medication-label")
+                        .attr("class", "medication-label viz-label axis");
+
+                    // Style line labels
+                    svg.selectAll(".disease-label")
+                        .attr("class", "disease-label viz-label axis");
+                });
         cells.exit().remove();
 
-        var filteredPatientMedicationsData = data.filter(function(d) {
-            return (patientMedications.indexOf(d.medication) !== -1) &&
-                (medications.indexOf(d.medication) !== -1);
-        }); 
+        var filteredPatientMedicationsData = data
+            .filter(function(d) {
+                return (patientMedications.indexOf(d.medication) !== -1) &&
+                    (medications.indexOf(d.medication) !== -1);
+            }); 
         var patientMedicationsCells = svg.selectAll(".patientMedications")
             .data(filteredPatientMedicationsData, function(d) {
                 return medications.indexOf(d.medication);
             });
         patientMedicationsCells.enter().append("rect")
-            .attr("class", "attribute-pair bordered")
+            .attr("class", "attribute-mark bordered")
             .attr("width", gridWidth)
             .attr("height", gridHeight)
             .merge(cells)
@@ -324,19 +364,29 @@ moduleVisualizations.factory('visualizations',
                 })
                 .style("fill", function(d) {
                     return "#ff0000";
+                })
+                .on("mouseover", function(d) {
+                    // select the parent and sort the paths
+                    svg.selectAll(".attribute-mark").sort(function (a, b) {
+                        // a is not the hovered element, send "a" to the back
+                        if (a != d) return -1;
+                        // a is the hovered element, bring "a" to the front
+                        else return 1;                             
+                    });
                 });
         patientMedicationsCells.exit().remove();
 
-        var filteredPatientDiseasesData = data.filter(function(d) {
-            return (patientDiseases.indexOf(d.disease) !== -1) &&
-                (diseases.indexOf(d.disease) !== -1);
-        }); 
+        var filteredPatientDiseasesData = data
+            .filter(function(d) {
+                return (patientDiseases.indexOf(d.disease) !== -1) &&
+                    (diseases.indexOf(d.disease) !== -1);
+            }); 
         var patientDiseasesCells = svg.selectAll(".patientDiseases")
             .data(filteredPatientDiseasesData, function(d) {
                 return diseases.indexOf(d.disease);
             });
         patientDiseasesCells.enter().append("rect")
-            .attr("class", "attribute-pair bordered")
+            .attr("class", "attribute-mark bordered")
             .attr("width", gridWidth)
             .attr("height", gridHeight)
             .merge(cells)
@@ -348,6 +398,15 @@ moduleVisualizations.factory('visualizations',
                 })
                 .style("fill", function(d) {
                     return "#ff0000";
+                })
+                .on("mouseover", function(d) {
+                    // select the parent and sort the paths
+                    svg.selectAll(".attribute-mark").sort(function (a, b) {
+                        // a is not the hovered element, send "a" to the back
+                        if (a != d) return -1;
+                        // a is the hovered element, bring "a" to the front
+                        else return 1;                             
+                    });
                 });
         patientDiseasesCells.exit().remove();
 
@@ -366,6 +425,15 @@ moduleVisualizations.factory('visualizations',
                 .attr("height", gridHeight / 2)
                 .style("fill", function(d, i) {
                     return colors[i];
+                })
+                .on("mouseover", function(d) {
+                    // select the parent and sort the paths
+                    svg.selectAll(".legend-rect").sort(function (a, b) {
+                        // a is not the hovered element, send "a" to the back
+                        if (a != d) return -1;
+                        // a is the hovered element, bring "a" to the front
+                        else return 1;                             
+                    });
                 });
         legendRect.exit().remove();
 

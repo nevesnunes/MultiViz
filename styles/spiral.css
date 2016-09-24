@@ -1,3 +1,15 @@
 .viz-spiral {
     display: inline-block;
 }
+
+.viz-spiral-axis path,
+.viz-spiral-axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.viz-spiral-axis text {
+  font-size: 0.9em;
+  font-family: sans-serif;
+}

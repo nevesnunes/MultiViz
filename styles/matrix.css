@@ -5,16 +5,19 @@ rect.bordered {
 
 rect.bordered:hover {
   fill: #286090 !important;
-  /*
-  stroke-width: 6px;   
-  stroke: #ff0000;
-  */
+  stroke: #4a99e6;
+  stroke-width: 4px;   
 }
 
 text.viz-label {
   font-size: 0.9em;
   font-family: sans-serif;
   fill: #000;
+}
+
+text.viz-label-selected {
+  font-weight: bold;
+  fill: #286090 !important;
 }
 
 text.axis {

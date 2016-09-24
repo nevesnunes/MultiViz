@@ -170,12 +170,23 @@ moduleLayout.controller('controllerMainPanel',
     });
 
     $scope.patient = patientData.getAttribute(patientData.KEY_PATIENT);
-    $scope.gotoIndex = function(button) {
-        window.location.href = "index.html";
-    };
 }]);
 
-moduleLayout.controller('controllerPanes',
+moduleLayout.directive("directiveMainPanel", function() {
+	return { 
+        scope: true,
+        link: function(scope, element, attrs) {
+            scope.gotoIndex = function(button) {
+                window.location.href = "index.html";
+            };
+            scope.newLayout = function(button) {
+                scope.APIPanes.newLayout();
+            };
+        }
+    };
+});
+
+moduleLayout.controller('controllerLayout',
         ['$scope', 'patientData',
         function($scope, patientData) {
     $scope.vizType = Object.freeze({
@@ -412,7 +423,8 @@ moduleLayout.directive("directiveActionPanel",
                             scope.vizType.HEAT_MAP) {
                         var list = scope.currentAttributeType;
                         // Attribute lists
-                        html = '<div class="btn-group" ' +
+                        html = '<div>' +
+                            '<div class="btn-group" ' +
                             'role="group" aria-label="...">' +
                             '<button type="button" ' +
                                 'id="btnDiseases" ' +
@@ -436,11 +448,11 @@ moduleLayout.directive("directiveActionPanel",
                             '<div class="right-inner-addon">' +
                                 '<i class="glyphicon glyphicon-search"></i>' +
                                 '<input type="text" ' +
-                                    'id="input-attribute" ' +
+                                    'id="input-patient" ' +
                                     'class="form-control" ' +
                                     'placeholder="Procurar..." ' +
                                     'ng-model="attributeModel" ' +
-                                    'ng-key-select autofocus tabindex=1>' +
+                                    'autofocus tabindex=1>' +
                             '</div>' +
                             // Selection choices
                             '<span>Selecionar:</span>' +
@@ -453,9 +465,9 @@ moduleLayout.directive("directiveActionPanel",
                             '<div class="table table-condensed table-bordered patient-table">' +
                                 '<div class="checkboxInTable patient-table-entry" ' +
                                     'ng-repeat="attribute in filteredAttributes = (' + list + ' | filter:attributeModel)"' +
-                                    'ng-click="check(attribute)">' +
-                                    '<div style="display: inline-block" ' +
-                                        'ng-class="isEntrySelected($index)">' +
+                                    'ng-click="check(attribute)" ' +
+                                    'ng-class="isEntrySelected($index)">' +
+                                    '<div style="display: inline-block">' +
                                         '<div style="display: inline-block" ' +
                                             'ng-class="isEntryCurrentPatientAttribute(attribute)">' +
                                         '</div>' +
@@ -466,7 +478,8 @@ moduleLayout.directive("directiveActionPanel",
                                             '{{::attribute}}' +
                                     '</div>' +
                                 '</div>' +
-                            '</div>';
+                            '</div>' +
+                        '</div>';
                     } else {
                         html = "<span>TODO</span>";
                     }
@@ -624,6 +637,9 @@ moduleLayout.directive("directivePanes",
             scope.addSpiral = function(button) {
                 var id = angular.element(button.target).data('id');
                 makeSpiralHTML(id, visualizations.makeSpiralID());
+            
+                // Maximize view, in order for added visualizations to be seen
+                scope.paneMaximize(button);
             };
 
             scope.removeSpiral = function(button) {
@@ -843,6 +859,15 @@ moduleLayout.directive("directivePanes",
                 }
             };
 
+            scope.newLayout = function() {
+                // Nuke our tracked nodes, since a
+                // new layout will be created later
+                nodes.setRootNode(undefined);
+                nodes.setCurrentNode(undefined);
+                
+                scope.updateLayout();
+            };
+
             scope.paneRemove = function(button) {
                 var id = angular.element(button.target).data('id');
                 var node = nodes.getRootNode().first(function (node1) {
@@ -888,14 +913,10 @@ moduleLayout.directive("directivePanes",
                         }
                     }
 
-                // Nuke our tracked nodes, since a
-                // new layout will be created later
+                    scope.updateLayout();
                 } else {
-                    nodes.setRootNode(undefined);
-                    nodes.setCurrentNode(undefined);
+                    scope.newLayout();
                 }
-                
-                scope.updateLayout();
             };
 
             // Generate a single view layout from the current node
@@ -994,6 +1015,7 @@ moduleLayout.directive("directivePanes",
             scope.APIPanes.vizType = scope.vizType;
             scope.APIPanes.makePaneSplit = scope.makePaneSplit; 
             scope.APIPanes.updateLayout = scope.updateLayout; 
+            scope.APIPanes.newLayout = scope.newLayout;
 
             // Initialize
             visualizations.updateData(
