@@ -23,21 +23,101 @@ var generator = (function() {
         return { name: element };
     };
 
-    var genericObjectGenerator = function(element) {
+    var diseaseObjectGenerator = function(element) {
         return {
             name: element,
             startDate: randomDate(new Date(2012, 0, 1), new Date())
         };
     };
 
+    var genericFrequencies = [
+            'Anual',
+            'Mensal',
+            'Semanal',
+            'Diário'
+    ];
+
+    var treatAsUTC = function(date) {
+        var result = new Date(date);
+        result.setMinutes(result.getMinutes() - result.getTimezoneOffset());
+        return result;
+    };
+
+    var daysBetween = function(startDate, endDate) {
+        var millisecondsPerDay = 24 * 60 * 60 * 1000;
+        return (treatAsUTC(endDate) - treatAsUTC(startDate)) / millisecondsPerDay;
+    };
+
+    var makeRandomDays = function(frequency, startDate, endDate) {
+        var days = [];
+        var countDays = daysBetween(startDate, endDate);
+        var currentDay = 1;
+        while (currentDay <= countDays) {
+            var chance = Math.floor(Math.random() * (4 - 1)) + 1;
+            if (chance < 3) {
+                var newDate = new Date(startDate);
+                newDate.setDate(newDate.getDate() + currentDay);
+                days.push(newDate);
+            }
+
+            currentDay += 1 * frequency;
+        }
+
+        return days;
+    };
+
+    var makeRandomRecordedFrequency = function(frequency, startDate, endDate) {
+        var recordedFrequency = [];
+        // FIXME: hardcoded aproximation of days in frequency
+        switch (frequency) {
+            case 'Anual': {
+                recordedFrequency = makeRandomDays(365, startDate, endDate);
+                break;
+            }
+            case 'Mensal': {
+                recordedFrequency = makeRandomDays(30, startDate, endDate);
+                break;
+            }
+            case 'Semanal': {
+                recordedFrequency = makeRandomDays(7, startDate, endDate);
+                break;
+            }
+            case 'Diária': {
+                recordedFrequency = makeRandomDays(1, startDate, endDate);
+                break;
+            }
+            default: {
+            }
+        } //switch
+
+        return recordedFrequency;
+    };
+
+    var medicationObjectGenerator = function(element) {
+        var startDate = randomDate(new Date(2012, 0, 1), new Date());
+        var endDate = randomDate(startDate, new Date());
+        var expectedFrequency = pickRandomElement(genericFrequencies);
+        // TODO
+        var recordedFrequency = makeRandomRecordedFrequency(
+                expectedFrequency, startDate, endDate);
+        var dosage = null;
+        return {
+            name: element,
+            startDate: startDate,
+            endDate: endDate,
+            expectedFrequency: expectedFrequency,
+            recordedFrequency: recordedFrequency
+        };
+    };
+
     var habits = ['Fruta', 'Biscoitos e bolos', 'Geleia e mel', 'Pastilhas com açúcar', 'Doces', 'Limonada e refrigerantes', 'Chá com açúcar', 'Café com açúcar'];
     var habitFrequencies = [
-            { name: 'Nunca', level: 0},
-            { name: 'Várias vezes por mês', level: 1},
-            { name: 'Uma vez por semana', level: 2},
-            { name: 'Várias vezes por semana', level: 3},
-            { name: 'Todos os dias', level: 4},
-            { name: 'Várias vezes ao dia', level: 5},
+            { name: 'Nunca', value: null, factor: null },
+            { name: 'Várias vezes por mês', value: 14, factor: 1 },
+            { name: 'Uma vez por semana', value: 7, factor: 1 },
+            { name: 'Várias vezes por semana', value: 3, factor: 1 },
+            { name: 'Todos os dias', value: 1, factor: 1 },
+            { name: 'Várias vezes ao dia', value: 1, factor: 2 },
     ];
     var habitObjectGenerator = function(element) {
         return {
@@ -81,9 +161,9 @@ var generator = (function() {
                 ' ' +
                 pickRandomElement(_lastNames);
 		var pickedDiseases = makeRandomArray(
-                diseases, genericObjectGenerator, "name");
+                diseases, diseaseObjectGenerator, "name");
 		var pickedMedications = makeRandomArray(
-                medications, genericObjectGenerator, "name");
+                medications, medicationObjectGenerator, "name");
 		var pickedHabits = makeRandomArray(
                 habits, habitObjectGenerator, "name");
 
