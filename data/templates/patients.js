@@ -13,6 +13,11 @@ var generator = (function() {
 	var canMakeInstance = function() {
 		return true; // FIXME
 	};
+        
+    var randomDate = function(start, end) {
+        return new Date(start.getTime() + 
+            Math.random() * (end.getTime() - start.getTime()));
+    };
 
     var makeRandomArray = function(array) {
 		var length = Math.floor(Math.random() * (array.length - 1)) + 1;
@@ -21,7 +26,10 @@ var generator = (function() {
             // Check if element wasn't already picked
             var element = pickRandomElement(array);
             if (pickedElements.indexOf(element) === -1) {
-                pickedElements.push(element);
+                pickedElements.push({
+                    name: element,
+                    startDate: randomDate(new Date(2012, 0, 1), new Date())
+                });
             }
 		}
 

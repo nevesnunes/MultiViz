@@ -1,1181 +1,3662 @@
 [
     {
-        "id": "9a9baad0-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Nikaniki Conny",
-        "diseases": [
-            "Doença da Tiroide",
-            "Candidiase Oral",
-            "Febre Reumática"
-        ],
-        "medications": [
-            "Anti-depressor",
-            "Aspirina",
-            "Análgésicos"
-        ]
-    },
-    {
-        "id": "9a9df4c0-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Agnese Marashio",
-        "diseases": [
-            "Doença Venérea"
-        ],
-        "medications": [
-            "Esteróides",
-            "Broncodilatador",
-            "Anti-diabéticos"
-        ]
-    },
-    {
-        "id": "9a9e1bd0-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Charil Tila",
-        "diseases": [
-            "Doença da Tiroide",
-            "Enfarte Miocárdio",
-            "Febre Reumática",
-            "Osteoporose"
-        ],
-        "medications": [
-            "Análgésicos",
-            "Broncodilatador"
-        ]
-    },
-    {
-        "id": "9a9e1bd1-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Lila Raimes",
-        "diseases": [
-            "Doença Venérea",
-            "Doença Cardíaca Congénita",
-            "Glaucoma",
-            "Enfarte Miocárdio",
-            "Candidiase Oral"
-        ],
-        "medications": [
-            "Anti-diabéticos",
-            "Aspirina",
-            "Anti-ácidos"
-        ]
-    },
-    {
-        "id": "9a9e69f0-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Candace Belanger",
-        "diseases": [
-            "Gânglios aumentados de volume",
-            "Artrite",
-            "Osteoporose"
-        ],
-        "medications": [
-            "Anti-diabéticos",
-            "Anti-depressor",
-            "Análgésicos",
-            "Aspirina",
-            "Estatinas"
-        ]
-    },
-    {
-        "id": "9a9e9100-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Danice Ha",
-        "diseases": [
-            "Enfarte Miocárdio",
-            "Osteoporose",
-            "Candidiase Oral"
-        ],
-        "medications": [
-            "Aspirina",
-            "Análgésicos",
-            "Anti-diabéticos"
-        ]
-    },
-    {
-        "id": "9a9eb810-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Tedra Hilly",
-        "diseases": [
-            "Doença Cardíaca Congénita",
-            "Doença da Tiroide",
-            "Doença Venérea",
-            "Febre Reumática"
-        ],
-        "medications": [
-            "Estatinas"
-        ]
-    },
-    {
-        "id": "9a9edf20-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Barbaraanne Humble",
-        "diseases": [
-            "Doença da Tiroide",
-            "Febre Reumática"
-        ],
-        "medications": [
-            "Broncodilatador"
-        ]
-    },
-    {
-        "id": "9a9f0630-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Kamillah Ullund",
-        "diseases": [
-            "Febre Reumática",
-            "Candidiase Oral"
-        ],
-        "medications": [
-            "Anti-diabéticos",
-            "Anti-hipertensor",
-            "Anti-ácidos",
-            "Broncodilatador"
-        ]
-    },
-    {
-        "id": "9a9f5450-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Bridie Darmit",
-        "diseases": [
-            "Febre Reumática"
-        ],
-        "medications": [
-            "Esteróides",
-            "Estatinas",
-            "Anti-diabéticos"
-        ]
-    },
-    {
-        "id": "9a9f7b60-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Katrina Jaime",
-        "diseases": [
-            "Osteoporose",
-            "Enfarte Miocárdio"
-        ],
-        "medications": [
-            "Estatinas",
-            "Anti-depressor",
-            "Análgésicos"
-        ]
-    },
-    {
-        "id": "9a9f7b61-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Nert Dora",
-        "diseases": [
-            "Candidiase Oral",
-            "Artrite",
-            "Osteoporose",
-            "Doença Venérea",
-            "Doença Cardíaca Congénita",
-            "Doença da Tiroide"
-        ],
-        "medications": [
-            "Estatinas",
-            "Esteróides",
-            "Análgésicos",
-            "Anti-depressor"
-        ]
-    },
-    {
-        "id": "9a9fa270-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Magdaia Ananna",
-        "diseases": [
-            "Febre Reumática",
-            "Artrite",
-            "Doença Cardíaca Congénita",
-            "Gânglios aumentados de volume",
-            "Doença da Tiroide",
-            "Enfarte Miocárdio"
-        ],
-        "medications": [
-            "Aspirina"
-        ]
-    },
-    {
-        "id": "9a9ff090-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Sascha Joyann",
-        "diseases": [
-            "Candidiase Oral",
-            "Enfarte Miocárdio",
-            "Febre Reumática",
-            "Glaucoma"
-        ],
-        "medications": [
-            "Análgésicos"
-        ]
-    },
-    {
-        "id": "9aa017a0-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Min Welcher",
-        "diseases": [
-            "Doença Cardíaca Congénita",
-            "Doença da Tiroide",
-            "Enfarte Miocárdio",
-            "Artrite"
-        ],
-        "medications": [
-            "Análgésicos",
-            "Esteróides",
-            "Anti-depressor",
-            "Anti-hipertensor",
-            "Aspirina"
-        ]
-    },
-    {
-        "id": "9aa03eb0-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Bari Gilberta",
-        "diseases": [
-            "Glaucoma",
-            "Artrite",
-            "Enfarte Miocárdio",
-            "Doença Venérea",
-            "Doença da Tiroide",
-            "Osteoporose"
-        ],
-        "medications": [
-            "Anti-ácidos"
-        ]
-    },
-    {
-        "id": "9aa065c0-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Jeannine Scholem",
-        "diseases": [
-            "Doença Cardíaca Congénita"
-        ],
-        "medications": [
-            "Estatinas",
-            "Aspirina",
-            "Broncodilatador"
-        ]
-    },
-    {
-        "id": "9aa08cd0-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Evonne Reidar",
-        "diseases": [
-            "Doença da Tiroide"
-        ],
-        "medications": [
-            "Anti-depressor",
-            "Esteróides",
-            "Estatinas",
-            "Anti-ácidos",
-            "Aspirina"
-        ]
-    },
-    {
-        "id": "9aa0b3e0-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Kristi Ora",
-        "diseases": [
-            "Osteoporose",
-            "Gânglios aumentados de volume",
-            "Glaucoma",
-            "Doença da Tiroide"
-        ],
-        "medications": [
-            "Anti-hipertensor",
-            "Anti-ácidos",
-            "Análgésicos",
-            "Esteróides",
-            "Aspirina",
-            "Anti-depressor"
-        ]
-    },
-    {
-        "id": "9aa0daf0-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Jacynth Biagi",
-        "diseases": [
-            "Candidiase Oral",
-            "Doença da Tiroide",
-            "Febre Reumática"
-        ],
-        "medications": [
-            "Anti-hipertensor",
-            "Broncodilatador",
-            "Anti-ácidos",
-            "Estatinas"
-        ]
-    },
-    {
-        "id": "9aa0daf1-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Beulah Eva",
-        "diseases": [
-            "Enfarte Miocárdio",
-            "Gânglios aumentados de volume",
-            "Doença Venérea",
-            "Glaucoma"
-        ],
-        "medications": [
-            "Estatinas",
-            "Anti-hipertensor",
-            "Anti-depressor",
-            "Broncodilatador"
-        ]
-    },
-    {
-        "id": "9aa12910-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Regine Guendolen",
-        "diseases": [
-            "Febre Reumática",
-            "Enfarte Miocárdio",
-            "Doença da Tiroide",
-            "Doença Cardíaca Congénita",
-            "Artrite",
-            "Glaucoma"
-        ],
-        "medications": [
-            "Anti-diabéticos",
-            "Estatinas",
-            "Esteróides"
-        ]
-    },
-    {
-        "id": "9aa15020-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Aimil Fujio",
-        "diseases": [
-            "Doença Cardíaca Congénita",
-            "Doença da Tiroide",
-            "Enfarte Miocárdio",
-            "Gânglios aumentados de volume",
-            "Glaucoma",
-            "Artrite",
-            "Febre Reumática"
-        ],
-        "medications": [
-            "Estatinas",
-            "Análgésicos",
-            "Anti-depressor"
-        ]
-    },
-    {
-        "id": "9aa15021-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Kikelia Massey",
-        "diseases": [
-            "Doença da Tiroide",
-            "Glaucoma",
-            "Candidiase Oral",
-            "Artrite"
-        ],
-        "medications": [
-            "Anti-diabéticos"
-        ]
-    },
-    {
-        "id": "9aa15022-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Kristien Astri",
-        "diseases": [
-            "Enfarte Miocárdio",
-            "Osteoporose",
-            "Febre Reumática",
-            "Artrite",
-            "Doença Venérea",
-            "Doença da Tiroide"
-        ],
-        "medications": [
-            "Broncodilatador",
-            "Anti-diabéticos",
-            "Anti-depressor"
-        ]
-    },
-    {
-        "id": "9aa17730-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Mollie Rutan",
-        "diseases": [
-            "Gânglios aumentados de volume",
-            "Enfarte Miocárdio",
-            "Doença da Tiroide"
-        ],
-        "medications": [
-            "Anti-hipertensor"
-        ]
-    },
-    {
-        "id": "9aa17731-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Daveen Dixie",
-        "diseases": [
-            "Osteoporose",
-            "Febre Reumática",
-            "Doença da Tiroide",
-            "Glaucoma"
-        ],
-        "medications": [
-            "Estatinas",
-            "Análgésicos",
-            "Anti-hipertensor",
-            "Anti-depressor"
-        ]
-    },
-    {
-        "id": "9aa19e40-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Camille Oskar",
-        "diseases": [
-            "Doença Cardíaca Congénita",
-            "Doença da Tiroide",
-            "Enfarte Miocárdio"
-        ],
-        "medications": [
-            "Anti-diabéticos",
-            "Aspirina"
-        ]
-    },
-    {
-        "id": "9aa19e41-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Trudy Hillari",
-        "diseases": [
-            "Gânglios aumentados de volume",
-            "Candidiase Oral",
-            "Artrite"
-        ],
-        "medications": [
-            "Anti-hipertensor",
-            "Anti-diabéticos"
-        ]
-    },
-    {
-        "id": "9aa1c550-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Xena Daren",
-        "diseases": [
-            "Doença Venérea",
-            "Doença da Tiroide",
-            "Artrite",
-            "Gânglios aumentados de volume",
-            "Glaucoma"
-        ],
-        "medications": [
-            "Anti-hipertensor",
-            "Broncodilatador",
-            "Anti-ácidos"
-        ]
-    },
-    {
-        "id": "9aa1ec60-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Felita Liederman",
-        "diseases": [
-            "Gânglios aumentados de volume",
-            "Doença da Tiroide"
-        ],
-        "medications": [
-            "Análgésicos",
-            "Broncodilatador",
-            "Esteróides",
-            "Estatinas",
-            "Anti-hipertensor"
-        ]
-    },
-    {
-        "id": "9aa1ec61-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Seka Ishmul",
-        "diseases": [
-            "Febre Reumática",
-            "Candidiase Oral",
-            "Glaucoma",
-            "Doença Venérea",
-            "Artrite",
-            "Doença da Tiroide",
-            "Enfarte Miocárdio"
-        ],
-        "medications": [
-            "Anti-hipertensor",
-            "Esteróides",
-            "Aspirina",
-            "Anti-depressor",
-            "Análgésicos",
-            "Anti-ácidos"
-        ]
-    },
-    {
-        "id": "9aa21370-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Ernaline Cioban",
-        "diseases": [
-            "Artrite",
-            "Doença Venérea",
-            "Glaucoma",
-            "Osteoporose",
-            "Doença Cardíaca Congénita"
-        ],
-        "medications": [
-            "Esteróides",
-            "Anti-ácidos"
-        ]
-    },
-    {
-        "id": "9aa2d6c0-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Gilberte Ronni",
-        "diseases": [
-            "Osteoporose"
-        ],
-        "medications": [
-            "Anti-diabéticos",
-            "Anti-depressor",
-            "Broncodilatador"
-        ]
-    },
-    {
-        "id": "9aa2fdd0-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Hattie Bathesda",
-        "diseases": [
-            "Doença Cardíaca Congénita",
-            "Gânglios aumentados de volume",
-            "Doença da Tiroide",
-            "Febre Reumática",
-            "Candidiase Oral"
-        ],
-        "medications": [
-            "Anti-depressor",
-            "Anti-ácidos",
-            "Broncodilatador",
-            "Estatinas",
-            "Aspirina"
-        ]
-    },
-    {
-        "id": "9aa2fdd1-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Andreana Willard",
-        "diseases": [
-            "Enfarte Miocárdio"
-        ],
-        "medications": [
-            "Esteróides",
-            "Anti-diabéticos",
-            "Anti-hipertensor",
-            "Aspirina",
-            "Estatinas",
-            "Anti-ácidos"
-        ]
-    },
-    {
-        "id": "9aa2fdd2-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Hedda Jocelin",
-        "diseases": [
-            "Artrite",
-            "Gânglios aumentados de volume",
-            "Candidiase Oral"
-        ],
-        "medications": [
-            "Estatinas",
-            "Esteróides",
-            "Aspirina",
-            "Anti-ácidos",
-            "Broncodilatador"
-        ]
-    },
-    {
-        "id": "9aa324e0-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Marie Hasseman",
-        "diseases": [
-            "Doença da Tiroide",
-            "Osteoporose"
-        ],
-        "medications": [
-            "Anti-depressor",
-            "Estatinas",
-            "Broncodilatador",
-            "Aspirina"
-        ]
-    },
-    {
-        "id": "9aa324e1-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Dorella Ruelle",
-        "diseases": [
-            "Gânglios aumentados de volume",
-            "Enfarte Miocárdio",
-            "Glaucoma",
-            "Candidiase Oral",
-            "Doença Cardíaca Congénita"
-        ],
-        "medications": [
-            "Anti-depressor"
-        ]
-    },
-    {
-        "id": "9aa324e2-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Annadiana Dolph",
-        "diseases": [
-            "Candidiase Oral",
-            "Gânglios aumentados de volume"
-        ],
-        "medications": [
-            "Esteróides",
-            "Aspirina",
-            "Estatinas",
-            "Anti-depressor",
-            "Análgésicos",
-            "Anti-hipertensor",
-            "Anti-ácidos"
-        ]
-    },
-    {
-        "id": "9aa34bf0-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Georgetta Perlie",
-        "diseases": [
-            "Candidiase Oral",
-            "Artrite"
-        ],
-        "medications": [
-            "Broncodilatador",
-            "Anti-ácidos",
-            "Anti-hipertensor",
-            "Análgésicos"
-        ]
-    },
-    {
-        "id": "9aa34bf1-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Ema Banky",
-        "diseases": [
-            "Glaucoma",
-            "Doença Cardíaca Congénita",
-            "Candidiase Oral",
-            "Enfarte Miocárdio",
-            "Doença da Tiroide"
-        ],
-        "medications": [
-            "Estatinas",
-            "Análgésicos",
-            "Anti-hipertensor",
-            "Anti-diabéticos"
-        ]
-    },
-    {
-        "id": "9aa34bf2-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Hulda Berkie",
-        "diseases": [
-            "Enfarte Miocárdio"
-        ],
-        "medications": [
-            "Anti-depressor",
-            "Anti-diabéticos",
-            "Análgésicos",
-            "Estatinas"
-        ]
-    },
-    {
-        "id": "9aa34bf3-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Gerladina Chobot",
-        "diseases": [
-            "Doença Venérea"
-        ],
-        "medications": [
-            "Estatinas",
-            "Aspirina",
-            "Anti-hipertensor",
-            "Anti-diabéticos",
-            "Broncodilatador"
-        ]
-    },
-    {
-        "id": "9aa34bf4-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Roselle Enrichetta",
-        "diseases": [
-            "Enfarte Miocárdio",
-            "Febre Reumática",
-            "Doença da Tiroide",
-            "Osteoporose",
-            "Artrite"
-        ],
-        "medications": [
-            "Anti-depressor",
-            "Anti-hipertensor",
-            "Anti-diabéticos",
-            "Esteróides",
-            "Análgésicos"
-        ]
-    },
-    {
-        "id": "9aa37300-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Theadora Delacourt",
-        "diseases": [
-            "Doença Venérea"
-        ],
-        "medications": [
-            "Análgésicos"
-        ]
-    },
-    {
-        "id": "9aa37301-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Jannelle Stacey",
-        "diseases": [
-            "Enfarte Miocárdio",
-            "Glaucoma",
-            "Gânglios aumentados de volume"
-        ],
-        "medications": [
-            "Broncodilatador",
-            "Anti-hipertensor",
-            "Aspirina",
-            "Anti-diabéticos",
-            "Análgésicos"
-        ]
-    },
-    {
-        "id": "9aa37302-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Phebe Packton",
-        "diseases": [
-            "Doença Cardíaca Congénita",
-            "Doença da Tiroide"
-        ],
-        "medications": [
-            "Anti-depressor",
-            "Análgésicos"
-        ]
-    },
-    {
-        "id": "9aa37303-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Gisele Rainie",
-        "diseases": [
-            "Artrite",
-            "Enfarte Miocárdio",
-            "Doença Venérea",
-            "Glaucoma",
-            "Doença da Tiroide",
-            "Doença Cardíaca Congénita",
-            "Candidiase Oral"
-        ],
-        "medications": [
-            "Broncodilatador",
-            "Estatinas",
-            "Anti-depressor"
-        ]
-    },
-    {
-        "id": "9aa39a10-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Corly Hance",
-        "diseases": [
-            "Gânglios aumentados de volume",
-            "Febre Reumática",
-            "Doença da Tiroide",
-            "Glaucoma",
-            "Enfarte Miocárdio"
-        ],
-        "medications": [
-            "Estatinas",
-            "Anti-depressor"
-        ]
-    },
-    {
-        "id": "9aa39a11-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Jasmin Boigie",
-        "diseases": [
-            "Glaucoma",
-            "Gânglios aumentados de volume"
-        ],
-        "medications": [
-            "Anti-hipertensor",
-            "Estatinas",
-            "Broncodilatador"
-        ]
-    },
-    {
-        "id": "9aa39a12-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Opaline Matthew",
-        "diseases": [
-            "Gânglios aumentados de volume",
-            "Osteoporose",
-            "Febre Reumática",
-            "Enfarte Miocárdio",
-            "Doença da Tiroide",
-            "Artrite"
-        ],
-        "medications": [
-            "Esteróides",
-            "Broncodilatador",
-            "Anti-hipertensor",
-            "Aspirina"
-        ]
-    },
-    {
-        "id": "9aa39a13-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Randi Mozelle",
-        "diseases": [
-            "Candidiase Oral",
-            "Doença Cardíaca Congénita",
-            "Artrite",
-            "Doença Venérea",
-            "Gânglios aumentados de volume",
-            "Enfarte Miocárdio"
-        ],
-        "medications": [
-            "Anti-hipertensor",
-            "Análgésicos",
-            "Anti-ácidos"
-        ]
-    },
-    {
-        "id": "9aa39a14-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Dollie Celin",
-        "diseases": [
-            "Enfarte Miocárdio"
-        ],
-        "medications": [
-            "Aspirina",
-            "Anti-hipertensor",
-            "Anti-ácidos"
-        ]
-    },
-    {
-        "id": "9aa3c120-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Lilla Marciano",
-        "diseases": [
-            "Doença Venérea",
-            "Candidiase Oral"
-        ],
-        "medications": [
-            "Análgésicos",
-            "Aspirina",
-            "Broncodilatador"
-        ]
-    },
-    {
-        "id": "9aa3c121-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Manda Rap",
-        "diseases": [
-            "Febre Reumática",
-            "Doença Cardíaca Congénita",
-            "Doença da Tiroide"
-        ],
-        "medications": [
-            "Broncodilatador",
-            "Esteróides",
-            "Anti-hipertensor"
-        ]
-    },
-    {
-        "id": "9aa3e830-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Dianna Publius",
-        "diseases": [
-            "Candidiase Oral",
-            "Artrite",
-            "Febre Reumática"
-        ],
-        "medications": [
-            "Broncodilatador",
-            "Anti-hipertensor",
-            "Análgésicos"
-        ]
-    },
-    {
-        "id": "9aa3e831-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Edeline Johnnie",
-        "diseases": [
-            "Artrite",
-            "Enfarte Miocárdio"
-        ],
-        "medications": [
-            "Anti-diabéticos"
-        ]
-    },
-    {
-        "id": "9aa3e832-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Ag Willamina",
-        "diseases": [
-            "Enfarte Miocárdio",
-            "Candidiase Oral",
-            "Gânglios aumentados de volume",
-            "Artrite"
-        ],
-        "medications": [
-            "Anti-hipertensor"
-        ]
-    },
-    {
-        "id": "9aa3e833-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Wenda Townshend",
-        "diseases": [
-            "Doença Cardíaca Congénita"
-        ],
-        "medications": [
-            "Anti-depressor",
-            "Análgésicos",
-            "Esteróides",
-            "Aspirina",
-            "Broncodilatador"
-        ]
-    },
-    {
-        "id": "9aa3e834-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Nikolia Sulamith",
-        "diseases": [
-            "Osteoporose"
-        ],
-        "medications": [
-            "Broncodilatador"
-        ]
-    },
-    {
-        "id": "9aa40f40-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Freda Purpura",
-        "diseases": [
-            "Gânglios aumentados de volume",
-            "Enfarte Miocárdio",
-            "Doença Cardíaca Congénita"
-        ],
-        "medications": [
-            "Anti-diabéticos"
-        ]
-    },
-    {
-        "id": "9aa40f41-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Harlie Dever",
-        "diseases": [
-            "Febre Reumática",
-            "Artrite",
-            "Doença da Tiroide",
-            "Glaucoma",
-            "Doença Cardíaca Congénita"
-        ],
-        "medications": [
-            "Anti-diabéticos",
-            "Broncodilatador"
-        ]
-    },
-    {
-        "id": "9aa40f42-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Ardella Atalayah",
-        "diseases": [
-            "Artrite",
-            "Osteoporose",
-            "Candidiase Oral",
-            "Doença Cardíaca Congénita",
-            "Enfarte Miocárdio"
-        ],
-        "medications": [
-            "Anti-depressor",
-            "Anti-diabéticos",
-            "Análgésicos"
-        ]
-    },
-    {
-        "id": "9aa40f43-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Christean Candy",
-        "diseases": [
-            "Candidiase Oral",
-            "Glaucoma",
-            "Osteoporose",
-            "Doença da Tiroide",
-            "Doença Venérea",
-            "Febre Reumática",
-            "Artrite"
-        ],
-        "medications": [
-            "Anti-diabéticos"
-        ]
-    },
-    {
-        "id": "9aa40f44-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Asia Shela",
-        "diseases": [
-            "Candidiase Oral",
-            "Febre Reumática",
-            "Gânglios aumentados de volume",
-            "Glaucoma"
-        ],
-        "medications": [
-            "Anti-diabéticos"
-        ]
-    },
-    {
-        "id": "9aa43650-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Lynsey Dodwell",
-        "diseases": [
-            "Artrite",
-            "Doença Venérea"
-        ],
-        "medications": [
-            "Esteróides"
-        ]
-    },
-    {
-        "id": "9aa43651-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Margarethe Ledah",
-        "diseases": [
-            "Artrite",
-            "Enfarte Miocárdio",
-            "Osteoporose",
-            "Candidiase Oral",
-            "Febre Reumática",
-            "Doença da Tiroide",
-            "Doença Cardíaca Congénita"
-        ],
-        "medications": [
-            "Análgésicos",
-            "Estatinas",
-            "Anti-ácidos"
-        ]
-    },
-    {
-        "id": "9aa45d60-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Ginger Tallbott",
-        "diseases": [
-            "Candidiase Oral",
-            "Doença da Tiroide",
-            "Doença Venérea",
-            "Enfarte Miocárdio",
-            "Artrite"
-        ],
-        "medications": [
-            "Esteróides",
-            "Anti-depressor",
-            "Anti-ácidos",
-            "Aspirina",
-            "Análgésicos"
-        ]
-    },
-    {
-        "id": "9aa45d61-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Demetria Remde",
-        "diseases": [
-            "Gânglios aumentados de volume",
-            "Candidiase Oral",
-            "Doença Cardíaca Congénita",
-            "Osteoporose",
-            "Glaucoma",
-            "Artrite"
-        ],
-        "medications": [
-            "Análgésicos",
-            "Estatinas",
-            "Anti-depressor",
-            "Anti-diabéticos",
-            "Esteróides",
-            "Anti-hipertensor"
-        ]
-    },
-    {
-        "id": "9aa45d62-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Jennifer Treva",
-        "diseases": [
-            "Doença Cardíaca Congénita",
-            "Febre Reumática",
-            "Gânglios aumentados de volume"
-        ],
-        "medications": [
-            "Esteróides"
-        ]
-    },
-    {
-        "id": "9aa45d63-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Reina Kiah",
-        "diseases": [
-            "Doença Cardíaca Congénita"
-        ],
-        "medications": [
-            "Anti-diabéticos",
-            "Análgésicos",
-            "Esteróides"
-        ]
-    },
-    {
-        "id": "9aa48470-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Deidre Agata",
-        "diseases": [
-            "Doença Cardíaca Congénita",
-            "Candidiase Oral",
-            "Gânglios aumentados de volume",
-            "Doença da Tiroide"
-        ],
-        "medications": [
-            "Esteróides",
-            "Aspirina",
-            "Estatinas"
-        ]
-    },
-    {
-        "id": "9aa48471-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Aridatha Janna",
-        "diseases": [
-            "Febre Reumática",
-            "Glaucoma",
-            "Candidiase Oral"
-        ],
-        "medications": [
-            "Anti-depressor",
-            "Estatinas",
-            "Broncodilatador"
-        ]
-    },
-    {
-        "id": "9aa48472-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Adey Frisse",
-        "diseases": [
-            "Enfarte Miocárdio",
-            "Doença Cardíaca Congénita",
-            "Doença da Tiroide"
-        ],
-        "medications": [
-            "Anti-ácidos",
-            "Estatinas",
-            "Anti-hipertensor",
-            "Análgésicos"
-        ]
-    },
-    {
-        "id": "9aa48473-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Fanchon Kenneth",
-        "diseases": [
-            "Doença Venérea",
-            "Artrite",
-            "Doença da Tiroide",
-            "Febre Reumática",
-            "Glaucoma",
-            "Doença Cardíaca Congénita",
-            "Gânglios aumentados de volume"
-        ],
-        "medications": [
-            "Anti-diabéticos",
-            "Análgésicos",
-            "Aspirina"
-        ]
-    },
-    {
-        "id": "9aa4ab80-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Jillene Helbon",
-        "diseases": [
-            "Doença da Tiroide"
-        ],
-        "medications": [
-            "Anti-diabéticos",
-            "Estatinas",
-            "Anti-hipertensor",
-            "Anti-ácidos",
-            "Aspirina"
-        ]
-    },
-    {
-        "id": "9aa4ab81-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Jada Engel",
-        "diseases": [
-            "Osteoporose",
-            "Doença Venérea",
-            "Artrite",
-            "Doença Cardíaca Congénita",
-            "Enfarte Miocárdio",
-            "Glaucoma"
-        ],
-        "medications": [
-            "Anti-diabéticos",
-            "Broncodilatador",
-            "Anti-depressor"
-        ]
-    },
-    {
-        "id": "9aa4ab82-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Berenice Kelleher",
-        "diseases": [
-            "Doença Venérea",
-            "Artrite"
-        ],
-        "medications": [
-            "Análgésicos",
-            "Broncodilatador",
-            "Estatinas"
-        ]
-    },
-    {
-        "id": "9aa4ab83-83d3-11e6-8695-a52f4fd66a71",
-        "name": "Korie Smart",
-        "diseases": [
-            "Candidiase Oral",
-            "Enfarte Miocárdio",
-            "Febre Reumática",
-            "Artrite",
-            "Glaucoma",
-            "Doença da Tiroide"
-        ],
-        "medications": [
-            "Anti-depressor",
-            "Esteróides",
-            "Anti-diabéticos",
-            "Aspirina",
-            "Broncodilatador",
-            "Anti-ácidos"
+        "id": "69ec4270-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Ardeen Chick",
+        "diseases": [
+            {
+                "name": "Doença Venérea",
+                "startDate": "2012-10-03T20:24:57.513Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Broncodilatador",
+                "startDate": "2014-02-17T19:57:03.537Z"
+            },
+            {
+                "name": "Aspirina",
+                "startDate": "2014-09-24T05:12:58.382Z"
+            },
+            {
+                "name": "Anti-depressor",
+                "startDate": "2012-02-13T02:50:11.517Z"
+            },
+            {
+                "name": "Anti-hipertensor",
+                "startDate": "2015-05-16T19:36:22.511Z"
+            }
+        ]
+    },
+    {
+        "id": "69ec6980-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Inesita Phebe",
+        "diseases": [
+            {
+                "name": "Doença da Tiroide",
+                "startDate": "2015-11-06T05:25:35.787Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Estatinas",
+                "startDate": "2014-03-06T13:24:49.933Z"
+            },
+            {
+                "name": "Broncodilatador",
+                "startDate": "2013-06-08T09:25:36.814Z"
+            },
+            {
+                "name": "Anti-diabéticos",
+                "startDate": "2013-10-20T01:59:14.963Z"
+            },
+            {
+                "name": "Aspirina",
+                "startDate": "2015-03-29T07:05:22.683Z"
+            }
+        ]
+    },
+    {
+        "id": "69ec9090-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Donnie Noella",
+        "diseases": [
+            {
+                "name": "Doença da Tiroide",
+                "startDate": "2014-06-21T19:46:49.064Z"
+            },
+            {
+                "name": "Enfarte Miocárdio",
+                "startDate": "2012-04-25T03:00:35.629Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Anti-hipertensor",
+                "startDate": "2012-03-05T06:43:54.685Z"
+            },
+            {
+                "name": "Anti-diabéticos",
+                "startDate": "2012-06-03T19:42:17.778Z"
+            },
+            {
+                "name": "Broncodilatador",
+                "startDate": "2016-01-06T10:31:12.300Z"
+            },
+            {
+                "name": "Broncodilatador",
+                "startDate": "2014-07-20T05:32:00.579Z"
+            },
+            {
+                "name": "Anti-diabéticos",
+                "startDate": "2012-02-23T05:40:55.350Z"
+            },
+            {
+                "name": "Aspirina",
+                "startDate": "2012-10-24T00:28:18.553Z"
+            }
+        ]
+    },
+    {
+        "id": "69ec9091-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Minnnie Louisa",
+        "diseases": [
+            {
+                "name": "Doença Venérea",
+                "startDate": "2013-04-08T02:18:30.388Z"
+            },
+            {
+                "name": "Candidiase Oral",
+                "startDate": "2013-11-01T23:11:44.538Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Estatinas",
+                "startDate": "2016-09-06T18:08:20.582Z"
+            }
+        ]
+    },
+    {
+        "id": "69ec9092-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Sibilla Diley",
+        "diseases": [
+            {
+                "name": "Febre Reumática",
+                "startDate": "2016-01-31T15:19:53.407Z"
+            },
+            {
+                "name": "Gânglios aumentados de volume",
+                "startDate": "2016-02-09T05:43:20.255Z"
+            },
+            {
+                "name": "Doença Venérea",
+                "startDate": "2012-01-12T09:13:50.985Z"
+            },
+            {
+                "name": "Gânglios aumentados de volume",
+                "startDate": "2015-09-08T20:32:10.605Z"
+            },
+            {
+                "name": "Doença da Tiroide",
+                "startDate": "2014-04-22T22:27:36.221Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Estatinas",
+                "startDate": "2013-06-13T07:28:01.309Z"
+            },
+            {
+                "name": "Anti-hipertensor",
+                "startDate": "2012-07-02T15:49:11.415Z"
+            },
+            {
+                "name": "Estatinas",
+                "startDate": "2013-08-02T21:11:25.168Z"
+            },
+            {
+                "name": "Esteróides",
+                "startDate": "2013-07-19T18:55:57.328Z"
+            },
+            {
+                "name": "Broncodilatador",
+                "startDate": "2015-07-01T05:19:44.046Z"
+            }
+        ]
+    },
+    {
+        "id": "69ec9093-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Martguerita Arta",
+        "diseases": [
+            {
+                "name": "Enfarte Miocárdio",
+                "startDate": "2013-03-01T15:25:04.959Z"
+            },
+            {
+                "name": "Artrite",
+                "startDate": "2013-01-08T22:05:39.983Z"
+            },
+            {
+                "name": "Osteoporose",
+                "startDate": "2012-09-17T05:39:14.090Z"
+            },
+            {
+                "name": "Enfarte Miocárdio",
+                "startDate": "2013-01-24T23:49:25.110Z"
+            },
+            {
+                "name": "Doença da Tiroide",
+                "startDate": "2014-01-10T06:22:52.012Z"
+            },
+            {
+                "name": "Osteoporose",
+                "startDate": "2014-12-06T01:03:55.662Z"
+            },
+            {
+                "name": "Artrite",
+                "startDate": "2014-06-15T12:44:54.093Z"
+            },
+            {
+                "name": "Artrite",
+                "startDate": "2016-09-24T12:37:23.075Z"
+            },
+            {
+                "name": "Osteoporose",
+                "startDate": "2012-09-23T12:14:41.416Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Anti-ácidos",
+                "startDate": "2016-07-04T22:08:01.008Z"
+            },
+            {
+                "name": "Anti-diabéticos",
+                "startDate": "2013-06-15T09:53:47.429Z"
+            },
+            {
+                "name": "Aspirina",
+                "startDate": "2012-01-20T20:47:09.809Z"
+            },
+            {
+                "name": "Broncodilatador",
+                "startDate": "2016-05-13T21:12:48.722Z"
+            },
+            {
+                "name": "Anti-depressor",
+                "startDate": "2012-01-02T20:19:52.516Z"
+            },
+            {
+                "name": "Anti-hipertensor",
+                "startDate": "2013-10-20T20:11:46.932Z"
+            },
+            {
+                "name": "Anti-ácidos",
+                "startDate": "2014-07-08T02:34:12.295Z"
+            },
+            {
+                "name": "Anti-ácidos",
+                "startDate": "2014-04-17T19:45:16.336Z"
+            }
+        ]
+    },
+    {
+        "id": "69ec9094-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Karen Verlee",
+        "diseases": [
+            {
+                "name": "Doença Cardíaca Congénita",
+                "startDate": "2013-11-01T13:04:00.553Z"
+            },
+            {
+                "name": "Febre Reumática",
+                "startDate": "2013-10-31T07:48:02.912Z"
+            },
+            {
+                "name": "Glaucoma",
+                "startDate": "2014-08-14T02:00:23.003Z"
+            },
+            {
+                "name": "Glaucoma",
+                "startDate": "2012-04-03T23:45:27.754Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Anti-depressor",
+                "startDate": "2014-05-05T23:15:11.754Z"
+            },
+            {
+                "name": "Estatinas",
+                "startDate": "2015-05-23T11:48:14.324Z"
+            },
+            {
+                "name": "Broncodilatador",
+                "startDate": "2014-08-20T04:31:30.679Z"
+            },
+            {
+                "name": "Anti-depressor",
+                "startDate": "2015-12-30T01:11:19.014Z"
+            }
+        ]
+    },
+    {
+        "id": "69ec9095-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Carlie Gabbert",
+        "diseases": [
+            {
+                "name": "Osteoporose",
+                "startDate": "2015-07-16T02:44:35.337Z"
+            },
+            {
+                "name": "Artrite",
+                "startDate": "2015-10-06T18:09:10.532Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Anti-diabéticos",
+                "startDate": "2012-08-04T21:14:19.765Z"
+            },
+            {
+                "name": "Análgésicos",
+                "startDate": "2015-04-04T09:45:28.671Z"
+            },
+            {
+                "name": "Aspirina",
+                "startDate": "2013-10-19T18:01:56.072Z"
+            },
+            {
+                "name": "Anti-ácidos",
+                "startDate": "2016-04-30T16:00:12.572Z"
+            },
+            {
+                "name": "Aspirina",
+                "startDate": "2014-08-19T01:09:21.015Z"
+            },
+            {
+                "name": "Anti-diabéticos",
+                "startDate": "2014-11-04T00:06:22.439Z"
+            },
+            {
+                "name": "Anti-depressor",
+                "startDate": "2013-11-24T11:20:28.308Z"
+            },
+            {
+                "name": "Anti-ácidos",
+                "startDate": "2012-01-17T14:41:19.175Z"
+            }
+        ]
+    },
+    {
+        "id": "69ec9096-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Casey Kaiulani",
+        "diseases": [
+            {
+                "name": "Glaucoma",
+                "startDate": "2013-03-07T02:54:45.182Z"
+            },
+            {
+                "name": "Artrite",
+                "startDate": "2013-06-25T12:07:17.565Z"
+            },
+            {
+                "name": "Artrite",
+                "startDate": "2016-01-16T01:56:32.041Z"
+            },
+            {
+                "name": "Enfarte Miocárdio",
+                "startDate": "2016-03-04T09:02:21.559Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Esteróides",
+                "startDate": "2014-01-14T08:23:11.688Z"
+            },
+            {
+                "name": "Análgésicos",
+                "startDate": "2013-07-31T23:19:42.781Z"
+            },
+            {
+                "name": "Anti-depressor",
+                "startDate": "2015-01-30T18:07:26.765Z"
+            },
+            {
+                "name": "Anti-ácidos",
+                "startDate": "2013-09-13T21:00:55.921Z"
+            },
+            {
+                "name": "Anti-ácidos",
+                "startDate": "2016-03-19T16:36:21.495Z"
+            },
+            {
+                "name": "Anti-ácidos",
+                "startDate": "2014-02-04T07:40:53.498Z"
+            },
+            {
+                "name": "Anti-hipertensor",
+                "startDate": "2014-11-14T01:41:50.038Z"
+            }
+        ]
+    },
+    {
+        "id": "69ec9097-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Tani Karol",
+        "diseases": [
+            {
+                "name": "Artrite",
+                "startDate": "2016-04-12T23:21:15.476Z"
+            },
+            {
+                "name": "Doença Venérea",
+                "startDate": "2014-01-12T18:00:50.805Z"
+            },
+            {
+                "name": "Glaucoma",
+                "startDate": "2013-05-12T17:45:08.388Z"
+            },
+            {
+                "name": "Candidiase Oral",
+                "startDate": "2012-10-25T08:13:50.494Z"
+            },
+            {
+                "name": "Doença da Tiroide",
+                "startDate": "2013-10-20T18:12:40.750Z"
+            },
+            {
+                "name": "Febre Reumática",
+                "startDate": "2012-11-06T13:22:16.927Z"
+            },
+            {
+                "name": "Glaucoma",
+                "startDate": "2013-03-02T20:21:19.280Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Broncodilatador",
+                "startDate": "2012-02-10T10:55:18.796Z"
+            },
+            {
+                "name": "Estatinas",
+                "startDate": "2015-12-07T18:38:06.752Z"
+            },
+            {
+                "name": "Anti-hipertensor",
+                "startDate": "2013-10-27T13:31:40.019Z"
+            },
+            {
+                "name": "Anti-diabéticos",
+                "startDate": "2016-03-24T21:12:05.268Z"
+            }
+        ]
+    },
+    {
+        "id": "69ec9098-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Madelin Teddy",
+        "diseases": [
+            {
+                "name": "Gânglios aumentados de volume",
+                "startDate": "2015-05-09T03:01:18.774Z"
+            },
+            {
+                "name": "Enfarte Miocárdio",
+                "startDate": "2012-03-08T02:02:36.225Z"
+            },
+            {
+                "name": "Osteoporose",
+                "startDate": "2012-10-12T15:41:38.274Z"
+            },
+            {
+                "name": "Doença Venérea",
+                "startDate": "2014-02-10T03:19:16.050Z"
+            },
+            {
+                "name": "Febre Reumática",
+                "startDate": "2013-03-05T09:31:20.126Z"
+            },
+            {
+                "name": "Candidiase Oral",
+                "startDate": "2012-04-26T00:57:55.311Z"
+            },
+            {
+                "name": "Glaucoma",
+                "startDate": "2012-12-04T21:33:29.424Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Anti-hipertensor",
+                "startDate": "2012-04-08T07:00:54.263Z"
+            }
+        ]
+    },
+    {
+        "id": "69ec9099-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Wilma Ernald",
+        "diseases": [
+            {
+                "name": "Artrite",
+                "startDate": "2015-08-16T22:18:03.799Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Estatinas",
+                "startDate": "2016-01-28T12:25:58.775Z"
+            },
+            {
+                "name": "Anti-depressor",
+                "startDate": "2016-02-13T18:46:17.147Z"
+            },
+            {
+                "name": "Anti-diabéticos",
+                "startDate": "2012-08-18T06:27:02.004Z"
+            }
+        ]
+    },
+    {
+        "id": "69ecb7a0-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Chere MacCarthy",
+        "diseases": [
+            {
+                "name": "Febre Reumática",
+                "startDate": "2015-06-06T18:24:20.413Z"
+            },
+            {
+                "name": "Artrite",
+                "startDate": "2012-06-25T10:21:11.752Z"
+            },
+            {
+                "name": "Artrite",
+                "startDate": "2015-06-14T11:22:34.803Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Anti-diabéticos",
+                "startDate": "2015-12-06T15:21:11.290Z"
+            },
+            {
+                "name": "Broncodilatador",
+                "startDate": "2015-03-31T02:37:32.265Z"
+            },
+            {
+                "name": "Aspirina",
+                "startDate": "2012-06-08T04:48:49.071Z"
+            },
+            {
+                "name": "Esteróides",
+                "startDate": "2016-01-08T18:46:37.464Z"
+            },
+            {
+                "name": "Aspirina",
+                "startDate": "2013-11-25T18:55:38.495Z"
+            },
+            {
+                "name": "Anti-ácidos",
+                "startDate": "2016-02-12T14:51:53.854Z"
+            },
+            {
+                "name": "Anti-diabéticos",
+                "startDate": "2014-09-29T11:34:24.350Z"
+            },
+            {
+                "name": "Broncodilatador",
+                "startDate": "2013-11-11T19:05:08.697Z"
+            }
+        ]
+    },
+    {
+        "id": "69ecb7a1-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Flss Chenay",
+        "diseases": [
+            {
+                "name": "Enfarte Miocárdio",
+                "startDate": "2016-02-25T09:53:28.224Z"
+            },
+            {
+                "name": "Gânglios aumentados de volume",
+                "startDate": "2015-11-11T23:37:39.486Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Anti-ácidos",
+                "startDate": "2015-05-08T18:34:14.931Z"
+            },
+            {
+                "name": "Esteróides",
+                "startDate": "2014-11-16T05:37:08.631Z"
+            },
+            {
+                "name": "Análgésicos",
+                "startDate": "2014-07-07T13:34:29.622Z"
+            },
+            {
+                "name": "Esteróides",
+                "startDate": "2015-10-31T17:16:13.923Z"
+            },
+            {
+                "name": "Broncodilatador",
+                "startDate": "2016-04-25T02:26:26.414Z"
+            }
+        ]
+    },
+    {
+        "id": "69ecb7a2-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Mickie Kelwen",
+        "diseases": [
+            {
+                "name": "Artrite",
+                "startDate": "2016-01-19T06:43:39.179Z"
+            },
+            {
+                "name": "Glaucoma",
+                "startDate": "2015-07-26T03:03:11.566Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Anti-hipertensor",
+                "startDate": "2016-07-26T10:40:09.301Z"
+            },
+            {
+                "name": "Análgésicos",
+                "startDate": "2015-10-01T18:06:32.776Z"
+            },
+            {
+                "name": "Aspirina",
+                "startDate": "2013-08-31T16:58:10.526Z"
+            }
+        ]
+    },
+    {
+        "id": "69ecb7a3-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Jemmy Ammon",
+        "diseases": [
+            {
+                "name": "Glaucoma",
+                "startDate": "2016-09-11T03:58:19.474Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Análgésicos",
+                "startDate": "2014-09-27T17:06:05.476Z"
+            },
+            {
+                "name": "Aspirina",
+                "startDate": "2015-01-29T20:22:12.329Z"
+            },
+            {
+                "name": "Broncodilatador",
+                "startDate": "2014-10-08T02:14:51.500Z"
+            },
+            {
+                "name": "Aspirina",
+                "startDate": "2014-04-18T15:59:58.671Z"
+            },
+            {
+                "name": "Estatinas",
+                "startDate": "2012-09-16T21:33:24.004Z"
+            },
+            {
+                "name": "Aspirina",
+                "startDate": "2012-05-28T01:38:52.114Z"
+            },
+            {
+                "name": "Aspirina",
+                "startDate": "2012-10-28T18:21:08.987Z"
+            },
+            {
+                "name": "Anti-depressor",
+                "startDate": "2012-10-06T14:17:25.524Z"
+            }
+        ]
+    },
+    {
+        "id": "69ecdeb0-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Zarla Lula",
+        "diseases": [
+            {
+                "name": "Osteoporose",
+                "startDate": "2014-05-01T06:36:11.921Z"
+            },
+            {
+                "name": "Gânglios aumentados de volume",
+                "startDate": "2012-06-30T20:36:07.628Z"
+            },
+            {
+                "name": "Osteoporose",
+                "startDate": "2013-08-31T13:47:57.112Z"
+            },
+            {
+                "name": "Candidiase Oral",
+                "startDate": "2016-05-28T17:00:45.447Z"
+            },
+            {
+                "name": "Osteoporose",
+                "startDate": "2015-07-11T15:07:41.569Z"
+            },
+            {
+                "name": "Doença Cardíaca Congénita",
+                "startDate": "2012-08-07T08:53:03.603Z"
+            },
+            {
+                "name": "Gânglios aumentados de volume",
+                "startDate": "2015-07-21T07:20:42.922Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Aspirina",
+                "startDate": "2014-03-23T00:11:00.791Z"
+            },
+            {
+                "name": "Anti-diabéticos",
+                "startDate": "2013-12-11T15:58:19.377Z"
+            },
+            {
+                "name": "Anti-diabéticos",
+                "startDate": "2016-01-25T08:56:06.021Z"
+            },
+            {
+                "name": "Estatinas",
+                "startDate": "2012-08-07T00:17:56.064Z"
+            },
+            {
+                "name": "Esteróides",
+                "startDate": "2012-01-02T05:00:02.818Z"
+            },
+            {
+                "name": "Anti-diabéticos",
+                "startDate": "2013-03-13T01:27:51.321Z"
+            },
+            {
+                "name": "Esteróides",
+                "startDate": "2016-06-08T03:01:07.673Z"
+            },
+            {
+                "name": "Estatinas",
+                "startDate": "2014-11-29T17:44:58.964Z"
+            }
+        ]
+    },
+    {
+        "id": "69ecdeb1-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Jane Burtis",
+        "diseases": [
+            {
+                "name": "Gânglios aumentados de volume",
+                "startDate": "2013-03-03T09:41:23.983Z"
+            },
+            {
+                "name": "Doença Cardíaca Congénita",
+                "startDate": "2012-07-20T18:18:01.999Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Anti-diabéticos",
+                "startDate": "2016-05-14T10:09:17.084Z"
+            },
+            {
+                "name": "Anti-depressor",
+                "startDate": "2013-07-09T04:19:21.108Z"
+            }
+        ]
+    },
+    {
+        "id": "69ecdeb2-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Frayda Chiou",
+        "diseases": [
+            {
+                "name": "Febre Reumática",
+                "startDate": "2015-06-21T20:38:55.814Z"
+            },
+            {
+                "name": "Candidiase Oral",
+                "startDate": "2016-05-30T22:41:48.774Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Análgésicos",
+                "startDate": "2014-04-30T12:07:15.158Z"
+            },
+            {
+                "name": "Análgésicos",
+                "startDate": "2016-03-04T02:27:20.183Z"
+            },
+            {
+                "name": "Broncodilatador",
+                "startDate": "2012-04-11T21:15:25.834Z"
+            }
+        ]
+    },
+    {
+        "id": "69ecdeb3-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Hetty Tallulah",
+        "diseases": [
+            {
+                "name": "Doença Venérea",
+                "startDate": "2012-11-12T22:59:18.048Z"
+            },
+            {
+                "name": "Doença da Tiroide",
+                "startDate": "2015-08-23T00:22:11.665Z"
+            },
+            {
+                "name": "Febre Reumática",
+                "startDate": "2013-12-12T21:28:10.734Z"
+            },
+            {
+                "name": "Enfarte Miocárdio",
+                "startDate": "2014-02-10T08:45:28.429Z"
+            },
+            {
+                "name": "Candidiase Oral",
+                "startDate": "2016-02-19T01:22:36.288Z"
+            },
+            {
+                "name": "Febre Reumática",
+                "startDate": "2015-07-04T02:06:37.126Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Anti-depressor",
+                "startDate": "2013-04-25T10:43:44.913Z"
+            },
+            {
+                "name": "Aspirina",
+                "startDate": "2012-12-05T16:40:17.828Z"
+            },
+            {
+                "name": "Anti-diabéticos",
+                "startDate": "2012-10-08T03:27:01.288Z"
+            },
+            {
+                "name": "Anti-depressor",
+                "startDate": "2013-06-20T09:59:58.749Z"
+            },
+            {
+                "name": "Anti-hipertensor",
+                "startDate": "2015-06-27T23:01:24.845Z"
+            }
+        ]
+    },
+    {
+        "id": "69ecdeb4-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Katha Restivo",
+        "diseases": [
+            {
+                "name": "Glaucoma",
+                "startDate": "2015-05-07T02:38:21.938Z"
+            },
+            {
+                "name": "Gânglios aumentados de volume",
+                "startDate": "2015-01-25T23:22:24.276Z"
+            },
+            {
+                "name": "Febre Reumática",
+                "startDate": "2014-10-12T12:12:03.820Z"
+            },
+            {
+                "name": "Glaucoma",
+                "startDate": "2012-11-22T20:28:48.736Z"
+            },
+            {
+                "name": "Febre Reumática",
+                "startDate": "2013-09-17T12:06:12.558Z"
+            },
+            {
+                "name": "Doença da Tiroide",
+                "startDate": "2014-09-16T22:46:49.402Z"
+            },
+            {
+                "name": "Doença Venérea",
+                "startDate": "2014-04-27T06:48:24.329Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Anti-depressor",
+                "startDate": "2014-08-10T04:18:47.676Z"
+            }
+        ]
+    },
+    {
+        "id": "69ecdeb5-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Alene Krystyna",
+        "diseases": [
+            {
+                "name": "Candidiase Oral",
+                "startDate": "2016-09-01T00:17:19.853Z"
+            },
+            {
+                "name": "Glaucoma",
+                "startDate": "2013-06-13T16:44:18.875Z"
+            },
+            {
+                "name": "Artrite",
+                "startDate": "2016-03-06T02:45:02.679Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Aspirina",
+                "startDate": "2013-02-17T10:22:21.064Z"
+            },
+            {
+                "name": "Análgésicos",
+                "startDate": "2015-06-10T22:56:01.989Z"
+            },
+            {
+                "name": "Estatinas",
+                "startDate": "2012-02-16T11:42:49.457Z"
+            },
+            {
+                "name": "Anti-ácidos",
+                "startDate": "2014-12-07T03:21:36.016Z"
+            },
+            {
+                "name": "Estatinas",
+                "startDate": "2015-03-17T16:48:31.922Z"
+            },
+            {
+                "name": "Broncodilatador",
+                "startDate": "2012-10-28T14:28:49.814Z"
+            },
+            {
+                "name": "Anti-ácidos",
+                "startDate": "2014-05-08T02:54:31.418Z"
+            },
+            {
+                "name": "Aspirina",
+                "startDate": "2016-05-20T20:50:38.119Z"
+            }
+        ]
+    },
+    {
+        "id": "69ecdeb6-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Grete Brezin",
+        "diseases": [
+            {
+                "name": "Febre Reumática",
+                "startDate": "2015-06-18T15:31:55.506Z"
+            },
+            {
+                "name": "Glaucoma",
+                "startDate": "2015-02-07T10:53:21.534Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Anti-ácidos",
+                "startDate": "2015-07-05T22:01:11.027Z"
+            },
+            {
+                "name": "Análgésicos",
+                "startDate": "2016-03-07T22:35:19.816Z"
+            },
+            {
+                "name": "Anti-hipertensor",
+                "startDate": "2015-03-04T20:25:06.217Z"
+            },
+            {
+                "name": "Anti-depressor",
+                "startDate": "2012-12-15T20:44:55.394Z"
+            },
+            {
+                "name": "Anti-ácidos",
+                "startDate": "2014-10-28T16:03:47.315Z"
+            },
+            {
+                "name": "Broncodilatador",
+                "startDate": "2013-02-17T01:26:29.078Z"
+            },
+            {
+                "name": "Análgésicos",
+                "startDate": "2014-02-22T06:01:25.213Z"
+            }
+        ]
+    },
+    {
+        "id": "69ecdeb7-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Tybie Yvette",
+        "diseases": [
+            {
+                "name": "Artrite",
+                "startDate": "2013-02-24T03:53:39.260Z"
+            },
+            {
+                "name": "Febre Reumática",
+                "startDate": "2015-07-17T04:24:46.224Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Anti-ácidos",
+                "startDate": "2015-04-09T11:04:24.486Z"
+            },
+            {
+                "name": "Anti-depressor",
+                "startDate": "2016-09-22T02:39:29.686Z"
+            },
+            {
+                "name": "Análgésicos",
+                "startDate": "2012-10-04T21:31:21.442Z"
+            },
+            {
+                "name": "Estatinas",
+                "startDate": "2015-08-21T04:50:21.578Z"
+            },
+            {
+                "name": "Análgésicos",
+                "startDate": "2013-12-23T10:36:33.919Z"
+            },
+            {
+                "name": "Anti-ácidos",
+                "startDate": "2015-01-15T03:14:46.401Z"
+            },
+            {
+                "name": "Aspirina",
+                "startDate": "2013-02-23T08:41:06.543Z"
+            },
+            {
+                "name": "Anti-diabéticos",
+                "startDate": "2014-11-07T08:56:42.948Z"
+            }
+        ]
+    },
+    {
+        "id": "69ecdeb8-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Jaimie Madel",
+        "diseases": [
+            {
+                "name": "Doença Cardíaca Congénita",
+                "startDate": "2015-09-07T21:29:33.538Z"
+            },
+            {
+                "name": "Doença Cardíaca Congénita",
+                "startDate": "2016-08-30T16:04:59.798Z"
+            },
+            {
+                "name": "Glaucoma",
+                "startDate": "2012-08-28T11:07:18.095Z"
+            },
+            {
+                "name": "Doença Venérea",
+                "startDate": "2015-11-14T18:59:12.087Z"
+            },
+            {
+                "name": "Febre Reumática",
+                "startDate": "2012-07-24T05:32:11.832Z"
+            },
+            {
+                "name": "Doença da Tiroide",
+                "startDate": "2014-01-13T04:42:13.985Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Broncodilatador",
+                "startDate": "2015-04-17T17:13:34.614Z"
+            },
+            {
+                "name": "Anti-depressor",
+                "startDate": "2016-01-25T05:57:53.849Z"
+            },
+            {
+                "name": "Anti-hipertensor",
+                "startDate": "2013-04-23T13:59:18.547Z"
+            },
+            {
+                "name": "Estatinas",
+                "startDate": "2013-01-15T09:37:25.823Z"
+            },
+            {
+                "name": "Estatinas",
+                "startDate": "2015-12-26T01:56:09.560Z"
+            }
+        ]
+    },
+    {
+        "id": "69ecdeb9-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Tobey Landing",
+        "diseases": [
+            {
+                "name": "Osteoporose",
+                "startDate": "2013-09-18T21:59:35.938Z"
+            },
+            {
+                "name": "Artrite",
+                "startDate": "2013-11-11T22:30:00.350Z"
+            },
+            {
+                "name": "Gânglios aumentados de volume",
+                "startDate": "2015-05-21T20:23:36.967Z"
+            },
+            {
+                "name": "Candidiase Oral",
+                "startDate": "2015-02-14T22:09:04.843Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Anti-depressor",
+                "startDate": "2012-03-22T21:56:41.071Z"
+            },
+            {
+                "name": "Estatinas",
+                "startDate": "2013-09-13T13:25:35.103Z"
+            },
+            {
+                "name": "Anti-hipertensor",
+                "startDate": "2012-06-04T10:32:56.499Z"
+            },
+            {
+                "name": "Anti-ácidos",
+                "startDate": "2012-08-22T13:39:56.669Z"
+            },
+            {
+                "name": "Esteróides",
+                "startDate": "2013-09-09T21:32:10.120Z"
+            }
+        ]
+    },
+    {
+        "id": "69ecdeba-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Darcy Jory",
+        "diseases": [
+            {
+                "name": "Enfarte Miocárdio",
+                "startDate": "2012-02-21T16:46:42.662Z"
+            },
+            {
+                "name": "Enfarte Miocárdio",
+                "startDate": "2012-02-19T05:50:48.063Z"
+            },
+            {
+                "name": "Osteoporose",
+                "startDate": "2016-04-08T06:18:39.788Z"
+            },
+            {
+                "name": "Doença Venérea",
+                "startDate": "2014-05-03T18:56:18.491Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Anti-hipertensor",
+                "startDate": "2015-01-23T14:26:15.820Z"
+            },
+            {
+                "name": "Análgésicos",
+                "startDate": "2013-08-04T23:31:08.108Z"
+            },
+            {
+                "name": "Análgésicos",
+                "startDate": "2014-02-13T00:11:44.704Z"
+            },
+            {
+                "name": "Análgésicos",
+                "startDate": "2013-02-05T03:27:54.509Z"
+            },
+            {
+                "name": "Análgésicos",
+                "startDate": "2013-08-13T10:27:37.985Z"
+            },
+            {
+                "name": "Anti-hipertensor",
+                "startDate": "2013-06-21T06:59:41.418Z"
+            }
+        ]
+    },
+    {
+        "id": "69ecdebb-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Ashil Bern",
+        "diseases": [
+            {
+                "name": "Glaucoma",
+                "startDate": "2012-11-08T14:21:18.257Z"
+            },
+            {
+                "name": "Artrite",
+                "startDate": "2012-06-07T11:11:01.079Z"
+            },
+            {
+                "name": "Osteoporose",
+                "startDate": "2015-08-30T23:25:43.142Z"
+            },
+            {
+                "name": "Osteoporose",
+                "startDate": "2014-11-18T12:16:53.721Z"
+            },
+            {
+                "name": "Doença da Tiroide",
+                "startDate": "2016-05-23T19:45:32.175Z"
+            },
+            {
+                "name": "Candidiase Oral",
+                "startDate": "2014-03-19T11:56:14.459Z"
+            },
+            {
+                "name": "Glaucoma",
+                "startDate": "2013-01-08T19:38:17.268Z"
+            },
+            {
+                "name": "Artrite",
+                "startDate": "2013-10-08T00:04:29.591Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Broncodilatador",
+                "startDate": "2012-10-13T08:07:30.299Z"
+            },
+            {
+                "name": "Anti-ácidos",
+                "startDate": "2013-10-04T16:27:51.294Z"
+            },
+            {
+                "name": "Broncodilatador",
+                "startDate": "2014-07-18T05:42:19.405Z"
+            },
+            {
+                "name": "Esteróides",
+                "startDate": "2013-03-23T19:16:52.157Z"
+            },
+            {
+                "name": "Esteróides",
+                "startDate": "2013-06-26T19:27:00.605Z"
+            },
+            {
+                "name": "Aspirina",
+                "startDate": "2016-03-16T11:21:27.311Z"
+            }
+        ]
+    },
+    {
+        "id": "69ecdebc-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Tressa Kristin",
+        "diseases": [
+            {
+                "name": "Doença da Tiroide",
+                "startDate": "2015-11-05T22:55:51.223Z"
+            },
+            {
+                "name": "Doença Venérea",
+                "startDate": "2014-06-16T04:41:36.777Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Anti-ácidos",
+                "startDate": "2013-08-22T01:37:01.213Z"
+            }
+        ]
+    },
+    {
+        "id": "69ecdebd-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Tarrah Helfand",
+        "diseases": [
+            {
+                "name": "Enfarte Miocárdio",
+                "startDate": "2016-09-23T12:09:19.996Z"
+            },
+            {
+                "name": "Doença da Tiroide",
+                "startDate": "2015-07-19T12:18:15.718Z"
+            },
+            {
+                "name": "Candidiase Oral",
+                "startDate": "2015-06-09T15:43:28.166Z"
+            },
+            {
+                "name": "Glaucoma",
+                "startDate": "2013-05-28T08:35:12.176Z"
+            },
+            {
+                "name": "Artrite",
+                "startDate": "2015-07-07T13:35:20.151Z"
+            },
+            {
+                "name": "Febre Reumática",
+                "startDate": "2016-08-02T07:28:37.631Z"
+            },
+            {
+                "name": "Doença Venérea",
+                "startDate": "2012-06-28T21:36:00.330Z"
+            },
+            {
+                "name": "Doença Venérea",
+                "startDate": "2015-06-23T01:33:52.890Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Anti-hipertensor",
+                "startDate": "2012-10-06T05:10:47.139Z"
+            },
+            {
+                "name": "Anti-hipertensor",
+                "startDate": "2014-11-14T05:51:03.631Z"
+            },
+            {
+                "name": "Aspirina",
+                "startDate": "2016-04-17T17:44:11.890Z"
+            },
+            {
+                "name": "Broncodilatador",
+                "startDate": "2013-04-09T12:03:07.013Z"
+            },
+            {
+                "name": "Anti-diabéticos",
+                "startDate": "2012-11-11T13:38:27.164Z"
+            },
+            {
+                "name": "Anti-hipertensor",
+                "startDate": "2015-08-18T13:50:05.030Z"
+            },
+            {
+                "name": "Anti-ácidos",
+                "startDate": "2014-09-19T15:28:24.766Z"
+            }
+        ]
+    },
+    {
+        "id": "69ecdebe-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Katie Upshaw",
+        "diseases": [
+            {
+                "name": "Candidiase Oral",
+                "startDate": "2012-08-29T05:04:06.242Z"
+            },
+            {
+                "name": "Doença Cardíaca Congénita",
+                "startDate": "2012-03-24T15:08:37.606Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Esteróides",
+                "startDate": "2012-02-26T11:41:41.913Z"
+            },
+            {
+                "name": "Análgésicos",
+                "startDate": "2013-01-07T12:47:06.741Z"
+            },
+            {
+                "name": "Estatinas",
+                "startDate": "2013-03-18T08:38:58.962Z"
+            }
+        ]
+    },
+    {
+        "id": "69ecdebf-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Caroljean Hsu",
+        "diseases": [
+            {
+                "name": "Artrite",
+                "startDate": "2016-01-14T04:25:59.585Z"
+            },
+            {
+                "name": "Gânglios aumentados de volume",
+                "startDate": "2014-05-06T05:29:19.635Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Esteróides",
+                "startDate": "2013-12-08T15:39:28.701Z"
+            },
+            {
+                "name": "Anti-ácidos",
+                "startDate": "2013-01-18T19:18:53.187Z"
+            },
+            {
+                "name": "Esteróides",
+                "startDate": "2015-05-13T09:27:14.992Z"
+            },
+            {
+                "name": "Broncodilatador",
+                "startDate": "2013-01-24T19:35:33.381Z"
+            }
+        ]
+    },
+    {
+        "id": "69ecdec0-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Leigha Hogle",
+        "diseases": [
+            {
+                "name": "Doença da Tiroide",
+                "startDate": "2012-07-25T00:25:15.015Z"
+            },
+            {
+                "name": "Enfarte Miocárdio",
+                "startDate": "2013-02-16T16:09:23.509Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Esteróides",
+                "startDate": "2012-12-11T03:27:00.076Z"
+            },
+            {
+                "name": "Anti-depressor",
+                "startDate": "2016-06-25T03:23:49.349Z"
+            },
+            {
+                "name": "Aspirina",
+                "startDate": "2012-05-05T20:12:57.265Z"
+            },
+            {
+                "name": "Broncodilatador",
+                "startDate": "2015-05-26T16:40:25.394Z"
+            },
+            {
+                "name": "Anti-ácidos",
+                "startDate": "2013-02-19T19:03:16.922Z"
+            },
+            {
+                "name": "Anti-ácidos",
+                "startDate": "2012-05-09T15:37:08.657Z"
+            }
+        ]
+    },
+    {
+        "id": "69ecdec1-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Tallou Hemingway",
+        "diseases": [
+            {
+                "name": "Enfarte Miocárdio",
+                "startDate": "2016-05-25T03:17:20.286Z"
+            },
+            {
+                "name": "Osteoporose",
+                "startDate": "2012-02-02T04:05:21.547Z"
+            },
+            {
+                "name": "Doença da Tiroide",
+                "startDate": "2013-10-11T21:35:26.282Z"
+            },
+            {
+                "name": "Enfarte Miocárdio",
+                "startDate": "2012-06-30T14:12:31.045Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Análgésicos",
+                "startDate": "2012-09-30T04:59:54.495Z"
+            }
+        ]
+    },
+    {
+        "id": "69ecdec2-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Reta Hummel",
+        "diseases": [
+            {
+                "name": "Candidiase Oral",
+                "startDate": "2012-11-18T15:15:35.238Z"
+            },
+            {
+                "name": "Doença da Tiroide",
+                "startDate": "2013-04-07T15:25:20.517Z"
+            },
+            {
+                "name": "Doença Venérea",
+                "startDate": "2012-07-10T00:19:13.280Z"
+            },
+            {
+                "name": "Doença da Tiroide",
+                "startDate": "2014-11-23T03:31:26.094Z"
+            },
+            {
+                "name": "Febre Reumática",
+                "startDate": "2013-06-08T04:30:12.362Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Aspirina",
+                "startDate": "2013-11-14T14:28:27.366Z"
+            },
+            {
+                "name": "Análgésicos",
+                "startDate": "2013-09-03T19:27:58.148Z"
+            },
+            {
+                "name": "Anti-diabéticos",
+                "startDate": "2016-09-10T22:24:50.119Z"
+            },
+            {
+                "name": "Anti-ácidos",
+                "startDate": "2015-03-31T10:07:31.295Z"
+            },
+            {
+                "name": "Broncodilatador",
+                "startDate": "2015-02-24T19:27:55.780Z"
+            },
+            {
+                "name": "Anti-ácidos",
+                "startDate": "2016-02-07T08:50:07.762Z"
+            },
+            {
+                "name": "Aspirina",
+                "startDate": "2015-07-31T08:57:02.529Z"
+            }
+        ]
+    },
+    {
+        "id": "69ecdec3-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Andi Sotos",
+        "diseases": [
+            {
+                "name": "Doença Venérea",
+                "startDate": "2015-02-11T11:49:33.619Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Estatinas",
+                "startDate": "2013-03-11T06:30:25.159Z"
+            },
+            {
+                "name": "Broncodilatador",
+                "startDate": "2014-03-10T21:29:55.994Z"
+            },
+            {
+                "name": "Broncodilatador",
+                "startDate": "2012-04-02T09:19:47.789Z"
+            },
+            {
+                "name": "Anti-ácidos",
+                "startDate": "2014-10-11T10:02:37.188Z"
+            },
+            {
+                "name": "Estatinas",
+                "startDate": "2014-01-19T21:11:33.947Z"
+            },
+            {
+                "name": "Broncodilatador",
+                "startDate": "2013-03-18T12:53:46.319Z"
+            },
+            {
+                "name": "Análgésicos",
+                "startDate": "2014-10-07T20:16:01.195Z"
+            }
+        ]
+    },
+    {
+        "id": "69ecdec4-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Charissa Berliner",
+        "diseases": [
+            {
+                "name": "Osteoporose",
+                "startDate": "2014-05-31T12:26:25.008Z"
+            },
+            {
+                "name": "Artrite",
+                "startDate": "2016-05-25T15:54:05.083Z"
+            },
+            {
+                "name": "Osteoporose",
+                "startDate": "2014-10-24T15:22:54.405Z"
+            },
+            {
+                "name": "Enfarte Miocárdio",
+                "startDate": "2013-09-14T10:44:11.834Z"
+            },
+            {
+                "name": "Doença Venérea",
+                "startDate": "2013-09-14T23:08:10.761Z"
+            },
+            {
+                "name": "Osteoporose",
+                "startDate": "2015-07-23T17:03:27.894Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Broncodilatador",
+                "startDate": "2012-09-03T11:25:39.728Z"
+            }
+        ]
+    },
+    {
+        "id": "69ecdec5-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Yvonne Myrna",
+        "diseases": [
+            {
+                "name": "Artrite",
+                "startDate": "2016-05-23T17:58:40.534Z"
+            },
+            {
+                "name": "Candidiase Oral",
+                "startDate": "2013-11-14T03:56:54.402Z"
+            },
+            {
+                "name": "Glaucoma",
+                "startDate": "2015-05-12T12:43:12.421Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Estatinas",
+                "startDate": "2015-07-01T21:50:23.295Z"
+            }
+        ]
+    },
+    {
+        "id": "69ecdec6-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Theo Linis",
+        "diseases": [
+            {
+                "name": "Doença Cardíaca Congénita",
+                "startDate": "2014-11-30T09:01:30.450Z"
+            },
+            {
+                "name": "Artrite",
+                "startDate": "2015-03-26T19:54:13.991Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Broncodilatador",
+                "startDate": "2014-05-29T02:33:16.577Z"
+            },
+            {
+                "name": "Estatinas",
+                "startDate": "2015-05-24T08:27:29.952Z"
+            }
+        ]
+    },
+    {
+        "id": "69ecdec7-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Darcey Cornell",
+        "diseases": [
+            {
+                "name": "Doença Cardíaca Congénita",
+                "startDate": "2013-03-31T07:28:22.653Z"
+            },
+            {
+                "name": "Glaucoma",
+                "startDate": "2013-03-08T06:30:09.226Z"
+            },
+            {
+                "name": "Candidiase Oral",
+                "startDate": "2015-04-10T00:37:16.138Z"
+            },
+            {
+                "name": "Doença Cardíaca Congénita",
+                "startDate": "2012-04-04T17:19:09.810Z"
+            },
+            {
+                "name": "Osteoporose",
+                "startDate": "2016-02-13T14:25:47.150Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Estatinas",
+                "startDate": "2014-01-14T23:31:49.819Z"
+            },
+            {
+                "name": "Anti-depressor",
+                "startDate": "2012-07-19T22:41:59.972Z"
+            },
+            {
+                "name": "Análgésicos",
+                "startDate": "2015-05-15T11:57:18.607Z"
+            },
+            {
+                "name": "Aspirina",
+                "startDate": "2014-12-14T16:54:28.815Z"
+            },
+            {
+                "name": "Anti-depressor",
+                "startDate": "2014-05-23T06:59:24.956Z"
+            },
+            {
+                "name": "Esteróides",
+                "startDate": "2016-07-23T17:26:43.980Z"
+            },
+            {
+                "name": "Análgésicos",
+                "startDate": "2014-03-09T22:16:41.159Z"
+            },
+            {
+                "name": "Anti-ácidos",
+                "startDate": "2013-06-21T09:39:49.863Z"
+            }
+        ]
+    },
+    {
+        "id": "69ecdec8-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Dee Dee Amal",
+        "diseases": [
+            {
+                "name": "Doença Venérea",
+                "startDate": "2013-09-01T15:48:49.799Z"
+            },
+            {
+                "name": "Doença Cardíaca Congénita",
+                "startDate": "2016-02-04T19:59:01.918Z"
+            },
+            {
+                "name": "Doença da Tiroide",
+                "startDate": "2013-06-12T15:42:25.147Z"
+            },
+            {
+                "name": "Doença Cardíaca Congénita",
+                "startDate": "2014-01-04T23:04:24.887Z"
+            },
+            {
+                "name": "Febre Reumática",
+                "startDate": "2016-09-07T08:56:56.457Z"
+            },
+            {
+                "name": "Doença Cardíaca Congénita",
+                "startDate": "2016-02-08T06:49:12.329Z"
+            },
+            {
+                "name": "Doença Venérea",
+                "startDate": "2014-12-22T02:32:36.897Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Anti-ácidos",
+                "startDate": "2016-05-24T17:17:39.264Z"
+            },
+            {
+                "name": "Estatinas",
+                "startDate": "2016-09-10T14:44:49.944Z"
+            },
+            {
+                "name": "Anti-hipertensor",
+                "startDate": "2012-10-22T12:18:59.517Z"
+            },
+            {
+                "name": "Aspirina",
+                "startDate": "2012-04-25T04:45:36.572Z"
+            }
+        ]
+    },
+    {
+        "id": "69ecdec9-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Dora Darbee",
+        "diseases": [
+            {
+                "name": "Doença da Tiroide",
+                "startDate": "2014-12-30T06:30:26.233Z"
+            },
+            {
+                "name": "Doença Venérea",
+                "startDate": "2012-03-01T00:53:37.584Z"
+            },
+            {
+                "name": "Doença Venérea",
+                "startDate": "2013-07-29T06:49:50.663Z"
+            },
+            {
+                "name": "Artrite",
+                "startDate": "2015-09-21T14:11:46.888Z"
+            },
+            {
+                "name": "Gânglios aumentados de volume",
+                "startDate": "2015-12-16T03:51:53.224Z"
+            },
+            {
+                "name": "Enfarte Miocárdio",
+                "startDate": "2014-07-13T21:24:03.561Z"
+            },
+            {
+                "name": "Febre Reumática",
+                "startDate": "2015-02-03T19:20:29.337Z"
+            },
+            {
+                "name": "Glaucoma",
+                "startDate": "2014-11-22T04:21:33.057Z"
+            },
+            {
+                "name": "Enfarte Miocárdio",
+                "startDate": "2014-06-03T20:07:37.405Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Anti-hipertensor",
+                "startDate": "2014-10-03T18:26:38.153Z"
+            },
+            {
+                "name": "Anti-diabéticos",
+                "startDate": "2016-01-07T21:01:27.588Z"
+            },
+            {
+                "name": "Broncodilatador",
+                "startDate": "2014-02-04T16:19:09.746Z"
+            }
+        ]
+    },
+    {
+        "id": "69ecdeca-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Ruth Seidel",
+        "diseases": [
+            {
+                "name": "Candidiase Oral",
+                "startDate": "2014-02-05T20:12:00.060Z"
+            },
+            {
+                "name": "Osteoporose",
+                "startDate": "2013-12-09T03:53:53.600Z"
+            },
+            {
+                "name": "Enfarte Miocárdio",
+                "startDate": "2014-02-06T16:50:05.055Z"
+            },
+            {
+                "name": "Glaucoma",
+                "startDate": "2012-08-09T06:41:57.402Z"
+            },
+            {
+                "name": "Gânglios aumentados de volume",
+                "startDate": "2015-03-09T22:32:42.230Z"
+            },
+            {
+                "name": "Enfarte Miocárdio",
+                "startDate": "2013-05-28T05:41:06.777Z"
+            },
+            {
+                "name": "Enfarte Miocárdio",
+                "startDate": "2013-11-02T05:55:46.353Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Anti-ácidos",
+                "startDate": "2015-03-21T04:04:23.055Z"
+            },
+            {
+                "name": "Anti-ácidos",
+                "startDate": "2014-07-10T23:59:28.658Z"
+            },
+            {
+                "name": "Anti-diabéticos",
+                "startDate": "2012-12-16T13:32:59.624Z"
+            },
+            {
+                "name": "Anti-diabéticos",
+                "startDate": "2015-08-06T22:58:58.767Z"
+            },
+            {
+                "name": "Estatinas",
+                "startDate": "2016-05-10T17:25:32.170Z"
+            },
+            {
+                "name": "Análgésicos",
+                "startDate": "2012-07-06T10:09:17.828Z"
+            },
+            {
+                "name": "Esteróides",
+                "startDate": "2012-03-13T17:18:39.752Z"
+            },
+            {
+                "name": "Esteróides",
+                "startDate": "2012-01-07T06:49:17.769Z"
+            }
+        ]
+    },
+    {
+        "id": "69ecdecb-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Isobel Marybeth",
+        "diseases": [
+            {
+                "name": "Enfarte Miocárdio",
+                "startDate": "2013-11-27T12:54:41.344Z"
+            },
+            {
+                "name": "Doença Venérea",
+                "startDate": "2014-08-06T05:42:51.805Z"
+            },
+            {
+                "name": "Glaucoma",
+                "startDate": "2016-02-07T04:39:11.409Z"
+            },
+            {
+                "name": "Artrite",
+                "startDate": "2012-05-11T11:59:09.207Z"
+            },
+            {
+                "name": "Artrite",
+                "startDate": "2014-07-29T15:50:10.639Z"
+            },
+            {
+                "name": "Gânglios aumentados de volume",
+                "startDate": "2013-05-07T19:43:42.864Z"
+            },
+            {
+                "name": "Osteoporose",
+                "startDate": "2014-06-11T07:37:50.320Z"
+            },
+            {
+                "name": "Enfarte Miocárdio",
+                "startDate": "2013-05-22T19:21:29.701Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Broncodilatador",
+                "startDate": "2014-05-03T12:02:38.820Z"
+            },
+            {
+                "name": "Esteróides",
+                "startDate": "2013-05-11T09:50:06.737Z"
+            },
+            {
+                "name": "Anti-ácidos",
+                "startDate": "2016-01-05T11:03:58.773Z"
+            },
+            {
+                "name": "Anti-hipertensor",
+                "startDate": "2016-01-05T06:45:03.564Z"
+            },
+            {
+                "name": "Anti-hipertensor",
+                "startDate": "2015-01-30T09:47:02.271Z"
+            },
+            {
+                "name": "Análgésicos",
+                "startDate": "2013-08-03T22:39:07.102Z"
+            },
+            {
+                "name": "Anti-hipertensor",
+                "startDate": "2016-06-10T23:09:37.189Z"
+            },
+            {
+                "name": "Anti-hipertensor",
+                "startDate": "2016-04-21T13:48:56.061Z"
+            }
+        ]
+    },
+    {
+        "id": "69ecdecc-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Ramonda Allan",
+        "diseases": [
+            {
+                "name": "Doença Venérea",
+                "startDate": "2015-06-18T10:44:06.517Z"
+            },
+            {
+                "name": "Enfarte Miocárdio",
+                "startDate": "2013-03-23T07:04:42.464Z"
+            },
+            {
+                "name": "Febre Reumática",
+                "startDate": "2012-11-14T23:28:31.502Z"
+            },
+            {
+                "name": "Enfarte Miocárdio",
+                "startDate": "2015-05-09T20:00:32.241Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Anti-depressor",
+                "startDate": "2014-10-15T09:00:02.517Z"
+            },
+            {
+                "name": "Análgésicos",
+                "startDate": "2012-08-21T07:39:07.779Z"
+            },
+            {
+                "name": "Broncodilatador",
+                "startDate": "2013-08-17T11:14:11.970Z"
+            },
+            {
+                "name": "Análgésicos",
+                "startDate": "2015-11-30T18:55:33.757Z"
+            },
+            {
+                "name": "Estatinas",
+                "startDate": "2013-01-14T17:58:43.350Z"
+            },
+            {
+                "name": "Anti-diabéticos",
+                "startDate": "2016-02-17T23:34:51.750Z"
+            },
+            {
+                "name": "Estatinas",
+                "startDate": "2015-11-08T08:03:56.432Z"
+            },
+            {
+                "name": "Anti-depressor",
+                "startDate": "2016-02-28T22:23:55.978Z"
+            }
+        ]
+    },
+    {
+        "id": "69ed05c0-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Kylie Lodi",
+        "diseases": [
+            {
+                "name": "Osteoporose",
+                "startDate": "2014-08-07T21:54:49.020Z"
+            },
+            {
+                "name": "Enfarte Miocárdio",
+                "startDate": "2012-09-21T07:02:52.164Z"
+            },
+            {
+                "name": "Gânglios aumentados de volume",
+                "startDate": "2013-04-28T10:50:18.890Z"
+            },
+            {
+                "name": "Doença da Tiroide",
+                "startDate": "2012-02-05T17:43:00.237Z"
+            },
+            {
+                "name": "Doença da Tiroide",
+                "startDate": "2014-11-07T05:53:15.774Z"
+            },
+            {
+                "name": "Artrite",
+                "startDate": "2014-03-27T02:15:29.050Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Anti-diabéticos",
+                "startDate": "2016-08-12T19:09:40.800Z"
+            }
+        ]
+    },
+    {
+        "id": "69ed05c1-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Margalo Nagey",
+        "diseases": [
+            {
+                "name": "Artrite",
+                "startDate": "2012-07-26T14:37:07.705Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Anti-ácidos",
+                "startDate": "2014-05-28T10:05:17.041Z"
+            },
+            {
+                "name": "Anti-ácidos",
+                "startDate": "2013-09-20T19:42:29.864Z"
+            },
+            {
+                "name": "Análgésicos",
+                "startDate": "2012-05-22T00:47:41.276Z"
+            },
+            {
+                "name": "Anti-hipertensor",
+                "startDate": "2012-03-15T02:23:51.618Z"
+            },
+            {
+                "name": "Esteróides",
+                "startDate": "2016-01-01T21:39:49.815Z"
+            },
+            {
+                "name": "Anti-hipertensor",
+                "startDate": "2013-01-13T12:01:12.220Z"
+            },
+            {
+                "name": "Estatinas",
+                "startDate": "2016-08-03T22:51:02.814Z"
+            },
+            {
+                "name": "Estatinas",
+                "startDate": "2016-03-11T02:20:56.917Z"
+            }
+        ]
+    },
+    {
+        "id": "69ed05c2-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Adina Summer",
+        "diseases": [
+            {
+                "name": "Glaucoma",
+                "startDate": "2012-08-27T08:19:14.951Z"
+            },
+            {
+                "name": "Glaucoma",
+                "startDate": "2015-09-02T23:20:12.952Z"
+            },
+            {
+                "name": "Artrite",
+                "startDate": "2012-03-05T01:51:53.074Z"
+            },
+            {
+                "name": "Doença Venérea",
+                "startDate": "2016-04-09T12:11:52.451Z"
+            },
+            {
+                "name": "Candidiase Oral",
+                "startDate": "2012-06-22T14:59:30.693Z"
+            },
+            {
+                "name": "Osteoporose",
+                "startDate": "2015-12-17T05:46:49.764Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Análgésicos",
+                "startDate": "2016-05-25T07:12:43.853Z"
+            },
+            {
+                "name": "Anti-diabéticos",
+                "startDate": "2012-02-16T15:32:17.049Z"
+            },
+            {
+                "name": "Anti-hipertensor",
+                "startDate": "2012-09-05T07:59:10.679Z"
+            },
+            {
+                "name": "Broncodilatador",
+                "startDate": "2015-09-15T03:45:02.283Z"
+            },
+            {
+                "name": "Esteróides",
+                "startDate": "2013-04-15T19:23:33.108Z"
+            },
+            {
+                "name": "Anti-diabéticos",
+                "startDate": "2013-02-22T18:10:34.152Z"
+            },
+            {
+                "name": "Broncodilatador",
+                "startDate": "2012-05-07T02:22:06.629Z"
+            },
+            {
+                "name": "Broncodilatador",
+                "startDate": "2013-11-14T06:27:11.101Z"
+            }
+        ]
+    },
+    {
+        "id": "69ed05c3-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Umeko Body",
+        "diseases": [
+            {
+                "name": "Febre Reumática",
+                "startDate": "2016-04-14T07:56:53.635Z"
+            },
+            {
+                "name": "Enfarte Miocárdio",
+                "startDate": "2016-07-30T03:05:24.417Z"
+            },
+            {
+                "name": "Doença Venérea",
+                "startDate": "2012-10-20T20:04:06.822Z"
+            },
+            {
+                "name": "Febre Reumática",
+                "startDate": "2014-05-17T17:51:12.173Z"
+            },
+            {
+                "name": "Doença da Tiroide",
+                "startDate": "2012-07-27T06:41:12.623Z"
+            },
+            {
+                "name": "Osteoporose",
+                "startDate": "2014-08-08T04:32:26.768Z"
+            },
+            {
+                "name": "Doença da Tiroide",
+                "startDate": "2015-10-10T07:53:41.208Z"
+            },
+            {
+                "name": "Candidiase Oral",
+                "startDate": "2013-02-05T08:13:34.770Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Estatinas",
+                "startDate": "2012-11-01T22:21:40.985Z"
+            },
+            {
+                "name": "Anti-diabéticos",
+                "startDate": "2012-01-02T21:19:36.451Z"
+            },
+            {
+                "name": "Análgésicos",
+                "startDate": "2013-11-17T07:08:48.409Z"
+            },
+            {
+                "name": "Análgésicos",
+                "startDate": "2013-03-12T02:37:01.814Z"
+            },
+            {
+                "name": "Anti-hipertensor",
+                "startDate": "2012-05-05T10:41:56.448Z"
+            }
+        ]
+    },
+    {
+        "id": "69ed05c4-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Quintina Shepherd",
+        "diseases": [
+            {
+                "name": "Doença Venérea",
+                "startDate": "2013-03-09T14:05:20.144Z"
+            },
+            {
+                "name": "Enfarte Miocárdio",
+                "startDate": "2013-04-22T19:22:49.523Z"
+            },
+            {
+                "name": "Doença da Tiroide",
+                "startDate": "2013-08-19T02:50:07.615Z"
+            },
+            {
+                "name": "Candidiase Oral",
+                "startDate": "2012-02-14T07:14:27.004Z"
+            },
+            {
+                "name": "Doença Venérea",
+                "startDate": "2016-03-18T19:56:21.975Z"
+            },
+            {
+                "name": "Enfarte Miocárdio",
+                "startDate": "2014-11-21T01:31:08.199Z"
+            },
+            {
+                "name": "Osteoporose",
+                "startDate": "2014-07-07T15:07:46.102Z"
+            },
+            {
+                "name": "Enfarte Miocárdio",
+                "startDate": "2013-09-24T19:03:15.522Z"
+            },
+            {
+                "name": "Doença da Tiroide",
+                "startDate": "2012-01-02T21:23:06.742Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Anti-hipertensor",
+                "startDate": "2014-04-08T22:46:13.196Z"
+            },
+            {
+                "name": "Esteróides",
+                "startDate": "2013-03-04T14:58:20.350Z"
+            },
+            {
+                "name": "Esteróides",
+                "startDate": "2013-06-21T13:47:24.907Z"
+            },
+            {
+                "name": "Anti-ácidos",
+                "startDate": "2013-09-20T12:25:52.664Z"
+            },
+            {
+                "name": "Análgésicos",
+                "startDate": "2013-11-29T02:09:54.006Z"
+            }
+        ]
+    },
+    {
+        "id": "69ed05c5-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Melodee Bryana",
+        "diseases": [
+            {
+                "name": "Doença Cardíaca Congénita",
+                "startDate": "2012-12-06T22:09:20.381Z"
+            },
+            {
+                "name": "Artrite",
+                "startDate": "2013-01-23T10:11:30.377Z"
+            },
+            {
+                "name": "Osteoporose",
+                "startDate": "2016-03-20T07:04:25.282Z"
+            },
+            {
+                "name": "Glaucoma",
+                "startDate": "2013-06-22T03:31:38.430Z"
+            },
+            {
+                "name": "Candidiase Oral",
+                "startDate": "2015-03-05T14:48:03.352Z"
+            },
+            {
+                "name": "Doença Cardíaca Congénita",
+                "startDate": "2016-03-25T13:53:50.342Z"
+            },
+            {
+                "name": "Gânglios aumentados de volume",
+                "startDate": "2014-03-17T03:59:34.830Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Análgésicos",
+                "startDate": "2015-01-02T17:17:56.098Z"
+            },
+            {
+                "name": "Anti-diabéticos",
+                "startDate": "2016-06-17T03:22:27.631Z"
+            },
+            {
+                "name": "Estatinas",
+                "startDate": "2012-08-22T11:27:05.404Z"
+            },
+            {
+                "name": "Broncodilatador",
+                "startDate": "2015-03-24T02:22:56.779Z"
+            },
+            {
+                "name": "Esteróides",
+                "startDate": "2013-07-02T05:12:09.857Z"
+            },
+            {
+                "name": "Broncodilatador",
+                "startDate": "2016-03-28T01:30:48.076Z"
+            },
+            {
+                "name": "Estatinas",
+                "startDate": "2015-05-24T06:01:43.211Z"
+            }
+        ]
+    },
+    {
+        "id": "69ed05c6-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Cassandry Westbrook",
+        "diseases": [
+            {
+                "name": "Glaucoma",
+                "startDate": "2014-04-01T10:32:33.970Z"
+            },
+            {
+                "name": "Glaucoma",
+                "startDate": "2012-05-03T10:04:22.591Z"
+            },
+            {
+                "name": "Candidiase Oral",
+                "startDate": "2012-08-12T12:19:58.933Z"
+            },
+            {
+                "name": "Artrite",
+                "startDate": "2012-11-14T21:49:05.786Z"
+            },
+            {
+                "name": "Enfarte Miocárdio",
+                "startDate": "2014-09-11T05:10:45.326Z"
+            },
+            {
+                "name": "Glaucoma",
+                "startDate": "2016-01-29T12:06:37.721Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Estatinas",
+                "startDate": "2013-11-25T18:31:05.481Z"
+            },
+            {
+                "name": "Esteróides",
+                "startDate": "2016-05-19T12:14:07.086Z"
+            },
+            {
+                "name": "Broncodilatador",
+                "startDate": "2014-02-19T19:12:05.645Z"
+            },
+            {
+                "name": "Broncodilatador",
+                "startDate": "2012-04-29T17:12:52.119Z"
+            },
+            {
+                "name": "Broncodilatador",
+                "startDate": "2013-02-25T14:57:58.978Z"
+            }
+        ]
+    },
+    {
+        "id": "69ed05c7-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Renie Bruning",
+        "diseases": [
+            {
+                "name": "Doença Cardíaca Congénita",
+                "startDate": "2013-10-19T23:52:04.983Z"
+            },
+            {
+                "name": "Febre Reumática",
+                "startDate": "2013-08-03T13:51:53.482Z"
+            },
+            {
+                "name": "Candidiase Oral",
+                "startDate": "2015-05-02T02:04:43.413Z"
+            },
+            {
+                "name": "Osteoporose",
+                "startDate": "2013-06-19T05:51:44.281Z"
+            },
+            {
+                "name": "Glaucoma",
+                "startDate": "2016-03-27T23:54:46.246Z"
+            },
+            {
+                "name": "Candidiase Oral",
+                "startDate": "2012-04-26T15:24:43.417Z"
+            },
+            {
+                "name": "Doença Cardíaca Congénita",
+                "startDate": "2013-10-23T21:32:31.978Z"
+            },
+            {
+                "name": "Doença da Tiroide",
+                "startDate": "2015-10-19T18:38:07.774Z"
+            },
+            {
+                "name": "Febre Reumática",
+                "startDate": "2013-05-23T07:44:28.858Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Broncodilatador",
+                "startDate": "2016-03-10T14:56:38.826Z"
+            },
+            {
+                "name": "Esteróides",
+                "startDate": "2012-08-19T01:48:56.148Z"
+            },
+            {
+                "name": "Aspirina",
+                "startDate": "2012-10-06T04:42:45.470Z"
+            },
+            {
+                "name": "Anti-hipertensor",
+                "startDate": "2016-01-10T09:57:48.365Z"
+            }
+        ]
+    },
+    {
+        "id": "69ed05c8-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Genovera Godfrey",
+        "diseases": [
+            {
+                "name": "Artrite",
+                "startDate": "2014-11-18T02:53:45.077Z"
+            },
+            {
+                "name": "Doença Cardíaca Congénita",
+                "startDate": "2012-10-04T14:57:01.663Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Estatinas",
+                "startDate": "2012-02-06T00:09:00.170Z"
+            },
+            {
+                "name": "Broncodilatador",
+                "startDate": "2016-01-02T20:32:27.339Z"
+            },
+            {
+                "name": "Análgésicos",
+                "startDate": "2012-08-07T03:44:18.574Z"
+            },
+            {
+                "name": "Anti-ácidos",
+                "startDate": "2015-12-26T19:54:22.611Z"
+            },
+            {
+                "name": "Anti-diabéticos",
+                "startDate": "2012-07-14T05:47:42.438Z"
+            },
+            {
+                "name": "Anti-ácidos",
+                "startDate": "2016-05-04T14:34:12.144Z"
+            }
+        ]
+    },
+    {
+        "id": "69ed05c9-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Regine Babcock",
+        "diseases": [
+            {
+                "name": "Gânglios aumentados de volume",
+                "startDate": "2015-09-27T16:21:16.196Z"
+            },
+            {
+                "name": "Doença Venérea",
+                "startDate": "2015-11-22T09:12:37.736Z"
+            },
+            {
+                "name": "Osteoporose",
+                "startDate": "2013-12-31T04:03:04.112Z"
+            },
+            {
+                "name": "Artrite",
+                "startDate": "2015-02-27T04:43:31.021Z"
+            },
+            {
+                "name": "Doença Venérea",
+                "startDate": "2015-07-17T01:49:37.256Z"
+            },
+            {
+                "name": "Glaucoma",
+                "startDate": "2016-09-09T10:51:00.070Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Análgésicos",
+                "startDate": "2016-03-11T04:44:40.324Z"
+            }
+        ]
+    },
+    {
+        "id": "69ed05ca-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Siouxie Bernt",
+        "diseases": [
+            {
+                "name": "Gânglios aumentados de volume",
+                "startDate": "2013-05-12T17:27:38.847Z"
+            },
+            {
+                "name": "Candidiase Oral",
+                "startDate": "2014-12-12T11:40:58.891Z"
+            },
+            {
+                "name": "Osteoporose",
+                "startDate": "2012-06-05T21:25:18.107Z"
+            },
+            {
+                "name": "Gânglios aumentados de volume",
+                "startDate": "2015-11-22T18:44:42.187Z"
+            },
+            {
+                "name": "Artrite",
+                "startDate": "2013-06-01T09:12:45.238Z"
+            },
+            {
+                "name": "Febre Reumática",
+                "startDate": "2012-08-22T01:35:37.546Z"
+            },
+            {
+                "name": "Glaucoma",
+                "startDate": "2016-09-09T13:20:33.011Z"
+            },
+            {
+                "name": "Candidiase Oral",
+                "startDate": "2014-03-22T21:43:27.354Z"
+            },
+            {
+                "name": "Doença da Tiroide",
+                "startDate": "2014-12-30T05:44:28.914Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Anti-hipertensor",
+                "startDate": "2016-07-12T11:08:47.596Z"
+            },
+            {
+                "name": "Anti-depressor",
+                "startDate": "2015-07-17T14:52:16.419Z"
+            }
+        ]
+    },
+    {
+        "id": "69ed05cb-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Kelcy Coshow",
+        "diseases": [
+            {
+                "name": "Doença Cardíaca Congénita",
+                "startDate": "2013-09-29T07:31:25.618Z"
+            },
+            {
+                "name": "Doença Cardíaca Congénita",
+                "startDate": "2013-08-27T15:59:19.148Z"
+            },
+            {
+                "name": "Doença Cardíaca Congénita",
+                "startDate": "2013-07-22T18:22:57.808Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Anti-ácidos",
+                "startDate": "2012-01-29T08:10:17.113Z"
+            }
+        ]
+    },
+    {
+        "id": "69ed05cc-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Eirena Derril",
+        "diseases": [
+            {
+                "name": "Artrite",
+                "startDate": "2012-04-16T02:09:33.434Z"
+            },
+            {
+                "name": "Candidiase Oral",
+                "startDate": "2014-05-01T02:42:55.693Z"
+            },
+            {
+                "name": "Glaucoma",
+                "startDate": "2014-06-04T23:15:53.458Z"
+            },
+            {
+                "name": "Doença Cardíaca Congénita",
+                "startDate": "2012-07-29T01:17:50.265Z"
+            },
+            {
+                "name": "Febre Reumática",
+                "startDate": "2015-04-10T01:00:02.319Z"
+            },
+            {
+                "name": "Doença da Tiroide",
+                "startDate": "2013-06-17T23:54:33.445Z"
+            },
+            {
+                "name": "Gânglios aumentados de volume",
+                "startDate": "2015-04-09T02:35:31.581Z"
+            },
+            {
+                "name": "Gânglios aumentados de volume",
+                "startDate": "2013-01-29T04:39:20.542Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Anti-diabéticos",
+                "startDate": "2012-03-21T22:18:04.870Z"
+            },
+            {
+                "name": "Broncodilatador",
+                "startDate": "2015-11-01T09:11:20.913Z"
+            },
+            {
+                "name": "Aspirina",
+                "startDate": "2016-07-26T00:51:10.712Z"
+            },
+            {
+                "name": "Aspirina",
+                "startDate": "2015-11-16T13:57:54.729Z"
+            }
+        ]
+    },
+    {
+        "id": "69ed05cd-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Jany Norvan",
+        "diseases": [
+            {
+                "name": "Febre Reumática",
+                "startDate": "2014-12-07T16:02:50.909Z"
+            },
+            {
+                "name": "Artrite",
+                "startDate": "2014-05-28T03:12:01.668Z"
+            },
+            {
+                "name": "Doença Cardíaca Congénita",
+                "startDate": "2012-05-10T16:35:55.556Z"
+            },
+            {
+                "name": "Febre Reumática",
+                "startDate": "2016-01-15T12:55:56.980Z"
+            },
+            {
+                "name": "Osteoporose",
+                "startDate": "2012-12-15T08:41:57.833Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Anti-diabéticos",
+                "startDate": "2015-01-15T10:13:26.071Z"
+            },
+            {
+                "name": "Esteróides",
+                "startDate": "2014-02-09T07:25:10.193Z"
+            },
+            {
+                "name": "Broncodilatador",
+                "startDate": "2016-05-28T03:40:38.204Z"
+            }
+        ]
+    },
+    {
+        "id": "69ed05ce-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Catherina Krein",
+        "diseases": [
+            {
+                "name": "Doença Venérea",
+                "startDate": "2012-01-21T14:50:41.307Z"
+            },
+            {
+                "name": "Gânglios aumentados de volume",
+                "startDate": "2013-07-30T11:16:26.820Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Análgésicos",
+                "startDate": "2013-11-16T16:48:05.433Z"
+            },
+            {
+                "name": "Análgésicos",
+                "startDate": "2013-11-23T11:46:06.504Z"
+            },
+            {
+                "name": "Anti-ácidos",
+                "startDate": "2012-06-01T10:37:54.663Z"
+            },
+            {
+                "name": "Anti-ácidos",
+                "startDate": "2015-02-09T01:15:09.800Z"
+            },
+            {
+                "name": "Anti-depressor",
+                "startDate": "2012-05-30T08:57:25.621Z"
+            }
+        ]
+    },
+    {
+        "id": "69ed05cf-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Kyrstin Hellene",
+        "diseases": [
+            {
+                "name": "Glaucoma",
+                "startDate": "2014-12-08T04:07:44.808Z"
+            },
+            {
+                "name": "Doença da Tiroide",
+                "startDate": "2014-06-28T02:14:45.315Z"
+            },
+            {
+                "name": "Artrite",
+                "startDate": "2016-05-01T07:50:37.667Z"
+            },
+            {
+                "name": "Febre Reumática",
+                "startDate": "2013-12-20T10:04:57.618Z"
+            },
+            {
+                "name": "Osteoporose",
+                "startDate": "2016-05-20T23:06:26.118Z"
+            },
+            {
+                "name": "Doença Cardíaca Congénita",
+                "startDate": "2014-05-25T12:14:51.879Z"
+            },
+            {
+                "name": "Artrite",
+                "startDate": "2014-01-08T20:30:34.878Z"
+            },
+            {
+                "name": "Doença da Tiroide",
+                "startDate": "2012-07-13T06:58:38.895Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Esteróides",
+                "startDate": "2013-12-13T21:55:43.252Z"
+            },
+            {
+                "name": "Anti-hipertensor",
+                "startDate": "2015-04-14T16:29:04.332Z"
+            },
+            {
+                "name": "Anti-diabéticos",
+                "startDate": "2016-09-09T13:50:37.110Z"
+            },
+            {
+                "name": "Anti-ácidos",
+                "startDate": "2013-09-04T12:52:50.246Z"
+            }
+        ]
+    },
+    {
+        "id": "69ed05d0-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Danette Leonteen",
+        "diseases": [
+            {
+                "name": "Gânglios aumentados de volume",
+                "startDate": "2014-02-02T05:24:20.556Z"
+            },
+            {
+                "name": "Doença Venérea",
+                "startDate": "2016-05-14T00:24:19.767Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Estatinas",
+                "startDate": "2016-03-21T06:53:50.877Z"
+            },
+            {
+                "name": "Broncodilatador",
+                "startDate": "2016-07-02T16:05:59.068Z"
+            },
+            {
+                "name": "Broncodilatador",
+                "startDate": "2014-01-28T11:17:08.522Z"
+            },
+            {
+                "name": "Estatinas",
+                "startDate": "2012-04-24T23:32:44.700Z"
+            },
+            {
+                "name": "Esteróides",
+                "startDate": "2014-01-18T08:32:56.205Z"
+            },
+            {
+                "name": "Anti-ácidos",
+                "startDate": "2013-03-16T08:35:17.597Z"
+            },
+            {
+                "name": "Broncodilatador",
+                "startDate": "2015-08-26T19:24:19.242Z"
+            }
+        ]
+    },
+    {
+        "id": "69ed05d1-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Deeanne Burnie",
+        "diseases": [
+            {
+                "name": "Osteoporose",
+                "startDate": "2015-11-23T18:54:34.719Z"
+            },
+            {
+                "name": "Febre Reumática",
+                "startDate": "2012-09-01T22:40:50.695Z"
+            },
+            {
+                "name": "Candidiase Oral",
+                "startDate": "2012-03-06T12:09:30.566Z"
+            },
+            {
+                "name": "Doença da Tiroide",
+                "startDate": "2014-12-14T21:33:55.905Z"
+            },
+            {
+                "name": "Doença da Tiroide",
+                "startDate": "2013-07-03T23:58:17.733Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Estatinas",
+                "startDate": "2013-11-22T20:20:00.885Z"
+            },
+            {
+                "name": "Estatinas",
+                "startDate": "2016-02-23T00:56:58.675Z"
+            },
+            {
+                "name": "Anti-depressor",
+                "startDate": "2013-05-23T22:47:12.129Z"
+            },
+            {
+                "name": "Esteróides",
+                "startDate": "2013-11-18T23:15:28.115Z"
+            }
+        ]
+    },
+    {
+        "id": "69ed05d2-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Bobbie Daile",
+        "diseases": [
+            {
+                "name": "Doença Cardíaca Congénita",
+                "startDate": "2016-07-22T18:19:14.433Z"
+            },
+            {
+                "name": "Enfarte Miocárdio",
+                "startDate": "2012-09-01T11:33:13.376Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Análgésicos",
+                "startDate": "2015-03-05T02:13:13.221Z"
+            },
+            {
+                "name": "Esteróides",
+                "startDate": "2014-07-22T21:27:42.767Z"
+            },
+            {
+                "name": "Anti-diabéticos",
+                "startDate": "2015-03-18T00:19:34.134Z"
+            },
+            {
+                "name": "Estatinas",
+                "startDate": "2015-05-16T12:59:38.479Z"
+            }
+        ]
+    },
+    {
+        "id": "69ed05d3-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Rakel Aurthur",
+        "diseases": [
+            {
+                "name": "Doença Cardíaca Congénita",
+                "startDate": "2012-04-12T15:04:41.163Z"
+            },
+            {
+                "name": "Candidiase Oral",
+                "startDate": "2016-07-05T06:27:42.690Z"
+            },
+            {
+                "name": "Candidiase Oral",
+                "startDate": "2016-08-11T08:00:25.331Z"
+            },
+            {
+                "name": "Doença Venérea",
+                "startDate": "2016-05-18T15:21:50.063Z"
+            },
+            {
+                "name": "Osteoporose",
+                "startDate": "2013-03-18T06:42:20.726Z"
+            },
+            {
+                "name": "Doença Venérea",
+                "startDate": "2015-08-25T23:11:38.885Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Broncodilatador",
+                "startDate": "2015-03-22T21:36:23.135Z"
+            },
+            {
+                "name": "Anti-depressor",
+                "startDate": "2015-04-25T08:15:43.386Z"
+            },
+            {
+                "name": "Aspirina",
+                "startDate": "2013-02-10T23:00:08.312Z"
+            },
+            {
+                "name": "Anti-depressor",
+                "startDate": "2012-10-14T11:56:48.338Z"
+            },
+            {
+                "name": "Estatinas",
+                "startDate": "2016-04-02T01:01:31.175Z"
+            }
+        ]
+    },
+    {
+        "id": "69ed05d4-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Mae Painter",
+        "diseases": [
+            {
+                "name": "Artrite",
+                "startDate": "2014-05-31T21:35:11.671Z"
+            },
+            {
+                "name": "Febre Reumática",
+                "startDate": "2014-04-22T06:37:43.610Z"
+            },
+            {
+                "name": "Glaucoma",
+                "startDate": "2012-12-11T17:18:42.031Z"
+            },
+            {
+                "name": "Doença da Tiroide",
+                "startDate": "2015-12-29T04:12:11.925Z"
+            },
+            {
+                "name": "Artrite",
+                "startDate": "2014-08-13T07:17:14.250Z"
+            },
+            {
+                "name": "Doença Venérea",
+                "startDate": "2014-09-03T15:12:57.234Z"
+            },
+            {
+                "name": "Glaucoma",
+                "startDate": "2012-10-13T12:28:10.462Z"
+            },
+            {
+                "name": "Enfarte Miocárdio",
+                "startDate": "2012-10-27T21:40:01.271Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Esteróides",
+                "startDate": "2014-10-01T09:39:53.005Z"
+            }
+        ]
+    },
+    {
+        "id": "69ed05d5-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Ginger Randal",
+        "diseases": [
+            {
+                "name": "Artrite",
+                "startDate": "2013-01-12T21:35:22.005Z"
+            },
+            {
+                "name": "Candidiase Oral",
+                "startDate": "2013-03-12T14:38:05.859Z"
+            },
+            {
+                "name": "Artrite",
+                "startDate": "2014-04-14T18:03:14.159Z"
+            },
+            {
+                "name": "Doença Cardíaca Congénita",
+                "startDate": "2015-01-05T07:33:03.783Z"
+            },
+            {
+                "name": "Doença Venérea",
+                "startDate": "2014-12-16T15:37:57.500Z"
+            },
+            {
+                "name": "Enfarte Miocárdio",
+                "startDate": "2012-11-12T02:22:15.782Z"
+            },
+            {
+                "name": "Enfarte Miocárdio",
+                "startDate": "2013-04-06T16:37:49.606Z"
+            },
+            {
+                "name": "Enfarte Miocárdio",
+                "startDate": "2013-09-30T03:49:38.278Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Esteróides",
+                "startDate": "2012-11-21T07:47:50.011Z"
+            },
+            {
+                "name": "Análgésicos",
+                "startDate": "2013-06-29T05:58:23.270Z"
+            }
+        ]
+    },
+    {
+        "id": "69ed2cd0-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Anne-Corinne Riorsson",
+        "diseases": [
+            {
+                "name": "Osteoporose",
+                "startDate": "2016-05-17T06:02:11.134Z"
+            },
+            {
+                "name": "Gânglios aumentados de volume",
+                "startDate": "2016-06-19T05:28:11.808Z"
+            },
+            {
+                "name": "Doença da Tiroide",
+                "startDate": "2012-09-14T22:27:20.384Z"
+            },
+            {
+                "name": "Doença Venérea",
+                "startDate": "2012-09-01T09:20:49.996Z"
+            },
+            {
+                "name": "Doença da Tiroide",
+                "startDate": "2014-09-23T23:51:18.958Z"
+            },
+            {
+                "name": "Osteoporose",
+                "startDate": "2012-08-27T01:15:08.409Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Broncodilatador",
+                "startDate": "2014-09-17T15:13:15.298Z"
+            },
+            {
+                "name": "Anti-diabéticos",
+                "startDate": "2015-11-18T15:23:40.798Z"
+            },
+            {
+                "name": "Aspirina",
+                "startDate": "2014-01-12T07:21:19.126Z"
+            },
+            {
+                "name": "Anti-depressor",
+                "startDate": "2016-08-06T12:18:39.504Z"
+            },
+            {
+                "name": "Anti-hipertensor",
+                "startDate": "2013-06-21T12:33:13.630Z"
+            },
+            {
+                "name": "Anti-diabéticos",
+                "startDate": "2015-03-26T14:30:01.815Z"
+            },
+            {
+                "name": "Broncodilatador",
+                "startDate": "2016-05-31T00:58:53.114Z"
+            },
+            {
+                "name": "Broncodilatador",
+                "startDate": "2015-11-24T04:05:23.220Z"
+            }
+        ]
+    },
+    {
+        "id": "69ed2cd1-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Dael Arbuckle",
+        "diseases": [
+            {
+                "name": "Doença Cardíaca Congénita",
+                "startDate": "2014-01-09T11:40:29.871Z"
+            },
+            {
+                "name": "Osteoporose",
+                "startDate": "2012-06-20T03:53:07.447Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Esteróides",
+                "startDate": "2015-02-07T23:26:16.929Z"
+            },
+            {
+                "name": "Anti-ácidos",
+                "startDate": "2016-02-13T06:13:48.177Z"
+            },
+            {
+                "name": "Broncodilatador",
+                "startDate": "2013-03-06T21:49:37.268Z"
+            },
+            {
+                "name": "Análgésicos",
+                "startDate": "2013-12-03T12:12:04.653Z"
+            },
+            {
+                "name": "Anti-diabéticos",
+                "startDate": "2015-01-03T00:59:00.152Z"
+            }
+        ]
+    },
+    {
+        "id": "69ed2cd2-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Sharai Euh",
+        "diseases": [
+            {
+                "name": "Enfarte Miocárdio",
+                "startDate": "2016-09-07T10:56:48.556Z"
+            },
+            {
+                "name": "Artrite",
+                "startDate": "2016-08-17T19:25:57.722Z"
+            },
+            {
+                "name": "Gânglios aumentados de volume",
+                "startDate": "2013-08-23T10:34:24.911Z"
+            },
+            {
+                "name": "Doença da Tiroide",
+                "startDate": "2012-10-22T11:42:47.435Z"
+            },
+            {
+                "name": "Febre Reumática",
+                "startDate": "2016-04-10T02:16:36.359Z"
+            },
+            {
+                "name": "Enfarte Miocárdio",
+                "startDate": "2012-05-26T10:16:01.799Z"
+            },
+            {
+                "name": "Febre Reumática",
+                "startDate": "2015-10-26T13:47:38.236Z"
+            },
+            {
+                "name": "Doença Venérea",
+                "startDate": "2016-04-30T12:56:55.532Z"
+            },
+            {
+                "name": "Doença Venérea",
+                "startDate": "2014-09-10T05:06:55.661Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Análgésicos",
+                "startDate": "2015-05-10T06:50:26.755Z"
+            },
+            {
+                "name": "Análgésicos",
+                "startDate": "2014-12-12T06:29:47.623Z"
+            },
+            {
+                "name": "Esteróides",
+                "startDate": "2015-04-28T00:14:11.411Z"
+            }
+        ]
+    },
+    {
+        "id": "69ed2cd3-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Quentin Bartel",
+        "diseases": [
+            {
+                "name": "Glaucoma",
+                "startDate": "2013-10-15T12:19:51.022Z"
+            },
+            {
+                "name": "Doença da Tiroide",
+                "startDate": "2012-03-21T02:24:37.582Z"
+            },
+            {
+                "name": "Enfarte Miocárdio",
+                "startDate": "2015-11-03T06:12:15.556Z"
+            },
+            {
+                "name": "Doença Venérea",
+                "startDate": "2016-09-13T11:09:53.794Z"
+            },
+            {
+                "name": "Gânglios aumentados de volume",
+                "startDate": "2014-07-09T14:12:32.339Z"
+            },
+            {
+                "name": "Glaucoma",
+                "startDate": "2013-02-16T22:49:42.674Z"
+            },
+            {
+                "name": "Gânglios aumentados de volume",
+                "startDate": "2014-02-09T08:20:35.415Z"
+            },
+            {
+                "name": "Doença Venérea",
+                "startDate": "2013-06-24T15:01:15.252Z"
+            },
+            {
+                "name": "Glaucoma",
+                "startDate": "2015-08-31T02:00:32.062Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Anti-hipertensor",
+                "startDate": "2014-05-02T13:30:45.674Z"
+            }
+        ]
+    },
+    {
+        "id": "69ed2cd4-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Tracy Bolte",
+        "diseases": [
+            {
+                "name": "Enfarte Miocárdio",
+                "startDate": "2013-06-15T07:54:22.660Z"
+            },
+            {
+                "name": "Artrite",
+                "startDate": "2015-02-28T16:12:07.114Z"
+            },
+            {
+                "name": "Glaucoma",
+                "startDate": "2012-02-05T21:59:10.687Z"
+            },
+            {
+                "name": "Doença da Tiroide",
+                "startDate": "2014-03-17T07:13:53.626Z"
+            },
+            {
+                "name": "Artrite",
+                "startDate": "2016-04-29T18:37:32.832Z"
+            },
+            {
+                "name": "Doença da Tiroide",
+                "startDate": "2015-07-11T10:31:27.610Z"
+            },
+            {
+                "name": "Doença Cardíaca Congénita",
+                "startDate": "2015-07-10T01:48:30.874Z"
+            },
+            {
+                "name": "Glaucoma",
+                "startDate": "2015-10-30T19:21:24.903Z"
+            },
+            {
+                "name": "Enfarte Miocárdio",
+                "startDate": "2012-10-31T14:59:41.280Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Anti-ácidos",
+                "startDate": "2015-05-03T17:22:54.860Z"
+            },
+            {
+                "name": "Anti-hipertensor",
+                "startDate": "2012-03-19T21:44:35.418Z"
+            },
+            {
+                "name": "Anti-hipertensor",
+                "startDate": "2014-03-08T16:29:54.688Z"
+            },
+            {
+                "name": "Anti-depressor",
+                "startDate": "2013-08-10T07:38:12.997Z"
+            },
+            {
+                "name": "Estatinas",
+                "startDate": "2014-03-06T08:18:37.864Z"
+            },
+            {
+                "name": "Esteróides",
+                "startDate": "2013-04-03T23:08:57.728Z"
+            },
+            {
+                "name": "Anti-depressor",
+                "startDate": "2015-07-28T18:18:12.203Z"
+            },
+            {
+                "name": "Anti-diabéticos",
+                "startDate": "2013-10-08T00:52:30.037Z"
+            }
+        ]
+    },
+    {
+        "id": "69ed2cd5-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Cassaundra Isador",
+        "diseases": [
+            {
+                "name": "Artrite",
+                "startDate": "2014-05-05T01:26:58.323Z"
+            },
+            {
+                "name": "Artrite",
+                "startDate": "2014-02-28T09:18:10.193Z"
+            },
+            {
+                "name": "Febre Reumática",
+                "startDate": "2014-01-30T17:16:14.080Z"
+            },
+            {
+                "name": "Doença Cardíaca Congénita",
+                "startDate": "2013-06-07T14:40:05.511Z"
+            },
+            {
+                "name": "Febre Reumática",
+                "startDate": "2012-05-19T08:38:25.494Z"
+            },
+            {
+                "name": "Osteoporose",
+                "startDate": "2016-08-17T23:54:47.428Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Esteróides",
+                "startDate": "2015-04-01T10:59:47.933Z"
+            },
+            {
+                "name": "Anti-hipertensor",
+                "startDate": "2016-01-11T08:00:11.250Z"
+            },
+            {
+                "name": "Anti-hipertensor",
+                "startDate": "2013-11-16T18:01:46.355Z"
+            },
+            {
+                "name": "Análgésicos",
+                "startDate": "2015-05-26T04:40:08.103Z"
+            },
+            {
+                "name": "Anti-depressor",
+                "startDate": "2015-06-01T03:43:34.631Z"
+            },
+            {
+                "name": "Anti-ácidos",
+                "startDate": "2014-11-19T19:24:14.354Z"
+            },
+            {
+                "name": "Esteróides",
+                "startDate": "2014-04-04T16:55:50.492Z"
+            },
+            {
+                "name": "Esteróides",
+                "startDate": "2015-11-25T21:39:26.077Z"
+            }
+        ]
+    },
+    {
+        "id": "69ed2cd6-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Lorianna Kloman",
+        "diseases": [
+            {
+                "name": "Artrite",
+                "startDate": "2015-09-28T14:06:06.405Z"
+            },
+            {
+                "name": "Febre Reumática",
+                "startDate": "2015-12-01T10:43:24.499Z"
+            },
+            {
+                "name": "Doença da Tiroide",
+                "startDate": "2016-05-31T02:40:47.542Z"
+            },
+            {
+                "name": "Artrite",
+                "startDate": "2014-02-03T13:23:39.633Z"
+            },
+            {
+                "name": "Osteoporose",
+                "startDate": "2013-12-30T02:50:25.830Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Análgésicos",
+                "startDate": "2014-04-12T03:55:42.285Z"
+            }
+        ]
+    },
+    {
+        "id": "69ed2cd7-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Jemmy Wilder",
+        "diseases": [
+            {
+                "name": "Glaucoma",
+                "startDate": "2014-05-27T10:14:44.053Z"
+            },
+            {
+                "name": "Doença da Tiroide",
+                "startDate": "2016-05-07T10:40:51.554Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Anti-ácidos",
+                "startDate": "2014-09-26T09:03:27.701Z"
+            },
+            {
+                "name": "Análgésicos",
+                "startDate": "2016-06-25T08:40:35.498Z"
+            },
+            {
+                "name": "Broncodilatador",
+                "startDate": "2013-07-14T20:18:24.351Z"
+            },
+            {
+                "name": "Estatinas",
+                "startDate": "2012-04-18T19:57:47.501Z"
+            },
+            {
+                "name": "Esteróides",
+                "startDate": "2012-08-20T14:56:33.485Z"
+            }
+        ]
+    },
+    {
+        "id": "69ed2cd8-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Nanni Lombardi",
+        "diseases": [
+            {
+                "name": "Gânglios aumentados de volume",
+                "startDate": "2016-08-12T15:27:11.634Z"
+            },
+            {
+                "name": "Doença da Tiroide",
+                "startDate": "2012-06-25T14:53:14.936Z"
+            },
+            {
+                "name": "Doença da Tiroide",
+                "startDate": "2012-12-29T08:13:55.882Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Análgésicos",
+                "startDate": "2013-12-09T18:54:45.024Z"
+            },
+            {
+                "name": "Broncodilatador",
+                "startDate": "2015-05-26T10:26:17.899Z"
+            },
+            {
+                "name": "Anti-diabéticos",
+                "startDate": "2013-09-22T23:17:46.653Z"
+            },
+            {
+                "name": "Anti-ácidos",
+                "startDate": "2015-02-04T05:40:13.417Z"
+            },
+            {
+                "name": "Broncodilatador",
+                "startDate": "2014-11-02T14:20:14.751Z"
+            },
+            {
+                "name": "Estatinas",
+                "startDate": "2016-03-17T02:53:47.878Z"
+            }
+        ]
+    },
+    {
+        "id": "69ed2cd9-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Nerty Penny",
+        "diseases": [
+            {
+                "name": "Artrite",
+                "startDate": "2014-01-22T12:19:27.421Z"
+            },
+            {
+                "name": "Enfarte Miocárdio",
+                "startDate": "2016-07-20T04:20:28.445Z"
+            },
+            {
+                "name": "Febre Reumática",
+                "startDate": "2013-02-16T21:18:21.592Z"
+            },
+            {
+                "name": "Osteoporose",
+                "startDate": "2016-01-01T01:23:07.733Z"
+            },
+            {
+                "name": "Doença Cardíaca Congénita",
+                "startDate": "2014-08-30T22:54:10.468Z"
+            },
+            {
+                "name": "Doença Cardíaca Congénita",
+                "startDate": "2016-03-16T20:14:07.213Z"
+            },
+            {
+                "name": "Febre Reumática",
+                "startDate": "2013-01-05T02:17:37.524Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Análgésicos",
+                "startDate": "2014-08-19T23:48:23.484Z"
+            },
+            {
+                "name": "Anti-depressor",
+                "startDate": "2013-07-06T01:28:40.859Z"
+            }
+        ]
+    },
+    {
+        "id": "69ed2cda-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Suzette Tankoos",
+        "diseases": [
+            {
+                "name": "Doença Cardíaca Congénita",
+                "startDate": "2014-12-25T18:06:04.080Z"
+            },
+            {
+                "name": "Doença da Tiroide",
+                "startDate": "2012-10-04T17:58:00.126Z"
+            },
+            {
+                "name": "Gânglios aumentados de volume",
+                "startDate": "2013-02-18T20:49:16.746Z"
+            },
+            {
+                "name": "Enfarte Miocárdio",
+                "startDate": "2012-11-29T18:07:07.548Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Aspirina",
+                "startDate": "2015-01-20T12:42:17.339Z"
+            },
+            {
+                "name": "Anti-hipertensor",
+                "startDate": "2013-04-18T02:25:37.260Z"
+            },
+            {
+                "name": "Anti-depressor",
+                "startDate": "2015-04-08T10:08:13.679Z"
+            },
+            {
+                "name": "Estatinas",
+                "startDate": "2013-03-03T05:34:03.039Z"
+            },
+            {
+                "name": "Estatinas",
+                "startDate": "2013-12-01T16:06:22.039Z"
+            }
+        ]
+    },
+    {
+        "id": "69ed2cdb-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Estella Dionysus",
+        "diseases": [
+            {
+                "name": "Doença da Tiroide",
+                "startDate": "2013-03-04T20:27:38.026Z"
+            },
+            {
+                "name": "Doença Cardíaca Congénita",
+                "startDate": "2014-03-31T02:14:58.880Z"
+            },
+            {
+                "name": "Febre Reumática",
+                "startDate": "2013-03-16T05:19:20.636Z"
+            },
+            {
+                "name": "Osteoporose",
+                "startDate": "2014-03-21T14:55:14.363Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Anti-depressor",
+                "startDate": "2014-08-30T02:21:25.209Z"
+            },
+            {
+                "name": "Estatinas",
+                "startDate": "2014-09-24T08:39:42.652Z"
+            },
+            {
+                "name": "Aspirina",
+                "startDate": "2015-09-18T12:50:14.572Z"
+            }
+        ]
+    },
+    {
+        "id": "69ed53e0-83d6-11e6-bfb1-5d61a795344d",
+        "name": "Ebony Orlene",
+        "diseases": [
+            {
+                "name": "Febre Reumática",
+                "startDate": "2012-12-26T11:43:11.377Z"
+            },
+            {
+                "name": "Artrite",
+                "startDate": "2014-04-09T16:29:38.018Z"
+            },
+            {
+                "name": "Gânglios aumentados de volume",
+                "startDate": "2015-02-28T19:11:58.462Z"
+            },
+            {
+                "name": "Candidiase Oral",
+                "startDate": "2013-11-26T10:59:52.570Z"
+            },
+            {
+                "name": "Artrite",
+                "startDate": "2013-01-05T17:45:28.968Z"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Aspirina",
+                "startDate": "2013-11-22T01:08:13.388Z"
+            },
+            {
+                "name": "Anti-depressor",
+                "startDate": "2015-04-09T16:52:06.324Z"
+            },
+            {
+                "name": "Esteróides",
+                "startDate": "2013-07-01T21:13:20.667Z"
+            },
+            {
+                "name": "Anti-diabéticos",
+                "startDate": "2014-07-13T11:26:07.808Z"
+            },
+            {
+                "name": "Estatinas",
+                "startDate": "2016-01-03T11:06:52.023Z"
+            },
+            {
+                "name": "Broncodilatador",
+                "startDate": "2012-11-30T00:58:34.312Z"
+            }
         ]
     }
 ]

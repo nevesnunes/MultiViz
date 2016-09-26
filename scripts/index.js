@@ -72,6 +72,26 @@ moduleIndex.factory('patientData', function($window) {
             .reduce(reduceDataArray, []);
     };
 
+    // Used when the property is an object, therefore we need to
+    // specify the key in order to reduce an array made with each
+    // object's key
+    var getAttributeListByProperty = function(key, attributeType, property) {
+        // FIXME:
+        // Invalid lists, due to loading url without stored attributes;
+        // Will probably change to some REST API
+        if (attributes[key].length === 0) {
+            window.location.href = "index.html";
+        }
+
+        return attributes[key]
+            .map(function(patient) {
+                return patient[attributeType].map(function(obj) {
+                    return obj[property];
+                });
+            })
+            .reduce(reduceDataArray, []);
+    };
+
     // Initialize
     attributes[KEY_PATIENT] = getData(KEY_PATIENT);
     attributes[KEY_PATIENTS] = getData(KEY_PATIENTS);
@@ -83,7 +103,8 @@ moduleIndex.factory('patientData', function($window) {
         setData: setData,
         getData: getData,
         getAttribute: getAttribute,
-        getAttributeList: getAttributeList
+        getAttributeList: getAttributeList,
+        getAttributeListByProperty: getAttributeListByProperty
     };
 });
 

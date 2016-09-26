@@ -72,15 +72,26 @@ moduleVisualizations.factory('visualizations',
     // Selected attribute lists shared among multiple patients
     var diseases = [];
     var medications = [];
+    var diseasesNames = [];
+    var medicationsNames = [];
     var updateData = function(selectedDiseases, selectedMedications) {
         diseases = processSelectedList(selectedDiseases);
         medications = processSelectedList(selectedMedications);
+
+        // FIXME: Most likely these will we different arrays, but
+        // for now we are only needing names
+        diseasesNames = diseases;
+        medicationsNames = medications;
     };
 
     // Patient attribute lists
     var patient = patientData.getAttribute(patientData.KEY_PATIENT);
-    var patientDiseases = patient.diseases;
-    var patientMedications = patient.medications;
+    var patientDiseasesNames = patient.diseases.map(function(obj) {
+        return obj.name;
+    });
+    var patientMedicationsNames = patient.medications.map(function(obj) {
+        return obj.name;
+    });
 
     // Unique identifier for heatmap elements
     var heatmapID = 0;
@@ -219,30 +230,30 @@ moduleVisualizations.factory('visualizations',
         // json data contains all attributes, which need to be filtered
         // first by user selected attributes
         var filteredData = data.filter(function(d) {
-            return (diseases.indexOf(d.disease) !== -1) &&
-                (medications.indexOf(d.medication) !== -1);
+            return (diseasesNames.indexOf(d.disease) !== -1) &&
+                (medicationsNames.indexOf(d.medication) !== -1);
         }); 
 
         // We now remove attributes from the lists that don't have
         // matches in filteredData (i.e. no cells for that attribute
         // have values)
-        diseases = (function(list, filteredMatrix) {
+        diseasesNames = (function(list, filteredMatrix) {
             return list.filter(function(name) {
                 var index = utils.arrayObjectIndexOf(
                     filteredMatrix, name, "disease");
                 return index !== -1;
             });
-        })(diseases, filteredData);
-        medications = (function(list, filteredMatrix) {
+        })(diseasesNames, filteredData);
+        medicationsNames = (function(list, filteredMatrix) {
             return list.filter(function(name) {
                 var index = utils.arrayObjectIndexOf(
                     filteredMatrix, name, "medication");
                 return index !== -1;
             });
-        })(medications, filteredData);
+        })(medicationsNames, filteredData);
 
         var diseaseLabels = svg.selectAll(".disease-label")
-            .data(diseases);
+            .data(diseasesNames);
         diseaseLabels.enter().append("text")
             .attr("x", 0)
             .attr("y", function(d, i) {
@@ -258,7 +269,7 @@ moduleVisualizations.factory('visualizations',
         diseaseLabels.exit().remove();
 
         var medicationLabels = svg.selectAll(".medication-label")
-            .data(medications);
+            .data(medicationsNames);
         medicationLabels.enter().append("text")
             .style("text-anchor", "middle")
             .attr("transform", function(d, i) {
@@ -293,10 +304,10 @@ moduleVisualizations.factory('visualizations',
             .attr("height", gridHeight)
             .merge(cells)
                 .attr("x", function(d) {
-                    return (1 + medications.indexOf(d.medication)) * gridWidth;
+                    return (1 + medicationsNames.indexOf(d.medication)) * gridWidth;
                 })
                 .attr("y", function(d) {
-                    return (1 + diseases.indexOf(d.disease)) * gridHeight;
+                    return (1 + diseasesNames.indexOf(d.disease)) * gridHeight;
                 })
                 .style("fill", function(d) {
                     return colorScale(d.incidences);
@@ -344,20 +355,20 @@ moduleVisualizations.factory('visualizations',
 
         var filteredPatientMedicationsData = data
             .filter(function(d) {
-                return (patientMedications.indexOf(d.medication) !== -1) &&
-                    (medications.indexOf(d.medication) !== -1);
+                return (patientMedicationsNames.indexOf(d.medication) !== -1) &&
+                    (medicationsNames.indexOf(d.medication) !== -1);
             }); 
-        var patientMedicationsCells = svg.selectAll(".patientMedications")
+        var patientMedicationsCells = svg.selectAll(".attribute-mark-column")
             .data(filteredPatientMedicationsData, function(d) {
-                return medications.indexOf(d.medication);
+                return medicationsNames.indexOf(d.medication);
             });
         patientMedicationsCells.enter().append("rect")
-            .attr("class", "attribute-mark bordered")
+            .attr("class", "attribute-pair bordered")
             .attr("width", gridWidth)
             .attr("height", gridHeight)
             .merge(cells)
                 .attr("x", function(d) {
-                    return (1 + medications.indexOf(d.medication)) * gridWidth;
+                    return (1 + medicationsNames.indexOf(d.medication)) * gridWidth;
                 })
                 .attr("y", function(d) {
                     return 0;
@@ -367,7 +378,7 @@ moduleVisualizations.factory('visualizations',
                 })
                 .on("mouseover", function(d) {
                     // select the parent and sort the paths
-                    svg.selectAll(".attribute-mark").sort(function (a, b) {
+                    svg.selectAll(".attribute-pair").sort(function (a, b) {
                         // a is not the hovered element, send "a" to the back
                         if (a != d) return -1;
                         // a is the hovered element, bring "a" to the front
@@ -378,15 +389,15 @@ moduleVisualizations.factory('visualizations',
 
         var filteredPatientDiseasesData = data
             .filter(function(d) {
-                return (patientDiseases.indexOf(d.disease) !== -1) &&
-                    (diseases.indexOf(d.disease) !== -1);
+                return (patientDiseasesNames.indexOf(d.disease) !== -1) &&
+                    (diseasesNames.indexOf(d.disease) !== -1);
             }); 
-        var patientDiseasesCells = svg.selectAll(".patientDiseases")
+        var patientDiseasesCells = svg.selectAll(".attribute-mark-line")
             .data(filteredPatientDiseasesData, function(d) {
-                return diseases.indexOf(d.disease);
+                return diseasesNames.indexOf(d.disease);
             });
         patientDiseasesCells.enter().append("rect")
-            .attr("class", "attribute-mark bordered")
+            .attr("class", "attribute-pair bordered")
             .attr("width", gridWidth)
             .attr("height", gridHeight)
             .merge(cells)
@@ -394,14 +405,14 @@ moduleVisualizations.factory('visualizations',
                     return 0;
                 })
                 .attr("y", function(d) {
-                    return (1 + diseases.indexOf(d.disease)) * gridHeight;
+                    return (1 + diseasesNames.indexOf(d.disease)) * gridHeight;
                 })
                 .style("fill", function(d) {
                     return "#ff0000";
                 })
                 .on("mouseover", function(d) {
                     // select the parent and sort the paths
-                    svg.selectAll(".attribute-mark").sort(function (a, b) {
+                    svg.selectAll(".attribute-pair").sort(function (a, b) {
                         // a is not the hovered element, send "a" to the back
                         if (a != d) return -1;
                         // a is the hovered element, bring "a" to the front
@@ -420,7 +431,7 @@ moduleVisualizations.factory('visualizations',
                 .attr("x", function(d, i) {
                     return legendWidth * (1 + i);
                 })
-                .attr("y", (diseases.length + 1.5) * gridHeight)
+                .attr("y", (diseasesNames.length + 1.5) * gridHeight)
                 .attr("width", legendWidth)
                 .attr("height", gridHeight / 2)
                 .style("fill", function(d, i) {
@@ -450,7 +461,7 @@ moduleVisualizations.factory('visualizations',
                 .attr("x", function(d, i) {
                     return legendWidth * (1 + i);
                 })
-                .attr("y", (diseases.length + 2.5) * gridHeight);
+                .attr("y", (diseasesNames.length + 2.5) * gridHeight);
         legendText.exit().remove();
     };
 

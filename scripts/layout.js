@@ -200,14 +200,18 @@ moduleLayout.controller('controllerLayout',
         patientData.KEY_PATIENTS, 'diseases');
     $scope.medications = patientData.getAttributeList(
         patientData.KEY_PATIENTS, 'medications');
-    $scope.selectedDiseases = $scope.diseases
+    $scope.diseasesNames = patientData.getAttributeListByProperty(
+        patientData.KEY_PATIENTS, 'diseases', 'name');
+    $scope.medicationsNames = patientData.getAttributeListByProperty(
+        patientData.KEY_PATIENTS, 'medications', 'name');
+    $scope.selectedDiseases = $scope.diseasesNames
         .map(function(attribute) {
             return {
                 name: attribute,
                 selected: true
             };
         });
-    $scope.selectedMedications = $scope.medications
+    $scope.selectedMedications = $scope.medicationsNames
         .map(function(attribute) {
             return {
                 name: attribute,
@@ -399,9 +403,13 @@ moduleLayout.directive("directiveActionPanel",
                 var array = [];
                 var patient = patientData.getAttribute(patientData.KEY_PATIENT);
                 if (scope.currentAttributeType === 'diseases') {
-                    array = patient.diseases;
+                    array = patient.diseases.map(function(obj) {
+                        return obj.name;
+                    });
                 } else if (scope.currentAttributeType === 'medications') {
-                    array = patient.medications;
+                    array = patient.medications.map(function(obj) {
+                        return obj.name;
+                    });
                 }
 
                 var index = array.indexOf(name);
@@ -421,7 +429,8 @@ moduleLayout.directive("directiveActionPanel",
                 if (rootHasNoChildren || viewNotRoot) {
                     if (nodes.getCurrentNode().model.vizType ===
                             scope.vizType.HEAT_MAP) {
-                        var list = scope.currentAttributeType;
+                        var list = scope.currentAttributeType + "Names";
+
                         // Attribute lists
                         html = '<div>' +
                             '<div class="btn-group" ' +
