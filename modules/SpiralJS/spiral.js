@@ -111,9 +111,9 @@ Spiral.prototype.render = function() {
         svg.append("g")
             .classed("circular-heat", true)
             .attr("transform", "translate(" + option.margin.left + "," + option.margin.top + ")");
-        svg.selectAll("g").selectAll("path")
-            .data(option.data)
-            .enter().append("path")
+        var spiralGroup = svg.selectAll("g").selectAll("path")
+            .data(option.data);
+        spiralGroup.enter().append("path")
             .style("fill", function(d) {
                 return colorScale(d[2]);
             })
@@ -123,11 +123,18 @@ Spiral.prototype.render = function() {
             .on("mouseout", function(d) {
                 cellsTip.hide(d);
             })
+            .attr("d", function(d) {
+                return d[1];
+            });
 
+        option.makeLegend(
+                svg, 
+                colorScale, 
+                option.gridWidth, 
+                option.gridHeight,
+                option.gridWidth, 
+                option.svgHeight - 30);
 
-        .attr("d", function(d) {
-            return d[1]
-        });
     } else if (option.graphType === "non-spiral") {
         // --------------------vvv Standard Line Graph vvv---------------------------
         var x2 = d3.scaleLinear().range([0, 730]);

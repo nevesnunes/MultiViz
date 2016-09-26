@@ -49,7 +49,6 @@ moduleVisualizations.factory('visualizations',
         height = 420 - margin.top - margin.bottom,
         gridHeight = Math.floor(height / 8),
         gridWidth = gridHeight * 2,
-        legendWidth = gridWidth,
         customDarkGreys = ["#bdbdbd","#969696","#737373","#525252","#252525","#000000"],
         buckets = customDarkGreys.length,
         colors = customDarkGreys;
@@ -85,6 +84,51 @@ moduleVisualizations.factory('visualizations',
     var patientMedicationsNames = patient.medications.map(function(obj) {
         return obj.name;
     });
+
+    var makeLegend = function(svg, colorScale, width, height, xMargin, y) {
+        var legendRect = svg.selectAll(".legend-rect")
+            .data([0].concat(colorScale.quantiles()), function(d) {
+                return d;
+            });
+        legendRect.enter().append("rect")
+            .attr("class", "legend-rect bordered")
+            .merge(legendRect)
+                .attr("x", function(d, i) {
+                    return width * (1 + i) - xMargin;
+                })
+                .attr("y", y)
+                .attr("width", width)
+                .attr("height", height / 2)
+                .style("fill", function(d, i) {
+                    return colors[i];
+                })
+                .on("mouseover", function(d) {
+                    // select the parent and sort the paths
+                    svg.selectAll(".legend-rect").sort(function (a, b) {
+                        // a is not the hovered element, send "a" to the back
+                        if (a != d) return -1;
+                        // a is the hovered element, bring "a" to the front
+                        else return 1;                             
+                    });
+                });
+        legendRect.exit().remove();
+
+        var legendText = svg.selectAll(".legend-text")
+            .data([0].concat(colorScale.quantiles()), function(d) {
+                return d;
+            });
+        legendText.enter().append("text")
+            .attr("class", "legend-text viz-label")
+            .merge(legendText)
+                .text(function(d) {
+                    return "≥ " + Math.round(d);
+                })
+                .attr("x", function(d, i) {
+                    return width * (1 + i) - xMargin;
+                })
+                .attr("y", y + height);
+        legendText.exit().remove();
+    };
 
     // Unique identifier for heatmap elements
     var heatmapID = 0;
@@ -128,14 +172,17 @@ moduleVisualizations.factory('visualizations',
 
         var data = [];
         var countPoints = 100;
-        var spacing = 3;
+        var spacing = 2.75;
+        var size = 300;
         var spiral = new Spiral('custom-path');
         spiral.setParam('numberOfPoints', countPoints);
         spiral.setParam('period', 7);
-        spiral.setParam('svgHeight', 300);
-        spiral.setParam('svgWidth', 300);
+        spiral.setParam('svgWidth', size);
+        spiral.setParam('svgHeight', size + 20);
+        spiral.setParam('gridWidth', gridWidth);
+        spiral.setParam('gridHeight', gridHeight);
         spiral.setParam('margin', {
-            top: 10,
+            top: 0,
             right: 0,
             bottom: 0,
             left: 0
@@ -143,6 +190,7 @@ moduleVisualizations.factory('visualizations',
         spiral.setParam('spacing', spacing);
         spiral.setParam('lineWidth', spacing*6);
         spiral.setParam('targetElement', '#' + spiralID);
+        spiral.setParam('makeLegend', makeLegend);
         spiral.randomData();
         var svg = spiral.render();
 
@@ -364,48 +412,13 @@ moduleVisualizations.factory('visualizations',
                 });
         patientDiseasesCells.exit().remove();
 
-        var legendRect = svg.selectAll(".legend-rect")
-            .data([0].concat(colorScale.quantiles()), function(d) {
-                return d;
-            });
-        legendRect.enter().append("rect")
-            .attr("class", "legend-rect bordered")
-            .merge(legendRect)
-                .attr("x", function(d, i) {
-                    return legendWidth * (1 + i);
-                })
-                .attr("y", (diseasesNames.length + 1.5) * gridHeight)
-                .attr("width", legendWidth)
-                .attr("height", gridHeight / 2)
-                .style("fill", function(d, i) {
-                    return colors[i];
-                })
-                .on("mouseover", function(d) {
-                    // select the parent and sort the paths
-                    svg.selectAll(".legend-rect").sort(function (a, b) {
-                        // a is not the hovered element, send "a" to the back
-                        if (a != d) return -1;
-                        // a is the hovered element, bring "a" to the front
-                        else return 1;                             
-                    });
-                });
-        legendRect.exit().remove();
-
-        var legendText = svg.selectAll(".legend-text")
-            .data([0].concat(colorScale.quantiles()), function(d) {
-                return d;
-            });
-        legendText.enter().append("text")
-            .attr("class", "legend-text viz-label")
-            .merge(legendText)
-                .text(function(d) {
-                    return "≥ " + Math.round(d);
-                })
-                .attr("x", function(d, i) {
-                    return legendWidth * (1 + i);
-                })
-                .attr("y", (diseasesNames.length + 2.5) * gridHeight);
-        legendText.exit().remove();
+        makeLegend(
+                svg, 
+                colorScale, 
+                gridWidth, 
+                gridHeight,
+                0,
+                (diseasesNames.length + 1.5) * gridHeight);
     };
 
     var makeDescriptionHeatMap = function(elementID) {
