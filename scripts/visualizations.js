@@ -43,11 +43,11 @@ moduleVisualizations.factory('visualizations',
             top: 80,
             right: 0,
             bottom: 150,
-            left: 250
+            left: 200
         },
-        width = 960 - margin.left - margin.right,
-        height = 530 - margin.top - margin.bottom,
-        gridHeight = Math.floor(width / 24),
+        width = 800 - margin.left - margin.right,
+        height = 420 - margin.top - margin.bottom,
+        gridHeight = Math.floor(height / 8),
         gridWidth = gridHeight * 2,
         legendWidth = gridWidth,
         customDarkGreys = ["#bdbdbd","#969696","#737373","#525252","#252525","#000000"],
@@ -118,29 +118,6 @@ moduleVisualizations.factory('visualizations',
     };
 
     var populateSpiral = function(data, svg) {
-        /*
-        var countSegments = 24;
-        var heightSegment = 20;
-        var innerRadius = 20;
-        var rings = 7;
-        var margin = 20;
-        var chart = circularHeatChart()
-	        .range(["#bdbdbd", "black"])
-            .numSegments(countSegments)
-            .segmentHeight(heightSegment)
-            .innerRadius(innerRadius)
-            .margin({
-                top: margin,
-                right: margin,
-                bottom: margin,
-                left: margin
-            });
-
-        var cells = svg.selectAll('svg')
-            .data([data]);
-        cells.enter()
-            .call(chart);
-        */
     };
 
     var makeSpiral = function(elementID, spiralID, isChecked) {
@@ -149,52 +126,25 @@ moduleVisualizations.factory('visualizations',
             return;
         }
 
-        /*
-        var countSegments = 24;
-        var heightSegment = 20;
-        var innerRadius = 20;
-        var rings = 7;
-        var margin = 20;
-        var chart = circularHeatChart()
-	        .range(["#bdbdbd", "black"])
-            .numSegments(countSegments)
-            .segmentHeight(heightSegment)
-            .innerRadius(innerRadius)
-            .margin({
-                top: margin,
-                right: margin,
-                bottom: margin,
-                left: margin
-            });
-
-        var data = [];
-        for(var i=0; i<countSegments*rings; i++) {
-            data[i] = Math.random();
-        }
-
-        var svg = d3.select("#" + spiralID)
-            .append("svg")
-            .attr("width", 2 * rings * heightSegment +
-                2 * innerRadius +
-                2 * margin)
-            .attr("height", 2 * rings * heightSegment +
-                2 * innerRadius +
-                2 * margin);
-        */
-
         var data = [];
         var countPoints = 100;
-        var spacing = 5;
-        var spiral2 = new Spiral('custom-path');
-        spiral2.setParam('numberOfPoints', countPoints);
-        spiral2.setParam('period', 7);
-        spiral2.setParam('svgHeight', 500);
-        spiral2.setParam('svgWidth', 500);
-        spiral2.setParam('spacing', spacing);
-        spiral2.setParam('lineWidth', spacing*6);
-        spiral2.setParam('targetElement', '#' + spiralID);
-        spiral2.randomData();
-        var svg = spiral2.render();
+        var spacing = 3;
+        var spiral = new Spiral('custom-path');
+        spiral.setParam('numberOfPoints', countPoints);
+        spiral.setParam('period', 7);
+        spiral.setParam('svgHeight', 300);
+        spiral.setParam('svgWidth', 300);
+        spiral.setParam('margin', {
+            top: 10,
+            right: 0,
+            bottom: 0,
+            left: 0
+        });
+        spiral.setParam('spacing', spacing);
+        spiral.setParam('lineWidth', spacing*6);
+        spiral.setParam('targetElement', '#' + spiralID);
+        spiral.randomData();
+        var svg = spiral.render();
 
         // Save svg for d3 updates
         nodes.updateViz({

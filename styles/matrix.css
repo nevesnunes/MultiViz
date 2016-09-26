@@ -1,6 +1,6 @@
 rect.bordered {
   stroke: #ededed;
-  stroke-width: 2px;   
+  stroke-width: 0px;   
 }
 
 rect.bordered:hover {
