@@ -70,18 +70,11 @@ moduleVisualizations.factory('visualizations',
     };
 
     // Selected attribute lists shared among multiple patients
-    var diseases = [];
-    var medications = [];
     var diseasesNames = [];
     var medicationsNames = [];
     var updateData = function(selectedDiseases, selectedMedications) {
-        diseases = processSelectedList(selectedDiseases);
-        medications = processSelectedList(selectedMedications);
-
-        // FIXME: Most likely these will we different arrays, but
-        // for now we are only needing names
-        diseasesNames = diseases;
-        medicationsNames = medications;
+        diseasesNames = processSelectedList(selectedDiseases);
+        medicationsNames = processSelectedList(selectedMedications);
     };
 
     // Patient attribute lists
@@ -296,10 +289,10 @@ moduleVisualizations.factory('visualizations',
                 return "Número de pacientes: " + d.incidences;
             });
         svg.call(cellsTip);
-        var cells = svg.selectAll(".attribute-pair")
+        var cells = svg.selectAll(".attribute-cell")
             .data(filteredData);
         cells.enter().append("rect")
-            .attr("class", "attribute-pair bordered")
+            .attr("class", "attribute-cell bordered")
             .attr("width", gridWidth)
             .attr("height", gridHeight)
             .merge(cells)
@@ -332,7 +325,7 @@ moduleVisualizations.factory('visualizations',
                         });
 
                     // Sort paths for correct hover styling
-                    svg.selectAll(".attribute-pair")
+                    svg.selectAll(".attribute-cell")
                         .sort(function (a, b) {
                             // a is not the hovered element, send "a" to the back
                             if (a != d) return -1;
@@ -363,7 +356,7 @@ moduleVisualizations.factory('visualizations',
                 return medicationsNames.indexOf(d.medication);
             });
         patientMedicationsCells.enter().append("rect")
-            .attr("class", "attribute-pair bordered")
+            .attr("class", "attribute-cell bordered")
             .attr("width", gridWidth)
             .attr("height", gridHeight)
             .merge(cells)
@@ -378,7 +371,7 @@ moduleVisualizations.factory('visualizations',
                 })
                 .on("mouseover", function(d) {
                     // select the parent and sort the paths
-                    svg.selectAll(".attribute-pair").sort(function (a, b) {
+                    svg.selectAll(".attribute-cell").sort(function (a, b) {
                         // a is not the hovered element, send "a" to the back
                         if (a != d) return -1;
                         // a is the hovered element, bring "a" to the front
@@ -397,7 +390,7 @@ moduleVisualizations.factory('visualizations',
                 return diseasesNames.indexOf(d.disease);
             });
         patientDiseasesCells.enter().append("rect")
-            .attr("class", "attribute-pair bordered")
+            .attr("class", "attribute-cell bordered")
             .attr("width", gridWidth)
             .attr("height", gridHeight)
             .merge(cells)
@@ -412,7 +405,7 @@ moduleVisualizations.factory('visualizations',
                 })
                 .on("mouseover", function(d) {
                     // select the parent and sort the paths
-                    svg.selectAll(".attribute-pair").sort(function (a, b) {
+                    svg.selectAll(".attribute-cell").sort(function (a, b) {
                         // a is not the hovered element, send "a" to the back
                         if (a != d) return -1;
                         // a is the hovered element, bring "a" to the front

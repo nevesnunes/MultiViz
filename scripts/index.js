@@ -92,6 +92,15 @@ moduleIndex.factory('patientData', function($window) {
             .reduce(reduceDataArray, []);
     };
 
+    var cloneAttributeList = function(obj) {
+        return (obj === undefined) ?
+            {} :
+            {
+                name: obj.name,
+                startDate: obj.startDate
+            };
+    };
+
     // Initialize
     attributes[KEY_PATIENT] = getData(KEY_PATIENT);
     attributes[KEY_PATIENTS] = getData(KEY_PATIENTS);
@@ -104,7 +113,8 @@ moduleIndex.factory('patientData', function($window) {
         getData: getData,
         getAttribute: getAttribute,
         getAttributeList: getAttributeList,
-        getAttributeListByProperty: getAttributeListByProperty
+        getAttributeListByProperty: getAttributeListByProperty,
+        cloneAttributeList: cloneAttributeList
     };
 });
 
