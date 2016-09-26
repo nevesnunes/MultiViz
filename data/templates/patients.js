@@ -51,7 +51,7 @@ var generator = (function() {
     var makeRandomDays = function(frequency, startDate, endDate) {
         var days = [];
         var countDays = daysBetween(startDate, endDate);
-        var currentDay = 1;
+        var currentDay = 0;
         while (currentDay <= countDays) {
             var chance = Math.floor(Math.random() * (4 - 1)) + 1;
             if (chance < 3) {
@@ -100,13 +100,14 @@ var generator = (function() {
         // TODO
         var recordedFrequency = makeRandomRecordedFrequency(
                 expectedFrequency, startDate, endDate);
-        var dosage = null;
+        var dosage = Math.floor(Math.random() * (4 - 1)) + 1;
         return {
             name: element,
             startDate: startDate,
             endDate: endDate,
             expectedFrequency: expectedFrequency,
-            recordedFrequency: recordedFrequency
+            recordedFrequency: recordedFrequency,
+            dosage: dosage
         };
     };
 
