@@ -252,15 +252,26 @@ moduleVisualizations.factory('visualizations',
             });
         })(medicationsNames, filteredData);
 
+        var rectWidth = 200;
+
         var diseaseLabels = svg.selectAll(".disease-label")
             .data(diseasesNames);
-        diseaseLabels.enter().append("text")
+        var diseaseLabelsGroup = diseaseLabels.enter().append("g");
+        diseaseLabelsGroup.append("rect")
+            .attr("class", "rect-disease-label rect-label")
+            .attr("x", -rectWidth)
+            .attr("y", function(d, i) {
+                return (1 + i) * gridHeight;
+            })
+            .attr("width", rectWidth)
+            .attr("height", gridHeight);
+        diseaseLabelsGroup.append("text")
             .attr("x", 0)
             .attr("y", function(d, i) {
                 return (1 + i) * gridHeight;
             })
             .style("text-anchor", "end")
-            .attr("transform", "translate(-6," + gridHeight / 1.5 + ")")
+            .attr("transform", "translate(-5," + gridHeight / 1.5 + ")")
             .attr("class", "disease-label viz-label axis")
             .merge(diseaseLabels)
                 .text(function(d) {
@@ -270,13 +281,22 @@ moduleVisualizations.factory('visualizations',
 
         var medicationLabels = svg.selectAll(".medication-label")
             .data(medicationsNames);
-        medicationLabels.enter().append("text")
-            .style("text-anchor", "middle")
+        var medicationLabelsGroup = medicationLabels.enter().append("g")
             .attr("transform", function(d, i) {
-                return "translate(" + ((1 + i) * gridWidth) + ", -25)rotate(20)";
-            })
+                return "translate(" + ((1.75 + i) * gridWidth) + ", " + 
+                        (-(1 * gridHeight)) + ")rotate(20)";
+            });
+        medicationLabelsGroup.append("rect")
+            .attr("class", "rect-medication-label rect-label")
+            .attr("x", -rectWidth)
+            .attr("width", rectWidth)
+            .attr("height", gridHeight);
+        medicationLabelsGroup.append("text")
+            .style("text-anchor", "end")
             .attr("class", "medication-label viz-label axis")
-            .merge(medicationLabels)
+            .attr("transform", "translate(-5," + gridHeight * 0.25 + ")")
+            .attr("y", gridHeight / 2)
+            .merge(medicationLabelsGroup)
                 .text(function(d) {
                     return d;
                 });
@@ -322,6 +342,12 @@ moduleVisualizations.factory('visualizations',
                                 "medication-label axis viz-label-selected" :
                                 "medication-label viz-label axis ";
                         });
+                    svg.selectAll(".rect-medication-label")
+                        .attr("class", function(a) {
+                            return (a == d.medication) ? 
+                                "rect-medication-label rect-label-selected" :
+                                "rect-medication-label rect-label";
+                        });
 
                     // Style line labels
                     svg.selectAll(".disease-label")
@@ -329,6 +355,12 @@ moduleVisualizations.factory('visualizations',
                             return (a == d.disease) ? 
                                 "disease-label axis viz-label-selected" :
                                 "disease-label viz-label axis ";
+                        });
+                    svg.selectAll(".rect-disease-label")
+                        .attr("class", function(a) {
+                            return (a == d.disease) ? 
+                                "rect-disease-label rect-label-selected" :
+                                "rect-disease-label rect-label";
                         });
 
                     // Sort paths for correct hover styling
@@ -346,10 +378,14 @@ moduleVisualizations.factory('visualizations',
                     // Style column labels
                     svg.selectAll(".medication-label")
                         .attr("class", "medication-label viz-label axis");
+                    svg.selectAll(".rect-medication-label")
+                        .attr("class", "rect-medication-label rect-label");
 
                     // Style line labels
                     svg.selectAll(".disease-label")
                         .attr("class", "disease-label viz-label axis");
+                    svg.selectAll(".rect-disease-label")
+                        .attr("class", "rect-disease-label rect-label");
                 });
         cells.exit().remove();
 

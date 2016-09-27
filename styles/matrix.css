@@ -1,11 +1,20 @@
+.rect-label {
+  fill-opacity: 0.0;
+}
+
+.rect-label-selected {
+  fill: #c4e3f3;
+  fill-opacity: 1.0;
+}
+
 rect.bordered {
-  stroke: #ededed;
-  stroke-width: 0px;   
+  stroke: white;
+  stroke-width: 2px;   
 }
 
 rect.bordered:hover {
-  fill: #286090 !important;
-  stroke: #4a99e6;
+  fill: #31708f !important;
+  stroke: #c4e3f3;
   stroke-width: 4px;   
 }
 
@@ -16,8 +25,10 @@ text.viz-label {
 }
 
 text.viz-label-selected {
+  font-size: 0.9em;
+  font-family: sans-serif;
   font-weight: bold;
-  fill: #286090 !important;
+  fill: #31708f !important;
 }
 
 text.axis {

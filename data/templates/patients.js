@@ -39,20 +39,11 @@ var generator = (function() {
             'Diário'
     ];
 
-    var treatAsUTC = function(date) {
-        var result = new Date(date);
-        result.setMinutes(result.getMinutes() - result.getTimezoneOffset());
-        return result;
-    };
-
-    var daysBetween = function(startDate, endDate) {
-        var millisecondsPerDay = 24 * 60 * 60 * 1000;
-        return (treatAsUTC(endDate) - treatAsUTC(startDate)) / millisecondsPerDay;
-    };
-
     var makeRandomDays = function(frequency, startDate, endDate) {
         var days = [];
-        var countDays = daysBetween(startDate, endDate);
+        var startMoment = moment(startDate);
+        var endMoment = moment(endDate);
+        var countDays = endMoment.diff(startMoment, 'days');
         var currentDay = 0;
         while (currentDay <= countDays) {
             var chance = Math.floor(Math.random() * (4 - 1)) + 1;
@@ -102,10 +93,10 @@ var generator = (function() {
                 startMoment.format('YYYY/MM/DD') + 
                 ' - ' + 
                 endMoment.format('YYYY/MM/DD'));
-        console.log('years: ' + endMoment.diff((startMoment), 'years'));
-        console.log('months: ' + endMoment.diff((startMoment), 'months'));
-        console.log('weeks: ' + endMoment.diff((startMoment), 'weeks'));
-        console.log('days: ' + endMoment.diff((startMoment), 'days'));
+        console.log('years: ' + endMoment.diff(startMoment, 'years'));
+        console.log('months: ' + endMoment.diff(startMoment, 'months'));
+        console.log('weeks: ' + endMoment.diff(startMoment, 'weeks'));
+        console.log('days: ' + endMoment.diff(startMoment, 'days'));
     };
 
     var medicationObjectGenerator = function(element) {
