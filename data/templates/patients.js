@@ -167,13 +167,17 @@ var generator = (function() {
                 medications, medicationObjectGenerator, "name");
 		var pickedHabits = makeRandomArray(
                 habits, habitObjectGenerator, "name");
+		var age = Math.floor(Math.random() * (100 - 1)) + 1;
+        var lastVisit = randomDate(new Date(2012, 0, 1), new Date());
 
 		return {
 			id: id,
 			name: name,
+			age: age,
 			diseases: pickedDiseases,
 			medications: pickedMedications,
-            habits: pickedHabits
+            habits: pickedHabits,
+            lastVisit: lastVisit
 		};
 	};
 

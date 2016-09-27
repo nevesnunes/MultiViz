@@ -128,8 +128,11 @@ moduleIndex.controller('controllerAddData',
                 index: index,
                 id: data.id,
                 name: data.name,
+                age: data.age,
                 diseases: data.diseases,
-                medications: data.medications
+                medications: data.medications,
+                habits: data.habits,
+                lastVisit: data.lastVisit
             };
         });
         patientData.setData(patientData.KEY_PATIENTS, result);
@@ -140,7 +143,12 @@ moduleIndex.controller('controllerAddData',
                 {
                     index: obj.index,
                     id: obj.id,
-                    name: obj.name
+                    name: obj.name,
+                    age: obj.age,
+                    diseases: obj.diseases,
+                    medications: obj.medications,
+                    habits: obj.habits,
+                    lastVisit: obj.lastVisit
                 };
         };
 

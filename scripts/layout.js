@@ -170,6 +170,11 @@ moduleLayout.controller('controllerMainPanel',
     });
 
     $scope.patient = patientData.getAttribute(patientData.KEY_PATIENT);
+    
+    var retrievedLastVisit = new Date($scope.patient.lastVisit);
+    $scope.dateLastVisit = retrievedLastVisit.getDate() + '/' +
+        (retrievedLastVisit.getMonth() + 1) + '/' + 
+        retrievedLastVisit.getFullYear();
 }]);
 
 moduleLayout.directive("directiveMainPanel", function() {
