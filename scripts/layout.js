@@ -24,7 +24,7 @@ moduleLayout.factory("nodes",
      *
      * @property {string} splitType - type of split
      *
-     * @property {string} vizType - type of visualization
+     * @property {string} vizType - type of visualization stored in node
      *
      * @property {{id:string, isValid:bool, isChecked:bool, html:string}[]} vizs -
      * one or more visualizations, identified by a unique id
@@ -98,9 +98,16 @@ moduleLayout.factory("nodes",
     };
 
     /**
-     * @param {nodeID:string, vizID:string, isChecked:bool, html:object} data -
-     * contains the updated html of a visualization identified by 
-     * node id and visualization id
+     * @param {
+     *   nodeID:string,
+     *   vizID:string,
+     *   isChecked:bool,
+     *   html:object,
+     *   context:object
+     * } data - contains the updated html of a visualization identified by 
+     * node id and visualization id; isChecked states if the visualization is
+     * displayed in the overview; state stores properties specific to the
+     * visualization type
      */
     var updateViz = function(data) {
         data.isChecked = data.isChecked || false;
@@ -117,7 +124,8 @@ moduleLayout.factory("nodes",
                 id: data.vizID,
                 isChecked: data.isChecked,
                 isValid: true,
-                html: data.html
+                html: data.html,
+                state: data.state || {}
             });
         }
     };
@@ -357,6 +365,11 @@ moduleLayout.directive("directiveActionPanel",
                 updateFromSelections();
             };
 
+            // Select a single property from the view's active property list
+            scope.checkSingle = function(name) {
+                // TODO
+            };
+
             // Select all properties from the view's active property list
             scope.checkAll = function() {
                 var array = [];
@@ -520,7 +533,7 @@ moduleLayout.directive("directiveActionPanel",
                             '<div class="table table-condensed table-bordered patient-table">' +
                                 '<div class="checkboxInTable patient-table-entry" ' +
                                     'ng-repeat="attribute in filteredAttributes = (' + list + ' | filter:attributeModel)"' +
-                                    'ng-click="check(attribute)" ' +
+                                    'ng-click="checkSingle(attribute)" ' +
                                     'ng-class="isEntrySelected($index)">' +
                                     '<div style="display: inline-block">' +
                                         '<div style="display: inline-block" ' +
