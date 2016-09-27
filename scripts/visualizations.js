@@ -43,13 +43,12 @@ moduleVisualizations.factory('visualizations',
             top: 80,
             right: 0,
             bottom: 150,
-            left: 250
+            left: 200
         },
-        width = 960 - margin.left - margin.right,
-        height = 530 - margin.top - margin.bottom,
-        gridHeight = Math.floor(width / 24),
+        width = 800 - margin.left - margin.right,
+        height = 420 - margin.top - margin.bottom,
+        gridHeight = Math.floor(height / 8),
         gridWidth = gridHeight * 2,
-        legendWidth = gridWidth,
         customDarkGreys = ["#bdbdbd","#969696","#737373","#525252","#252525","#000000"],
         buckets = customDarkGreys.length,
         colors = customDarkGreys;
@@ -70,17 +69,66 @@ moduleVisualizations.factory('visualizations',
     };
 
     // Selected attribute lists shared among multiple patients
-    var diseases = [];
-    var medications = [];
+    var diseasesNames = [];
+    var medicationsNames = [];
     var updateData = function(selectedDiseases, selectedMedications) {
-        diseases = processSelectedList(selectedDiseases);
-        medications = processSelectedList(selectedMedications);
+        diseasesNames = processSelectedList(selectedDiseases);
+        medicationsNames = processSelectedList(selectedMedications);
     };
 
     // Patient attribute lists
     var patient = patientData.getAttribute(patientData.KEY_PATIENT);
-    var patientDiseases = patient.diseases;
-    var patientMedications = patient.medications;
+    var patientDiseasesNames = patient.diseases.map(function(obj) {
+        return obj.name;
+    });
+    var patientMedicationsNames = patient.medications.map(function(obj) {
+        return obj.name;
+    });
+
+    var makeLegend = function(svg, colorScale, width, height, xMargin, y) {
+        var legendRect = svg.selectAll(".legend-rect")
+            .data([0].concat(colorScale.quantiles()), function(d) {
+                return d;
+            });
+        legendRect.enter().append("rect")
+            .attr("class", "legend-rect bordered")
+            .merge(legendRect)
+                .attr("x", function(d, i) {
+                    return width * i + xMargin;
+                })
+                .attr("y", y)
+                .attr("width", width)
+                .attr("height", height / 2)
+                .style("fill", function(d, i) {
+                    return colors[i];
+                })
+                .on("mouseover", function(d) {
+                    // select the parent and sort the paths
+                    svg.selectAll(".legend-rect").sort(function (a, b) {
+                        // a is not the hovered element, send "a" to the back
+                        if (a != d) return -1;
+                        // a is the hovered element, bring "a" to the front
+                        else return 1;                             
+                    });
+                });
+        legendRect.exit().remove();
+
+        var legendText = svg.selectAll(".legend-text")
+            .data([0].concat(colorScale.quantiles()), function(d) {
+                return d;
+            });
+        legendText.enter().append("text")
+            .attr("class", "legend-text viz-label")
+            .merge(legendText)
+                .text(function(d) {
+                    return "≥ " + Math.round(d);
+                })
+                .attr("x", function(d, i) {
+                    return width * i + xMargin;
+                })
+                .attr("y", y + height);
+        legendText.exit().remove();
+    };
 
     // Unique identifier for heatmap elements
     var heatmapID = 0;
@@ -114,29 +162,6 @@ moduleVisualizations.factory('visualizations',
     };
 
     var populateSpiral = function(data, svg) {
-        /*
-        var countSegments = 24;
-        var heightSegment = 20;
-        var innerRadius = 20;
-        var rings = 7;
-        var margin = 20;
-        var chart = circularHeatChart()
-	        .range(["#bdbdbd", "black"])
-            .numSegments(countSegments)
-            .segmentHeight(heightSegment)
-            .innerRadius(innerRadius)
-            .margin({
-                top: margin,
-                right: margin,
-                bottom: margin,
-                left: margin
-            });
-
-        var cells = svg.selectAll('svg')
-            .data([data]);
-        cells.enter()
-            .call(chart);
-        */
     };
 
     var makeSpiral = function(elementID, spiralID, isChecked) {
@@ -145,52 +170,38 @@ moduleVisualizations.factory('visualizations',
             return;
         }
 
-        /*
-        var countSegments = 24;
-        var heightSegment = 20;
-        var innerRadius = 20;
-        var rings = 7;
-        var margin = 20;
-        var chart = circularHeatChart()
-	        .range(["#bdbdbd", "black"])
-            .numSegments(countSegments)
-            .segmentHeight(heightSegment)
-            .innerRadius(innerRadius)
-            .margin({
-                top: margin,
-                right: margin,
-                bottom: margin,
-                left: margin
-            });
-
-        var data = [];
-        for(var i=0; i<countSegments*rings; i++) {
-            data[i] = Math.random();
-        }
-
-        var svg = d3.select("#" + spiralID)
-            .append("svg")
-            .attr("width", 2 * rings * heightSegment +
-                2 * innerRadius +
-                2 * margin)
-            .attr("height", 2 * rings * heightSegment +
-                2 * innerRadius +
-                2 * margin);
-        */
-
         var data = [];
         var countPoints = 100;
-        var spacing = 5;
-        var spiral2 = new Spiral('custom-path');
-        spiral2.setParam('numberOfPoints', countPoints);
-        spiral2.setParam('period', 7);
-        spiral2.setParam('svgHeight', 500);
-        spiral2.setParam('svgWidth', 500);
-        spiral2.setParam('spacing', spacing);
-        spiral2.setParam('lineWidth', spacing*6);
-        spiral2.setParam('targetElement', '#' + spiralID);
-        spiral2.randomData();
-        var svg = spiral2.render();
+        var size = 300;
+
+        // FIXME: There's probably a less hardcoded way to compute adjustments...
+        var spacing = 275 / countPoints;
+        if (countPoints < 100)
+            spacing *= (countPoints / 100) + 0.25 * ((100 - countPoints) / 100);
+        if (countPoints < 10)
+            spacing *= 1.25 * (countPoints / 10);
+
+        var spiral = new Spiral({
+            graphType: 'custom-path',
+            numberOfPoints: countPoints,
+            period: '7',
+            svgWidth: size,
+            svgHeight: size + 50,
+            margin: {
+                top: -30,
+                right: 0,
+                bottom: 0,
+                left: 0
+            },
+            spacing: spacing,
+            lineWidth: spacing * 6,
+            targetElement: '#' + spiralID,
+            functions: {
+                makeLegend: makeLegend
+            }
+        });
+        spiral.randomData();
+        var svg = spiral.render();
 
         // Save svg for d3 updates
         nodes.updateViz({
@@ -219,37 +230,48 @@ moduleVisualizations.factory('visualizations',
         // json data contains all attributes, which need to be filtered
         // first by user selected attributes
         var filteredData = data.filter(function(d) {
-            return (diseases.indexOf(d.disease) !== -1) &&
-                (medications.indexOf(d.medication) !== -1);
+            return (diseasesNames.indexOf(d.disease) !== -1) &&
+                (medicationsNames.indexOf(d.medication) !== -1);
         }); 
 
         // We now remove attributes from the lists that don't have
         // matches in filteredData (i.e. no cells for that attribute
         // have values)
-        diseases = (function(list, filteredMatrix) {
+        diseasesNames = (function(list, filteredMatrix) {
             return list.filter(function(name) {
                 var index = utils.arrayObjectIndexOf(
                     filteredMatrix, name, "disease");
                 return index !== -1;
             });
-        })(diseases, filteredData);
-        medications = (function(list, filteredMatrix) {
+        })(diseasesNames, filteredData);
+        medicationsNames = (function(list, filteredMatrix) {
             return list.filter(function(name) {
                 var index = utils.arrayObjectIndexOf(
                     filteredMatrix, name, "medication");
                 return index !== -1;
             });
-        })(medications, filteredData);
+        })(medicationsNames, filteredData);
+
+        var rectWidth = 200;
 
         var diseaseLabels = svg.selectAll(".disease-label")
-            .data(diseases);
-        diseaseLabels.enter().append("text")
+            .data(diseasesNames);
+        var diseaseLabelsGroup = diseaseLabels.enter().append("g");
+        diseaseLabelsGroup.append("rect")
+            .attr("class", "rect-disease-label rect-label")
+            .attr("x", -rectWidth)
+            .attr("y", function(d, i) {
+                return (1 + i) * gridHeight;
+            })
+            .attr("width", rectWidth)
+            .attr("height", gridHeight);
+        diseaseLabelsGroup.append("text")
             .attr("x", 0)
             .attr("y", function(d, i) {
                 return (1 + i) * gridHeight;
             })
             .style("text-anchor", "end")
-            .attr("transform", "translate(-6," + gridHeight / 1.5 + ")")
+            .attr("transform", "translate(-5," + gridHeight / 1.5 + ")")
             .attr("class", "disease-label viz-label axis")
             .merge(diseaseLabels)
                 .text(function(d) {
@@ -258,14 +280,23 @@ moduleVisualizations.factory('visualizations',
         diseaseLabels.exit().remove();
 
         var medicationLabels = svg.selectAll(".medication-label")
-            .data(medications);
-        medicationLabels.enter().append("text")
-            .style("text-anchor", "middle")
+            .data(medicationsNames);
+        var medicationLabelsGroup = medicationLabels.enter().append("g")
             .attr("transform", function(d, i) {
-                return "translate(" + ((1 + i) * gridWidth) + ", -25)rotate(20)";
-            })
+                return "translate(" + ((1.75 + i) * gridWidth) + ", " + 
+                        (-(1 * gridHeight)) + ")rotate(20)";
+            });
+        medicationLabelsGroup.append("rect")
+            .attr("class", "rect-medication-label rect-label")
+            .attr("x", -rectWidth)
+            .attr("width", rectWidth)
+            .attr("height", gridHeight);
+        medicationLabelsGroup.append("text")
+            .style("text-anchor", "end")
             .attr("class", "medication-label viz-label axis")
-            .merge(medicationLabels)
+            .attr("transform", "translate(-5," + gridHeight * 0.25 + ")")
+            .attr("y", gridHeight / 2)
+            .merge(medicationLabelsGroup)
                 .text(function(d) {
                     return d;
                 });
@@ -285,18 +316,18 @@ moduleVisualizations.factory('visualizations',
                 return "Número de pacientes: " + d.incidences;
             });
         svg.call(cellsTip);
-        var cells = svg.selectAll(".attribute-pair")
+        var cells = svg.selectAll(".attribute-cell")
             .data(filteredData);
         cells.enter().append("rect")
-            .attr("class", "attribute-pair bordered")
+            .attr("class", "attribute-cell bordered")
             .attr("width", gridWidth)
             .attr("height", gridHeight)
             .merge(cells)
                 .attr("x", function(d) {
-                    return (1 + medications.indexOf(d.medication)) * gridWidth;
+                    return (1 + medicationsNames.indexOf(d.medication)) * gridWidth;
                 })
                 .attr("y", function(d) {
-                    return (1 + diseases.indexOf(d.disease)) * gridHeight;
+                    return (1 + diseasesNames.indexOf(d.disease)) * gridHeight;
                 })
                 .style("fill", function(d) {
                     return colorScale(d.incidences);
@@ -311,6 +342,12 @@ moduleVisualizations.factory('visualizations',
                                 "medication-label axis viz-label-selected" :
                                 "medication-label viz-label axis ";
                         });
+                    svg.selectAll(".rect-medication-label")
+                        .attr("class", function(a) {
+                            return (a == d.medication) ? 
+                                "rect-medication-label rect-label-selected" :
+                                "rect-medication-label rect-label";
+                        });
 
                     // Style line labels
                     svg.selectAll(".disease-label")
@@ -319,9 +356,15 @@ moduleVisualizations.factory('visualizations',
                                 "disease-label axis viz-label-selected" :
                                 "disease-label viz-label axis ";
                         });
+                    svg.selectAll(".rect-disease-label")
+                        .attr("class", function(a) {
+                            return (a == d.disease) ? 
+                                "rect-disease-label rect-label-selected" :
+                                "rect-disease-label rect-label";
+                        });
 
                     // Sort paths for correct hover styling
-                    svg.selectAll(".attribute-pair")
+                    svg.selectAll(".attribute-cell")
                         .sort(function (a, b) {
                             // a is not the hovered element, send "a" to the back
                             if (a != d) return -1;
@@ -335,29 +378,33 @@ moduleVisualizations.factory('visualizations',
                     // Style column labels
                     svg.selectAll(".medication-label")
                         .attr("class", "medication-label viz-label axis");
+                    svg.selectAll(".rect-medication-label")
+                        .attr("class", "rect-medication-label rect-label");
 
                     // Style line labels
                     svg.selectAll(".disease-label")
                         .attr("class", "disease-label viz-label axis");
+                    svg.selectAll(".rect-disease-label")
+                        .attr("class", "rect-disease-label rect-label");
                 });
         cells.exit().remove();
 
         var filteredPatientMedicationsData = data
             .filter(function(d) {
-                return (patientMedications.indexOf(d.medication) !== -1) &&
-                    (medications.indexOf(d.medication) !== -1);
+                return (patientMedicationsNames.indexOf(d.medication) !== -1) &&
+                    (medicationsNames.indexOf(d.medication) !== -1);
             }); 
-        var patientMedicationsCells = svg.selectAll(".patientMedications")
+        var patientMedicationsCells = svg.selectAll(".attribute-mark-column")
             .data(filteredPatientMedicationsData, function(d) {
-                return medications.indexOf(d.medication);
+                return medicationsNames.indexOf(d.medication);
             });
         patientMedicationsCells.enter().append("rect")
-            .attr("class", "attribute-mark bordered")
+            .attr("class", "attribute-cell bordered")
             .attr("width", gridWidth)
             .attr("height", gridHeight)
             .merge(cells)
                 .attr("x", function(d) {
-                    return (1 + medications.indexOf(d.medication)) * gridWidth;
+                    return (1 + medicationsNames.indexOf(d.medication)) * gridWidth;
                 })
                 .attr("y", function(d) {
                     return 0;
@@ -367,7 +414,7 @@ moduleVisualizations.factory('visualizations',
                 })
                 .on("mouseover", function(d) {
                     // select the parent and sort the paths
-                    svg.selectAll(".attribute-mark").sort(function (a, b) {
+                    svg.selectAll(".attribute-cell").sort(function (a, b) {
                         // a is not the hovered element, send "a" to the back
                         if (a != d) return -1;
                         // a is the hovered element, bring "a" to the front
@@ -378,15 +425,15 @@ moduleVisualizations.factory('visualizations',
 
         var filteredPatientDiseasesData = data
             .filter(function(d) {
-                return (patientDiseases.indexOf(d.disease) !== -1) &&
-                    (diseases.indexOf(d.disease) !== -1);
+                return (patientDiseasesNames.indexOf(d.disease) !== -1) &&
+                    (diseasesNames.indexOf(d.disease) !== -1);
             }); 
-        var patientDiseasesCells = svg.selectAll(".patientDiseases")
+        var patientDiseasesCells = svg.selectAll(".attribute-mark-line")
             .data(filteredPatientDiseasesData, function(d) {
-                return diseases.indexOf(d.disease);
+                return diseasesNames.indexOf(d.disease);
             });
         patientDiseasesCells.enter().append("rect")
-            .attr("class", "attribute-mark bordered")
+            .attr("class", "attribute-cell bordered")
             .attr("width", gridWidth)
             .attr("height", gridHeight)
             .merge(cells)
@@ -394,14 +441,14 @@ moduleVisualizations.factory('visualizations',
                     return 0;
                 })
                 .attr("y", function(d) {
-                    return (1 + diseases.indexOf(d.disease)) * gridHeight;
+                    return (1 + diseasesNames.indexOf(d.disease)) * gridHeight;
                 })
                 .style("fill", function(d) {
                     return "#ff0000";
                 })
                 .on("mouseover", function(d) {
                     // select the parent and sort the paths
-                    svg.selectAll(".attribute-mark").sort(function (a, b) {
+                    svg.selectAll(".attribute-cell").sort(function (a, b) {
                         // a is not the hovered element, send "a" to the back
                         if (a != d) return -1;
                         // a is the hovered element, bring "a" to the front
@@ -410,48 +457,13 @@ moduleVisualizations.factory('visualizations',
                 });
         patientDiseasesCells.exit().remove();
 
-        var legendRect = svg.selectAll(".legend-rect")
-            .data([0].concat(colorScale.quantiles()), function(d) {
-                return d;
-            });
-        legendRect.enter().append("rect")
-            .attr("class", "legend-rect bordered")
-            .merge(legendRect)
-                .attr("x", function(d, i) {
-                    return legendWidth * (1 + i);
-                })
-                .attr("y", (diseases.length + 1.5) * gridHeight)
-                .attr("width", legendWidth)
-                .attr("height", gridHeight / 2)
-                .style("fill", function(d, i) {
-                    return colors[i];
-                })
-                .on("mouseover", function(d) {
-                    // select the parent and sort the paths
-                    svg.selectAll(".legend-rect").sort(function (a, b) {
-                        // a is not the hovered element, send "a" to the back
-                        if (a != d) return -1;
-                        // a is the hovered element, bring "a" to the front
-                        else return 1;                             
-                    });
-                });
-        legendRect.exit().remove();
-
-        var legendText = svg.selectAll(".legend-text")
-            .data([0].concat(colorScale.quantiles()), function(d) {
-                return d;
-            });
-        legendText.enter().append("text")
-            .attr("class", "legend-text viz-label")
-            .merge(legendText)
-                .text(function(d) {
-                    return "≥ " + Math.round(d);
-                })
-                .attr("x", function(d, i) {
-                    return legendWidth * (1 + i);
-                })
-                .attr("y", (diseases.length + 2.5) * gridHeight);
-        legendText.exit().remove();
+        makeLegend(
+                svg, 
+                colorScale, 
+                gridWidth, 
+                gridHeight,
+                gridWidth,
+                (diseasesNames.length + 1.5) * gridHeight);
     };
 
     var makeDescriptionHeatMap = function(elementID) {

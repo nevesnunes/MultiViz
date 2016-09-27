@@ -19,6 +19,9 @@ digraph dependencies {
       "controllerMainPanel"[label="controllerMainPanel", color=4]
       "moduleIndex" -> "controllerMainPanel"
     
+      "controllerOptionList"[label="controllerOptionList", color=4]
+      "moduleIndex" -> "controllerOptionList"
+    
 
     
 
@@ -40,8 +43,8 @@ digraph dependencies {
       "directiveTooltip"[label="directiveTooltip", color=3]
       "moduleIndex" -> "directiveTooltip"
     
-      "ngKeySelect"[label="ngKeySelect", color=3]
-      "moduleIndex" -> "ngKeySelect"
+      "directiveOptionList"[label="directiveOptionList", color=3]
+      "moduleIndex" -> "directiveOptionList"
     
 
 
@@ -62,7 +65,7 @@ digraph dependencies {
     
       
         "patientData"[label="patientData"]
-        "patientData" -> "ngKeySelect"
+        "patientData" -> "directiveOptionList"
       
     
 
@@ -85,6 +88,11 @@ digraph dependencies {
       
         "patientData"[label="patientData"]
         "patientData" -> "controllerMainPanel"
+      
+    
+      
+        "$scope"[label="$scope"]
+        "$scope" -> "controllerOptionList"
       
     
 

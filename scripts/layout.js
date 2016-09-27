@@ -24,7 +24,7 @@ moduleLayout.factory("nodes",
      *
      * @property {string} splitType - type of split
      *
-     * @property {string} vizType - type of visualization
+     * @property {string} vizType - type of visualization stored in node
      *
      * @property {{id:string, isValid:bool, isChecked:bool, html:string}[]} vizs -
      * one or more visualizations, identified by a unique id
@@ -98,9 +98,16 @@ moduleLayout.factory("nodes",
     };
 
     /**
-     * @param {nodeID:string, vizID:string, isChecked:bool, html:object} data -
-     * contains the updated html of a visualization identified by 
-     * node id and visualization id
+     * @param {
+     *   nodeID:string,
+     *   vizID:string,
+     *   isChecked:bool,
+     *   html:object,
+     *   context:object
+     * } data - contains the updated html of a visualization identified by 
+     * node id and visualization id; isChecked states if the visualization is
+     * displayed in the overview; state stores properties specific to the
+     * visualization type
      */
     var updateViz = function(data) {
         data.isChecked = data.isChecked || false;
@@ -117,7 +124,8 @@ moduleLayout.factory("nodes",
                 id: data.vizID,
                 isChecked: data.isChecked,
                 isValid: true,
-                html: data.html
+                html: data.html,
+                state: data.state || {}
             });
         }
     };
@@ -170,6 +178,9 @@ moduleLayout.controller('controllerMainPanel',
     });
 
     $scope.patient = patientData.getAttribute(patientData.KEY_PATIENT);
+    
+    var retrievedLastVisit = new Date($scope.patient.lastVisit);
+    $scope.dateLastVisit = moment(retrievedLastVisit).format('YYYY/MM/DD');
 }]);
 
 moduleLayout.directive("directiveMainPanel", function() {
@@ -200,14 +211,18 @@ moduleLayout.controller('controllerLayout',
         patientData.KEY_PATIENTS, 'diseases');
     $scope.medications = patientData.getAttributeList(
         patientData.KEY_PATIENTS, 'medications');
-    $scope.selectedDiseases = $scope.diseases
+    $scope.diseasesNames = patientData.getAttributeListByProperty(
+        patientData.KEY_PATIENTS, 'diseases', 'name');
+    $scope.medicationsNames = patientData.getAttributeListByProperty(
+        patientData.KEY_PATIENTS, 'medications', 'name');
+    $scope.selectedDiseases = $scope.diseasesNames
         .map(function(attribute) {
             return {
                 name: attribute,
                 selected: true
             };
         });
-    $scope.selectedMedications = $scope.medications
+    $scope.selectedMedications = $scope.medicationsNames
         .map(function(attribute) {
             return {
                 name: attribute,
@@ -350,6 +365,11 @@ moduleLayout.directive("directiveActionPanel",
                 updateFromSelections();
             };
 
+            // Select a single property from the view's active property list
+            scope.checkSingle = function(name) {
+                // TODO
+            };
+
             // Select all properties from the view's active property list
             scope.checkAll = function() {
                 var array = [];
@@ -399,9 +419,13 @@ moduleLayout.directive("directiveActionPanel",
                 var array = [];
                 var patient = patientData.getAttribute(patientData.KEY_PATIENT);
                 if (scope.currentAttributeType === 'diseases') {
-                    array = patient.diseases;
+                    array = patient.diseases.map(function(obj) {
+                        return obj.name;
+                    });
                 } else if (scope.currentAttributeType === 'medications') {
-                    array = patient.medications;
+                    array = patient.medications.map(function(obj) {
+                        return obj.name;
+                    });
                 }
 
                 var index = array.indexOf(name);
@@ -421,7 +445,8 @@ moduleLayout.directive("directiveActionPanel",
                 if (rootHasNoChildren || viewNotRoot) {
                     if (nodes.getCurrentNode().model.vizType ===
                             scope.vizType.HEAT_MAP) {
-                        var list = scope.currentAttributeType;
+                        var list = scope.currentAttributeType + "Names";
+
                         // Attribute lists
                         html = '<div>' +
                             '<div class="btn-group" ' +
@@ -466,6 +491,49 @@ moduleLayout.directive("directiveActionPanel",
                                 '<div class="checkboxInTable patient-table-entry" ' +
                                     'ng-repeat="attribute in filteredAttributes = (' + list + ' | filter:attributeModel)"' +
                                     'ng-click="check(attribute)" ' +
+                                    'ng-class="isEntrySelected($index)">' +
+                                    '<div style="display: inline-block">' +
+                                        '<div style="display: inline-block" ' +
+                                            'ng-class="isEntryCurrentPatientAttribute(attribute)">' +
+                                        '</div>' +
+                                        '<input ' +
+                                            'class="custom-checkbox" ' +
+                                            'type="checkbox" ' +
+                                            'ng-checked="isSelected(attribute)"> ' +
+                                            '{{::attribute}}' +
+                                    '</div>' +
+                                '</div>' +
+                            '</div>' +
+                        '</div>';
+                    } else if (nodes.getCurrentNode().model.vizType ===
+                            scope.vizType.SPIRAL) {
+                        var list = "medicationsNames";
+
+                        // Attribute lists
+                        html = '<div>' +
+                            '<div class="dropdown">' +
+                                '<button type="button" href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Medicações <span class="caret"></span></button>' +
+                                '<ul class="dropdown-menu">' +
+                                    '<li><a href="#">TODO</a></li>' +
+                                '</ul>' +
+                            '</div>' +
+                            '<p/>' +
+                            // Search
+                            '<div class="right-inner-addon">' +
+                                '<i class="glyphicon glyphicon-search"></i>' +
+                                '<input type="text" ' +
+                                    'id="input-patient" ' +
+                                    'class="form-control" ' +
+                                    'placeholder="Procurar..." ' +
+                                    'ng-model="attributeModel" ' +
+                                    'autofocus tabindex=1>' +
+                            '</div>' +
+                            '<p/>' +
+                            // List
+                            '<div class="table table-condensed table-bordered patient-table">' +
+                                '<div class="checkboxInTable patient-table-entry" ' +
+                                    'ng-repeat="attribute in filteredAttributes = (' + list + ' | filter:attributeModel)"' +
+                                    'ng-click="checkSingle(attribute)" ' +
                                     'ng-class="isEntrySelected($index)">' +
                                     '<div style="display: inline-block">' +
                                         '<div style="display: inline-block" ' +

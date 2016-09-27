@@ -72,6 +72,35 @@ moduleIndex.factory('patientData', function($window) {
             .reduce(reduceDataArray, []);
     };
 
+    // Used when the property is an object, therefore we need to
+    // specify the key in order to reduce an array made with each
+    // object's key
+    var getAttributeListByProperty = function(key, attributeType, property) {
+        // FIXME:
+        // Invalid lists, due to loading url without stored attributes;
+        // Will probably change to some REST API
+        if (attributes[key].length === 0) {
+            window.location.href = "index.html";
+        }
+
+        return attributes[key]
+            .map(function(patient) {
+                return patient[attributeType].map(function(obj) {
+                    return obj[property];
+                });
+            })
+            .reduce(reduceDataArray, []);
+    };
+
+    var cloneAttributeList = function(obj) {
+        return (obj === undefined) ?
+            {} :
+            {
+                name: obj.name,
+                startDate: obj.startDate
+            };
+    };
+
     // Initialize
     attributes[KEY_PATIENT] = getData(KEY_PATIENT);
     attributes[KEY_PATIENTS] = getData(KEY_PATIENTS);
@@ -83,7 +112,9 @@ moduleIndex.factory('patientData', function($window) {
         setData: setData,
         getData: getData,
         getAttribute: getAttribute,
-        getAttributeList: getAttributeList
+        getAttributeList: getAttributeList,
+        getAttributeListByProperty: getAttributeListByProperty,
+        cloneAttributeList: cloneAttributeList
     };
 });
 
@@ -97,8 +128,11 @@ moduleIndex.controller('controllerAddData',
                 index: index,
                 id: data.id,
                 name: data.name,
+                age: data.age,
                 diseases: data.diseases,
-                medications: data.medications
+                medications: data.medications,
+                habits: data.habits,
+                lastVisit: data.lastVisit
             };
         });
         patientData.setData(patientData.KEY_PATIENTS, result);
@@ -109,7 +143,12 @@ moduleIndex.controller('controllerAddData',
                 {
                     index: obj.index,
                     id: obj.id,
-                    name: obj.name
+                    name: obj.name,
+                    age: obj.age,
+                    diseases: obj.diseases,
+                    medications: obj.medications,
+                    habits: obj.habits,
+                    lastVisit: obj.lastVisit
                 };
         };
 

@@ -59,6 +59,8 @@ digraph dependencies {
       
         "controllerMainPanel"[label="controllerMainPanel", color=4]
       
+        "controllerOptionList"[label="controllerOptionList", color=4]
+      
 
       
 
@@ -78,7 +80,7 @@ digraph dependencies {
       
         "directiveTooltip"[label="directiveTooltip", color=3]
       
-        "ngKeySelect"[label="ngKeySelect", color=3]
+        "directiveOptionList"[label="directiveOptionList", color=3]
       
 
 
@@ -93,13 +95,15 @@ digraph dependencies {
       
         "moduleIndex" -> "directiveTooltip"
       
-        "moduleIndex" -> "ngKeySelect"
+        "moduleIndex" -> "directiveOptionList"
       
 
       
         "moduleIndex" -> "controllerAddData"
       
         "moduleIndex" -> "controllerMainPanel"
+      
+        "moduleIndex" -> "controllerOptionList"
       
 
       
@@ -132,7 +136,7 @@ digraph dependencies {
       
         
           "patientData"[label="patientData"]
-          "patientData" -> "ngKeySelect"
+          "patientData" -> "directiveOptionList"
         
       
 
@@ -154,6 +158,11 @@ digraph dependencies {
         
           "patientData"[label="patientData"]
           "patientData" -> "controllerMainPanel"
+        
+      
+        
+          "$scope"[label="$scope"]
+          "$scope" -> "controllerOptionList"
         
       
 
@@ -374,7 +383,7 @@ digraph dependencies {
       
         "controllerMainPanel"[label="controllerMainPanel", color=4]
       
-        "controllerPanes"[label="controllerPanes", color=4]
+        "controllerLayout"[label="controllerLayout", color=4]
       
 
       
@@ -389,6 +398,8 @@ digraph dependencies {
       
 
       
+        "directiveMainPanel"[label="directiveMainPanel", color=3]
+      
         "directiveActionPanel"[label="directiveActionPanel", color=3]
       
         "directivePanes"[label="directivePanes", color=3]
@@ -402,6 +413,8 @@ digraph dependencies {
       
 
       
+        "moduleLayout" -> "directiveMainPanel"
+      
         "moduleLayout" -> "directiveActionPanel"
       
         "moduleLayout" -> "directivePanes"
@@ -410,7 +423,7 @@ digraph dependencies {
       
         "moduleLayout" -> "controllerMainPanel"
       
-        "moduleLayout" -> "controllerPanes"
+        "moduleLayout" -> "controllerLayout"
       
 
       
@@ -434,6 +447,8 @@ digraph dependencies {
       node[shape="ellipse",style="filled", color=8]
       
 
+      
+        
       
         
           "visualizations"[label="visualizations"]
@@ -475,10 +490,10 @@ digraph dependencies {
       
         
           "$scope"[label="$scope"]
-          "$scope" -> "controllerPanes"
+          "$scope" -> "controllerLayout"
         
           "patientData"[label="patientData"]
-          "patientData" -> "controllerPanes"
+          "patientData" -> "controllerLayout"
         
       
 
