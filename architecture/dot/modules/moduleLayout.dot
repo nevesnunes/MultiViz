@@ -25,8 +25,8 @@ digraph dependencies {
       "controllerMainPanel"[label="controllerMainPanel", color=4]
       "moduleLayout" -> "controllerMainPanel"
     
-      "controllerPanes"[label="controllerPanes", color=4]
-      "moduleLayout" -> "controllerPanes"
+      "controllerLayout"[label="controllerLayout", color=4]
+      "moduleLayout" -> "controllerLayout"
     
 
     
@@ -39,6 +39,9 @@ digraph dependencies {
     node[shape="cds"]
     
 
+    
+      "directiveMainPanel"[label="directiveMainPanel", color=3]
+      "moduleLayout" -> "directiveMainPanel"
     
       "directiveActionPanel"[label="directiveActionPanel", color=3]
       "moduleLayout" -> "directiveActionPanel"
@@ -58,6 +61,8 @@ digraph dependencies {
     node[shape="ellipse",style="filled", color=9]
     
 
+    
+      
     
       
         "visualizations"[label="visualizations"]
@@ -100,10 +105,10 @@ digraph dependencies {
     
       
         "$scope"[label="$scope"]
-        "$scope" -> "controllerPanes"
+        "$scope" -> "controllerLayout"
       
         "patientData"[label="patientData"]
-        "patientData" -> "controllerPanes"
+        "patientData" -> "controllerLayout"
       
     
 

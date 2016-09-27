@@ -1,11 +1,13 @@
-var _node_fs = require('fs');
+var node_fs = require('fs');
 
-var _uuid = require('../../node_modules/node-uuid/uuid.js');
+var uuid = require('../../node_modules/node-uuid/uuid.js');
+var moment = require('../../node_modules/moment/moment.js');
+moment().format();
 
 // Databases
-var _firstNames = require('../../modules/random-name/first-names.json');
-var _middleNames = require('../../modules/random-name/middle-names.json');
-var _lastNames = require('../../modules/random-name/names.json');
+var firstNames = require('../../modules/random-name/first-names.json');
+var middleNames = require('../../modules/random-name/middle-names.json');
+var lastNames = require('../../modules/random-name/names.json');
 
 var generator = (function() {
 	var iterations = 80;
@@ -82,7 +84,7 @@ var generator = (function() {
                 recordedFrequency = makeRandomDays(7, startDate, endDate);
                 break;
             }
-            case 'Diária': {
+            case 'Diário': {
                 recordedFrequency = makeRandomDays(1, startDate, endDate);
                 break;
             }
@@ -93,11 +95,24 @@ var generator = (function() {
         return recordedFrequency;
     };
 
+    var logDateDifference = function(startDate, endDate) {
+        var startMoment = moment(startDate);
+        var endMoment = moment(endDate);
+        console.log(
+                startMoment.format('YYYY/MM/DD') + 
+                ' - ' + 
+                endMoment.format('YYYY/MM/DD'));
+        console.log('years: ' + endMoment.diff((startMoment), 'years'));
+        console.log('months: ' + endMoment.diff((startMoment), 'months'));
+        console.log('weeks: ' + endMoment.diff((startMoment), 'weeks'));
+        console.log('days: ' + endMoment.diff((startMoment), 'days'));
+    };
+
     var medicationObjectGenerator = function(element) {
         var startDate = randomDate(new Date(2012, 0, 1), new Date());
         var endDate = randomDate(startDate, new Date());
+
         var expectedFrequency = pickRandomElement(genericFrequencies);
-        // TODO
         var recordedFrequency = makeRandomRecordedFrequency(
                 expectedFrequency, startDate, endDate);
         var dosage = Math.floor(Math.random() * (4 - 1)) + 1;
@@ -156,11 +171,11 @@ var generator = (function() {
     var diseases = ['Artrite', 'Candidiase Oral', 'Doença Cardíaca Congénita', 'Doença da Tiroide', 'Doença Venérea', 'Enfarte Miocárdio', 'Febre Reumática', 'Gânglios aumentados de volume', 'Glaucoma', 'Osteoporose'];
     var medications = ['Anti-hipertensor', 'Broncodilatador', 'Anti-depressor', 'Anti-ácidos', 'Estatinas', 'Anti-diabéticos', 'Análgésicos', 'Aspirina', 'Esteróides'];
 	var makeInstance = function() {
-        var id = _uuid.v1();
+        var id = uuid.v1();
         var name =
-                pickRandomElement(_firstNames) +
+                pickRandomElement(firstNames) +
                 ' ' +
-                pickRandomElement(_lastNames);
+                pickRandomElement(lastNames);
 		var pickedDiseases = makeRandomArray(
                 diseases, diseaseObjectGenerator, "name");
 		var pickedMedications = makeRandomArray(
@@ -199,7 +214,7 @@ for (var i = 0; i < generator.iterations; i++) {
 // Output data
 var jsonData = JSON.stringify(data, null, 4);
 var filename = __dirname + "/../patients.json";
-_node_fs.writeFile(filename, jsonData, function(err) {
+node_fs.writeFile(filename, jsonData, function(err) {
     if(err) {
         return console.log(err);
     }
