@@ -1,34 +1,45 @@
-function Spiral(graphType) {
+function Spiral(parameters) {
     this.option = {
-        graphType: graphType || "points",
-        numberOfPoints: null,
-        period: null,
-        margin: {
+        graphType: parameters.graphType || "points",
+        numberOfPoints: parameters.numberOfPoints || null,
+        period: parameters.period || null,
+        svgHeight: parameters.svgHeight || 0,
+        svgWidth: parameters.svgWidth || 0,
+        margin: parameters.margin || {
             top: 10,
             right: 10,
             bottom: 10,
             left: 30
         },
-        svgHeight: 0,
-        svgWidth: 0,
-        spacing: 1,
-        lineWidth: 50,
-        targetElement: '#chart',
-        data: [],
-        x: d3.scaleLinear().range([0, 730]).domain([-750, 750]),
-        y: d3.scaleLinear().range([480, 0]).domain([-500, 500]),
-        tickMarkNumber: [],
-        tickMarkLabels: [],
-        color: 'black',
-        colorMode: 'opacity'
-    }
-};
+        spacing: parameters.spacing || 1,
+        lineWidth: parameters.lineWidth || 50,
+        targetElement: parameters.targetElement || '#chart',
+        data: parameters.data || [],
+        tickMarkNumber: parameters.tickMarkNumber || [],
+        tickMarkLabels: parameters.tickMarkLabels || [],
+        color: parameters.color || 'black',
+        colors: parameters.colors || ["#bdbdbd","#969696","#737373","#525252","#252525","#000000"],
+        functions: parameters.functions || {}
+    };
+
+    // Compute position
+    var width = this.option.svgWidth - 
+            this.option.margin.left - this.option.margin.right;
+    var height = this.option.svgHeight - 
+            this.option.margin.top - this.option.margin.bottom;
+    this.option.x = d3.scaleLinear()
+            .range([0, width])
+            .domain([-this.option.svgWidth, this.option.svgWidth]);
+    this.option.y = d3.scaleLinear()
+            .range([height, 0])
+            .domain([-this.option.svgHeight, this.option.svgHeight]);
+}
 
 Spiral.prototype.cartesian = function(radius, angle, size) {
     var classObj = this;
     var option = classObj.option;
 
-    var size = size || 1;
+    size = size || 1;
     var xPos = option.x(radius * Math.cos(angle));
     var yPos = option.y(radius * Math.sin(angle));
     return [xPos, yPos, size];
@@ -41,11 +52,13 @@ Spiral.prototype.render = function() {
     var svg = d3.select(option.targetElement)
         .append("svg")
         .attr("width", option.svgWidth)
-        .attr("height", option.svgHeight)
+        .attr("height", option.svgHeight);
 
     if (option.graphType === "points") {
         svg.append("g")
-            .attr("transform", "translate(" + option.margin.left + "," + option.margin.top + ")");
+            .attr("transform", "translate(" + 
+                    option.margin.left + "," + 
+                    option.margin.top + ")");
 
         svg.selectAll("g").selectAll("dot")
             .data(option.data)
@@ -87,18 +100,16 @@ Spiral.prototype.render = function() {
             arcPath += "Q" + outerControlPoint[0] + " " + outerControlPoint[1] + " " + point3[0] + " " + point3[1];
             arcPath += "L" + point4[0] + " " + point4[1];
             arcPath += "Q" + innerControlPoint[0] + " " + innerControlPoint[1] + " " + startPoint[0] + " " + startPoint[1] + "Z";
-            datum[1] = arcPath
+            datum[1] = arcPath;
         });
 
 
-        var customDarkGreys = ["#bdbdbd", "#969696", "#737373", "#525252", "#252525", "#000000"];
-        var buckets = customDarkGreys.length;
-        var colors = customDarkGreys;
+        var buckets = option.colors.length;
         var colorScale = d3.scaleQuantile()
             .domain([0, buckets - 1, d3.max(option.data, function(d) {
                 return d[2];
             })])
-            .range(colors);
+            .range(option.colors);
 
         var cellsTip = d3.tip()
             .attr('class', 'tooltip tooltip-element tooltip-d3')
@@ -127,12 +138,15 @@ Spiral.prototype.render = function() {
                 return d[1];
             });
 
-        option.makeLegend(
+        var padding = 10;
+        var gridWidth = (option.svgWidth - 2 * padding) / buckets;
+        var gridHeight = gridWidth / 2;
+        option.functions.makeLegend(
                 svg, 
                 colorScale, 
-                option.gridWidth, 
-                option.gridHeight,
-                option.gridWidth, 
+                gridWidth, 
+                gridHeight,
+                padding, 
                 option.svgHeight - 30);
 
     } else if (option.graphType === "non-spiral") {
@@ -189,7 +203,7 @@ Spiral.prototype.render = function() {
             .attr("fill", "none")
             .attr("stroke-width", "1")
             .attr("stroke", option.color)
-            .attr("transform", "translate(" + option.margin.left + ",0)")
+            .attr("transform", "translate(" + option.margin.left + ",0)");
     }
 
     return svg;
@@ -209,7 +223,7 @@ Spiral.prototype.randomData = function() {
         }
 
         if (option.graphType === 'non-spiral') {
-            option.data.push([i, size * option.period, 2])
+            option.data.push([i, size * option.period, 2]);
         } else {
             option.data.push(this.cartesian(rad, angle, size));
         }
@@ -219,15 +233,7 @@ Spiral.prototype.randomData = function() {
 Spiral.prototype.setParam = function(param, value) {
     var classObj = this;
     var option = classObj.option;
-
     option[param] = value;
-
-    if (['svgHeight', 'svgWidth', 'margin.top', 'margin.right', 'margin.bottom', 'margin.left'].indexOf(param) > -1) {
-        var width = option.svgWidth - option.margin.left - option.margin.right;
-        var height = option.svgHeight - option.margin.top - option.margin.bottom;
-        option.x = d3.scaleLinear().range([0, width]).domain([-option.svgWidth, option.svgWidth]);
-        option.y = d3.scaleLinear().range([height, 0]).domain([-option.svgHeight, option.svgHeight]);
-    }
 };
 
 Spiral.prototype.redraw = function() {
@@ -236,7 +242,7 @@ Spiral.prototype.redraw = function() {
 
     var graphContainer = document.getElementById(option.targetElement.substr(1));
     while (graphContainer.firstChild) {
-        graphContainer.removeChild(graphContainer.firstChild)
+        graphContainer.removeChild(graphContainer.firstChild);
     }
     classObj.render();
 };
@@ -261,7 +267,7 @@ Spiral.prototype.autocorrelate = function() {
 
     for (var tau = 0; tau < n; tau++) {
         var sigma1 = 0;
-        for (var j = 0; j < n - tau; j++) {
+        for (j = 0; j < n - tau; j++) {
             sigma1 += (this.option.data[j][index] - avg) * (this.option.data[j + tau][index] - avg);
         }
 
@@ -284,24 +290,24 @@ Spiral.prototype.findPeriod = function() {
 
     for (var i = 0; i < coeffArray.length; i++) {
         averageCoeff += coeffArray[i][1];
-    };
+    }
     averageCoeff = averageCoeff / coeffArray.length;
 
-    for (var i = 0; i < coeffArray.length; i++) {
+    for (i = 0; i < coeffArray.length; i++) {
         coeffDiffSum += Math.pow((coeffArray[i][1] - averageCoeff), 2);
-    };
+    }
     coeffStdDev = Math.sqrt(coeffDiffSum / coeffArray.length);
 
-    for (var i = 0; i < coeffArray.length / 2; i++) {
+    for (i = 0; i < coeffArray.length / 2; i++) {
         if (coeffArray[i][1] >= averageCoeff + 3 * coeffStdDev) {
             tauArray.push(coeffArray[i][0]);
-        };
-    };
+        }
+    }
 
-    for (var i = 0; i < tauArray.length; i++) {
+    for (i = 0; i < tauArray.length; i++) {
         var diff = tauArray[i] - tauArray[i - 1];
         potentialPeriods[diff] = potentialPeriods[diff] ? potentialPeriods[diff] + 1 : 1;
-    };
+    }
 
     Object.keys(potentialPeriods).forEach(function(potentialPeriod) {
         if (potentialPeriods[potentialPeriod] > periodOccurance) {
@@ -316,15 +322,15 @@ Spiral.prototype.findPeriod = function() {
 
 function theta(t, period) {
     return 2 * Math.PI / (period) * t;
-};
+}
 
 function startAngle(t, period) {
     return (theta(t - 1, period) + theta(t, period)) / 2;
-};
+}
 
 function endAngle(t, period) {
     return (theta(t + 1, period) + theta(t, period)) / 2;
-};
+}
 
 function radius(spacing, angle) {
     return spacing * angle;

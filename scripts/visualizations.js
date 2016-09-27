@@ -94,7 +94,7 @@ moduleVisualizations.factory('visualizations',
             .attr("class", "legend-rect bordered")
             .merge(legendRect)
                 .attr("x", function(d, i) {
-                    return width * (1 + i) - xMargin;
+                    return width * i + xMargin;
                 })
                 .attr("y", y)
                 .attr("width", width)
@@ -124,7 +124,7 @@ moduleVisualizations.factory('visualizations',
                     return "≥ " + Math.round(d);
                 })
                 .attr("x", function(d, i) {
-                    return width * (1 + i) - xMargin;
+                    return width * i + xMargin;
                 })
                 .attr("y", y + height);
         legendText.exit().remove();
@@ -172,25 +172,34 @@ moduleVisualizations.factory('visualizations',
 
         var data = [];
         var countPoints = 100;
-        var spacing = 2.75;
         var size = 300;
-        var spiral = new Spiral('custom-path');
-        spiral.setParam('numberOfPoints', countPoints);
-        spiral.setParam('period', 7);
-        spiral.setParam('svgWidth', size);
-        spiral.setParam('svgHeight', size + 20);
-        spiral.setParam('gridWidth', gridWidth);
-        spiral.setParam('gridHeight', gridHeight);
-        spiral.setParam('margin', {
-            top: 0,
-            right: 0,
-            bottom: 0,
-            left: 0
+
+        // FIXME: There's probably a less hardcoded way to compute adjustments...
+        var spacing = 275 / countPoints;
+        if (countPoints < 100)
+            spacing *= (countPoints / 100) + 0.25 * ((100 - countPoints) / 100);
+        if (countPoints < 10)
+            spacing *= 1.25 * (countPoints / 10);
+
+        var spiral = new Spiral({
+            graphType: 'custom-path',
+            numberOfPoints: countPoints,
+            period: '7',
+            svgWidth: size,
+            svgHeight: size + 50,
+            margin: {
+                top: -30,
+                right: 0,
+                bottom: 0,
+                left: 0
+            },
+            spacing: spacing,
+            lineWidth: spacing * 6,
+            targetElement: '#' + spiralID,
+            functions: {
+                makeLegend: makeLegend
+            }
         });
-        spiral.setParam('spacing', spacing);
-        spiral.setParam('lineWidth', spacing*6);
-        spiral.setParam('targetElement', '#' + spiralID);
-        spiral.setParam('makeLegend', makeLegend);
         spiral.randomData();
         var svg = spiral.render();
 
@@ -417,7 +426,7 @@ moduleVisualizations.factory('visualizations',
                 colorScale, 
                 gridWidth, 
                 gridHeight,
-                0,
+                gridWidth,
                 (diseasesNames.length + 1.5) * gridHeight);
     };
 
