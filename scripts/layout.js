@@ -492,6 +492,49 @@ moduleLayout.directive("directiveActionPanel",
                                 '</div>' +
                             '</div>' +
                         '</div>';
+                    } else if (nodes.getCurrentNode().model.vizType ===
+                            scope.vizType.SPIRAL) {
+                        var list = "medicationsNames";
+
+                        // Attribute lists
+                        html = '<div>' +
+                            '<div class="dropdown">' +
+                                '<button type="button" href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Medicações <span class="caret"></span></button>' +
+                                '<ul class="dropdown-menu">' +
+                                    '<li><a href="#">TODO</a></li>' +
+                                '</ul>' +
+                            '</div>' +
+                            '<p/>' +
+                            // Search
+                            '<div class="right-inner-addon">' +
+                                '<i class="glyphicon glyphicon-search"></i>' +
+                                '<input type="text" ' +
+                                    'id="input-patient" ' +
+                                    'class="form-control" ' +
+                                    'placeholder="Procurar..." ' +
+                                    'ng-model="attributeModel" ' +
+                                    'autofocus tabindex=1>' +
+                            '</div>' +
+                            '<p/>' +
+                            // List
+                            '<div class="table table-condensed table-bordered patient-table">' +
+                                '<div class="checkboxInTable patient-table-entry" ' +
+                                    'ng-repeat="attribute in filteredAttributes = (' + list + ' | filter:attributeModel)"' +
+                                    'ng-click="check(attribute)" ' +
+                                    'ng-class="isEntrySelected($index)">' +
+                                    '<div style="display: inline-block">' +
+                                        '<div style="display: inline-block" ' +
+                                            'ng-class="isEntryCurrentPatientAttribute(attribute)">' +
+                                        '</div>' +
+                                        '<input ' +
+                                            'class="custom-checkbox" ' +
+                                            'type="checkbox" ' +
+                                            'ng-checked="isSelected(attribute)"> ' +
+                                            '{{::attribute}}' +
+                                    '</div>' +
+                                '</div>' +
+                            '</div>' +
+                        '</div>';
                     } else {
                         html = "<span>TODO</span>";
                     }
