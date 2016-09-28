@@ -393,6 +393,12 @@ moduleVisualizations.factory('visualizations',
             .filter(function(d) {
                 return (patientMedicationsNames.indexOf(d.medication) !== -1) &&
                     (medicationsNames.indexOf(d.medication) !== -1);
+            })
+            .map(function(d) {
+                return {
+                    medication: d.medication,
+                    isMark: true
+                };
             }); 
         var patientMedicationsCells = svg.selectAll(".attribute-mark-column")
             .data(filteredPatientMedicationsData, function(d) {
@@ -427,6 +433,12 @@ moduleVisualizations.factory('visualizations',
             .filter(function(d) {
                 return (patientDiseasesNames.indexOf(d.disease) !== -1) &&
                     (diseasesNames.indexOf(d.disease) !== -1);
+            })
+            .map(function(d) {
+                return {
+                    disease: d.disease,
+                    isMark: true
+                };
             }); 
         var patientDiseasesCells = svg.selectAll(".attribute-mark-line")
             .data(filteredPatientDiseasesData, function(d) {
