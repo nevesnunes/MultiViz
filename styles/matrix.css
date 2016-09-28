@@ -18,13 +18,13 @@ rect.bordered:hover {
   stroke-width: 4px;   
 }
 
-text.viz-label {
+.text-label {
   font-size: 0.9em;
   font-family: sans-serif;
   fill: #000;
 }
 
-text.viz-label-selected {
+.text-label-selected {
   font-size: 0.9em;
   font-family: sans-serif;
   font-weight: bold;
