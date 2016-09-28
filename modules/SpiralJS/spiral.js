@@ -217,9 +217,10 @@ Spiral.prototype.randomData = function() {
     for (var i = 0; i < option.numberOfPoints; i++) {
         var angle = theta(i, option.period);
         var rad = radius(option.spacing, angle);
-        var size = 1 + Math.random() * 1.5;
-        if (i % 10 === 0) {
-            size = 1.5 + Math.random() * 3;
+        var size = Math.floor((Math.random() * 5) + 1);
+        var chance = Math.floor((Math.random() * 5) + 1);
+        if (chance < 3) {
+            size = 0;
         }
 
         if (option.graphType === 'non-spiral') {
