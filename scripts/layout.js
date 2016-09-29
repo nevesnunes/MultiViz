@@ -125,6 +125,7 @@ moduleLayout.factory("nodes",
                 isChecked: data.isChecked,
                 isValid: true,
                 html: data.html,
+                vizObj: data.vizObj || {},
                 state: data.state || {}
             });
         }
@@ -339,8 +340,8 @@ moduleLayout.directive("directiveActionPanel",
                     visualizations.updateHeatMap(node.model.id);
                 } else if (node.model.vizType ===
                         scope.vizType.SPIRAL) {
-                    var viz = nodes.getVizByIDs(nodeID, spiralID);
-                    viz.state.medications = state.medications;
+                    // FIXME
+                    node.model.vizs[0].state = state;
                     visualizations.updateSpiral(node.model.id);
                 }
             };
@@ -371,7 +372,10 @@ moduleLayout.directive("directiveActionPanel",
 
             // Select a single property from the view's active property list
             scope.checkSingle = function(name) {
-                // TODO
+                updateFromSelections({
+                        medications: scope.selectedMedications,
+                        currentMedication: name 
+                });
             };
 
             // Select all properties from the view's active property list
@@ -526,6 +530,7 @@ moduleLayout.directive("directiveActionPanel",
 
                         // Attribute lists
                         html = '<div>' +
+                            '<h4>Escolha um atributo:</h4>' +
                             '<div class="dropdown">' +
                                 '<button type="button" href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Medicações <span class="caret"></span></button>' +
                                 '<ul class="dropdown-menu">' +
@@ -554,11 +559,7 @@ moduleLayout.directive("directiveActionPanel",
                                         '<div style="display: inline-block" ' +
                                             'ng-class="isEntryCurrentPatientAttribute(attribute)">' +
                                         '</div>' +
-                                        '<input ' +
-                                            'class="custom-checkbox" ' +
-                                            'type="checkbox" ' +
-                                            'ng-checked="isSelected(attribute)"> ' +
-                                            '{{::attribute}}' +
+                                        '{{::attribute}}' +
                                     '</div>' +
                                 '</div>' +
                             '</div>' +

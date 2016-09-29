@@ -19,6 +19,7 @@ function Spiral(parameters) {
         tickMarkLabels: parameters.tickMarkLabels || [],
         color: parameters.color || 'black',
         colors: parameters.colors || ["#bdbdbd","#969696","#737373","#525252","#252525","#000000"],
+        currentMedication: parameters.currentMedication || "TODO Attribute",
         functions: parameters.functions || {}
     };
 
@@ -49,7 +50,10 @@ Spiral.prototype.render = function() {
     var classObj = this;
     var option = classObj.option;
 
+    d3.select(option.targetElement).html("");
     var svg = d3.select(option.targetElement)
+        .append('div')
+        .html('<p>' + option.currentMedication + '</p>')
         .append("svg")
         .attr("width", option.svgWidth)
         .attr("height", option.svgHeight);

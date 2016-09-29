@@ -153,7 +153,15 @@ moduleVisualizations.factory('visualizations',
                 '</p>';
     };
 
-    var populateSpiral = function(data, svg) {
+    var populateSpiral = function(data, id) {
+        /*
+        var spiral = nodes.getVizs(id)[0];
+        spiral.randomData();
+        var svg = spiral.render();
+        var svg = heatMap.html;
+        diseaseNames = processSelectedList(heatMap.state.diseases);
+        medicationNames = processSelectedList(heatMap.state.medications);
+        */
     };
 
     var makeSpiral = function(elementID, spiralID, isChecked, state) {
@@ -188,6 +196,7 @@ moduleVisualizations.factory('visualizations',
             spacing: spacing,
             lineWidth: spacing * 6,
             targetElement: '#' + spiralID,
+            currentMedication: state.currentMedication,
             functions: {
                 makeLegend: makeLegend
             }
@@ -208,15 +217,17 @@ moduleVisualizations.factory('visualizations',
     };
 
     var updateSpiral = function(elementID) {
+        /*
         var data = [];
-        for(var i=0; i<countSegments*rings; i++) {
-            data[i] = Math.random();
-        }
-
         var spirals = nodes.getVizs(elementID);
         for (var j = 0; j < spirals.length; j++) {
-            populateSpiral(data, spirals[j].html);
+            populateSpiral(data, spirals[j]);
         }
+        */
+
+        var node = nodes.getCurrentNode();
+        var spiral = node.model.vizs[0];
+        makeSpiral(node.model.id, spiral.id, spiral.isChecked, spiral.state);
     };
 
     var populateHeatMap = function(data, id) {
