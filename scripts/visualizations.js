@@ -69,11 +69,11 @@ moduleVisualizations.factory('visualizations',
     };
 
     // Selected attribute lists shared among multiple patients
-    var diseasesNames = [];
-    var medicationsNames = [];
+    var diseaseNames = [];
+    var medicationNames = [];
     var updateData = function(selectedDiseases, selectedMedications) {
-        diseasesNames = processSelectedList(selectedDiseases);
-        medicationsNames = processSelectedList(selectedMedications);
+        diseaseNames = processSelectedList(selectedDiseases);
+        medicationNames = processSelectedList(selectedMedications);
     };
 
     // Patient attribute lists
@@ -118,7 +118,7 @@ moduleVisualizations.factory('visualizations',
                 return d;
             });
         legendText.enter().append("text")
-            .attr("class", "legend-text viz-label")
+            .attr("class", "legend-text text-label")
             .merge(legendText)
                 .text(function(d) {
                     return "≥ " + Math.round(d);
@@ -230,73 +230,89 @@ moduleVisualizations.factory('visualizations',
         // json data contains all attributes, which need to be filtered
         // first by user selected attributes
         var filteredData = data.filter(function(d) {
-            return (diseasesNames.indexOf(d.disease) !== -1) &&
-                (medicationsNames.indexOf(d.medication) !== -1);
+            return (diseaseNames.indexOf(d.disease) !== -1) &&
+                (medicationNames.indexOf(d.medication) !== -1);
         }); 
 
         // We now remove attributes from the lists that don't have
         // matches in filteredData (i.e. no cells for that attribute
         // have values)
-        diseasesNames = (function(list, filteredMatrix) {
+        diseaseNames = (function(list, filteredMatrix) {
             return list.filter(function(name) {
                 var index = utils.arrayObjectIndexOf(
                     filteredMatrix, name, "disease");
                 return index !== -1;
             });
-        })(diseasesNames, filteredData);
-        medicationsNames = (function(list, filteredMatrix) {
+        })(diseaseNames, filteredData);
+        medicationNames = (function(list, filteredMatrix) {
             return list.filter(function(name) {
                 var index = utils.arrayObjectIndexOf(
                     filteredMatrix, name, "medication");
                 return index !== -1;
             });
-        })(medicationsNames, filteredData);
+        })(medicationNames, filteredData);
 
         var rectWidth = 200;
 
-        var diseaseLabels = svg.selectAll(".disease-label")
-            .data(diseasesNames);
-        var diseaseLabelsGroup = diseaseLabels.enter().append("g");
+        var diseaseLabels = svg.selectAll(".rect-disease-label")
+            .data(diseaseNames);
+        var diseaseLabelsGroup = diseaseLabels.enter();
         diseaseLabelsGroup.append("rect")
             .attr("class", "rect-disease-label rect-label")
             .attr("x", -rectWidth)
-            .attr("y", function(d, i) {
-                return (1 + i) * gridHeight;
-            })
             .attr("width", rectWidth)
-            .attr("height", gridHeight);
-        diseaseLabelsGroup.append("text")
-            .attr("x", 0)
-            .attr("y", function(d, i) {
-                return (1 + i) * gridHeight;
-            })
-            .style("text-anchor", "end")
-            .attr("transform", "translate(-5," + gridHeight / 1.5 + ")")
-            .attr("class", "disease-label viz-label axis")
+            .attr("height", gridHeight)
             .merge(diseaseLabels)
+                .attr("y", function(d, i) {
+                    return (1 + i) * gridHeight;
+                });
+        diseaseLabels.exit().remove();
+
+        diseaseLabels = svg.selectAll(".text-disease-label")
+            .data(diseaseNames);
+        diseaseLabelsGroup = diseaseLabels.enter();
+        diseaseLabelsGroup.append("text")
+            .attr("class", "text-disease-label text-label")
+            .style("text-anchor", "end")
+            .attr("x", 0)
+            .attr("transform", "translate(-5," + gridHeight / 1.5 + ")")
+            .merge(diseaseLabels)
+                .attr("y", function(d, i) {
+                    return (1 + i) * gridHeight;
+                })
                 .text(function(d) {
                     return d;
                 });
         diseaseLabels.exit().remove();
 
-        var medicationLabels = svg.selectAll(".medication-label")
-            .data(medicationsNames);
-        var medicationLabelsGroup = medicationLabels.enter().append("g")
-            .attr("transform", function(d, i) {
-                return "translate(" + ((1.75 + i) * gridWidth) + ", " + 
-                        (-(1 * gridHeight)) + ")rotate(20)";
-            });
+        var medicationLabels = svg.selectAll(".rect-medication-label")
+            .data(medicationNames);
+        var medicationLabelsGroup = medicationLabels.enter();
         medicationLabelsGroup.append("rect")
             .attr("class", "rect-medication-label rect-label")
             .attr("x", -rectWidth)
             .attr("width", rectWidth)
-            .attr("height", gridHeight);
+            .attr("height", gridHeight)
+            .merge(medicationLabels)
+                .attr("transform", function(d, i) {
+                    return "translate(" + ((1.75 + i) * gridWidth) + ", " + 
+                            (-(1 * gridHeight)) + ")rotate(20)";
+                });
+        medicationLabels.exit().remove();
+
+        medicationLabels = svg.selectAll(".text-medication-label")
+            .data(medicationNames);
+        medicationLabelsGroup = medicationLabels.enter();
         medicationLabelsGroup.append("text")
+            .attr("class", "text-medication-label text-label")
             .style("text-anchor", "end")
-            .attr("class", "medication-label viz-label axis")
-            .attr("transform", "translate(-5," + gridHeight * 0.25 + ")")
             .attr("y", gridHeight / 2)
-            .merge(medicationLabelsGroup)
+            .attr("transform", "translate(-5," + gridHeight * 0.25 + ")")
+            .merge(medicationLabels)
+                .attr("transform", function(d, i) {
+                    return "translate(" + ((1.75 + i) * gridWidth) + ", " + 
+                            (-(1 * gridHeight)) + ")rotate(20)";
+                })
                 .text(function(d) {
                     return d;
                 });
@@ -324,10 +340,10 @@ moduleVisualizations.factory('visualizations',
             .attr("height", gridHeight)
             .merge(cells)
                 .attr("x", function(d) {
-                    return (1 + medicationsNames.indexOf(d.medication)) * gridWidth;
+                    return (1 + medicationNames.indexOf(d.medication)) * gridWidth;
                 })
                 .attr("y", function(d) {
-                    return (1 + diseasesNames.indexOf(d.disease)) * gridHeight;
+                    return (1 + diseaseNames.indexOf(d.disease)) * gridHeight;
                 })
                 .style("fill", function(d) {
                     return colorScale(d.incidences);
@@ -336,11 +352,11 @@ moduleVisualizations.factory('visualizations',
                     cellsTip.show(d);
 
                     // Style column labels
-                    svg.selectAll(".medication-label")
+                    svg.selectAll(".text-medication-label")
                         .attr("class", function(a) {
                             return (a == d.medication) ? 
-                                "medication-label axis viz-label-selected" :
-                                "medication-label viz-label axis ";
+                                "text-medication-label text-label-selected" :
+                                "text-medication-label text-label";
                         });
                     svg.selectAll(".rect-medication-label")
                         .attr("class", function(a) {
@@ -350,11 +366,11 @@ moduleVisualizations.factory('visualizations',
                         });
 
                     // Style line labels
-                    svg.selectAll(".disease-label")
+                    svg.selectAll(".text-disease-label")
                         .attr("class", function(a) {
                             return (a == d.disease) ? 
-                                "disease-label axis viz-label-selected" :
-                                "disease-label viz-label axis ";
+                                "text-disease-label text-label-selected" :
+                                "text-disease-label text-label ";
                         });
                     svg.selectAll(".rect-disease-label")
                         .attr("class", function(a) {
@@ -376,14 +392,14 @@ moduleVisualizations.factory('visualizations',
                     cellsTip.hide(d);
                     
                     // Style column labels
-                    svg.selectAll(".medication-label")
-                        .attr("class", "medication-label viz-label axis");
+                    svg.selectAll(".text-medication-label")
+                        .attr("class", "text-medication-label text-label ");
                     svg.selectAll(".rect-medication-label")
                         .attr("class", "rect-medication-label rect-label");
 
                     // Style line labels
-                    svg.selectAll(".disease-label")
-                        .attr("class", "disease-label viz-label axis");
+                    svg.selectAll(".text-disease-label")
+                        .attr("class", "text-disease-label text-label");
                     svg.selectAll(".rect-disease-label")
                         .attr("class", "rect-disease-label rect-label");
                 });
@@ -392,11 +408,17 @@ moduleVisualizations.factory('visualizations',
         var filteredPatientMedicationsData = data
             .filter(function(d) {
                 return (patientMedicationsNames.indexOf(d.medication) !== -1) &&
-                    (medicationsNames.indexOf(d.medication) !== -1);
+                    (medicationNames.indexOf(d.medication) !== -1);
+            })
+            .map(function(d) {
+                return {
+                    medication: d.medication,
+                    isMark: true
+                };
             }); 
         var patientMedicationsCells = svg.selectAll(".attribute-mark-column")
             .data(filteredPatientMedicationsData, function(d) {
-                return medicationsNames.indexOf(d.medication);
+                return medicationNames.indexOf(d.medication);
             });
         patientMedicationsCells.enter().append("rect")
             .attr("class", "attribute-cell bordered")
@@ -404,7 +426,7 @@ moduleVisualizations.factory('visualizations',
             .attr("height", gridHeight)
             .merge(cells)
                 .attr("x", function(d) {
-                    return (1 + medicationsNames.indexOf(d.medication)) * gridWidth;
+                    return (1 + medicationNames.indexOf(d.medication)) * gridWidth;
                 })
                 .attr("y", function(d) {
                     return 0;
@@ -426,11 +448,17 @@ moduleVisualizations.factory('visualizations',
         var filteredPatientDiseasesData = data
             .filter(function(d) {
                 return (patientDiseasesNames.indexOf(d.disease) !== -1) &&
-                    (diseasesNames.indexOf(d.disease) !== -1);
+                    (diseaseNames.indexOf(d.disease) !== -1);
+            })
+            .map(function(d) {
+                return {
+                    disease: d.disease,
+                    isMark: true
+                };
             }); 
         var patientDiseasesCells = svg.selectAll(".attribute-mark-line")
             .data(filteredPatientDiseasesData, function(d) {
-                return diseasesNames.indexOf(d.disease);
+                return diseaseNames.indexOf(d.disease);
             });
         patientDiseasesCells.enter().append("rect")
             .attr("class", "attribute-cell bordered")
@@ -441,7 +469,7 @@ moduleVisualizations.factory('visualizations',
                     return 0;
                 })
                 .attr("y", function(d) {
-                    return (1 + diseasesNames.indexOf(d.disease)) * gridHeight;
+                    return (1 + diseaseNames.indexOf(d.disease)) * gridHeight;
                 })
                 .style("fill", function(d) {
                     return "#ff0000";
@@ -463,7 +491,7 @@ moduleVisualizations.factory('visualizations',
                 gridWidth, 
                 gridHeight,
                 gridWidth,
-                (diseasesNames.length + 1.5) * gridHeight);
+                (diseaseNames.length + 1.5) * gridHeight);
     };
 
     var makeDescriptionHeatMap = function(elementID) {
