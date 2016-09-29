@@ -236,6 +236,23 @@ Spiral.prototype.randomData = function() {
     }
 };
 
+Spiral.prototype.processData = function(values) {
+    var classObj = this;
+    var option = classObj.option;
+
+    option.data = [];
+    for (var i = 0; i < values.length; i++) {
+        var angle = theta(i, option.period);
+        var rad = radius(option.spacing, angle);
+
+        if (option.graphType === 'non-spiral') {
+            option.data.push([i, values[i] * option.period, 2]);
+        } else {
+            option.data.push(this.cartesian(rad, angle, values[i]));
+        }
+    }
+};
+
 Spiral.prototype.setParam = function(param, value) {
     var classObj = this;
     var option = classObj.option;

@@ -181,6 +181,37 @@ moduleVisualizations.factory('visualizations',
         if (countPoints < 10)
             spacing *= 1.25 * (countPoints / 10);
 
+        // FIXME: Fill array from expectedFrequency with these values
+        var patientMedicationIndex = utils.arrayObjectIndexOf(
+                patient.medications, state.currentMedication, "name");
+        var startMoment = moment(
+                patient.medications[patientMedicationIndex].startDate);
+        var endMoment = moment(
+                patient.medications[patientMedicationIndex].endDate);
+        var patientMedicationFrequency = 
+                patient.medications[patientMedicationIndex].expectedFrequency;
+        var countTimeSpan = 0;
+        switch (patientMedicationFrequency) {
+            case 'Anual': {
+                countTimeSpan += endMoment.diff(startMoment, 'years');
+                break;
+            }
+            case 'Mensal': {
+                countTimeSpan += endMoment.diff(startMoment, 'months');
+                break;
+            }
+            case 'Semanal': {
+                countTimeSpan += endMoment.diff(startMoment, 'weeks');
+                break;
+            }
+            case 'Diário': {
+                countTimeSpan += endMoment.diff(startMoment, 'days');
+                break;
+            }
+            default: {
+            }
+        } //switch
+
         var spiral = new Spiral({
             graphType: 'custom-path',
             numberOfPoints: countPoints,
