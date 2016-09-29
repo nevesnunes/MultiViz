@@ -68,20 +68,12 @@ moduleVisualizations.factory('visualizations',
         });
     };
 
-    // Selected attribute lists shared among multiple patients
-    var diseaseNames = [];
-    var medicationNames = [];
-    var updateData = function(selectedDiseases, selectedMedications) {
-        diseaseNames = processSelectedList(selectedDiseases);
-        medicationNames = processSelectedList(selectedMedications);
-    };
-
     // Patient attribute lists
     var patient = patientData.getAttribute(patientData.KEY_PATIENT);
-    var patientDiseasesNames = patient.diseases.map(function(obj) {
+    var patientDiseaseNames = patient.diseases.map(function(obj) {
         return obj.name;
     });
-    var patientMedicationsNames = patient.medications.map(function(obj) {
+    var patientMedicationNames = patient.medications.map(function(obj) {
         return obj.name;
     });
 
@@ -164,7 +156,7 @@ moduleVisualizations.factory('visualizations',
     var populateSpiral = function(data, svg) {
     };
 
-    var makeSpiral = function(elementID, spiralID, isChecked) {
+    var makeSpiral = function(elementID, spiralID, isChecked, state) {
         if (elementID === undefined) {
             console.log("[WARN] @makeHeatMap: undefined id.");
             return;
@@ -208,7 +200,8 @@ moduleVisualizations.factory('visualizations',
             nodeID: elementID,
             vizID: spiralID,
             isChecked: isChecked,
-            html: svg
+            html: svg,
+            state: state
         });
 
         populateSpiral(data, svg);
@@ -226,7 +219,12 @@ moduleVisualizations.factory('visualizations',
         }
     };
 
-    var populateHeatMap = function(data, svg) {
+    var populateHeatMap = function(data, id) {
+        var heatMap = nodes.getVizs(id)[0];
+        var svg = heatMap.html;
+        diseaseNames = processSelectedList(heatMap.state.diseases);
+        medicationNames = processSelectedList(heatMap.state.medications);
+
         // json data contains all attributes, which need to be filtered
         // first by user selected attributes
         var filteredData = data.filter(function(d) {
@@ -407,7 +405,7 @@ moduleVisualizations.factory('visualizations',
 
         var filteredPatientMedicationsData = data
             .filter(function(d) {
-                return (patientMedicationsNames.indexOf(d.medication) !== -1) &&
+                return (patientMedicationNames.indexOf(d.medication) !== -1) &&
                     (medicationNames.indexOf(d.medication) !== -1);
             })
             .map(function(d) {
@@ -447,7 +445,7 @@ moduleVisualizations.factory('visualizations',
 
         var filteredPatientDiseasesData = data
             .filter(function(d) {
-                return (patientDiseasesNames.indexOf(d.disease) !== -1) &&
+                return (patientDiseaseNames.indexOf(d.disease) !== -1) &&
                     (diseaseNames.indexOf(d.disease) !== -1);
             })
             .map(function(d) {
@@ -510,7 +508,8 @@ moduleVisualizations.factory('visualizations',
                 '</img>' +
                 '</p>';
     };
-    var makeHeatMap = function(elementID, heatMapID) {
+
+    var makeHeatMap = function(elementID, heatMapID, state) {
         if (elementID === undefined) {
             console.log("[WARN] @makeHeatMap: undefined id.");
             return;
@@ -527,19 +526,19 @@ moduleVisualizations.factory('visualizations',
         nodes.updateViz({
             nodeID: elementID,
             vizID: heatMapID,
-            html: svg
+            currentVizID: heatMapID,
+            html: svg,
+            state: state
         });
 
-        populateHeatMap(dataIncidences, svg);
+        populateHeatMap(dataIncidences, elementID);
     };
 
     var updateHeatMap = function(elementID) {
-        var heatMap = nodes.getVizs(elementID)[0];
-        populateHeatMap(dataIncidences, heatMap.html);
+        populateHeatMap(dataIncidences, elementID);
     };
 
     return {
-        updateData: updateData,
         makeSpiral: makeSpiral,
         makeSpiralID: makeSpiralID,
         makeDescriptionSpiral: makeDescriptionSpiral,
