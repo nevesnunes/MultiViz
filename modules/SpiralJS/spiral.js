@@ -19,6 +19,7 @@ function Spiral(parameters) {
         tickMarkLabels: parameters.tickMarkLabels || [],
         color: parameters.color || 'black',
         colors: parameters.colors || ["#bdbdbd","#969696","#737373","#525252","#252525","#000000"],
+        currentMedication: parameters.currentMedication || "TODO Attribute",
         functions: parameters.functions || {}
     };
 
@@ -49,10 +50,14 @@ Spiral.prototype.render = function() {
     var classObj = this;
     var option = classObj.option;
 
-    var svg = d3.select(option.targetElement)
+    d3.select('#' + option.targetElement + "-contents").remove();
+    var svg = d3.select('#' + option.targetElement)
+        .append('div')
+            .attr('id', option.targetElement + "-contents")
+            .html('<p>' + option.currentMedication + '</p>')
         .append("svg")
-        .attr("width", option.svgWidth)
-        .attr("height", option.svgHeight);
+            .attr("width", option.svgWidth)
+            .attr("height", option.svgHeight);
 
     if (option.graphType === "points") {
         svg.append("g")
@@ -120,7 +125,7 @@ Spiral.prototype.render = function() {
             });
         svg.call(cellsTip);
         svg.append("g")
-            .classed("circular-heat", true)
+            .classed("spiral-cell", true)
             .attr("transform", "translate(" + option.margin.left + "," + option.margin.top + ")");
         var spiralGroup = svg.selectAll("g").selectAll("path")
             .data(option.data);
@@ -227,6 +232,23 @@ Spiral.prototype.randomData = function() {
             option.data.push([i, size * option.period, 2]);
         } else {
             option.data.push(this.cartesian(rad, angle, size));
+        }
+    }
+};
+
+Spiral.prototype.processData = function(values) {
+    var classObj = this;
+    var option = classObj.option;
+
+    option.data = [];
+    for (var i = 0; i < values.length; i++) {
+        var angle = theta(i, option.period);
+        var rad = radius(option.spacing, angle);
+
+        if (option.graphType === 'non-spiral') {
+            option.data.push([i, values[i] * option.period, 2]);
+        } else {
+            option.data.push(this.cartesian(rad, angle, values[i]));
         }
     }
 };

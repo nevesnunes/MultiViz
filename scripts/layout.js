@@ -103,7 +103,7 @@ moduleLayout.factory("nodes",
      *   vizID:string,
      *   isChecked:bool,
      *   html:object,
-     *   context:object
+     *   state:object
      * } data - contains the updated html of a visualization identified by 
      * node id and visualization id; isChecked states if the visualization is
      * displayed in the overview; state stores properties specific to the
@@ -125,6 +125,7 @@ moduleLayout.factory("nodes",
                 isChecked: data.isChecked,
                 isValid: true,
                 html: data.html,
+                vizObj: data.vizObj || {},
                 state: data.state || {}
             });
         }
@@ -331,28 +332,29 @@ moduleLayout.directive("directiveActionPanel",
             };
 
             // Redraw visualizations
-            var updateFromSelections = function() {
-                visualizations.updateData(
-                    scope.selectedDiseases,
-                    scope.selectedMedications
-                );
-
+            var updateFromSelections = function(state) {
                 var node = nodes.getCurrentNode();
                 if (node.model.vizType ===
                         scope.vizType.HEAT_MAP) {
+                    node.model.vizs[0].state = state;
                     visualizations.updateHeatMap(node.model.id);
                 } else if (node.model.vizType ===
                         scope.vizType.SPIRAL) {
+                    // FIXME
+                    node.model.vizs[0].state = state;
                     visualizations.updateSpiral(node.model.id);
                 }
             };
 
             // Select a property from the view's active property list
             scope.check = function(name) {
-                var array = [];
-                if (scope.currentAttributeType === 'diseases') {
+                var array;
+                var attributeType;
+                if (scope.currentAttributeType ===
+                        scope.attributeType.DISEASES) {
                     array = scope.selectedDiseases;
-                } else if (scope.currentAttributeType === 'medications') {
+                } else if (scope.currentAttributeType ===
+                        scope.attributeType.MEDICATIONS) {
                     array = scope.selectedMedications;
                 }
 
@@ -362,12 +364,18 @@ moduleLayout.directive("directiveActionPanel",
 
                 array[index].selected = !(array[index].selected);
 
-                updateFromSelections();
+                updateFromSelections({
+                        diseases: scope.selectedDiseases,
+                        medications: scope.selectedMedications
+                });
             };
 
             // Select a single property from the view's active property list
             scope.checkSingle = function(name) {
-                // TODO
+                updateFromSelections({
+                        medications: scope.selectedMedications,
+                        currentMedication: name 
+                });
             };
 
             // Select all properties from the view's active property list
@@ -382,7 +390,10 @@ moduleLayout.directive("directiveActionPanel",
                 for (var i = 0, len = array.length; i < len; i++)
                     array[i].selected = true;
 
-                updateFromSelections();
+                updateFromSelections({
+                        diseases: scope.selectedDiseases,
+                        medications: scope.selectedMedications
+                });
             };
 
             // Select no properties from the view's active property list
@@ -397,7 +408,10 @@ moduleLayout.directive("directiveActionPanel",
                 for (var i = 0, len = array.length; i < len; i++)
                     array[i].selected = false;
 
-                updateFromSelections();
+                updateFromSelections({
+                        diseases: scope.selectedDiseases,
+                        medications: scope.selectedMedications
+                });
             };
 
             scope.isSelected = function(name) {
@@ -507,10 +521,16 @@ moduleLayout.directive("directiveActionPanel",
                         '</div>';
                     } else if (nodes.getCurrentNode().model.vizType ===
                             scope.vizType.SPIRAL) {
-                        var list = "medicationsNames";
+                        scope.patient = 
+                                patientData.getAttribute(patientData.KEY_PATIENT);
+                        scope.defaultActionsList = 
+                                scope.patient.medications.map(function(obj) {
+                            return obj.name;
+                        });
 
                         // Attribute lists
                         html = '<div>' +
+                            '<h4>Escolha um atributo:</h4>' +
                             '<div class="dropdown">' +
                                 '<button type="button" href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Medicações <span class="caret"></span></button>' +
                                 '<ul class="dropdown-menu">' +
@@ -532,18 +552,14 @@ moduleLayout.directive("directiveActionPanel",
                             // List
                             '<div class="table table-condensed table-bordered patient-table">' +
                                 '<div class="checkboxInTable patient-table-entry" ' +
-                                    'ng-repeat="attribute in filteredAttributes = (' + list + ' | filter:attributeModel)"' +
+                                    'ng-repeat="attribute in filteredAttributes = (defaultActionsList | filter:attributeModel)"' +
                                     'ng-click="checkSingle(attribute)" ' +
                                     'ng-class="isEntrySelected($index)">' +
                                     '<div style="display: inline-block">' +
                                         '<div style="display: inline-block" ' +
                                             'ng-class="isEntryCurrentPatientAttribute(attribute)">' +
                                         '</div>' +
-                                        '<input ' +
-                                            'class="custom-checkbox" ' +
-                                            'type="checkbox" ' +
-                                            'ng-checked="isSelected(attribute)"> ' +
-                                            '{{::attribute}}' +
+                                        '{{::attribute}}' +
                                     '</div>' +
                                 '</div>' +
                             '</div>' +
@@ -862,8 +878,11 @@ moduleLayout.directive("directivePanes",
                 var target = angular.element('#' + id);
                 target.append($compile(html)(scope));
 
-                visualizations.makeSpiral(
-                    id, spiralID, isChecked);
+                visualizations.makeSpiral(id, spiralID, isChecked, {
+                        medications: scope.selectedMedications,
+                        // FIXME: This is retrieved from checkSingle()
+                        currentMedication: scope.selectedMedications[0].name
+                });
             };
 
             // Two step creation: 
@@ -891,8 +910,10 @@ moduleLayout.directive("directivePanes",
                 var target = angular.element('#' + id);
                 target.append($compile(html)(scope));
 
-                visualizations.makeHeatMap(
-                    id, heatMapID);
+                visualizations.makeHeatMap(id, heatMapID, {
+                        diseases: scope.selectedDiseases,
+                        medications: scope.selectedMedications
+                });
             };
 
             // Make html node layout
@@ -1086,10 +1107,6 @@ moduleLayout.directive("directivePanes",
             scope.APIPanes.newLayout = scope.newLayout;
 
             // Initialize
-            visualizations.updateData(
-                scope.selectedDiseases,
-                scope.selectedMedications
-            );
             scope.updateLayout();
         } //link
     }; //return

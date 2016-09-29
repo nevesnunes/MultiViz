@@ -68,20 +68,12 @@ moduleVisualizations.factory('visualizations',
         });
     };
 
-    // Selected attribute lists shared among multiple patients
-    var diseaseNames = [];
-    var medicationNames = [];
-    var updateData = function(selectedDiseases, selectedMedications) {
-        diseaseNames = processSelectedList(selectedDiseases);
-        medicationNames = processSelectedList(selectedMedications);
-    };
-
     // Patient attribute lists
     var patient = patientData.getAttribute(patientData.KEY_PATIENT);
-    var patientDiseasesNames = patient.diseases.map(function(obj) {
+    var patientDiseaseNames = patient.diseases.map(function(obj) {
         return obj.name;
     });
-    var patientMedicationsNames = patient.medications.map(function(obj) {
+    var patientMedicationNames = patient.medications.map(function(obj) {
         return obj.name;
     });
 
@@ -161,10 +153,18 @@ moduleVisualizations.factory('visualizations',
                 '</p>';
     };
 
-    var populateSpiral = function(data, svg) {
+    var populateSpiral = function(data, id) {
+        /*
+        var spiral = nodes.getVizs(id)[0];
+        spiral.randomData();
+        var svg = spiral.render();
+        var svg = heatMap.html;
+        diseaseNames = processSelectedList(heatMap.state.diseases);
+        medicationNames = processSelectedList(heatMap.state.medications);
+        */
     };
 
-    var makeSpiral = function(elementID, spiralID, isChecked) {
+    var makeSpiral = function(elementID, spiralID, isChecked, state) {
         if (elementID === undefined) {
             console.log("[WARN] @makeHeatMap: undefined id.");
             return;
@@ -181,6 +181,37 @@ moduleVisualizations.factory('visualizations',
         if (countPoints < 10)
             spacing *= 1.25 * (countPoints / 10);
 
+        // FIXME: Fill array from expectedFrequency with these values
+        var patientMedicationIndex = utils.arrayObjectIndexOf(
+                patient.medications, state.currentMedication, "name");
+        var startMoment = moment(
+                patient.medications[patientMedicationIndex].startDate);
+        var endMoment = moment(
+                patient.medications[patientMedicationIndex].endDate);
+        var patientMedicationFrequency = 
+                patient.medications[patientMedicationIndex].expectedFrequency;
+        var countTimeSpan = 0;
+        switch (patientMedicationFrequency) {
+            case 'Anual': {
+                countTimeSpan += endMoment.diff(startMoment, 'years');
+                break;
+            }
+            case 'Mensal': {
+                countTimeSpan += endMoment.diff(startMoment, 'months');
+                break;
+            }
+            case 'Semanal': {
+                countTimeSpan += endMoment.diff(startMoment, 'weeks');
+                break;
+            }
+            case 'Diário': {
+                countTimeSpan += endMoment.diff(startMoment, 'days');
+                break;
+            }
+            default: {
+            }
+        } //switch
+
         var spiral = new Spiral({
             graphType: 'custom-path',
             numberOfPoints: countPoints,
@@ -195,7 +226,8 @@ moduleVisualizations.factory('visualizations',
             },
             spacing: spacing,
             lineWidth: spacing * 6,
-            targetElement: '#' + spiralID,
+            targetElement: spiralID,
+            currentMedication: state.currentMedication,
             functions: {
                 makeLegend: makeLegend
             }
@@ -208,25 +240,33 @@ moduleVisualizations.factory('visualizations',
             nodeID: elementID,
             vizID: spiralID,
             isChecked: isChecked,
-            html: svg
+            html: svg,
+            state: state
         });
 
         populateSpiral(data, svg);
     };
 
     var updateSpiral = function(elementID) {
+        /*
         var data = [];
-        for(var i=0; i<countSegments*rings; i++) {
-            data[i] = Math.random();
-        }
-
         var spirals = nodes.getVizs(elementID);
         for (var j = 0; j < spirals.length; j++) {
-            populateSpiral(data, spirals[j].html);
+            populateSpiral(data, spirals[j]);
         }
+        */
+
+        var node = nodes.getCurrentNode();
+        var spiral = node.model.vizs[0];
+        makeSpiral(node.model.id, spiral.id, spiral.isChecked, spiral.state);
     };
 
-    var populateHeatMap = function(data, svg) {
+    var populateHeatMap = function(data, id) {
+        var heatMap = nodes.getVizs(id)[0];
+        var svg = heatMap.html;
+        diseaseNames = processSelectedList(heatMap.state.diseases);
+        medicationNames = processSelectedList(heatMap.state.medications);
+
         // json data contains all attributes, which need to be filtered
         // first by user selected attributes
         var filteredData = data.filter(function(d) {
@@ -407,7 +447,7 @@ moduleVisualizations.factory('visualizations',
 
         var filteredPatientMedicationsData = data
             .filter(function(d) {
-                return (patientMedicationsNames.indexOf(d.medication) !== -1) &&
+                return (patientMedicationNames.indexOf(d.medication) !== -1) &&
                     (medicationNames.indexOf(d.medication) !== -1);
             })
             .map(function(d) {
@@ -447,7 +487,7 @@ moduleVisualizations.factory('visualizations',
 
         var filteredPatientDiseasesData = data
             .filter(function(d) {
-                return (patientDiseasesNames.indexOf(d.disease) !== -1) &&
+                return (patientDiseaseNames.indexOf(d.disease) !== -1) &&
                     (diseaseNames.indexOf(d.disease) !== -1);
             })
             .map(function(d) {
@@ -510,7 +550,8 @@ moduleVisualizations.factory('visualizations',
                 '</img>' +
                 '</p>';
     };
-    var makeHeatMap = function(elementID, heatMapID) {
+
+    var makeHeatMap = function(elementID, heatMapID, state) {
         if (elementID === undefined) {
             console.log("[WARN] @makeHeatMap: undefined id.");
             return;
@@ -527,19 +568,19 @@ moduleVisualizations.factory('visualizations',
         nodes.updateViz({
             nodeID: elementID,
             vizID: heatMapID,
-            html: svg
+            currentVizID: heatMapID,
+            html: svg,
+            state: state
         });
 
-        populateHeatMap(dataIncidences, svg);
+        populateHeatMap(dataIncidences, elementID);
     };
 
     var updateHeatMap = function(elementID) {
-        var heatMap = nodes.getVizs(elementID)[0];
-        populateHeatMap(dataIncidences, heatMap.html);
+        populateHeatMap(dataIncidences, elementID);
     };
 
     return {
-        updateData: updateData,
         makeSpiral: makeSpiral,
         makeSpiralID: makeSpiralID,
         makeDescriptionSpiral: makeDescriptionSpiral,
