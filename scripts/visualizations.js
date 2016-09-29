@@ -195,7 +195,7 @@ moduleVisualizations.factory('visualizations',
             },
             spacing: spacing,
             lineWidth: spacing * 6,
-            targetElement: '#' + spiralID,
+            targetElement: spiralID,
             currentMedication: state.currentMedication,
             functions: {
                 makeLegend: makeLegend

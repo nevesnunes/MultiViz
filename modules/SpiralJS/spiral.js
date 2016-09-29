@@ -50,13 +50,14 @@ Spiral.prototype.render = function() {
     var classObj = this;
     var option = classObj.option;
 
-    d3.select(option.targetElement).html("");
-    var svg = d3.select(option.targetElement)
+    d3.select('#' + option.targetElement + "-contents").remove();
+    var svg = d3.select('#' + option.targetElement)
         .append('div')
-        .html('<p>' + option.currentMedication + '</p>')
+            .attr('id', option.targetElement + "-contents")
+            .html('<p>' + option.currentMedication + '</p>')
         .append("svg")
-        .attr("width", option.svgWidth)
-        .attr("height", option.svgHeight);
+            .attr("width", option.svgWidth)
+            .attr("height", option.svgHeight);
 
     if (option.graphType === "points") {
         svg.append("g")
