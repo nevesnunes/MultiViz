@@ -879,7 +879,9 @@ moduleLayout.directive("directivePanes",
                 target.append($compile(html)(scope));
 
                 visualizations.makeSpiral(id, spiralID, isChecked, {
-                        medications: scope.selectedMedications
+                        medications: scope.selectedMedications,
+                        // FIXME: This is retrieved from checkSingle()
+                        currentMedication: scope.selectedMedications[0].name
                 });
             };
 

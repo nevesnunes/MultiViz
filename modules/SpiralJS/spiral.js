@@ -125,7 +125,7 @@ Spiral.prototype.render = function() {
             });
         svg.call(cellsTip);
         svg.append("g")
-            .classed("circular-heat", true)
+            .classed("spiral-cell", true)
             .attr("transform", "translate(" + option.margin.left + "," + option.margin.top + ")");
         var spiralGroup = svg.selectAll("g").selectAll("path")
             .data(option.data);

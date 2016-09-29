@@ -1,3 +1,12 @@
+.spiral-cell path {
+	stroke: #777;
+	stroke-width: 0.1px;
+}
+
+.spiral-cell path:hover {
+    fill: #286090 !important;
+}
+
 .viz-spiral {
     display: inline-block;
 }
