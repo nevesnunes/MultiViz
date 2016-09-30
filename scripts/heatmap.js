@@ -5,7 +5,8 @@ moduleVisualizations.directive('directiveHeatMapTooltip',
     return {
         link: function (scope, element, attrs) {
             scope.setTooltipText = function(button) {
-                var text = "<div style=\"text-align: left\" class=\"p\">" +
+                var text =
+                    "<div style=\"text-align: left\" class=\"p\">" +
                         "Encontre relações entre atributos " +
                         "partilhados por múltiplos pacientes." +
                     "</div>" +
@@ -29,12 +30,14 @@ moduleVisualizations.factory('HeatMapVisualization',
     var HeatMapVisualization = function(options) {
         this.dataIncidences = null;
 
+        // Patient attribute lists
         this.diseases = options.diseases;
         this.medications = options.medications;
 
         this.html = null;
     };
 
+    // Fixed properties
     var margin = {
             top: 80,
             right: 0,
@@ -45,8 +48,6 @@ moduleVisualizations.factory('HeatMapVisualization',
         height = 420 - margin.top - margin.bottom,
         gridHeight = Math.floor(height / 8),
         gridWidth = gridHeight * 2;
-
-    var diseases, medications;
 
     // Unique identifier
     var heatmapID = 0;
@@ -76,7 +77,7 @@ moduleVisualizations.factory('HeatMapVisualization',
         var self = this;
 
         if (elementID === undefined) {
-            console.log("[WARN] @makeHeatMapVisualization: undefined id.");
+            console.log("[WARN] @make: undefined id.");
             return;
         }
         

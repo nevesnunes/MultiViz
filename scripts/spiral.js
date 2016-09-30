@@ -5,7 +5,11 @@ moduleVisualizations.directive('directiveSpiralTooltip',
     return {
         link: function (scope, element, attrs) {
             scope.setTooltipText = function(button) {
-                scope.tooltipText = "info spiral";
+                scope.tooltipText = 
+                    "<div style=\"text-align: left\" class=\"p\">" +
+                        "Encontre padrões temporais em atributos " +
+                        "do paciente actual." +
+                    "</div>";
             };
         }
     };
@@ -17,6 +21,7 @@ moduleVisualizations.factory('SpiralVisualization',
     var SpiralVisualization = function(options) {
         this.dataIncidences = null;
 
+        // Patient attribute lists
         this.medications = options.medications;
         this.currentMedication = options.currentMedication;
 

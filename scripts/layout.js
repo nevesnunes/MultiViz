@@ -105,12 +105,10 @@ moduleLayout.factory("nodes",
      *   vizObject:object
      * } data - contains the updated html of a visualization identified by 
      * node id and visualization id; isChecked states if the visualization is
-     * displayed in the overview; vizObject stores properties specific to the
-     * visualization type
+     * displayed in the overview; vizObject is an instance of a
+     * visualization factory
      */
     var updateViz = function(data) {
-        data.isChecked = data.isChecked || false;
-
         var node = rootNode.first(function(node1) {
             return node1.model.id === data.nodeID;
         });
@@ -121,14 +119,14 @@ moduleLayout.factory("nodes",
         } else {
             node.model.vizs.push({
                 id: data.vizID,
-                isChecked: data.isChecked,
-                isValid: true,
-                vizObject: data.vizObject || {}
+                isChecked: data.isChecked || false,
+                isValid: data.isValid || true,
+                vizObject: data.vizObject
             });
         }
     };
 
-    // Print node layout to console
+    // Print node tree layout to console
     var treePrint = function() {
         var nodesToPrint = [];
         getRootNode().walk(function(node) {
@@ -355,16 +353,16 @@ moduleLayout.directive("directiveActionPanel",
                 array[index].selected = !(array[index].selected);
 
                 updateFromSelections({
-                        diseases: scope.selectedDiseases,
-                        medications: scope.selectedMedications
+                    diseases: scope.selectedDiseases,
+                    medications: scope.selectedMedications
                 });
             };
 
             // Select a single property from the view's active property list
             scope.checkSingle = function(name) {
                 updateFromSelections({
-                        medications: scope.selectedMedications,
-                        currentMedication: name 
+                    medications: scope.selectedMedications,
+                    currentMedication: name 
                 });
             };
 
@@ -381,8 +379,8 @@ moduleLayout.directive("directiveActionPanel",
                     array[i].selected = true;
 
                 updateFromSelections({
-                        diseases: scope.selectedDiseases,
-                        medications: scope.selectedMedications
+                    diseases: scope.selectedDiseases,
+                    medications: scope.selectedMedications
                 });
             };
 
@@ -399,8 +397,8 @@ moduleLayout.directive("directiveActionPanel",
                     array[i].selected = false;
 
                 updateFromSelections({
-                        diseases: scope.selectedDiseases,
-                        medications: scope.selectedMedications
+                    diseases: scope.selectedDiseases,
+                    medications: scope.selectedMedications
                 });
             };
 
@@ -879,7 +877,7 @@ moduleLayout.directive("directivePanes",
 
                 spiralObject.make(id, spiralID, isChecked);
 
-                // Save svg for d3 updates
+                // Save visualization for d3 updates
                 nodes.updateViz({
                     nodeID: id,
                     vizID: spiralID,
@@ -920,7 +918,7 @@ moduleLayout.directive("directivePanes",
 
                 heatMapObject.make(id, heatMapID);
 
-                // Save svg for d3 updates
+                // Save visualization for d3 updates
                 nodes.updateViz({
                     nodeID: id,
                     vizID: heatMapID,
@@ -937,7 +935,6 @@ moduleLayout.directive("directivePanes",
                     element.html($compile('')(scope));
 
                     scope.APIActionPanel.makeViewChooser();
-
                 } else {
                     // Generate views
                     element.html($compile(
@@ -963,7 +960,7 @@ moduleLayout.directive("directivePanes",
 
             scope.newLayout = function() {
                 // Nuke our tracked nodes, since a
-                // new layout will be created later
+                // new layout will be created in the next update
                 nodes.setRootNode(undefined);
                 nodes.setCurrentNode(undefined);
                 
