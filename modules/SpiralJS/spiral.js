@@ -2,7 +2,7 @@ function Spiral(parameters) {
     this.option = {
         graphType: parameters.graphType || "points",
         numberOfPoints: parameters.numberOfPoints || null,
-        period: parameters.period || null,
+        period: parameters.period || 12,
         svgHeight: parameters.svgHeight || 0,
         svgWidth: parameters.svgWidth || 0,
         margin: parameters.margin || {
@@ -37,8 +37,8 @@ function Spiral(parameters) {
 }
 
 Spiral.prototype.cartesian = function(radius, angle, size) {
-    var classObj = this;
-    var option = classObj.option;
+    var self = this;
+    var option = self.option;
 
     size = size || 1;
     var xPos = option.x(radius * Math.cos(angle));
@@ -47,8 +47,8 @@ Spiral.prototype.cartesian = function(radius, angle, size) {
 };
 
 Spiral.prototype.render = function() {
-    var classObj = this;
-    var option = classObj.option;
+    var self = this;
+    var option = self.option;
 
     d3.select('#' + option.targetElement + "-contents").remove();
     var svg = d3.select('#' + option.targetElement)
@@ -94,13 +94,13 @@ Spiral.prototype.render = function() {
             var ctrlOuterRad = 0.01;
             var angle = theta(t, option.period);
             var rad = radius(option.spacing, angle);
-            var innerControlPoint = classObj.cartesian(rad - option.lineWidth * 0.5 + ctrlInnerRad, angle);
-            var outerControlPoint = classObj.cartesian(rad + option.lineWidth * 0.5 + ctrlOuterRad, angle);
+            var innerControlPoint = self.cartesian(rad - option.lineWidth * 0.5 + ctrlInnerRad, angle);
+            var outerControlPoint = self.cartesian(rad + option.lineWidth * 0.5 + ctrlOuterRad, angle);
 
-            var startPoint = classObj.cartesian(startInnerRadius, start);
-            var point2 = classObj.cartesian(startOuterRadius, start);
-            var point3 = classObj.cartesian(endOuterRadius, end);
-            var point4 = classObj.cartesian(endInnerRadius, end);
+            var startPoint = self.cartesian(startInnerRadius, start);
+            var point2 = self.cartesian(startOuterRadius, start);
+            var point3 = self.cartesian(endOuterRadius, end);
+            var point4 = self.cartesian(endInnerRadius, end);
             var arcPath = "M" + startPoint[0] + " " + startPoint[1] + "L" + point2[0] + " " + point2[1];
             arcPath += "Q" + outerControlPoint[0] + " " + outerControlPoint[1] + " " + point3[0] + " " + point3[1];
             arcPath += "L" + point4[0] + " " + point4[1];
@@ -215,8 +215,8 @@ Spiral.prototype.render = function() {
 };
 
 Spiral.prototype.randomData = function() {
-    var classObj = this;
-    var option = classObj.option;
+    var self = this;
+    var option = self.option;
 
     option.data = [];
     for (var i = 0; i < option.numberOfPoints; i++) {
@@ -237,8 +237,8 @@ Spiral.prototype.randomData = function() {
 };
 
 Spiral.prototype.processData = function(values) {
-    var classObj = this;
-    var option = classObj.option;
+    var self = this;
+    var option = self.option;
 
     option.data = [];
     for (var i = 0; i < values.length; i++) {
@@ -254,20 +254,20 @@ Spiral.prototype.processData = function(values) {
 };
 
 Spiral.prototype.setParam = function(param, value) {
-    var classObj = this;
-    var option = classObj.option;
+    var self = this;
+    var option = self.option;
     option[param] = value;
 };
 
 Spiral.prototype.redraw = function() {
-    var classObj = this;
-    var option = classObj.option;
+    var self = this;
+    var option = self.option;
 
     var graphContainer = document.getElementById(option.targetElement.substr(1));
     while (graphContainer.firstChild) {
         graphContainer.removeChild(graphContainer.firstChild);
     }
-    classObj.render();
+    self.render();
 };
 
 Spiral.prototype.autocorrelate = function() {
