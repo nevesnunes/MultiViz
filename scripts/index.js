@@ -1,9 +1,9 @@
 var moduleIndex = angular.module('moduleIndex', []);
 
 moduleIndex.factory('retrievePatientData', ['$http', function($http) {
-    var retrieveData = function() {
+    var retrieveData = function(filename) {
         return $http
-            .get('data/patients.json')
+            .get('data/' + filename)
             .then(function(result) {
                 return result.data;
             });
@@ -121,7 +121,7 @@ moduleIndex.factory('patientData', function($window) {
 moduleIndex.controller('controllerAddData',
         ['$scope', '$http', 'patientData', 'retrievePatientData',
         function($scope, $http, patientData, retrievePatientData, $location) {
-    var patientDataPromise = retrievePatientData.retrieveData();
+    var patientDataPromise = retrievePatientData.retrieveData('patients.json');
     patientDataPromise.then(function(result) {
         $scope.patientList = result.map(function(data, index) {
             return {
