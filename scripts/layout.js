@@ -921,7 +921,11 @@ moduleLayout.directive("directivePanes",
                 // No nodes available: make first view functionality
                 if (nodes.getCurrentNode() === undefined) {
                     // There may be a previous view: nuke the layout
-                    element.html($compile('')(scope));
+                    element.html($compile(
+                        '<h1 class=bg-header>' +
+                            'Nenhuma visualização disponível' +
+                        '</h1>'
+                    )(scope));
 
                     scope.APIActionPanel.makeViewChooser();
 
