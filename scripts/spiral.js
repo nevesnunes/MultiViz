@@ -90,6 +90,7 @@ moduleVisualizations.factory('SpiralVisualization',
         var countTimeSpan = 0;
         var period = 7;
 
+        // FIXME: refactor into visualizations factory
         var interval = "";
         switch (expectedFrequency) {
             case 'Anual': {
@@ -98,7 +99,6 @@ moduleVisualizations.factory('SpiralVisualization',
             }
             case 'Mensal': {
                 interval = 'months';
-                period = 12;
                 break;
             }
             case 'Semanal': {
@@ -134,6 +134,9 @@ moduleVisualizations.factory('SpiralVisualization',
             }
             this.binning = binInterval;
         }
+
+        if (binInterval === 'months')
+            period = 12;
 
         // Populate data by checking if values are present for each given moment
         var data = [];
