@@ -19,20 +19,47 @@ moduleVisualizations.factory('SpiralVisualization',
         ['visualizations', 'patientData', 'retrievePatientData', 'utils', 'nodes',
         function(visualizations, patientData, retrievePatientData, utils, nodes) {
     var SpiralVisualization = function(options) {
-        this.dataIncidences = null;
-
         // Patient attribute lists
         this.medications = options.medications;
         this.currentMedication = options.currentMedication;
 
+        // This visualization maintains it's state in it's own object,
+        // which we will use in factory methods
+        this.spiral = null;
+
+        this.binning = null;
+        this.data = null;
         this.html = null;
     };
+
+    var COUNT_MAX_THRESHOLD = 150;
 
     // Unique identifier
     var spiralID = 0;
     SpiralVisualization.prototype.makeID = function() {
         spiralID++;
         return "spiral-" + spiralID;
+    };
+
+    var nextInterval = function(interval) {
+        switch (interval) {
+            case 'years': {
+                // FIXME: Try setting smaller date range
+                return 'years';
+            }
+            case 'months': {
+                return 'years';
+            }
+            case 'weeks': {
+                return 'months';
+            }
+            case 'days': {
+                return 'weeks';
+            }
+            default: {
+                return interval;
+            }
+        } //switch
     };
 
     SpiralVisualization.prototype.makeDescription = function(elementID) {
@@ -71,6 +98,7 @@ moduleVisualizations.factory('SpiralVisualization',
 
         var countTimeSpan = 0;
         var period = 7;
+
         var interval = "";
         switch (expectedFrequency) {
             case 'Anual': {
@@ -84,7 +112,6 @@ moduleVisualizations.factory('SpiralVisualization',
             }
             case 'Semanal': {
                 interval = 'weeks';
-                period = 7;
                 break;
             }
             case 'Diário': {
@@ -94,48 +121,60 @@ moduleVisualizations.factory('SpiralVisualization',
             default: {
             }
         } //switch
-        countTimeSpan += endMoment.diff(startMoment, interval);
+        countTimeSpan = endMoment.diff(startMoment, interval);
+
+        // Bin data if interval is too large;
+        // If the user didn't set a specific binning, we compute the most
+        // adequate one based on expected frequency range
+        // FIXME
+        //var binning = (this.binning === null) ? 'days' : this.binning;
+        var binFactor = 0;
+        var binInterval = interval;
+        var binTimeSpan = countTimeSpan;
+        while (binTimeSpan > COUNT_MAX_THRESHOLD) {
+            binFactor++;
+            binInterval = nextInterval(binInterval);
+            binTimeSpan = endMoment.diff(startMoment, binInterval);
+        }
 
         // Populate data by checking if values are present for each given moment
         var data = [];
         var currentMoment = startMoment.clone();	
+        var previousBinMoment = currentMoment.clone();
+        var currentBinMoment = previousBinMoment.clone().add(1, binInterval);
+        var accumulatorBinDays = 0;
         for (var i = 0, currentDateIndex = 0; i < countTimeSpan; i++) {
-            currentMoment.add(1, interval);	
-
             var recordedMoment = moment(recordedFrequency[currentDateIndex]);
             var diffDates = currentMoment.diff(recordedMoment, interval);
-            console.log(diffDates);
-            
-            // Recorded date is earlier than expected: Include missing values
-            if (diffDates > 0) {
-                while (diffDates !== 0) {
-                    data.push({
-                        value: 0,
-                        date: recordedMoment.format('YYYY/MM/DD')
-                    });
-                    recordedMoment.add(1, interval);
-                    diffDates = currentMoment.diff(recordedMoment, interval);
-                } 
-            }
+            var diffBinDate = currentMoment.diff(currentBinMoment, interval);
 
             // Value is present
             if (diffDates === 0) {
-                data.push({
-                    value: 1 * patientMedications.dosage,
-                    date: recordedMoment.format('YYYY/MM/DD')
-                });
+                accumulatorBinDays++;
                 currentDateIndex++;
-
-            // No value in expected moment
-            } else {
-                data.push({
-                    value: 0,
-                    date: recordedMoment.format('YYYY/MM/DD')
-                });
             }
+
+            if (diffBinDate === 0) {
+                var dateString = previousBinMoment.format('YYYY/MM/DD');
+                if (binFactor > 0) {
+                    dateString += ' - ';
+                    dateString += currentBinMoment.format('YYYY/MM/DD');
+                }
+                previousBinMoment = currentBinMoment.clone();
+                currentBinMoment.add(1, binInterval);
+                data.push({
+                    value: accumulatorBinDays,
+                    dosage: patientMedications.dosage,
+                    date: dateString,
+                    binFactor: binFactor
+                });
+                accumulatorBinDays = 0;
+            }
+
+            currentMoment.add(1, interval);	
         }
 
-        var countPoints = countTimeSpan;
+        var countPoints = binTimeSpan;
         var size = 300;
 
         // FIXME: There's probably a less hardcoded way to compute adjustments...
@@ -145,7 +184,7 @@ moduleVisualizations.factory('SpiralVisualization',
         if (countPoints < 10)
             spacing *= 1.25 * (countPoints / 10);
 
-        var spiral = new Spiral({
+        this.spiral = new Spiral({
             graphType: 'custom-path',
             numberOfPoints: countPoints,
             period: period,
@@ -166,11 +205,9 @@ moduleVisualizations.factory('SpiralVisualization',
                 makeLegend: visualizations.makeLegend
             }
         });
-        // spiral.randomData();
-        spiral.processData(data);
-        this.html = spiral.render();
 
-        this.populate(data, this.html);
+        this.data = data;
+        this.populate(data, spiralID);
     };
 
     SpiralVisualization.prototype.populate = function(data, id) {
@@ -182,6 +219,10 @@ moduleVisualizations.factory('SpiralVisualization',
         diseaseNames = processSelectedList(heatMap.this.diseases);
         medicationNames = processSelectedList(heatMap.this.medications);
         */
+
+        // spiral.randomData();
+        this.spiral.processData(data);
+        this.html = this.spiral.render();
     };
 
     SpiralVisualization.prototype.update = function(elementID, state) {
@@ -195,9 +236,21 @@ moduleVisualizations.factory('SpiralVisualization',
 
         var node = nodes.getCurrentNode();
         var spiral = node.model.vizs[0];
-        this.medications = state.medications;
-        this.currentMedication = state.currentMedication;
-        this.make(node.model.id, spiral.id, spiral.isChecked);
+        if (state.binning) {
+            this.binning = state.binning;
+            this.make(node.model.id, spiral.id, spiral.isChecked);
+        }
+        if (state.medications) {
+            this.medications = state.medications;
+        }
+        if (state.currentMedication) {
+            if (this.currentMedication !== state.currentMedication) {
+                this.currentMedication = state.currentMedication;
+                this.make(node.model.id, spiral.id, spiral.isChecked);
+            } else {
+                this.populate(this.data, spiral.id);
+            }
+        }
     };
 
     return SpiralVisualization;

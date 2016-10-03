@@ -28,12 +28,11 @@ moduleVisualizations.factory('HeatMapVisualization',
         ['visualizations', 'patientData', 'retrievePatientData', 'utils', 'nodes',
         function(visualizations, patientData, retrievePatientData, utils, nodes) {
     var HeatMapVisualization = function(options) {
-        this.dataIncidences = null;
-
         // Patient attribute lists
         this.diseases = options.diseases;
         this.medications = options.medications;
 
+        this.dataIncidences = null;
         this.html = null;
     };
 

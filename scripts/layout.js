@@ -708,6 +708,13 @@ moduleLayout.directive("directivePanes",
                 return "";
             }
 
+            // Select the bin size to use on a temporal visualization
+            scope.setBinning = function(binning) {
+                updateFromSelections({
+                    binning: binning
+                });
+            };
+
             scope.addSpiral = function(button) {
                 var id = angular.element(button.target).data('id');
                 makeSpiral(id, SpiralVisualization.prototype.makeID());
@@ -870,6 +877,19 @@ moduleLayout.directive("directivePanes",
                         }) +
                     // FIXME: remove
                     spiralID +
+                    '</div>' +
+                    '<div>' +
+                        '<span>Agrupamento:</span>' +
+                        '<div class="dropdown">' +
+                            '<button type="button" href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">' +
+                                'Dia' +
+                                '<span class="caret"></span></button>' +
+                            '<ul class="dropdown-menu">' +
+                                '<li><a href="#" ng-click="setBinning(\'days\')">Dia</a></li>' +
+                                '<li><a href="#" ng-click="setBinning(\'weeks\')">Semana</a></li>' +
+                                '<li><a href="#" ng-click="setBinning(\'months\')">Mês</a></li>' +
+                                '<li><a href="#" ng-click="setBinning(\'years\')">Ano</a></li>' +
+                            '</ul>' +
                     '</div>' +
                     '</div>';
                 var target = angular.element('#' + id);
