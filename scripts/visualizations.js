@@ -20,6 +20,54 @@ moduleVisualizations.factory('visualizations',
         });
     };
 
+    var intervals = {
+        'years': {
+            value: 0,
+            translation: 'Ano'
+        },
+        'months': {
+            value: 1,
+            translation: 'Mês'
+        },
+        'weeks': {
+            value: 2,
+            translation: 'Semana'
+        },
+        'days': {
+            value: 3,
+            translation: 'Dia'
+        }
+    };
+
+    var diffInterval = function(i1, i2) {
+        return intervals[i1].value - intervals[i2].value;
+    };
+
+    var nextInterval = function(interval) {
+        switch (interval) {
+            case 'years': {
+                // FIXME: Try setting smaller date range
+                return 'years';
+            }
+            case 'months': {
+                return 'years';
+            }
+            case 'weeks': {
+                return 'months';
+            }
+            case 'days': {
+                return 'weeks';
+            }
+            default: {
+                return interval;
+            }
+        } //switch
+    };
+
+    var translateFrequency = function(frequency) {
+        return intervals[frequency].translation;
+    };
+    
     var makeLegend = function(svg, colorScale, width, height, xMargin, y) {
         var legendRect = svg.selectAll(".legend-rect")
             .data([0].concat(colorScale.quantiles()), function(d) {
@@ -68,6 +116,9 @@ moduleVisualizations.factory('visualizations',
     return {
         colors: colors,
         processSelectedList: processSelectedList,
+        diffInterval: diffInterval,
+        nextInterval: nextInterval,
+        translateFrequency: translateFrequency,
         makeLegend: makeLegend
     };
 }]);

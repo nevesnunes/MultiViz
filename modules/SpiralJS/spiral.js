@@ -20,6 +20,7 @@ function Spiral(parameters) {
         color: parameters.color || 'black',
         colors: parameters.colors || ["#bdbdbd","#969696","#737373","#525252","#252525","#000000"],
         currentMedication: parameters.currentMedication || "TODO Attribute",
+        expectedFrequency: parameters.expectedFrequency,
         functions: parameters.functions || {}
     };
 
@@ -53,7 +54,12 @@ Spiral.prototype.render = function() {
     var svg = d3.select('#' + option.targetElement)
         .append('div')
             .attr('id', option.targetElement + "-contents")
-            .html('<p>' + option.currentMedication + '</p>')
+            .html('<p><b>' +
+                    option.currentMedication +
+                '</b>' +
+                ' (Frequência prescrita: ' +
+                    option.expectedFrequency +
+                ')</p>')
         .append("svg")
             .attr("width", option.svgWidth)
             .attr("height", option.svgHeight);
@@ -120,13 +126,16 @@ Spiral.prototype.render = function() {
             .offset([-10, 0])
             .direction('n')
             .html(function(d) {
-                return "<span>Dose: " + d[2].value + "</span><br/>" +
-                    "<span>Dia: " + d[2].date + "</span>";
+                return "<span>Contagem: " + d[2].value + "</span><br/>" +
+                    "<span>Dose: " + d[2].dosage + "</span><br/>" +
+                    "<span>Datas: " + d[2].date + "</span>";
             });
         svg.call(cellsTip);
         svg.append("g")
             .classed("spiral-cell", true)
-            .attr("transform", "translate(" + option.margin.left + "," + option.margin.top + ")");
+            .attr("transform", "translate(" +
+                option.margin.left + "," +
+                option.margin.top + ")");
         var spiralGroup = svg.selectAll("g").selectAll("path")
             .data(option.data);
         spiralGroup.enter().append("path")

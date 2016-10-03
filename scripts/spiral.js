@@ -41,27 +41,6 @@ moduleVisualizations.factory('SpiralVisualization',
         return "spiral-" + spiralID;
     };
 
-    var nextInterval = function(interval) {
-        switch (interval) {
-            case 'years': {
-                // FIXME: Try setting smaller date range
-                return 'years';
-            }
-            case 'months': {
-                return 'years';
-            }
-            case 'weeks': {
-                return 'months';
-            }
-            case 'days': {
-                return 'weeks';
-            }
-            default: {
-                return interval;
-            }
-        } //switch
-    };
-
     SpiralVisualization.prototype.makeDescription = function(elementID) {
         if (elementID === undefined) {
             console.log("[WARN] @make: undefined id.");
@@ -96,6 +75,18 @@ moduleVisualizations.factory('SpiralVisualization',
         var expectedFrequency = patientMedications.expectedFrequency;
         var recordedFrequency = patientMedications.recordedFrequency;
 
+        if (recordedFrequency.length === 0) {
+            d3.select('#' + spiralID + "-contents").remove();
+            var svg = d3.select('#' + spiralID)
+                .append('div')
+                    .attr('id', spiralID + "-contents")
+                    .html('<p><b>' +
+                            this.currentMedication +
+                        '</b></p>' +
+                        '<p>Nenhuma contagem registada.</p>');
+            return;
+        }
+
         var countTimeSpan = 0;
         var period = 7;
 
@@ -126,15 +117,22 @@ moduleVisualizations.factory('SpiralVisualization',
         // Bin data if interval is too large;
         // If the user didn't set a specific binning, we compute the most
         // adequate one based on expected frequency range
-        // FIXME
-        //var binning = (this.binning === null) ? 'days' : this.binning;
         var binFactor = 0;
         var binInterval = interval;
         var binTimeSpan = countTimeSpan;
-        while (binTimeSpan > COUNT_MAX_THRESHOLD) {
-            binFactor++;
-            binInterval = nextInterval(binInterval);
-            binTimeSpan = endMoment.diff(startMoment, binInterval);
+        if (this.binning !== null) {
+            while (visualizations.diffInterval(binInterval, this.binning) > 0) {
+                binFactor++;
+                binInterval = visualizations.nextInterval(binInterval);
+                binTimeSpan = endMoment.diff(startMoment, binInterval);
+            }
+        } else {
+            while (binTimeSpan > COUNT_MAX_THRESHOLD) {
+                binFactor++;
+                binInterval = visualizations.nextInterval(binInterval);
+                binTimeSpan = endMoment.diff(startMoment, binInterval);
+            }
+            this.binning = binInterval;
         }
 
         // Populate data by checking if values are present for each given moment
@@ -199,7 +197,9 @@ moduleVisualizations.factory('SpiralVisualization',
             spacing: spacing,
             lineWidth: spacing * 6,
             targetElement: spiralID,
+            binning: this.binning,
             currentMedication: this.currentMedication,
+            expectedFrequency: expectedFrequency,
             colors: visualizations.colors,
             functions: {
                 makeLegend: visualizations.makeLegend
@@ -245,6 +245,7 @@ moduleVisualizations.factory('SpiralVisualization',
         }
         if (state.currentMedication) {
             if (this.currentMedication !== state.currentMedication) {
+                this.binning = null;
                 this.currentMedication = state.currentMedication;
                 this.make(node.model.id, spiral.id, spiral.isChecked);
             } else {

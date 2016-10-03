@@ -328,10 +328,7 @@ moduleLayout.directive("directiveActionPanel",
 
             // Redraw visualizations
             var updateFromSelections = function(state) {
-                var node = nodes.getCurrentNode();
-                // FIXME
-                var vizObject = node.model.vizs[0].vizObject;
-                vizObject.update(node.model.id, state);
+                scope.APIPanes.updateFromSelections(state);
             };
 
             // Select a property from the view's active property list
@@ -708,9 +705,25 @@ moduleLayout.directive("directivePanes",
                 return "";
             }
 
+            // Redraw visualizations
+            scope.updateFromSelections = function(state) {
+                var node = nodes.getCurrentNode();
+                // FIXME
+                var vizObject = node.model.vizs[0].vizObject;
+                vizObject.update(node.model.id, state);
+
+                if (vizObject.binning && vizObject.binning !== null) {
+                    scope.currentBinning = visualizations.translateFrequency(
+                        vizObject.binning);
+                    var target = angular.element(
+                        '#' + node.model.vizs[0].id + "-binning");
+                    $compile(target)(scope);
+                }
+            };
+
             // Select the bin size to use on a temporal visualization
             scope.setBinning = function(binning) {
-                updateFromSelections({
+                scope.updateFromSelections({
                     binning: binning
                 });
             };
@@ -794,9 +807,7 @@ moduleLayout.directive("directivePanes",
                                 'class="custom-btn-svg"> ';
                     }
 
-                    target.html($compile(
-                        html
-                    )(scope));
+                    target.html($compile(html)(scope));
                 }
             };
 
@@ -880,9 +891,9 @@ moduleLayout.directive("directivePanes",
                     '</div>' +
                     '<div>' +
                         '<span>Agrupamento:</span>' +
-                        '<div class="dropdown">' +
+                        '<div class="dropdown" id="' + spiralID+ '-binning">' +
                             '<button type="button" href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">' +
-                                'Dia' +
+                                '{{currentBinning}} ' +
                                 '<span class="caret"></span></button>' +
                             '<ul class="dropdown-menu">' +
                                 '<li><a href="#" ng-click="setBinning(\'days\')">Dia</a></li>' +
@@ -904,6 +915,10 @@ moduleLayout.directive("directivePanes",
                     isChecked: isChecked,
                     vizObject: spiralObject
                 });
+
+                scope.currentBinning = visualizations.translateFrequency(
+                    spiralObject.binning);
+                $compile(target);
             };
 
             // Two step creation: 
@@ -1135,6 +1150,7 @@ moduleLayout.directive("directivePanes",
             scope.APIPanes.makePaneSplit = scope.makePaneSplit; 
             scope.APIPanes.updateLayout = scope.updateLayout; 
             scope.APIPanes.newLayout = scope.newLayout;
+            scope.APIPanes.updateFromSelections = scope.updateFromSelections;
 
             // Initialize
             scope.updateLayout();
