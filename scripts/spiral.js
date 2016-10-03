@@ -59,8 +59,83 @@ moduleVisualizations.factory('SpiralVisualization',
             return;
         }
 
+        var patient = patientData.getAttribute(patientData.KEY_PATIENT);
+        var patientMedicationIndex = utils.arrayObjectIndexOf(
+                patient.medications, this.currentMedication, "name");
+        var patientMedications = patient.medications[patientMedicationIndex];
+
+        var startMoment = moment(patientMedications.startDate);
+        var endMoment = moment(patientMedications.endDate);
+        var expectedFrequency = patientMedications.expectedFrequency;
+        var recordedFrequency = patientMedications.recordedFrequency;
+
+        var countTimeSpan = 0;
+        var period = 7;
+        var interval = "";
+        switch (expectedFrequency) {
+            case 'Anual': {
+                interval = 'years';
+                break;
+            }
+            case 'Mensal': {
+                interval = 'months';
+                period = 12;
+                break;
+            }
+            case 'Semanal': {
+                interval = 'weeks';
+                period = 7;
+                break;
+            }
+            case 'Diário': {
+                interval = 'days';
+                break;
+            }
+            default: {
+            }
+        } //switch
+        countTimeSpan += endMoment.diff(startMoment, interval);
+
+        // Populate data by checking if values are present for each given moment
         var data = [];
-        var countPoints = 100;
+        var currentMoment = startMoment.clone();	
+        for (var i = 0, currentDateIndex = 0; i < countTimeSpan; i++) {
+            currentMoment.add(1, interval);	
+
+            var recordedMoment = moment(recordedFrequency[currentDateIndex]);
+            var diffDates = currentMoment.diff(recordedMoment, interval);
+            console.log(diffDates);
+            
+            // Recorded date is earlier than expected: Include missing values
+            if (diffDates > 0) {
+                while (diffDates !== 0) {
+                    data.push({
+                        value: 0,
+                        date: recordedMoment.format('YYYY/MM/DD')
+                    });
+                    recordedMoment.add(1, interval);
+                    diffDates = currentMoment.diff(recordedMoment, interval);
+                } 
+            }
+
+            // Value is present
+            if (diffDates === 0) {
+                data.push({
+                    value: 1 * patientMedications.dosage,
+                    date: recordedMoment.format('YYYY/MM/DD')
+                });
+                currentDateIndex++;
+
+            // No value in expected moment
+            } else {
+                data.push({
+                    value: 0,
+                    date: recordedMoment.format('YYYY/MM/DD')
+                });
+            }
+        }
+
+        var countPoints = countTimeSpan;
         var size = 300;
 
         // FIXME: There's probably a less hardcoded way to compute adjustments...
@@ -70,42 +145,10 @@ moduleVisualizations.factory('SpiralVisualization',
         if (countPoints < 10)
             spacing *= 1.25 * (countPoints / 10);
 
-        // FIXME: Fill array from expectedFrequency with these values
-        var patient = patientData.getAttribute(patientData.KEY_PATIENT);
-        var patientMedicationIndex = utils.arrayObjectIndexOf(
-                patient.medications, this.currentMedication, "name");
-        var startMoment = moment(
-                patient.medications[patientMedicationIndex].startDate);
-        var endMoment = moment(
-                patient.medications[patientMedicationIndex].endDate);
-        var patientMedicationFrequency = 
-                patient.medications[patientMedicationIndex].expectedFrequency;
-        var countTimeSpan = 0;
-        switch (patientMedicationFrequency) {
-            case 'Anual': {
-                countTimeSpan += endMoment.diff(startMoment, 'years');
-                break;
-            }
-            case 'Mensal': {
-                countTimeSpan += endMoment.diff(startMoment, 'months');
-                break;
-            }
-            case 'Semanal': {
-                countTimeSpan += endMoment.diff(startMoment, 'weeks');
-                break;
-            }
-            case 'Diário': {
-                countTimeSpan += endMoment.diff(startMoment, 'days');
-                break;
-            }
-            default: {
-            }
-        } //switch
-
         var spiral = new Spiral({
             graphType: 'custom-path',
             numberOfPoints: countPoints,
-            period: '7',
+            period: period,
             svgWidth: size,
             svgHeight: size + 50,
             margin: {
@@ -123,7 +166,8 @@ moduleVisualizations.factory('SpiralVisualization',
                 makeLegend: visualizations.makeLegend
             }
         });
-        spiral.randomData();
+        // spiral.randomData();
+        spiral.processData(data);
         this.html = spiral.render();
 
         this.populate(data, this.html);

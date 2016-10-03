@@ -40,7 +40,6 @@ Spiral.prototype.cartesian = function(radius, angle, size) {
     var self = this;
     var option = self.option;
 
-    size = size || 1;
     var xPos = option.x(radius * Math.cos(angle));
     var yPos = option.y(radius * Math.sin(angle));
     return [xPos, yPos, size];
@@ -69,7 +68,7 @@ Spiral.prototype.render = function() {
             .data(option.data)
             .enter().append("circle")
             .attr("r", function(d) {
-                return d[2];
+                return d[2].value;
             })
             .attr("cx", function(d) {
                 return d[0];
@@ -112,7 +111,7 @@ Spiral.prototype.render = function() {
         var buckets = option.colors.length;
         var colorScale = d3.scaleQuantile()
             .domain([0, buckets - 1, d3.max(option.data, function(d) {
-                return d[2];
+                return d[2].value;
             })])
             .range(option.colors);
 
@@ -121,7 +120,8 @@ Spiral.prototype.render = function() {
             .offset([-10, 0])
             .direction('n')
             .html(function(d) {
-                return "Value: " + d[2];
+                return "<span>Dose: " + d[2].value + "</span><br/>" +
+                    "<span>Dia: " + d[2].date + "</span>";
             });
         svg.call(cellsTip);
         svg.append("g")
@@ -131,7 +131,7 @@ Spiral.prototype.render = function() {
             .data(option.data);
         spiralGroup.enter().append("path")
             .style("fill", function(d) {
-                return colorScale(d[2]);
+                return colorScale(d[2].value);
             })
             .on("mouseover", function(d) {
                 cellsTip.show(d);
@@ -236,19 +236,25 @@ Spiral.prototype.randomData = function() {
     }
 };
 
-Spiral.prototype.processData = function(values) {
+/**
+ * @param {float[]} values - dataset values that are displayed in tooltip
+ * @param {integer} expectedCount - number of possible values in the time span
+ * established for this dataset
+ * @param {integer} valueFactor - multiplier applied to each value
+ */
+Spiral.prototype.processData = function(data) {
     var self = this;
     var option = self.option;
 
     option.data = [];
-    for (var i = 0; i < values.length; i++) {
+    for (var i = 0; i < data.length; i++) {
         var angle = theta(i, option.period);
         var rad = radius(option.spacing, angle);
 
         if (option.graphType === 'non-spiral') {
             option.data.push([i, values[i] * option.period, 2]);
         } else {
-            option.data.push(this.cartesian(rad, angle, values[i]));
+            option.data.push(this.cartesian(rad, angle, data[i]));
         }
     }
 };
