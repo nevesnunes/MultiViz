@@ -19,8 +19,6 @@ function Spiral(parameters) {
         tickMarkLabels: parameters.tickMarkLabels || [],
         color: parameters.color || 'black',
         colors: parameters.colors || ["#bdbdbd","#969696","#737373","#525252","#252525","#000000"],
-        currentMedication: parameters.currentMedication || "TODO Attribute",
-        expectedFrequency: parameters.expectedFrequency,
         functions: parameters.functions || {}
     };
 
@@ -35,7 +33,25 @@ function Spiral(parameters) {
     this.option.y = d3.scaleLinear()
             .range([height, 0])
             .domain([-this.option.svgHeight, this.option.svgHeight]);
+
+    // Make initial svg element
+    var svg = d3.select('#' + this.option.targetElement);
+    svg.append('div')
+        .attr('id', this.option.targetElement + "-attribute-text");
+    svg.append("svg")
+            .attr("width", this.option.svgWidth)
+            .attr("height", this.option.svgHeight)
+        .append("g")
+            .attr("transform", "translate(" +
+                this.option.margin.left + "," +
+                this.option.margin.top + ")");
+    this.option.html = svg;
 }
+
+Spiral.prototype.set = function(key, value) {
+    this.option[key] = value;
+    return this;
+};
 
 Spiral.prototype.cartesian = function(radius, angle, size) {
     var self = this;
@@ -50,26 +66,17 @@ Spiral.prototype.render = function() {
     var self = this;
     var option = self.option;
 
-    d3.select('#' + option.targetElement + "-contents").remove();
-    var svg = d3.select('#' + option.targetElement)
-        .append('div')
-            .attr('id', option.targetElement + "-contents")
-            .html('<p><b>' +
-                    option.currentMedication +
-                '</b>' +
-                ' (Frequência prescrita: ' +
-                    option.expectedFrequency +
-                ')</p>')
-        .append("svg")
-            .attr("width", option.svgWidth)
-            .attr("height", option.svgHeight);
+    var attributeText = d3.select(
+        '#' + option.targetElement + "-attribute-text")
+        .html('<p><b>' +
+                option.currentMedication +
+            '</b>' +
+            ' (Frequência prescrita: ' +
+                option.expectedFrequency +
+            ')</p>');
 
+    var svg = option.html.selectAll("svg");
     if (option.graphType === "points") {
-        svg.append("g")
-            .attr("transform", "translate(" + 
-                    option.margin.left + "," + 
-                    option.margin.top + ")");
-
         svg.selectAll("g").selectAll("dot")
             .data(option.data)
             .enter().append("circle")
@@ -99,20 +106,25 @@ Spiral.prototype.render = function() {
             var ctrlOuterRad = 0.01;
             var angle = theta(t, option.period);
             var rad = radius(option.spacing, angle);
-            var innerControlPoint = self.cartesian(rad - option.lineWidth * 0.5 + ctrlInnerRad, angle);
-            var outerControlPoint = self.cartesian(rad + option.lineWidth * 0.5 + ctrlOuterRad, angle);
+            var innerControlPoint = self.cartesian(
+                rad - option.lineWidth * 0.5 + ctrlInnerRad, angle);
+            var outerControlPoint = self.cartesian(
+                rad + option.lineWidth * 0.5 + ctrlOuterRad, angle);
 
             var startPoint = self.cartesian(startInnerRadius, start);
             var point2 = self.cartesian(startOuterRadius, start);
             var point3 = self.cartesian(endOuterRadius, end);
             var point4 = self.cartesian(endInnerRadius, end);
-            var arcPath = "M" + startPoint[0] + " " + startPoint[1] + "L" + point2[0] + " " + point2[1];
-            arcPath += "Q" + outerControlPoint[0] + " " + outerControlPoint[1] + " " + point3[0] + " " + point3[1];
-            arcPath += "L" + point4[0] + " " + point4[1];
-            arcPath += "Q" + innerControlPoint[0] + " " + innerControlPoint[1] + " " + startPoint[0] + " " + startPoint[1] + "Z";
+            var arcPath = "M" + startPoint[0] + " " + startPoint[1] +
+                "L" + point2[0] + " " + point2[1] +
+                "Q" + outerControlPoint[0] + " " + outerControlPoint[1] +
+                    " " + point3[0] + " " + point3[1] +
+                "L" + point4[0] + " " + point4[1] +
+                "Q" + innerControlPoint[0] + " " + innerControlPoint[1] +
+                    " " + startPoint[0] + " " + startPoint[1] +
+                "Z";
             datum[1] = arcPath;
         });
-
 
         var buckets = option.colors.length;
         var colorScale = d3.scaleQuantile()
@@ -121,7 +133,7 @@ Spiral.prototype.render = function() {
             })])
             .range(option.colors);
 
-        var cellsTip = d3.tip()
+        var sectorsTip = d3.tip()
             .attr('class', 'tooltip tooltip-element tooltip-d3')
             .offset([-10, 0])
             .direction('n')
@@ -130,27 +142,28 @@ Spiral.prototype.render = function() {
                     "<span>Dose: " + d[2].dosage + "</span><br/>" +
                     "<span>Datas: " + d[2].date + "</span>";
             });
-        svg.call(cellsTip);
-        svg.append("g")
-            .classed("spiral-cell", true)
-            .attr("transform", "translate(" +
-                option.margin.left + "," +
-                option.margin.top + ")");
-        var spiralGroup = svg.selectAll("g").selectAll("path")
-            .data(option.data);
-        spiralGroup.enter().append("path")
-            .style("fill", function(d) {
-                return colorScale(d[2].value);
-            })
-            .on("mouseover", function(d) {
-                cellsTip.show(d);
-            })
-            .on("mouseout", function(d) {
-                cellsTip.hide(d);
-            })
-            .attr("d", function(d) {
+        svg.call(sectorsTip);
+        var spiralPaths = svg.selectAll("g").selectAll(".spiral-sector")
+            .data(option.data, function(d) {
                 return d[1];
             });
+        spiralPaths.exit().remove();
+        var spiralGroup = spiralPaths.enter();
+        spiralGroup.append("path")
+            .attr("class", "spiral-sector")
+            .merge(spiralPaths)
+                .style("fill", function(d) {
+                    return colorScale(d[2].value);
+                })
+                .on("mouseover", function(d) {
+                    sectorsTip.show(d);
+                })
+                .on("mouseout", function(d) {
+                    sectorsTip.hide(d);
+                })
+                .attr("d", function(d) {
+                    return d[1];
+                });
 
         var padding = 10;
         var gridWidth = (option.svgWidth - 2 * padding) / buckets;
@@ -268,23 +281,6 @@ Spiral.prototype.processData = function(data) {
     }
 };
 
-Spiral.prototype.setParam = function(param, value) {
-    var self = this;
-    var option = self.option;
-    option[param] = value;
-};
-
-Spiral.prototype.redraw = function() {
-    var self = this;
-    var option = self.option;
-
-    var graphContainer = document.getElementById(option.targetElement.substr(1));
-    while (graphContainer.firstChild) {
-        graphContainer.removeChild(graphContainer.firstChild);
-    }
-    self.render();
-};
-
 Spiral.prototype.autocorrelate = function() {
     var n = this.option.numberOfPoints;
     var index = this.option.graphType === 'non-spiral' ? 1 : 2;
@@ -316,6 +312,8 @@ Spiral.prototype.autocorrelate = function() {
     return coeffArray;
 };
 
+// FIXME: This needs to be defined in our spiral factory in order to
+// call populate()
 Spiral.prototype.findPeriod = function() {
     var averageCoeff = 0;
     var coeffStdDev = 0;
@@ -354,8 +352,8 @@ Spiral.prototype.findPeriod = function() {
         }
     });
 
-    this.setParam('period', Number(foundPeriod));
-    this.redraw();
+    this.set('period', Number(foundPeriod));
+    this.render();
 };
 
 function theta(t, period) {

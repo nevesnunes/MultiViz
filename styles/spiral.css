@@ -1,9 +1,9 @@
-.spiral-cell path {
+.spiral-sector {
 	stroke: #777;
 	stroke-width: 0.1px;
 }
 
-.spiral-cell path:hover {
+.spiral-sector:hover {
     fill: #286090 !important;
 }
 

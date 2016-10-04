@@ -81,11 +81,11 @@ moduleVisualizations.factory('HeatMapVisualization',
         }
         
         var svg = d3.select("#" + heatMapID).append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
             .append("g")
-            .attr("transform",
-                  "translate(" + margin.left + "," + margin.top + ")");
+                .attr("transform", "translate(" +
+                    margin.left + "," + margin.top + ")");
         this.html = svg;
 
         var patientDataPromise = 

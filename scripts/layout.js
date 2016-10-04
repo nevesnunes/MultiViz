@@ -891,9 +891,11 @@ moduleLayout.directive("directivePanes",
                     '</div>' +
                     '<div>' +
                         '<span>Agrupamento:</span>' +
-                        '<div class="dropdown" id="' + spiralID+ '-binning">' +
+                        '<div class="dropdown">' +
                             '<button type="button" href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">' +
-                                '{{currentBinning}} ' +
+                                '<span id="' + spiralID+ '-binning">' +
+                                    '{{currentBinning}} ' +
+                                '</span>' +
                                 '<span class="caret"></span></button>' +
                             '<ul class="dropdown-menu">' +
                                 '<li><a href="#" ng-click="setBinning(\'days\')">Dia</a></li>' +
@@ -907,6 +909,8 @@ moduleLayout.directive("directivePanes",
                 target.append($compile(html)(scope));
 
                 spiralObject.make(id, spiralID, isChecked);
+                scope.currentBinning = visualizations.translateFrequency(
+                    spiralObject.binning);
 
                 // Save visualization for d3 updates
                 nodes.updateViz({
@@ -915,10 +919,6 @@ moduleLayout.directive("directivePanes",
                     isChecked: isChecked,
                     vizObject: spiralObject
                 });
-
-                scope.currentBinning = visualizations.translateFrequency(
-                    spiralObject.binning);
-                $compile(target);
             };
 
             // Two step creation: 
