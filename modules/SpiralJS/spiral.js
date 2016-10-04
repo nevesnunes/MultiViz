@@ -62,6 +62,21 @@ Spiral.prototype.cartesian = function(radius, angle, size) {
     return [xPos, yPos, size];
 };
 
+Spiral.prototype.renderNoData = function() {
+    var option = this.option;
+    option.html.select('#' + option.targetElement + "-attribute-text")
+        .html('<p><b>' +
+                option.currentMedication +
+            '</b></p>' +
+            '<p>Nenhuma contagem registada.</p>');
+    option.html.selectAll("svg").selectAll("g").selectAll("path").remove();
+
+    // Don't leave empty space in svg
+    option.html.selectAll("svg")
+            .attr("width", 0)
+            .attr("height", 0);
+};
+
 Spiral.prototype.render = function() {
     var self = this;
     var option = self.option;
@@ -75,7 +90,9 @@ Spiral.prototype.render = function() {
                 option.expectedFrequency +
             ')</p>');
 
-    var svg = option.html.selectAll("svg");
+    var svg = option.html.selectAll("svg")
+            .attr("width", option.svgWidth)
+            .attr("height", option.svgHeight);
     if (option.graphType === "points") {
         svg.selectAll("g").selectAll("dot")
             .data(option.data)

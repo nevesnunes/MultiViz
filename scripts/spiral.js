@@ -98,16 +98,10 @@ moduleVisualizations.factory('SpiralVisualization',
 
         // No recorded data available
         if (recordedFrequency.length === 0) {
-            var svg = d3.select('#' + spiralID + "-attribute-text")
-                    .html('<p><b>' +
-                            this.currentMedication +
-                        '</b></p>' +
-                        '<p>Nenhuma contagem registada.</p>');
+            this.spiral.set('currentMedication', this.currentMedication);
+            this.spiral.renderNoData();
             return;
         }
-
-        var countTimeSpan = 0;
-        var period = 7;
 
         // FIXME: refactor into visualizations factory
         var interval = "";
@@ -131,7 +125,7 @@ moduleVisualizations.factory('SpiralVisualization',
             default: {
             }
         } //switch
-        countTimeSpan = endMoment.diff(startMoment, interval);
+        var countTimeSpan = endMoment.diff(startMoment, interval);
 
         // Bin data if expected interval is too large;
         // If the user didn't set a specific binning, we compute the most
@@ -155,6 +149,7 @@ moduleVisualizations.factory('SpiralVisualization',
         }
 
         // Set default period for the given interval
+        var period = 7;
         if (binInterval === 'months')
             period = 12;
 
@@ -238,10 +233,10 @@ moduleVisualizations.factory('SpiralVisualization',
         this.html = this.spiral.render();
     };
 
-    SpiralVisualization.prototype.update = function(elementID, state) {
+    SpiralVisualization.prototype.update = function(id, state) {
         /*
         var data = [];
-        var spirals = nodes.getVizs(elementID);
+        var spirals = nodes.getVizs(id);
         for (var j = 0; j < spirals.length; j++) {
             populate(data, spirals[j]);
         }
@@ -262,11 +257,9 @@ moduleVisualizations.factory('SpiralVisualization',
             if (this.currentMedication !== state.currentMedication) {
                 this.binning = null;
                 this.currentMedication = state.currentMedication;
-
-                this.makeBins();
-            } else {
-                this.populate(this.data, spiral.id);
             }
+
+            this.makeBins();
         }
     };
 
