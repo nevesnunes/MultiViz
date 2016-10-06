@@ -443,22 +443,25 @@ moduleLayout.directive("directiveActionPanel",
 
             // Set shared state and invoke a callback that uses it; We need to
             // share state since we don't know which directive has the callback
-            scope.callWithAttribute = function(callback, name) {
+            scope.callWithSavedAttribute = function(
+                    callbackName, callBackArguments, name) {
                 scope.currentMedication.name = name;
-                scope[callback]();
+                scope[callbackName](callBackArguments);
             };
 
             // Retrieve a user selected attribute to be used in a 
             // spiral visualization; Since this functionality is shared by 
             // both visualization creation and modification, each of these cases 
             // will pass their specific behaviour as a callback
-            scope.chooseSpiralAttribute = function(callbackName) {
+            scope.chooseSpiralAttribute = function(
+                    callbackName, callBackArguments) {
                 scope.patient = 
                         patientData.getAttribute(patientData.KEY_PATIENT);
                 scope.defaultActionsList = 
                         scope.patient.medications.map(function(obj) {
                     return obj.name;
                 });
+                scope.callBackArguments = callBackArguments;
 
                 // Attribute lists
                 var html = '<div>' +
@@ -485,7 +488,7 @@ moduleLayout.directive("directiveActionPanel",
                     '<div class="table table-condensed table-bordered patient-table">' +
                         '<div class="checkboxInTable patient-table-entry" ' +
                             'ng-repeat="attribute in filteredAttributes = (defaultActionsList | filter:attributeModel)"' +
-                            'ng-click="callWithAttribute(\'' + callbackName + '\', attribute)" ' +
+                            'ng-click="callWithSavedAttribute(\'' + callbackName + '\', callBackArguments, attribute)" ' +
                             'ng-class="isEntrySelected($index)">' +
                             '<div style="display: inline-block">' +
                                 '<div style="display: inline-block" ' +
@@ -595,6 +598,10 @@ moduleLayout.directive("directiveActionPanel",
                 updateActionPanel(html);
             };
 
+            scope.addSpiral = function(button) {
+                scope.APIPanes.addSpiral(button);
+            };
+
             // Populate API
             scope.APIActionPanel.makeTODOActionPanel = scope.makeTODOActionPanel;
             scope.APIActionPanel.cancelSplit = scope.cancelSplit;
@@ -664,7 +671,7 @@ moduleLayout.directive("directivePanes",
                         visualization += utils.makeImgButton({
                             style:  'display: block',
                             id:     id,
-                            method: "addSpiral($event)",
+                            method: "chooseAddSpiral($event)",
                             text:   "Adicionar espiral",
                             img:    "images/controls/add.svg"
                         });
@@ -782,6 +789,10 @@ moduleLayout.directive("directivePanes",
                 scope.updateFromSelections({
                     binning: binning
                 });
+            };
+
+            scope.chooseAddSpiral = function(button) {
+                scope.APIActionPanel.chooseSpiralAttribute('addSpiral', button);
             };
 
             scope.addSpiral = function(button) {
@@ -1223,6 +1234,7 @@ moduleLayout.directive("directivePanes",
             scope.APIPanes.updateLayout = scope.updateLayout; 
             scope.APIPanes.newLayout = scope.newLayout;
             scope.APIPanes.updateFromSelections = scope.updateFromSelections;
+            scope.APIPanes.addSpiral = scope.addSpiral;
 
             // Initialize
             scope.updateLayout();
