@@ -83,12 +83,15 @@ Spiral.prototype.render = function() {
 
     d3.select(
         '#' + option.targetElement + "-attribute-text")
-        .html('<p><b>' +
+        .html('<b>' +
                 option.currentMedication +
-            '</b>' +
-            ' (Frequência prescrita: ' +
+            '</b><br/>' +
+            'Frequência prescrita: ' +
                 option.expectedFrequency +
-            ')</p>');
+            '<br/>' +
+            'Intervalo: ' +
+                option.timespan +
+            '');
     d3.select(
         '#' + option.targetElement + "-binning")
         .html(option.functions.translateFrequency(option.binning));

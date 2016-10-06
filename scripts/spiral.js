@@ -210,6 +210,10 @@ moduleVisualizations.factory('SpiralVisualization',
             .set('spacing', spacing)
             .set('lineWidth', spacing * 6)
             .set('binning', this.binning)
+            .set('timespan', 
+                startMoment.format('YYYY/MM/DD') +
+                ' - ' +
+                endMoment.format('YYYY/MM/DD'))
             .set('currentMedication', this.currentMedication)
             .set('expectedFrequency', expectedFrequency);
 
