@@ -814,6 +814,8 @@ moduleLayout.directive("directivePanes",
 
                 // Remove from DOM
                 angular.element('#' + elementProperties.vizID).remove();
+
+                scope.APIActionPanel.makeDefaultActions();
             };
 
             scope.dragSpiral = function(button) {
