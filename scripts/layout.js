@@ -211,6 +211,10 @@ moduleLayout.controller('controllerLayout',
         patientData.KEY_PATIENTS, 'diseases', 'name');
     $scope.medicationsNames = patientData.getAttributeListByProperty(
         patientData.KEY_PATIENTS, 'medications', 'name');
+
+    // Shared state among multiple directives;
+    // Note that directives have scope set to `true`, so these properties have
+    // to be objects in order to be modifiable by the directives
     $scope.selectedDiseases = $scope.diseasesNames
         .map(function(attribute) {
             return {
@@ -225,11 +229,14 @@ moduleLayout.controller('controllerLayout',
                 selected: true
             };
         });
+    $scope.currentMedication = {
+        name: null
+    };
 
-    // Populated by directive panes
+    // Shared methods from directive panes
     $scope.APIPanes = {};
 
-    // Populated by directive action-panel
+    // Shared methods from directive action-panel
     $scope.APIActionPanel = {};
 }]);
 
@@ -292,7 +299,7 @@ moduleLayout.directive("directiveActionPanel",
                         '</a>' +
                     '</img>' +
                     '</div>' +
-                    '<div class="view-choice" ng-click="chooseSpiral()">' +
+                    '<div class="view-choice" ng-click="chooseSpiralAttribute(\'chooseSpiral\')">' +
                     '<img src="images/views/circulartime.svg" ' +
                         'class="view-choice-svg">' +
                         '<a class="discrete-link" href="#">' +
@@ -356,11 +363,12 @@ moduleLayout.directive("directiveActionPanel",
             };
 
             // Select a single property from the view's active property list
-            scope.checkSingle = function(name) {
+            scope.checkSingle = function() {
                 updateFromSelections({
                     medications: scope.selectedMedications,
-                    currentMedication: name 
+                    currentMedication: scope.currentMedication.name
                 });
+                scope.APIActionPanel.makeDefaultActions();
             };
 
             // Select all properties from the view's active property list
@@ -431,6 +439,65 @@ moduleLayout.directive("directiveActionPanel",
                 return (index === -1) ?
                     "markPatientAttribute" :
                     "markPatientAttribute markPresent";
+            };
+
+            // Set shared state and invoke a callback that uses it; We need to
+            // share state since we don't know which directive has the callback
+            scope.callWithAttribute = function(callback, name) {
+                scope.currentMedication.name = name;
+                scope[callback]();
+            };
+
+            // Retrieve a user selected attribute to be used in a 
+            // spiral visualization; Since this functionality is shared by 
+            // both visualization creation and modification, each of these cases 
+            // will pass their specific behaviour as a callback
+            scope.chooseSpiralAttribute = function(callbackName) {
+                scope.patient = 
+                        patientData.getAttribute(patientData.KEY_PATIENT);
+                scope.defaultActionsList = 
+                        scope.patient.medications.map(function(obj) {
+                    return obj.name;
+                });
+
+                // Attribute lists
+                var html = '<div>' +
+                    '<h4>Escolha um atributo:</h4>' +
+                    '<div class="dropdown">' +
+                        '<button type="button" href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Medicações <span class="caret"></span></button>' +
+                        '<ul class="dropdown-menu">' +
+                            '<li><a href="#">TODO</a></li>' +
+                        '</ul>' +
+                    '</div>' +
+                    '<p/>' +
+                    // Search
+                    '<div class="right-inner-addon">' +
+                        '<i class="glyphicon glyphicon-search"></i>' +
+                        '<input type="text" ' +
+                            'id="input-patient" ' +
+                            'class="form-control" ' +
+                            'placeholder="Procurar..." ' +
+                            'ng-model="attributeModel" ' +
+                            'autofocus tabindex=1>' +
+                    '</div>' +
+                    '<p/>' +
+                    // List
+                    '<div class="table table-condensed table-bordered patient-table">' +
+                        '<div class="checkboxInTable patient-table-entry" ' +
+                            'ng-repeat="attribute in filteredAttributes = (defaultActionsList | filter:attributeModel)"' +
+                            'ng-click="callWithAttribute(\'' + callbackName + '\', attribute)" ' +
+                            'ng-class="isEntrySelected($index)">' +
+                            '<div style="display: inline-block">' +
+                                '<div style="display: inline-block" ' +
+                                    'ng-class="isEntryCurrentPatientAttribute(attribute)">' +
+                                '</div>' +
+                                '{{::attribute}}' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
+    
+                updateActionPanel(html);
             };
 
             scope.makeDefaultActions = function() {
@@ -513,41 +580,8 @@ moduleLayout.directive("directiveActionPanel",
                             return obj.name;
                         });
 
-                        // Attribute lists
                         html = '<div>' +
-                            '<h4>Escolha um atributo:</h4>' +
-                            '<div class="dropdown">' +
-                                '<button type="button" href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Medicações <span class="caret"></span></button>' +
-                                '<ul class="dropdown-menu">' +
-                                    '<li><a href="#">TODO</a></li>' +
-                                '</ul>' +
-                            '</div>' +
-                            '<p/>' +
-                            // Search
-                            '<div class="right-inner-addon">' +
-                                '<i class="glyphicon glyphicon-search"></i>' +
-                                '<input type="text" ' +
-                                    'id="input-patient" ' +
-                                    'class="form-control" ' +
-                                    'placeholder="Procurar..." ' +
-                                    'ng-model="attributeModel" ' +
-                                    'autofocus tabindex=1>' +
-                            '</div>' +
-                            '<p/>' +
-                            // List
-                            '<div class="table table-condensed table-bordered patient-table">' +
-                                '<div class="checkboxInTable patient-table-entry" ' +
-                                    'ng-repeat="attribute in filteredAttributes = (defaultActionsList | filter:attributeModel)"' +
-                                    'ng-click="checkSingle(attribute)" ' +
-                                    'ng-class="isEntrySelected($index)">' +
-                                    '<div style="display: inline-block">' +
-                                        '<div style="display: inline-block" ' +
-                                            'ng-class="isEntryCurrentPatientAttribute(attribute)">' +
-                                        '</div>' +
-                                        '{{::attribute}}' +
-                                    '</div>' +
-                                '</div>' +
-                            '</div>' +
+                            '<h4>Spiral actions</h4>' +
                         '</div>';
                     } else {
                         html = "<span>TODO</span>";
@@ -565,6 +599,8 @@ moduleLayout.directive("directiveActionPanel",
             scope.APIActionPanel.makeTODOActionPanel = scope.makeTODOActionPanel;
             scope.APIActionPanel.cancelSplit = scope.cancelSplit;
             scope.APIActionPanel.makeViewChooser = scope.makeViewChooser;
+            scope.APIActionPanel.chooseSpiralAttribute =
+                scope.chooseSpiralAttribute;
             scope.APIActionPanel.makeDefaultActions =
                 scope.makeDefaultActions;
         } //link
@@ -705,24 +741,51 @@ moduleLayout.directive("directivePanes",
                 return "";
             }
 
+            function extractPropertiesFromElement(element) {
+                // Make sure we are targeting the button element, not 
+                // one of it's children
+                var target = angular.element(element.target);
+                var nodeID = target.data('node-id');
+                if (nodeID === undefined) {
+                    target = target.parent();
+                    nodeID = target.data('node-id');
+                }
+
+                return {
+                    nodeID: nodeID,
+                    vizID: target.data('id'),
+                    isCheckable: target.data('checkable')
+                };
+            }
+
             // Redraw visualizations
             scope.updateFromSelections = function(state) {
-                var node = nodes.getCurrentNode();
                 // FIXME
-                var vizObject = node.model.vizs[0].vizObject;
-                vizObject.update(node.model.id, state);
+                var node = nodes.getCurrentNode();
+                var viz = nodes.getVizByIDs(
+                    node.model.id, node.model.currentVizID);
+                var vizObject = viz.vizObject;
+                vizObject.update(node.model.id, node.model.currentVizID, state);
 
                 if (vizObject.binning && vizObject.binning !== null) {
                     scope.currentBinning = visualizations.translateFrequency(
                         vizObject.binning);
                     var target = angular.element(
-                        '#' + node.model.vizs[0].id + "-binning");
+                        '#' + viz.id + "-binning");
                     $compile(target)(scope);
                 }
             };
 
-            // Select the bin size to use on a temporal visualization
-            scope.setBinning = function(binning) {
+            // Select the bin size for a visualization's dataset
+            scope.setBinning = function(button, binning) {
+                var elementProperties = extractPropertiesFromElement(button);
+
+                // Update node properties
+                var node = nodes.getRootNode().first(function (node1) {
+                    return node1.model.id === elementProperties.nodeID;
+                });
+                node.model.currentVizID = elementProperties.vizID;
+
                 scope.updateFromSelections({
                     binning: binning
                 });
@@ -737,24 +800,16 @@ moduleLayout.directive("directivePanes",
             };
 
             scope.removeSpiral = function(button) {
-                // Make sure we are targeting the button element, not 
-                // one of it's children
-                var target = angular.element(button.target);
-                var nodeID = target.data('node-id');
-                if (nodeID === undefined) {
-                    target = target.parent();
-                    nodeID = target.data('node-id');
-                }
-                var spiralID = target.data('id');
+                var elementProperties = extractPropertiesFromElement(button);
 
                 // Untrack in node visualizations
                 nodes.removeViz({
-                    nodeID: nodeID,
-                    vizID: spiralID
+                    nodeID: elementProperties.nodeID,
+                    vizID: elementProperties.vizID
                 });
 
                 // Remove from DOM
-                angular.element('#' + spiralID).remove();
+                angular.element('#' + elementProperties.vizID).remove();
             };
 
             scope.dragSpiral = function(button) {
@@ -762,28 +817,21 @@ moduleLayout.directive("directivePanes",
             };
 
             scope.togglePinned = function(button) {
-                // Make sure we are targeting the button element, not 
-                // one of it's children
-                var target = angular.element(button.target);
-                var isCheckable = target.data('checkable');
-                if (isCheckable === undefined) {
-                    target = target.parent();
-                    isCheckable = target.data('checkable');
-                }
+                var elementProperties = extractPropertiesFromElement(button);
 
                 // We have the right element, now we test it
-                if (isCheckable) {
-                    var nodeID = target.data('node-id');
-                    var spiralID = target.data('id');
+                if (elementProperties.isCheckable) {
+                    var nodeID = elementProperties.nodeID;
+                    var vizID = elementProperties.vizID;
 
                     // Update node properties
                     var node = nodes.getRootNode().first(function (node1) {
                         return node1.model.id === nodeID;
                     });
-                    node.model.currentVizID = spiralID;
+                    node.model.currentVizID = vizID;
 
                     // Update visualization properties
-                    var viz = nodes.getVizByIDs(nodeID, spiralID);
+                    var viz = nodes.getVizByIDs(nodeID, vizID);
                     viz.isChecked = !viz.isChecked;
 
                     // Update DOM
@@ -794,16 +842,16 @@ moduleLayout.directive("directivePanes",
                         img = "images/controls/pin.svg";
                         imgChecked = "images/controls/checked.svg";
                         html = '<img src="' + img + '" ' +
-                                'data-id="' + spiralID + '" ' +
+                                'data-id="' + vizID + '" ' +
                                 'class="custom-btn-svg"> ' +
                             '<img src="' + imgChecked + '" ' +
-                                'data-id="' + spiralID + '" ' +
+                                'data-id="' + vizID + '" ' +
                                 'class="custom-btn-svg custom-btn-svg-checked"> ';
                     } else {
                         target.removeClass('custom-btn-checked');
                         img = "images/controls/pin.svg";
                         html = '<img src="' + img + '" ' +
-                                'data-id="' + spiralID + '" ' +
+                                'data-id="' + vizID + '" ' +
                                 'class="custom-btn-svg"> ';
                     }
 
@@ -834,20 +882,31 @@ moduleLayout.directive("directivePanes",
                 }
             };
 
+            scope.updateFromSpiralAttribute = function(button) {
+                var elementProperties = extractPropertiesFromElement(button);
+
+                // Update node properties
+                var node = nodes.getRootNode().first(function (node1) {
+                    return node1.model.id === elementProperties.nodeID;
+                });
+                node.model.currentVizID = elementProperties.vizID;
+
+                scope.APIActionPanel.chooseSpiralAttribute('checkSingle');
+            };
+
             // Two step creation: 
             // - first, angular elements we need to compile;
             // - then, d3 elements
-            var makeSpiral = function(id, spiralID) {
+            var makeSpiral = function(id, vizID) {
                 // If it's the only visualization in the view,
                 // consider it checked
                 var isChecked = (nodes.getVizs(id).length === 0);
-                var viz = nodes.getVizByIDs(id, spiralID);
+                var viz = nodes.getVizByIDs(id, vizID);
                 var spiralObject;
                 if (!viz) {
                     spiralObject = new SpiralVisualization({
                         medications: scope.selectedMedications,
-                        // FIXME: This is retrieved from checkSingle()
-                        currentMedication: scope.selectedMedications[0].name
+                        currentMedication: scope.currentMedication.name
                     });
                 } else {
                     isChecked = isChecked || viz.isChecked;
@@ -855,19 +914,26 @@ moduleLayout.directive("directivePanes",
                 }
 
                 var html = '<div ' +
-                    'id="' + spiralID + '" ' +
+                    'id="' + vizID + '" ' +
                     'data-node-id="' + id + '" ' +
                     'class="viz-spiral">' +
                     '<div style="display: block">' + 
                         utils.makeImgButton({
-                            id:     spiralID,
+                            id:     vizID,
+                            nodeID: id,
+                            method: "updateFromSpiralAttribute($event)",
+                            title:  "Substituir atributo",
+                            img:    "images/controls/config.svg"
+                        }) +
+                        utils.makeImgButton({
+                            id:     vizID,
                             nodeID: id,
                             method: "dragSpiral($event)",
                             title:  "Arrastar Espiral",
                             img:    "images/controls/drag.svg"
                         }) +
                         utils.makeImgButton({
-                            id:           spiralID,
+                            id:           vizID,
                             nodeID:       id,
                             checkable:    true,
                             directive:    "directive-button",
@@ -880,42 +946,58 @@ moduleLayout.directive("directivePanes",
                             imgChecked:   "images/controls/checked.svg"
                         }) +
                         utils.makeImgButton({
-                            id:     spiralID,
+                            id:     vizID,
                             nodeID: id,
                             method: "removeSpiral($event)",
                             title:  "Remover Espiral",
                             img:    "images/controls/remove.svg"
                         }) +
                     // FIXME: remove
-                    spiralID +
+                    vizID +
                     '</div>' +
                     '<div>' +
                         '<span>Agrupamento:</span>' +
                         '<div class="dropdown">' +
                             '<button type="button" href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">' +
-                                '<span id="' + spiralID+ '-binning">' +
+                                '<span id="' + vizID+ '-binning">' +
                                     '{{currentBinning}} ' +
                                 '</span>' +
                                 '<span class="caret"></span></button>' +
                             '<ul class="dropdown-menu">' +
-                                '<li><a href="#" ng-click="setBinning(\'days\')">Dia</a></li>' +
-                                '<li><a href="#" ng-click="setBinning(\'weeks\')">Semana</a></li>' +
-                                '<li><a href="#" ng-click="setBinning(\'months\')">Mês</a></li>' +
-                                '<li><a href="#" ng-click="setBinning(\'years\')">Ano</a></li>' +
+                                '<li><a href="#" ' +
+                                    'data-id="' + vizID + '" ' +
+                                    'data-node-id="' + id + '" ' +
+                                    'ng-click="setBinning($event, \'days\')">Dia</a>' +
+                                '</li>' +
+                                '<li><a href="#" ' +
+                                    'data-id="' + vizID + '" ' +
+                                    'data-node-id="' + id + '" ' +
+                                    'ng-click="setBinning($event, \'weeks\')">Semana</a>' +
+                                '</li>' +
+                                '<li><a href="#" ' +
+                                    'data-id="' + vizID + '" ' +
+                                    'data-node-id="' + id + '" ' +
+                                    'ng-click="setBinning($event, \'months\')">Mês</a>' +
+                                '</li>' +
+                                '<li><a href="#" ' +
+                                    'data-id="' + vizID + '" ' +
+                                    'data-node-id="' + id + '" ' +
+                                    'ng-click="setBinning($event, \'years\')">Ano</a>' +
+                                '</li>' +
                             '</ul>' +
                     '</div>' +
                     '</div>';
                 var target = angular.element('#' + id);
                 target.append($compile(html)(scope));
 
-                spiralObject.make(id, spiralID, isChecked);
+                spiralObject.make(id, vizID, isChecked);
                 scope.currentBinning = visualizations.translateFrequency(
                     spiralObject.binning);
 
                 // Save visualization for d3 updates
                 nodes.updateViz({
                     nodeID: id,
-                    vizID: spiralID,
+                    vizID: vizID,
                     isChecked: isChecked,
                     vizObject: spiralObject
                 });
@@ -926,6 +1008,7 @@ moduleLayout.directive("directivePanes",
             // - then, d3 elements
             var makeHeatMap = function(node) {
                 var id = node.model.id;
+                // FIXME: We assume a node will only have one heatmap
                 var heatMap = node.model.vizs[0];
                 var heatMapID;
                 var heatMapObject;

@@ -233,7 +233,7 @@ moduleVisualizations.factory('SpiralVisualization',
         this.html = this.spiral.render();
     };
 
-    SpiralVisualization.prototype.update = function(id, state) {
+    SpiralVisualization.prototype.update = function(nodeID, vizID, state) {
         /*
         var data = [];
         var spirals = nodes.getVizs(id);
@@ -242,8 +242,7 @@ moduleVisualizations.factory('SpiralVisualization',
         }
         */
 
-        var node = nodes.getCurrentNode();
-        var spiral = node.model.vizs[0];
+        var spiral = nodes.getVizByIDs(nodeID, vizID);
         if (state.binning) {
             this.binning = state.binning;
             this.spiral.set('binning', this.binning);

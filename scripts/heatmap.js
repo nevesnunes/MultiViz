@@ -383,10 +383,10 @@ moduleVisualizations.factory('HeatMapVisualization',
                 (diseaseNames.length + 1.5) * gridHeight);
     };
 
-    HeatMapVisualization.prototype.update = function(elementID, state) {
+    HeatMapVisualization.prototype.update = function(nodeID, vizID, state) {
         this.diseases = state.diseases;
         this.medications = state.medications;
-        this.populate(this.dataIncidences, elementID);
+        this.populate(this.dataIncidences, nodeID);
     };
 
     return HeatMapVisualization;
