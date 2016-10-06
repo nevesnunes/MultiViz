@@ -742,7 +742,7 @@ moduleLayout.directive("directivePanes",
             }
 
             function extractPropertiesFromElement(element) {
-                // Make sure we are targeting the button element, not 
+                // Make sure we are targeting the element, not 
                 // one of it's children
                 var target = angular.element(element.target);
                 var nodeID = target.data('node-id');
@@ -752,6 +752,7 @@ moduleLayout.directive("directivePanes",
                 }
 
                 return {
+                    target: target,
                     nodeID: nodeID,
                     vizID: target.data('id'),
                     isCheckable: target.data('checkable')
@@ -766,14 +767,6 @@ moduleLayout.directive("directivePanes",
                     node.model.id, node.model.currentVizID);
                 var vizObject = viz.vizObject;
                 vizObject.update(node.model.id, node.model.currentVizID, state);
-
-                if (vizObject.binning && vizObject.binning !== null) {
-                    scope.currentBinning = visualizations.translateFrequency(
-                        vizObject.binning);
-                    var target = angular.element(
-                        '#' + viz.id + "-binning");
-                    $compile(target)(scope);
-                }
             };
 
             // Select the bin size for a visualization's dataset
@@ -837,6 +830,7 @@ moduleLayout.directive("directivePanes",
                     // Update DOM
                     var img = "";
                     var html = "";
+                    var target = elementProperties.target;
                     if (viz.isChecked) {
                         target.addClass('custom-btn-checked');
                         img = "images/controls/pin.svg";
@@ -936,7 +930,6 @@ moduleLayout.directive("directivePanes",
                             id:           vizID,
                             nodeID:       id,
                             checkable:    true,
-                            directive:    "directive-button",
                             method:       "togglePinnedSpiral($event)",
                             title:        "Marcar Espiral como visualização principal",
                             img:          "images/controls/pin.svg",
@@ -959,9 +952,7 @@ moduleLayout.directive("directivePanes",
                         '<span>Agrupamento:</span>' +
                         '<div class="dropdown">' +
                             '<button type="button" href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">' +
-                                '<span id="' + vizID+ '-binning">' +
-                                    '{{currentBinning}} ' +
-                                '</span>' +
+                                '<span id="' + vizID+ '-binning"></span>' +
                                 '<span class="caret"></span></button>' +
                             '<ul class="dropdown-menu">' +
                                 '<li><a href="#" ' +
@@ -991,8 +982,6 @@ moduleLayout.directive("directivePanes",
                 target.append($compile(html)(scope));
 
                 spiralObject.make(id, vizID, isChecked);
-                scope.currentBinning = visualizations.translateFrequency(
-                    spiralObject.binning);
 
                 // Save visualization for d3 updates
                 nodes.updateViz({

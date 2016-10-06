@@ -79,7 +79,8 @@ moduleVisualizations.factory('SpiralVisualization',
             targetElement: spiralID,
             colors: visualizations.colors,
             functions: {
-                makeLegend: visualizations.makeLegend
+                makeLegend: visualizations.makeLegend,
+                translateFrequency: visualizations.translateFrequency
             }
         });
         this.makeBins();

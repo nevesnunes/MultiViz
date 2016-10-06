@@ -1,18 +1,5 @@
 var moduleUtils = angular.module('moduleUtils', []);
-/*
-moduleUtils.directive("directiveButton",function($compile) {
-  return {
-    link: function(scope, element, attrs) {
-        scope.isButtonChecked = function() {
-        var a = element.data('checked');
-        var b = element.attr('data-checked');
 
-            return "";
-        };
-    }
-  };
-});
-*/
 moduleUtils.factory('utils', function() {
     var makeImgButton = function(options) {
         options.clazz = options.clazz || "btn-primary";

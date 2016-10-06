@@ -81,7 +81,7 @@ Spiral.prototype.render = function() {
     var self = this;
     var option = self.option;
 
-    var attributeText = d3.select(
+    d3.select(
         '#' + option.targetElement + "-attribute-text")
         .html('<p><b>' +
                 option.currentMedication +
@@ -89,6 +89,9 @@ Spiral.prototype.render = function() {
             ' (Frequência prescrita: ' +
                 option.expectedFrequency +
             ')</p>');
+    d3.select(
+        '#' + option.targetElement + "-binning")
+        .html(option.functions.translateFrequency(option.binning));
 
     var svg = option.html.selectAll("svg")
             .attr("width", option.svgWidth)
