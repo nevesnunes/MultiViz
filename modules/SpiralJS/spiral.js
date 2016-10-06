@@ -90,11 +90,11 @@ Spiral.prototype.render = function() {
                 option.expectedFrequency +
             '<br/>' +
             'Intervalo: ' +
-                option.timespan +
+                option.timeSpan +
             '');
     d3.select(
         '#' + option.targetElement + "-binning")
-        .html(option.functions.translateFrequency(option.binning));
+        .html(option.functions.translateInterval(option.binning));
 
     var svg = option.html.selectAll("svg")
             .attr("width", option.svgWidth)

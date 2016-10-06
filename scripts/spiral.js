@@ -80,7 +80,7 @@ moduleVisualizations.factory('SpiralVisualization',
             colors: visualizations.colors,
             functions: {
                 makeLegend: visualizations.makeLegend,
-                translateFrequency: visualizations.translateFrequency
+                translateInterval: visualizations.translateInterval
             }
         });
         this.makeBins();
@@ -104,28 +104,7 @@ moduleVisualizations.factory('SpiralVisualization',
             return;
         }
 
-        // FIXME: refactor into visualizations factory
-        var interval = "";
-        switch (expectedFrequency) {
-            case 'Anual': {
-                interval = 'years';
-                break;
-            }
-            case 'Mensal': {
-                interval = 'months';
-                break;
-            }
-            case 'Semanal': {
-                interval = 'weeks';
-                break;
-            }
-            case 'Diário': {
-                interval = 'days';
-                break;
-            }
-            default: {
-            }
-        } //switch
+        var interval = visualizations.translateFrequency(expectedFrequency);
         var countTimeSpan = endMoment.diff(startMoment, interval);
 
         // Bin data if expected interval is too large;
@@ -210,7 +189,7 @@ moduleVisualizations.factory('SpiralVisualization',
             .set('spacing', spacing)
             .set('lineWidth', spacing * 6)
             .set('binning', this.binning)
-            .set('timespan', 
+            .set('timeSpan', 
                 startMoment.format('YYYY/MM/DD') +
                 ' - ' +
                 endMoment.format('YYYY/MM/DD'))

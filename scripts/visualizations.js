@@ -64,10 +64,29 @@ moduleVisualizations.factory('visualizations',
         } //switch
     };
 
-    var translateFrequency = function(frequency) {
-        return intervals[frequency].translation;
+    var translateInterval = function(interval) {
+        return intervals[interval].translation;
     };
     
+    var frequencies = {
+        'Anual': {
+            translation: 'years'
+        },
+        'Mensal': {
+            translation: 'months'
+        },
+        'Semanal': {
+            translation: 'weeks'
+        },
+        'Diário': {
+            translation: 'days'
+        }
+    };
+
+    var translateFrequency = function(frequency) {
+        return frequencies[frequency].translation;
+    };
+
     var makeLegend = function(svg, colorScale, width, height, xMargin, y) {
         var legendRect = svg.selectAll(".legend-rect")
             .data([0].concat(colorScale.quantiles()), function(d) {
@@ -118,6 +137,7 @@ moduleVisualizations.factory('visualizations',
         processSelectedList: processSelectedList,
         diffInterval: diffInterval,
         nextInterval: nextInterval,
+        translateInterval: translateInterval,
         translateFrequency: translateFrequency,
         makeLegend: makeLegend
     };
