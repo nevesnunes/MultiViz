@@ -50,7 +50,7 @@ moduleVisualizations.factory('SpiralVisualization',
         return '<p class="viz-title">' +
                 'Análise temporal de atributos' +
                 '  ' +
-                '<span class="tooltip-wrapper" ' +
+                '<span class="tooltip-wrapper help" ' +
                     'title="{{tooltipText}}" ' + 
                     'directive-tooltip directive-spiral-tooltip>' +
                     '<img src="images/controls/info.svg">' +

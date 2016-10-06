@@ -103,6 +103,10 @@ body {
  * Custom elements
  */
 
+.help {
+    cursor: help; 
+}
+
 .discrete-link {
     color: inherit;
 }

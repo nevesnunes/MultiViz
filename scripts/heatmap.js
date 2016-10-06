@@ -64,7 +64,7 @@ moduleVisualizations.factory('HeatMapVisualization',
         return '<p class="viz-title">' +
                 'Relação entre doenças e medicações' +
                 '  ' +
-                '<img class="tooltip-wrapper" ' +
+                '<img class="tooltip-wrapper help" ' +
                     'title="{{tooltipText}}" ' + 
                     'directive-tooltip directive-heat-map-tooltip ' +
                     'src="images/controls/info.svg">' +
