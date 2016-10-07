@@ -87,6 +87,21 @@ moduleVisualizations.factory('visualizations',
         return frequencies[frequency].translation;
     };
 
+    var extractDatesWithInterval = function(startDate, endDate, interval) {
+        var startMoment = moment(startDate, 'YYYY/MM/DD');
+        var endMoment = moment(endDate, 'YYYY/MM/DD');
+        var diffYears = endMoment.diff(startMoment, interval);
+        var dates = [];
+        while (diffYears--) {
+            dates.push(startMoment.toDate());
+            startMoment.add(1, interval);
+        }
+        dates.push(startMoment.toDate());
+        dates.push(endMoment.toDate());
+        
+        return dates;
+    };
+
     var makeLegend = function(svg, colorScale, width, height, xMargin, y) {
         var legendRect = svg.selectAll(".legend-rect")
             .data([0].concat(colorScale.quantiles()), function(d) {
@@ -139,6 +154,7 @@ moduleVisualizations.factory('visualizations',
         nextInterval: nextInterval,
         translateInterval: translateInterval,
         translateFrequency: translateFrequency,
+        extractDatesWithInterval: extractDatesWithInterval, 
         makeLegend: makeLegend
     };
 }]);

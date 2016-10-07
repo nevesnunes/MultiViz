@@ -103,8 +103,7 @@ Spiral.prototype.render = function() {
                 option.expectedFrequency +
             '<br/>' +
             'Intervalo: ' +
-                option.timeSpan +
-            '');
+                option.startDate + ' - ' + option.endDate);
     d3.select('#' + option.targetElement + "-binning")
         .html(option.functions.translateInterval(option.binning));
 
@@ -118,7 +117,7 @@ Spiral.prototype.render = function() {
         .select('#' + this.option.targetElement + "-svg-line")
         .selectAll("svg")
         .attr("width", this.option.lineRange.x)
-        .attr("height", this.option.lineRange.y + this.option.padding);
+        .attr("height", this.option.lineRange.y + this.option.padding * 4);
 
     if (option.graphType === "points") {
         svg.selectAll("g").selectAll("dot")
@@ -230,49 +229,21 @@ Spiral.prototype.render = function() {
                 option.svgHeight - 30);
 
         //
-        // Temporal line graph for interval brushing
+        // Temporal line for interval brushing
         //
-        var x2 = d3.scaleLinear().range([0, option.lineRange.x]);
+        var x2 = d3.scaleTime().range([50, option.lineRange.x - 50]);
         var y2 = d3.scaleLinear().range([option.lineRange.y, 0]);
-        x2.domain(d3.extent(option.data, function(d) {
-            return d[0];
-        }));
+        var parseTime = function(date) {
+            return moment(date, 'YYYY/MM/DD').toDate();
+        };
+        x2.domain([parseTime(option.startDate), parseTime(option.endDate)])
+            .nice();
         y2.domain([0, d3.max(option.data, function(d) {
             return d[1];
         })]);
         var line = d3.line()
-            .x(function(d) { return x2(d[0]); })
+            .x(function(d) { return x2(parseTime(d[2].date)); })
             .y(function(d) { return y2(d[1]); });
-
-        /*
-        var xAxis = d3.svg.axis().scale(x2)
-          .orient("bottom").ticks(5);
-
-        var yAxis = d3.svg.axis().scale(y2)
-          .orient("left").ticks(5);
-
-        svgLine.append("g")
-          .attr("class", "x axis viz-spiral-axis")
-          .attr("transform", "translate("+option.margin.left+"," + 480 + ")")
-          .call(xAxis)
-          .append("text")
-            .attr("x", 710)
-            .attr("y", -3)
-            .attr("dy", "-.35em")
-            .style("text-anchor", "middle")
-            .text("time");
-
-        svgLine.append("g")
-          .attr("class", "y axis viz-spiral-axis")
-          .attr("transform", "translate("+option.margin.left+",0)")
-          .call(yAxis)
-          .append("text")
-            .attr("transform", "rotate(-90)")
-            .attr("y", 6)
-            .attr("dy", ".71em")
-            .style("text-anchor", "end")
-            .text("Signal (a.u.)");
-        */
 
         var linePaths = svgLine.selectAll("g").selectAll(".temporal-line")
             .data([option.data]);
@@ -285,6 +256,42 @@ Spiral.prototype.render = function() {
                 .attr("fill", "white")
                 .attr("stroke-width", "2")
                 .attr("stroke", option.color);
+
+        //
+        // Temporal line axis
+        //
+        // FIXME: Hardcoded for years
+        var xAxis = d3.axisBottom(x2)
+            .tickValues(option.functions.extractDatesWithInterval(
+                option.startDate, option.endDate, 'years'))
+            .tickFormat(d3.timeFormat("%Y/%m/%d"));
+        svgLine.selectAll(".temporal-line-axis").remove();
+        svgLine.append("g")
+            .attr("class", "x axis temporal-line-axis")
+            .attr("transform", "translate(" +
+                option.margin.left + "," +
+                (option.lineRange.y + option.padding) + ")")
+            .call(xAxis)
+            .append("text")
+                .attr("x", option.lineRange.x - option.padding * 2)
+                .attr("y", option.lineRange.y)
+                .attr("dy", "-.35em")
+                .style("text-anchor", "middle")
+                .text("time");
+        /*
+        var yAxis = d3.svg.axis().scale(y2)
+          .orient("left").ticks(5);
+        svgLine.append("g")
+          .attr("class", "y axis viz-spiral-axis")
+          .attr("transform", "translate("+option.margin.left+",0)")
+          .call(yAxis)
+          .append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 6)
+            .attr("dy", ".71em")
+            .style("text-anchor", "end")
+            .text("Signal (a.u.)");
+        */
     }
 };
 
@@ -322,12 +329,7 @@ Spiral.prototype.processData = function(data) {
         var rad = radius(option.spacing, angle);
 
         //option.data.push([i, data[i] * option.period, 2]);
-        var size = Math.floor((Math.random() * 5) + 1);
-        var chance = Math.floor((Math.random() * 5) + 1);
-        if (chance < 3) {
-            size = 0;
-        }
-        option.data.push([i, size * 10, 2]);
+        option.data.push([i, data[i].value * 10, data[i]]);
         option.spiralData.push(this.cartesian(rad, angle, data[i]));
     }
 };

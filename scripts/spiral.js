@@ -78,6 +78,7 @@ moduleVisualizations.factory('SpiralVisualization',
             colors: visualizations.colors,
             functions: {
                 makeLegend: visualizations.makeLegend,
+                extractDatesWithInterval: visualizations.extractDatesWithInterval,
                 translateInterval: visualizations.translateInterval
             }
         });
@@ -152,7 +153,8 @@ moduleVisualizations.factory('SpiralVisualization',
             // The bin interval ended: 
             // Add accumulated values to data and advance to the next bin
             if (diffBinDate === 0) {
-                var dateString = previousBinMoment.format('YYYY/MM/DD');
+                var startDateString = previousBinMoment.format('YYYY/MM/DD');
+                var dateString = startDateString;
                 if (binFactor > 0) {
                     dateString += ' - ';
                     dateString += currentBinMoment.format('YYYY/MM/DD');
@@ -163,6 +165,7 @@ moduleVisualizations.factory('SpiralVisualization',
                     value: accumulatorBinDays,
                     dosage: patientMedications.dosage,
                     date: dateString,
+                    startDate: startDateString,
                     binFactor: binFactor
                 });
                 accumulatorBinDays = 0;
@@ -187,10 +190,8 @@ moduleVisualizations.factory('SpiralVisualization',
             .set('spacing', spacing)
             .set('lineWidth', spacing * 6)
             .set('binning', this.binning)
-            .set('timeSpan', 
-                startMoment.format('YYYY/MM/DD') +
-                ' - ' +
-                endMoment.format('YYYY/MM/DD'))
+            .set('startDate', startMoment.format('YYYY/MM/DD'))
+            .set('endDate', endMoment.format('YYYY/MM/DD'))
             .set('currentMedication', this.currentMedication)
             .set('expectedFrequency', expectedFrequency);
 
