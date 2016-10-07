@@ -1,16 +1,21 @@
 function Spiral(parameters) {
     this.option = {
-        graphType: parameters.graphType || "points",
+        graphType: parameters.graphType || "custom-path",
         numberOfPoints: parameters.numberOfPoints || null,
         period: parameters.period || 12,
         svgHeight: parameters.svgHeight || 0,
         svgWidth: parameters.svgWidth || 0,
+        lineRange: {
+            x: parameters.svgWidth * 2,
+            y: parameters.svgHeight / 10
+        },
         margin: parameters.margin || {
             top: 10,
             right: 10,
             bottom: 10,
             left: 30
         },
+        padding: parameters.padding || 10,
         spacing: parameters.spacing || 1,
         lineWidth: parameters.lineWidth || 50,
         targetElement: parameters.targetElement || '#chart',
@@ -38,13 +43,22 @@ function Spiral(parameters) {
     var svg = d3.select('#' + this.option.targetElement);
     svg.append('div')
         .attr('id', this.option.targetElement + "-attribute-text");
-    svg.append("svg")
-            .attr("width", this.option.svgWidth)
-            .attr("height", this.option.svgHeight)
+    svg.append('div')
+        .attr('class', 'inline-wrapper')
+        .attr('id', this.option.targetElement + "-svg-spiral")
+        .append("svg")
         .append("g")
             .attr("transform", "translate(" +
                 this.option.margin.left + "," +
                 this.option.margin.top + ")");
+    svg.append('div')
+        .attr('class', 'inline-wrapper')
+        .attr('id', this.option.targetElement + "-svg-line")
+        .append("svg")
+        .append("g")
+            .attr("transform", "translate(" +
+                this.option.margin.left + "," +
+                (this.option.padding / 2) + ")");
     this.option.html = svg;
 }
 
@@ -81,8 +95,7 @@ Spiral.prototype.render = function() {
     var self = this;
     var option = self.option;
 
-    d3.select(
-        '#' + option.targetElement + "-attribute-text")
+    d3.select('#' + option.targetElement + "-attribute-text")
         .html('<b>' +
                 option.currentMedication +
             '</b><br/>' +
@@ -92,13 +105,21 @@ Spiral.prototype.render = function() {
             'Intervalo: ' +
                 option.timeSpan +
             '');
-    d3.select(
-        '#' + option.targetElement + "-binning")
+    d3.select('#' + option.targetElement + "-binning")
         .html(option.functions.translateInterval(option.binning));
 
-    var svg = option.html.selectAll("svg")
-            .attr("width", option.svgWidth)
-            .attr("height", option.svgHeight);
+    // Always set size, since it may have been modified previously
+    var svg = option.html
+        .select('#' + this.option.targetElement + "-svg-spiral")
+        .selectAll("svg")
+        .attr("width", option.svgWidth)
+        .attr("height", option.svgHeight);
+    var svgLine = option.html
+        .select('#' + this.option.targetElement + "-svg-line")
+        .selectAll("svg")
+        .attr("width", this.option.lineRange.x)
+        .attr("height", this.option.lineRange.y + this.option.padding);
+
     if (option.graphType === "points") {
         svg.selectAll("g").selectAll("dot")
             .data(option.data)
@@ -112,8 +133,15 @@ Spiral.prototype.render = function() {
             .attr("cy", function(d) {
                 return d[1];
             });
-    } else if (option.graphType === "custom-path") {
-        option.data.forEach(function(datum, t) {
+    } else {
+        //
+        // Spiral sectors
+        //
+        // For each sector, calculate the four points that limit it's
+        // boundaries and the control points for curvature of lines. Unfortunately
+        // d3.js offers no functions that produce separate paths,
+        // so we have to create each svg path manually...
+        option.spiralData.forEach(function(datum, t) {
             t = t + 2 * (option.lineWidth / option.spacing);
             var start = startAngle(t, option.period);
             var end = endAngle(t, option.period);
@@ -151,7 +179,7 @@ Spiral.prototype.render = function() {
 
         var buckets = option.colors.length;
         var colorScale = d3.scaleQuantile()
-            .domain([0, buckets - 1, d3.max(option.data, function(d) {
+            .domain([0, buckets - 1, d3.max(option.spiralData, function(d) {
                 return d[2].value;
             })])
             .range(option.colors);
@@ -167,7 +195,7 @@ Spiral.prototype.render = function() {
             });
         svg.call(sectorsTip);
         var spiralPaths = svg.selectAll("g").selectAll(".spiral-sector")
-            .data(option.data, function(d) {
+            .data(option.spiralData, function(d) {
                 return d[1];
             });
         spiralPaths.exit().remove();
@@ -188,75 +216,76 @@ Spiral.prototype.render = function() {
                     return d[1];
                 });
 
-        var padding = 10;
-        var gridWidth = (option.svgWidth - 2 * padding) / buckets;
+        //
+        // Spiral legend
+        //
+        var gridWidth = (option.svgWidth - 2 * option.padding) / buckets;
         var gridHeight = gridWidth / 2;
         option.functions.makeLegend(
                 svg, 
                 colorScale, 
                 gridWidth, 
                 gridHeight,
-                padding, 
+                option.padding, 
                 option.svgHeight - 30);
 
-    } else if (option.graphType === "non-spiral") {
-        // --------------------vvv Standard Line Graph vvv---------------------------
-        var x2 = d3.scaleLinear().range([0, 730]);
-        var y2 = d3.scaleLinear().range([480, 0]);
+        //
+        // Temporal line graph for interval brushing
+        //
+        var x2 = d3.scaleLinear().range([0, option.lineRange.x]);
+        var y2 = d3.scaleLinear().range([option.lineRange.y, 0]);
         x2.domain(d3.extent(option.data, function(d) {
             return d[0];
         }));
-        y2.domain(d3.extent(option.data, function(d) {
+        y2.domain([0, d3.max(option.data, function(d) {
             return d[1];
-        }));
+        })]);
         var line = d3.line()
-            .x(function(d) {
-                return x2(d[0]);
-            })
-            .y(function(d) {
-                return y2(d[1]);
-            });
+            .x(function(d) { return x2(d[0]); })
+            .y(function(d) { return y2(d[1]); });
 
         /*
-            var xAxis = d3.svg.axis().scale(x2)
-              .orient("bottom").ticks(5);
+        var xAxis = d3.svg.axis().scale(x2)
+          .orient("bottom").ticks(5);
 
-            var yAxis = d3.svg.axis().scale(y2)
-              .orient("left").ticks(5);
+        var yAxis = d3.svg.axis().scale(y2)
+          .orient("left").ticks(5);
 
-            svg.append("g")
-              .attr("class", "x axis viz-spiral-axis")
-              .attr("transform", "translate("+option.margin.left+"," + 480 + ")")
-              .call(xAxis)
-              .append("text")
-                .attr("x", 710)
-                .attr("y", -3)
-                .attr("dy", "-.35em")
-                .style("text-anchor", "middle")
-                .text("time");
+        svgLine.append("g")
+          .attr("class", "x axis viz-spiral-axis")
+          .attr("transform", "translate("+option.margin.left+"," + 480 + ")")
+          .call(xAxis)
+          .append("text")
+            .attr("x", 710)
+            .attr("y", -3)
+            .attr("dy", "-.35em")
+            .style("text-anchor", "middle")
+            .text("time");
 
-            svg.append("g")
-              .attr("class", "y axis viz-spiral-axis")
-              .attr("transform", "translate("+option.margin.left+",0)")
-              .call(yAxis)
-              .append("text")
-                .attr("transform", "rotate(-90)")
-                .attr("y", 6)
-                .attr("dy", ".71em")
-                .style("text-anchor", "end")
-                .text("Signal (a.u.)");
+        svgLine.append("g")
+          .attr("class", "y axis viz-spiral-axis")
+          .attr("transform", "translate("+option.margin.left+",0)")
+          .call(yAxis)
+          .append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 6)
+            .attr("dy", ".71em")
+            .style("text-anchor", "end")
+            .text("Signal (a.u.)");
         */
-        svg.append("path")
-            .datum(option.data)
-            .attr("class", "line")
-            .attr("d", line)
-            .attr("fill", "none")
-            .attr("stroke-width", "1")
-            .attr("stroke", option.color)
-            .attr("transform", "translate(" + option.margin.left + ",0)");
-    }
 
-    return svg;
+        var linePaths = svgLine.selectAll("g").selectAll(".temporal-line")
+            .data([option.data]);
+        linePaths.exit().remove();
+        var lineGroup = linePaths.enter();
+        lineGroup.append("path")
+            .merge(linePaths)
+                .attr("class", "temporal-line")
+                .attr("d", line)
+                .attr("fill", "white")
+                .attr("stroke-width", "2")
+                .attr("stroke", option.color);
+    }
 };
 
 Spiral.prototype.randomData = function() {
@@ -264,6 +293,7 @@ Spiral.prototype.randomData = function() {
     var option = self.option;
 
     option.data = [];
+    option.spiralData = [];
     for (var i = 0; i < option.numberOfPoints; i++) {
         var angle = theta(i, option.period);
         var rad = radius(option.spacing, angle);
@@ -273,34 +303,32 @@ Spiral.prototype.randomData = function() {
             size = 0;
         }
 
-        if (option.graphType === 'non-spiral') {
-            option.data.push([i, size * option.period, 2]);
-        } else {
-            option.data.push(this.cartesian(rad, angle, size));
-        }
+        option.data.push([i, size * option.period, 2]);
+        option.spiralData.push(this.cartesian(rad, angle, size));
     }
 };
 
 /**
- * @param {float[]} values - dataset values that are displayed in tooltip
- * @param {integer} expectedCount - number of possible values in the time span
- * established for this dataset
- * @param {integer} valueFactor - multiplier applied to each value
+ * @param {float[]} data - dataset values that are displayed in tooltip
  */
 Spiral.prototype.processData = function(data) {
     var self = this;
     var option = self.option;
 
     option.data = [];
+    option.spiralData = [];
     for (var i = 0; i < data.length; i++) {
         var angle = theta(i, option.period);
         var rad = radius(option.spacing, angle);
 
-        if (option.graphType === 'non-spiral') {
-            option.data.push([i, values[i] * option.period, 2]);
-        } else {
-            option.data.push(this.cartesian(rad, angle, data[i]));
+        //option.data.push([i, data[i] * option.period, 2]);
+        var size = Math.floor((Math.random() * 5) + 1);
+        var chance = Math.floor((Math.random() * 5) + 1);
+        if (chance < 3) {
+            size = 0;
         }
+        option.data.push([i, size * 10, 2]);
+        option.spiralData.push(this.cartesian(rad, angle, data[i]));
     }
 };
 

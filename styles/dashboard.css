@@ -236,6 +236,10 @@ body {
     font-weight: bold;
 }
 
+.inline-wrapper {
+  display: inline-block;
+}
+
 /* Tooltips */
 
 .tooltip-element {

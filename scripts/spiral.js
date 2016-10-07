@@ -29,7 +29,6 @@ moduleVisualizations.factory('SpiralVisualization',
 
         this.binning = null;
         this.data = null;
-        this.html = null;
     };
 
     var COUNT_MAX_THRESHOLD = 150;
@@ -67,7 +66,6 @@ moduleVisualizations.factory('SpiralVisualization',
 
         var size = 300;
         this.spiral = new Spiral({
-            graphType: 'custom-path',
             svgWidth: size,
             svgHeight: size + 50,
             margin: {
@@ -214,7 +212,7 @@ moduleVisualizations.factory('SpiralVisualization',
 
         //spiral.randomData();
         this.spiral.processData(data);
-        this.html = this.spiral.render();
+        this.spiral.render();
     };
 
     SpiralVisualization.prototype.update = function(nodeID, vizID, state) {
