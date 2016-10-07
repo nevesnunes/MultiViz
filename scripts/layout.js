@@ -994,7 +994,7 @@ moduleLayout.directive("directivePanes",
                 var target = angular.element('#' + id);
                 target.append($compile(html)(scope));
 
-                spiralObject.make(id, vizID, isChecked);
+                spiralObject.make(id, vizID);
 
                 // Save visualization for d3 updates
                 nodes.updateViz({
@@ -1220,6 +1220,9 @@ moduleLayout.directive("directivePanes",
                             currentVizID: undefined,
                             children: []
                         }));
+
+                        // Update child properties
+                        // TODO: vizs need to update nodeID
 
                         // Update parent properties
                         node.model.splitType = scope.nodeToSplit.split;

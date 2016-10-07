@@ -57,8 +57,7 @@ moduleVisualizations.factory('SpiralVisualization',
                 '</p>';
     };
 
-    SpiralVisualization.prototype.make = function(
-            elementID, spiralID, isChecked) {
+    SpiralVisualization.prototype.make = function(elementID, spiralID) {
         if (elementID === undefined) {
             console.log("[WARN] @make: undefined id.");
             return;
@@ -212,6 +211,10 @@ moduleVisualizations.factory('SpiralVisualization',
         */
 
         //spiral.randomData();
+        
+        // TODO: vizs need to store nodeID
+        //var isMaximized = (nodes.getCurrentNode().model.id === id);
+
         this.spiral.processData(data);
         this.spiral.render();
     };
