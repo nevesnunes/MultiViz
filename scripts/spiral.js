@@ -128,6 +128,7 @@ moduleVisualizations.factory('SpiralVisualization',
         var binFactor = 0;
         var binInterval = interval;
         var binTimeSpan = recordedEndMoment.diff(recordedStartMoment, interval);
+
         if (this.binning !== null) {
             while (visualizations.diffInterval(binInterval, this.binning) > 0) {
                 binFactor++;
@@ -144,6 +145,9 @@ moduleVisualizations.factory('SpiralVisualization',
             }
             this.binning = binInterval;
         }
+        // The difference for the bin interval may be zero, but the time span
+        // should always be greater then zero
+        binTimeSpan = Math.max(binTimeSpan, 1);
 
         // Set default period for the given interval
         var period = 7;
@@ -171,17 +175,15 @@ moduleVisualizations.factory('SpiralVisualization',
                 currentDateIndex++;
             }
 
-            // The bin interval ended: 
-            // Add accumulated values to data and advance to the next bin
-            if (diffBinDate === 0) {
+            // The bin interval ended or point limit reached:
+            // Add accumulated values to data
+            if ((diffBinDate === 0) || (i == countTimeSpan - 1)) {
                 var startDateString = previousBinMoment.format('YYYY/MM/DD');
                 var dateString = startDateString;
                 if (binFactor > 0) {
                     dateString += ' - ';
                     dateString += currentBinMoment.format('YYYY/MM/DD');
                 }
-                previousBinMoment = currentBinMoment.clone();
-                currentBinMoment.add(1, binInterval);
 
                 // If moment is contained in the brush interval, add date to
                 // brushed data container
@@ -202,7 +204,12 @@ moduleVisualizations.factory('SpiralVisualization',
                     startDate: startDateString,
                     binFactor: binFactor
                 });
+
                 accumulatorBinDays = 0;
+
+                // Advance to the next bin
+                previousBinMoment = currentBinMoment.clone();
+                currentBinMoment.add(1, binInterval);
             }
 
             // Advance to the next expected date
