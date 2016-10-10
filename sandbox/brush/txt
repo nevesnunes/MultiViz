@@ -4,3 +4,5 @@ g .context
     g .brush
         rect .overlay
         rect .selection
+        rect .handle--e
+        rect .handle--w

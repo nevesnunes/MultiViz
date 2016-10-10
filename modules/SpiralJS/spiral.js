@@ -46,24 +46,31 @@ function Spiral(parameters) {
 
     // Make initial svg element
     var svg = d3.select('#' + this.option.targetElement);
-    svg.append('div')
-        .attr('id', this.option.targetElement + "-attribute-text");
-    svg.append('div')
-        .attr('class', 'inline-wrapper')
-        .attr('id', this.option.targetElement + "-svg-spiral")
-        .append("svg")
-        .append("g")
-            .attr("transform", "translate(" +
-                this.option.margin.left + "," +
-                this.option.margin.top + ")");
-    svg.append('div')
-        .attr('class', 'inline-wrapper')
+    var contents = svg.append('div')
+        .attr('id', this.option.targetElement + "-contents");
+    var rightContents = contents.append('div')
+        .style('float', 'right');
+    rightContents.append('div')
+        .attr('id', this.option.targetElement + "-attribute-text")
+        // Align with axis
+        .style('margin-left',
+            (this.option.margin.left + this.option.marginLine) + "px")
+        .style('margin-bottom', "20px");
+    rightContents.append('div')
         .attr('id', this.option.targetElement + "-svg-line")
         .append("svg")
         .append("g")
             .attr("transform", "translate(" +
                 (this.option.margin.left + this.option.marginLine) + "," +
                 (this.option.padding / 2) + ")");
+    contents.append('div')
+        .attr('id', this.option.targetElement + "-svg-spiral")
+        .style('float', 'left')
+        .append("svg")
+        .append("g")
+            .attr("transform", "translate(" +
+                this.option.margin.left + "," +
+                this.option.margin.top + ")");
     this.option.html = svg;
 }
 
