@@ -25,7 +25,10 @@ function Spiral(parameters) {
         tickMarkLabels: parameters.tickMarkLabels || [],
         color: parameters.color || 'black',
         colors: parameters.colors || ["#bdbdbd","#969696","#737373","#525252","#252525","#000000"],
-        functions: parameters.functions || {}
+        functions: parameters.functions || {},
+        intervalDates: [],
+        intervalPos: [],
+        isBeingCreated: true
     };
 
     // Compute position
@@ -75,6 +78,10 @@ Spiral.prototype.cartesian = function(radius, angle, size) {
     var xPos = option.x(radius * Math.cos(angle));
     var yPos = option.y(radius * Math.sin(angle));
     return [xPos, yPos, size];
+};
+
+Spiral.prototype.getIntervalDates = function() {
+    return this.option.intervalDates;
 };
 
 Spiral.prototype.renderNoData = function() {
@@ -286,16 +293,50 @@ Spiral.prototype.render = function() {
         //
         var brushed = function() {
             // ignore brush-by-zoom
-            if (d3.event.sourceEvent && 
-                d3.event.sourceEvent.type === "zoom") return;
-            // TODO: update interval
+            if ((d3.event.sourceEvent && 
+                    d3.event.sourceEvent.type === "zoom") ||
+                    // Ignore empty selections.
+                    (!d3.event.selection)) {
+                option.intervalDates = [];
+                option.intervalPos = [];
+                return; 
+            }
+
+            // The current function is called even on brush creation, so we need a 
+            // guard to avoid a function call loop involving the spiral factory
+            if (option.isBeingCreated) {
+                option.isBeingCreated = false;
+            } else {
+                var d0 = d3.event.selection.map(x2.invert),
+                    d1 = d0.map(d3.timeDay.round);
+                // Record the new dates to be used when calculating new bins
+                option.intervalDates = [
+                    moment(d1[0]),
+                    moment(d1[1])
+                ];
+                // Record selection coordinates in order to restore them
+                // after the new bins are made
+                option.intervalPos = [
+                    d3.event.selection[0],
+                    d3.event.selection[1]
+                ];
+
+                // Need to recalculate bins, since interval was changed
+                option.functions.makeBins();
+            }
         };
+        var brushPos;
+        if (option.intervalPos.length > 0) {
+            brushPos = option.intervalPos.slice();
+        } else {
+            brushPos = x2.range();
+        }
         var brush = d3.brushX()
             .extent([
                 [0, 0],
                 [option.lineRange.x, option.lineRange.y]
             ])
-            .on("brush end", brushed);
+            .on("end", brushed);
         svgLine.selectAll(".temporal-line-brush").remove();
         svgLine.append("g")
             .attr("class", "brush temporal-line-brush")
@@ -303,7 +344,7 @@ Spiral.prototype.render = function() {
                 (option.margin.left + option.marginLine) + "," +
                 0 + ")")
             .call(brush)
-            .call(brush.move, x2.range());
+            .call(brush.move, brushPos);
     }
 };
 
@@ -330,19 +371,21 @@ Spiral.prototype.randomData = function() {
 /**
  * @param {float[]} data - dataset values that are displayed in tooltip
  */
-Spiral.prototype.processData = function(data) {
+Spiral.prototype.processData = function(data, brushedData) {
     var self = this;
     var option = self.option;
 
     option.data = [];
     option.spiralData = [];
     for (var i = 0; i < data.length; i++) {
+        option.data.push([i, data[i].value * 10, data[i]]);
+    }
+
+    for (i = 0; i < brushedData.length; i++) {
         var angle = theta(i, option.period);
         var rad = radius(option.spacing, angle);
 
-        //option.data.push([i, data[i] * option.period, 2]);
-        option.data.push([i, data[i].value * 10, data[i]]);
-        option.spiralData.push(this.cartesian(rad, angle, data[i]));
+        option.spiralData.push(this.cartesian(rad, angle, brushedData[i]));
     }
 };
 

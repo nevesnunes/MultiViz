@@ -18,17 +18,19 @@ moduleVisualizations.directive('directiveSpiralTooltip',
 moduleVisualizations.factory('SpiralVisualization',
         ['visualizations', 'patientData', 'retrievePatientData', 'utils', 'nodes',
         function(visualizations, patientData, retrievePatientData, utils, nodes) {
+    var self;
     var SpiralVisualization = function(options) {
+        self = this;
         // Patient attribute lists
-        this.medications = options.medications;
-        this.currentMedication = options.currentMedication;
+        self.medications = options.medications;
+        self.currentMedication = options.currentMedication;
 
         // This visualization maintains it's state in it's own object,
         // which we will use in our facade
-        this.spiral = null;
+        self.spiral = null;
 
-        this.binning = null;
-        this.data = null;
+        self.binning = null;
+        //self.data = null;
     };
 
     var COUNT_MAX_THRESHOLD = 150;
@@ -64,7 +66,7 @@ moduleVisualizations.factory('SpiralVisualization',
         }
 
         var size = 300;
-        this.spiral = new Spiral({
+        self.spiral = new Spiral({
             svgWidth: size,
             svgHeight: size + 50,
             margin: {
@@ -76,29 +78,43 @@ moduleVisualizations.factory('SpiralVisualization',
             targetElement: spiralID,
             colors: visualizations.colors,
             functions: {
+                makeBins: self.makeBins,
                 makeLegend: visualizations.makeLegend,
                 extractDatesWithInterval: visualizations.extractDatesWithInterval,
                 translateInterval: visualizations.translateInterval
             }
         });
-        this.makeBins();
+        self.makeBins();
     };
 
     SpiralVisualization.prototype.makeBins = function() {
         var patient = patientData.getAttribute(patientData.KEY_PATIENT);
         var patientMedicationIndex = utils.arrayObjectIndexOf(
-                patient.medications, this.currentMedication, "name");
+                patient.medications, self.currentMedication, "name");
         var patientMedications = patient.medications[patientMedicationIndex];
-
-        var startMoment = moment(patientMedications.startDate);
-        var endMoment = moment(patientMedications.endDate);
         var expectedFrequency = patientMedications.expectedFrequency;
         var recordedFrequency = patientMedications.recordedFrequency;
 
+        // Check if interval was defined in temporal line brush;
+        // Otherwise, use expected start and end dates
+        var startMoment = moment(patientMedications.startDate);
+        var endMoment = moment(patientMedications.endDate);
+        var recordedStartMoment;
+        var recordedEndMoment;
+        var intervalDates = self.spiral.getIntervalDates();
+        if (intervalDates.length > 0) {
+            recordedStartMoment = intervalDates[0];
+            recordedEndMoment = intervalDates[1];
+        } else {
+            recordedStartMoment = moment(recordedFrequency[0]);
+            recordedEndMoment = moment(
+                recordedFrequency[recordedFrequency.length - 1]);
+        }
+
         // No recorded data available
         if (recordedFrequency.length === 0) {
-            this.spiral.set('currentMedication', this.currentMedication);
-            this.spiral.renderNoData();
+            self.spiral.set('currentMedication', self.currentMedication);
+            self.spiral.renderNoData();
             return;
         }
 
@@ -110,20 +126,22 @@ moduleVisualizations.factory('SpiralVisualization',
         // adequate one based on interval range
         var binFactor = 0;
         var binInterval = interval;
-        var binTimeSpan = countTimeSpan;
-        if (this.binning !== null) {
-            while (visualizations.diffInterval(binInterval, this.binning) > 0) {
+        var binTimeSpan = recordedEndMoment.diff(recordedStartMoment, interval);
+        if (self.binning !== null) {
+            while (visualizations.diffInterval(binInterval, self.binning) > 0) {
                 binFactor++;
                 binInterval = visualizations.nextInterval(binInterval);
-                binTimeSpan = endMoment.diff(startMoment, binInterval);
+                binTimeSpan = recordedEndMoment.diff(
+                    recordedStartMoment, binInterval);
             }
         } else {
             while (binTimeSpan > COUNT_MAX_THRESHOLD) {
                 binFactor++;
                 binInterval = visualizations.nextInterval(binInterval);
-                binTimeSpan = endMoment.diff(startMoment, binInterval);
+                binTimeSpan = recordedEndMoment.diff(
+                    recordedStartMoment, binInterval);
             }
-            this.binning = binInterval;
+            self.binning = binInterval;
         }
 
         // Set default period for the given interval
@@ -133,6 +151,7 @@ moduleVisualizations.factory('SpiralVisualization',
 
         // Populate data by checking if values are present for each given moment
         var data = [];
+        var brushedData = [];
         var currentMoment = startMoment.clone();	
         var previousBinMoment = currentMoment.clone();
         var currentBinMoment = previousBinMoment.clone().add(1, binInterval);
@@ -160,6 +179,19 @@ moduleVisualizations.factory('SpiralVisualization',
                 }
                 previousBinMoment = currentBinMoment.clone();
                 currentBinMoment.add(1, binInterval);
+
+                // If moment is contained in the brush interval, also add date to
+                // brushed data container
+                if ((currentMoment.diff(recordedStartMoment, interval) > 0) &&
+                        (currentMoment.diff(recordedEndMoment, interval) <= 0)) {
+                    brushedData.push({
+                        value: accumulatorBinDays,
+                        dosage: patientMedications.dosage,
+                        date: dateString,
+                        startDate: startDateString,
+                        binFactor: binFactor
+                    });
+                }
                 data.push({
                     value: accumulatorBinDays,
                     dosage: patientMedications.dosage,
@@ -183,24 +215,27 @@ moduleVisualizations.factory('SpiralVisualization',
         if (countPoints < 10)
             spacing *= 1.25 * (countPoints / 10);
 
-        this.spiral
+        self.spiral
             .set('numberOfPoints', countPoints)
             .set('period', period)
             .set('spacing', spacing)
             .set('lineWidth', spacing * 6)
-            .set('binning', this.binning)
+            .set('binning', self.binning)
+            .set('recordedStartDate', recordedStartMoment.format('YYYY/MM/DD'))
+            .set('recordedEndDate', recordedEndMoment.format('YYYY/MM/DD'))
             .set('startDate', startMoment.format('YYYY/MM/DD'))
             .set('endDate', endMoment.format('YYYY/MM/DD'))
-            .set('currentMedication', this.currentMedication)
-            .set('expectedFrequency', expectedFrequency);
+            .set('currentMedication', self.currentMedication)
+            .set('expectedFrequency', expectedFrequency)
+            .set('isBeingCreated', true);
 
         // Save extra state outside of Spiral instance
-        this.data = data;
+        //self.data = data;
 
-        this.populate(data, spiralID);
+        self.populate(data, brushedData, spiralID);
     };
 
-    SpiralVisualization.prototype.populate = function(data, id) {
+    SpiralVisualization.prototype.populate = function(data, brushedData, id) {
         /*
         var spiral = nodes.getVizs(id)[0];
         spiral.randomData();
@@ -215,8 +250,8 @@ moduleVisualizations.factory('SpiralVisualization',
         // TODO: vizs need to store nodeID
         //var isMaximized = (nodes.getCurrentNode().model.id === id);
 
-        this.spiral.processData(data);
-        this.spiral.render();
+        self.spiral.processData(data, brushedData);
+        self.spiral.render();
     };
 
     SpiralVisualization.prototype.update = function(nodeID, vizID, state) {
@@ -230,21 +265,21 @@ moduleVisualizations.factory('SpiralVisualization',
 
         var spiral = nodes.getVizByIDs(nodeID, vizID);
         if (state.binning) {
-            this.binning = state.binning;
-            this.spiral.set('binning', this.binning);
+            self.binning = state.binning;
+            self.spiral.set('binning', self.binning);
 
-            this.makeBins();
+            self.makeBins();
         }
         if (state.medications) {
-            this.medications = state.medications;
+            self.medications = state.medications;
         }
         if (state.currentMedication) {
-            if (this.currentMedication !== state.currentMedication) {
-                this.binning = null;
-                this.currentMedication = state.currentMedication;
+            if (self.currentMedication !== state.currentMedication) {
+                self.binning = null;
+                self.currentMedication = state.currentMedication;
             }
 
-            this.makeBins();
+            self.makeBins();
         }
     };
 
