@@ -279,7 +279,7 @@ Spiral.prototype.render = function() {
             .attr("class", "x axis temporal-line-axis")
             .attr("transform", "translate(" +
                 (option.margin.left + option.marginLine) + "," +
-                (option.lineRange.y + option.padding) + ")")
+                (option.lineRange.y + option.padding + 1) + ")")
             .call(xAxis)
             .append("text")
                 .attr("x", option.lineRange.x - option.padding * 2)
@@ -334,7 +334,7 @@ Spiral.prototype.render = function() {
         var brush = d3.brushX()
             .extent([
                 [0, 0],
-                [option.lineRange.x, option.lineRange.y]
+                [option.lineRange.x, option.lineRange.y + 10]
             ])
             .on("end", brushed);
         svgLine.selectAll(".temporal-line-brush").remove();
