@@ -15,6 +15,7 @@ function Spiral(parameters) {
             bottom: 10,
             left: 30
         },
+        marginLine: 60,
         padding: parameters.padding || 10,
         spacing: parameters.spacing || 1,
         lineWidth: parameters.lineWidth || 50,
@@ -57,7 +58,7 @@ function Spiral(parameters) {
         .append("svg")
         .append("g")
             .attr("transform", "translate(" +
-                this.option.margin.left + "," +
+                (this.option.margin.left + this.option.marginLine) + "," +
                 (this.option.padding / 2) + ")");
     this.option.html = svg;
 }
@@ -116,7 +117,7 @@ Spiral.prototype.render = function() {
     var svgLine = option.html
         .select('#' + this.option.targetElement + "-svg-line")
         .selectAll("svg")
-        .attr("width", this.option.lineRange.x)
+        .attr("width", this.option.lineRange.x + this.option.marginLine * 2)
         .attr("height", this.option.lineRange.y + this.option.padding * 4);
 
     if (option.graphType === "points") {
@@ -231,13 +232,14 @@ Spiral.prototype.render = function() {
         //
         // Temporal line for interval brushing
         //
-        var x2 = d3.scaleTime().range([50, option.lineRange.x - 50]);
+        var x2 = d3.scaleTime().range([0, option.lineRange.x]);
         var y2 = d3.scaleLinear().range([option.lineRange.y, 0]);
         var parseTime = function(date) {
             return moment(date, 'YYYY/MM/DD').toDate();
         };
-        x2.domain([parseTime(option.startDate), parseTime(option.endDate)])
-            .nice();
+        var dataStartDate = option.data[0][2].startDate;
+        var dataEndDate = option.data[option.data.length - 1][2].startDate;
+        x2.domain([parseTime(dataStartDate), parseTime(dataEndDate)]);
         y2.domain([0, d3.max(option.data, function(d) {
             return d[1];
         })]);
@@ -263,13 +265,13 @@ Spiral.prototype.render = function() {
         // FIXME: Hardcoded for years
         var xAxis = d3.axisBottom(x2)
             .tickValues(option.functions.extractDatesWithInterval(
-                option.startDate, option.endDate, 'years'))
+                dataStartDate, dataEndDate, 'years'))
             .tickFormat(d3.timeFormat("%Y/%m/%d"));
         svgLine.selectAll(".temporal-line-axis").remove();
         svgLine.append("g")
             .attr("class", "x axis temporal-line-axis")
             .attr("transform", "translate(" +
-                option.margin.left + "," +
+                (option.margin.left + option.marginLine) + "," +
                 (option.lineRange.y + option.padding) + ")")
             .call(xAxis)
             .append("text")
@@ -278,20 +280,30 @@ Spiral.prototype.render = function() {
                 .attr("dy", "-.35em")
                 .style("text-anchor", "middle")
                 .text("time");
-        /*
-        var yAxis = d3.svg.axis().scale(y2)
-          .orient("left").ticks(5);
+
+        //
+        // Temporal line brush
+        //
+        var brushed = function() {
+            // ignore brush-by-zoom
+            if (d3.event.sourceEvent && 
+                d3.event.sourceEvent.type === "zoom") return;
+            // TODO: update interval
+        };
+        var brush = d3.brushX()
+            .extent([
+                [0, 0],
+                [option.lineRange.x, option.lineRange.y]
+            ])
+            .on("brush end", brushed);
+        svgLine.selectAll(".temporal-line-brush").remove();
         svgLine.append("g")
-          .attr("class", "y axis viz-spiral-axis")
-          .attr("transform", "translate("+option.margin.left+",0)")
-          .call(yAxis)
-          .append("text")
-            .attr("transform", "rotate(-90)")
-            .attr("y", 6)
-            .attr("dy", ".71em")
-            .style("text-anchor", "end")
-            .text("Signal (a.u.)");
-        */
+            .attr("class", "brush temporal-line-brush")
+            .attr("transform", "translate(" +
+                (option.margin.left + option.marginLine) + "," +
+                0 + ")")
+            .call(brush)
+            .call(brush.move, x2.range());
     }
 };
 
