@@ -26,6 +26,7 @@ function Spiral(parameters) {
         color: parameters.color || 'black',
         colors: parameters.colors || ["#bdbdbd","#969696","#737373","#525252","#252525","#000000"],
         functions: parameters.functions || {},
+        currentMedication: parameters.currentMedication,
         intervalDates: [],
         intervalPos: [],
         isBeingCreated: true
@@ -85,7 +86,9 @@ Spiral.prototype.getIntervalDates = function() {
 };
 
 Spiral.prototype.renderNoData = function() {
-    var option = this.option;
+    var self = this;
+    var option = self.option;
+
     option.html.select('#' + option.targetElement + "-attribute-text")
         .html('<p><b>' +
                 option.currentMedication +
@@ -245,13 +248,19 @@ Spiral.prototype.render = function() {
             return moment(date, 'YYYY/MM/DD').toDate();
         };
         var dataStartDate = option.data[0][2].startDate;
-        var dataEndDate = option.data[option.data.length - 1][2].startDate;
+        var dataEndDate = option.data[option.data.length - 1][2].endDate;
         x2.domain([parseTime(dataStartDate), parseTime(dataEndDate)]);
         y2.domain([0, d3.max(option.data, function(d) {
             return d[1];
         })]);
         var line = d3.line()
-            .x(function(d) { return x2(parseTime(d[2].date)); })
+            .x(function(d, i) { 
+                // The last point needs to be the endDate, to avoid
+                // being the same value as the previous point
+                return x2(parseTime((i == (option.data.length - 1)) ?
+                        d[2].endDate :
+                        d[2].startDate));
+            })
             .y(function(d) { return y2(d[1]); });
 
         var linePaths = svgLine.selectAll("g").selectAll(".temporal-line")

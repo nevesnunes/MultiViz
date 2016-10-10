@@ -101,18 +101,23 @@ moduleLayout.factory("nodes",
      * @param {
      *   nodeID:string,
      *   vizID:string,
+     *   currentVizID:string,
      *   isChecked:bool,
      *   vizObject:object
      * } data - contains the updated html of a visualization identified by 
-     * node id and visualization id; isChecked states if the visualization is
-     * displayed in the overview; vizObject is an instance of a
-     * visualization factory
+     * node id and visualization id; 
+     * currentVizID stores the id of the visualization that will be 
+     * manipulated by user actions;
+     * isChecked states if the visualization is displayed in the overview;
+     * vizObject is an instance of a visualization factory
      */
     var updateViz = function(data) {
         var node = rootNode.first(function(node1) {
             return node1.model.id === data.nodeID;
         });
         var index = utils.arrayObjectIndexOf(node.model.vizs, data.vizID, "id");
+        if (data.currentVizID !== undefined)
+            node.model.currentVizID = data.currentVizID;
         if (index > -1) {
             node.model.vizs[index].isValid = true;
             node.model.vizs[index].vizObject = data.vizObject;

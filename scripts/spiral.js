@@ -84,7 +84,7 @@ moduleVisualizations.factory('SpiralVisualization',
                 extractDatesWithInterval: visualizations.extractDatesWithInterval,
                 translateInterval: visualizations.translateInterval
             },
-            thisFactory: self
+            currentMedication: self.currentMedication
         });
         self.makeBins();
     };
@@ -101,16 +101,23 @@ moduleVisualizations.factory('SpiralVisualization',
         // Otherwise, use expected start and end dates
         var startMoment = moment(patientMedications.startDate);
         var endMoment = moment(patientMedications.endDate);
-        var recordedStartMoment;
-        var recordedEndMoment;
+        var recordedStartMoment = moment(recordedFrequency[0]);
+        var recordedEndMoment = moment(
+                recordedFrequency[recordedFrequency.length - 1]);
+        var intervalStartMoment = moment(recordedFrequency[0]);
+        var intervalEndMoment = moment(
+                recordedFrequency[recordedFrequency.length - 1]);
+        var interval = visualizations.translateFrequency(expectedFrequency);
         var intervalDates = this.spiral.getIntervalDates();
         if (intervalDates.length > 0) {
-            recordedStartMoment = intervalDates[0];
-            recordedEndMoment = intervalDates[1];
-        } else {
-            recordedStartMoment = moment(recordedFrequency[0]);
-            recordedEndMoment = moment(
-                recordedFrequency[recordedFrequency.length - 1]);
+            // Brush intervals may specify dates outside of the recorded range, so
+            // we only apply them if they are inside this range
+            if (intervalStartMoment.diff(intervalDates[0], interval) <= 0) {
+                intervalStartMoment = intervalDates[0];
+            }
+            if (intervalEndMoment.diff(intervalDates[1], interval) >= 0) {
+                intervalEndMoment = intervalDates[1];
+            }
         }
 
         // No recorded data available
@@ -119,7 +126,6 @@ moduleVisualizations.factory('SpiralVisualization',
             return;
         }
 
-        var interval = visualizations.translateFrequency(expectedFrequency);
         var countTimeSpan = endMoment.diff(startMoment, interval);
 
         // Bin data if expected interval is too large;
@@ -127,21 +133,21 @@ moduleVisualizations.factory('SpiralVisualization',
         // adequate one based on interval range
         var binFactor = 0;
         var binInterval = interval;
-        var binTimeSpan = recordedEndMoment.diff(recordedStartMoment, interval);
+        var binTimeSpan = intervalEndMoment.diff(intervalStartMoment, interval);
 
         if (this.binning !== null) {
             while (visualizations.diffInterval(binInterval, this.binning) > 0) {
                 binFactor++;
                 binInterval = visualizations.nextInterval(binInterval);
-                binTimeSpan = recordedEndMoment.diff(
-                    recordedStartMoment, binInterval);
+                binTimeSpan = intervalEndMoment.diff(
+                    intervalStartMoment, binInterval);
             }
         } else {
             while (binTimeSpan > COUNT_MAX_THRESHOLD) {
                 binFactor++;
                 binInterval = visualizations.nextInterval(binInterval);
-                binTimeSpan = recordedEndMoment.diff(
-                    recordedStartMoment, binInterval);
+                binTimeSpan = intervalEndMoment.diff(
+                    intervalStartMoment, binInterval);
             }
             this.binning = binInterval;
         }
@@ -179,21 +185,23 @@ moduleVisualizations.factory('SpiralVisualization',
             // Add accumulated values to data
             if ((diffBinDate === 0) || (i == countTimeSpan - 1)) {
                 var startDateString = previousBinMoment.format('YYYY/MM/DD');
+                var endDateString = currentBinMoment.format('YYYY/MM/DD');
                 var dateString = startDateString;
                 if (binFactor > 0) {
                     dateString += ' - ';
-                    dateString += currentBinMoment.format('YYYY/MM/DD');
+                    dateString += endDateString;
                 }
 
                 // If moment is contained in the brush interval, add date to
                 // brushed data container
-                if ((currentMoment.diff(recordedStartMoment, interval) > 0) &&
-                        (currentMoment.diff(recordedEndMoment, interval) <= 0)) {
+                if ((currentMoment.diff(intervalStartMoment, interval) > 0) &&
+                        (currentMoment.diff(intervalEndMoment, interval) <= 0)) {
                     brushedData.push({
                         value: accumulatorBinDays,
                         dosage: patientMedications.dosage,
                         date: dateString,
                         startDate: startDateString,
+                        endDate: endDateString,
                         binFactor: binFactor
                     });
                 }
@@ -202,6 +210,7 @@ moduleVisualizations.factory('SpiralVisualization',
                     dosage: patientMedications.dosage,
                     date: dateString,
                     startDate: startDateString,
+                    endDate: endDateString,
                     binFactor: binFactor
                 });
 
