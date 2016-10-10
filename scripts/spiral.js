@@ -113,7 +113,6 @@ moduleVisualizations.factory('SpiralVisualization',
 
         // No recorded data available
         if (recordedFrequency.length === 0) {
-            self.spiral.set('currentMedication', self.currentMedication);
             self.spiral.renderNoData();
             return;
         }
@@ -146,7 +145,9 @@ moduleVisualizations.factory('SpiralVisualization',
 
         // Set default period for the given interval
         var period = 7;
-        if (binInterval === 'months')
+        if (binInterval === 'days')
+            period = 30;
+        else if (binInterval === 'months')
             period = 12;
 
         // Populate data by checking if values are present for each given moment
@@ -180,7 +181,7 @@ moduleVisualizations.factory('SpiralVisualization',
                 previousBinMoment = currentBinMoment.clone();
                 currentBinMoment.add(1, binInterval);
 
-                // If moment is contained in the brush interval, also add date to
+                // If moment is contained in the brush interval, add date to
                 // brushed data container
                 if ((currentMoment.diff(recordedStartMoment, interval) > 0) &&
                         (currentMoment.diff(recordedEndMoment, interval) <= 0)) {
@@ -214,6 +215,7 @@ moduleVisualizations.factory('SpiralVisualization',
             spacing *= (countPoints / 100) + 0.25 * ((100 - countPoints) / 100);
         if (countPoints < 10)
             spacing *= 1.25 * (countPoints / 10);
+        spacing *= period / 7;
 
         self.spiral
             .set('numberOfPoints', countPoints)
@@ -221,11 +223,11 @@ moduleVisualizations.factory('SpiralVisualization',
             .set('spacing', spacing)
             .set('lineWidth', spacing * 6)
             .set('binning', self.binning)
+            .set('currentMedication', self.currentMedication)
             .set('recordedStartDate', recordedStartMoment.format('YYYY/MM/DD'))
             .set('recordedEndDate', recordedEndMoment.format('YYYY/MM/DD'))
             .set('startDate', startMoment.format('YYYY/MM/DD'))
             .set('endDate', endMoment.format('YYYY/MM/DD'))
-            .set('currentMedication', self.currentMedication)
             .set('expectedFrequency', expectedFrequency)
             .set('isBeingCreated', true);
 
@@ -277,6 +279,11 @@ moduleVisualizations.factory('SpiralVisualization',
             if (self.currentMedication !== state.currentMedication) {
                 self.binning = null;
                 self.currentMedication = state.currentMedication;
+                self.spiral
+                    .set('currentMedication', self.currentMedication)
+                    // Invalidate previous brushing
+                    .set('intervalDates', [])
+                    .set('intervalPos', []);
             }
 
             self.makeBins();
