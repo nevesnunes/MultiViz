@@ -29,18 +29,18 @@
                             <div ng-controller="controllerOptionList">
                                 <div class="right-inner-addon" style="margin-bottom:10px;">
                                     <i class="glyphicon glyphicon-search"></i>
-                                    <input type="text" id="input-patient" class="form-control" placeholder="Procurar..." ng-model="patientModel.name" data-directive-option-list autofocus tabindex=1>
+                                    <input type="text" id="input-patient" class="form-control" placeholder="Procurar..." ng-model="optionListModel.name" data-directive-option-list autofocus tabindex=1>
                                 </div>
                                 <p></p>
                                 <div class="table table-condensed table-bordered patient-table">
-                                    <div ng-repeat="patient in filteredAttributes = (patientList | filter:patientModel.name)" ng-click="selectEntry($event, patient)">
+                                    <div ng-repeat="patient in filteredAttributes = (patientList | filter:optionListModel.name)" ng-click="selectEntry($event, patient)">
                                         <div ng-focus="focusedEntry($event, patient)" class="patient-table-entry" ng-class="isEntrySelected($index)">{{::patient.name}}</div>
                                     </div>
                                 </div>
 
                                 <p></p>
                                 <div class="tooltip-wrapper disabled" title="{{::tooltipText}}" directive-tooltip>
-                                    <button class="btn btn-primary" id='button-goto-views' ng-click="gotoViews($event, patientModel)" ng-disabled="isDisabled($event)" tabindex=2>Consultar Dados</button>
+                                    <button class="btn btn-primary" id='button-goto-views' ng-click="gotoViews($event, optionListModel)" ng-disabled="isDisabled($event)" tabindex=2>Consultar Dados</button>
                                 </div>
                             </div>
                         </div>

@@ -471,6 +471,20 @@ moduleLayout.directive("directiveActionPanel",
                 });
                 scope.callBackArguments = callBackArguments;
 
+                //
+                // directive-option-list API
+                //
+                scope.optionListCondition = function(button) {
+                    // Option selection is always valid
+                    return true;
+                };
+                scope.optionListAction = function(button, model) {
+                    scope.callWithSavedAttribute(
+                        callbackName,
+                        scope.callBackArguments,
+                        model);
+                };
+
                 var cancelButton = '';
                 if (nodes.getRootNode() !== undefined) {
                     cancelButton = utils.makeImgButton({
@@ -492,28 +506,31 @@ moduleLayout.directive("directiveActionPanel",
                             '</ul>' +
                         '</div>' +
                         '<p/>' +
-                        // Search
-                        '<div class="right-inner-addon">' +
-                            '<i class="glyphicon glyphicon-search"></i>' +
-                            '<input type="text" ' +
-                                'id="input-patient" ' +
-                                'class="form-control" ' +
-                                'placeholder="Procurar..." ' +
-                                'ng-model="attributeModel" ' +
-                                'autofocus tabindex=1>' +
-                        '</div>' +
-                        '<p/>' +
-                        // List
-                        '<div class="table table-condensed table-bordered patient-table">' +
-                            '<div class="checkboxInTable patient-table-entry" ' +
-                                'ng-repeat="attribute in filteredAttributes = (defaultActionsList | filter:attributeModel)"' +
-                                'ng-click="callWithSavedAttribute(\'' + callbackName + '\', callBackArguments, attribute)" ' +
-                                'ng-class="isEntrySelected($index)">' +
-                                '<div style="display: inline-block">' +
-                                    '<div style="display: inline-block" ' +
-                                        'ng-class="isEntryCurrentPatientAttribute(attribute)">' +
+                        '<div ng-controller="controllerOptionList">' +
+                            // Search
+                            '<div class="right-inner-addon">' +
+                                '<i class="glyphicon glyphicon-search"></i>' +
+                                '<input type="text" ' +
+                                    'id="input-patient" ' +
+                                    'class="form-control" ' +
+                                    'placeholder="Procurar..." ' +
+                                    'ng-model="optionListModel" ' +
+                                    'data-directive-option-list ' +
+                                    'autofocus tabindex=1>' +
+                            '</div>' +
+                            '<p/>' +
+                            // List
+                            '<div class="table table-condensed table-bordered patient-table">' +
+                                '<div class="checkboxInTable patient-table-entry" ' +
+                                    'ng-repeat="attribute in filteredAttributes = (defaultActionsList | filter:optionListModel)"' +
+                                    'ng-click="callWithSavedAttribute(\'' + callbackName + '\', callBackArguments, attribute)" ' +
+                                    'ng-class="isEntrySelected($index)">' +
+                                    '<div style="display: inline-block">' +
+                                        '<div style="display: inline-block" ' +
+                                            'ng-class="isEntryCurrentPatientAttribute(attribute)">' +
+                                        '</div>' +
+                                        '{{::attribute}}' +
                                     '</div>' +
-                                    '{{::attribute}}' +
                                 '</div>' +
                             '</div>' +
                         '</div>' +
@@ -581,7 +598,7 @@ moduleLayout.directive("directiveActionPanel",
                                     'id="input-patient" ' +
                                     'class="form-control" ' +
                                     'placeholder="Procurar..." ' +
-                                    'ng-model="attributeModel" ' +
+                                    'ng-model="optionListModel" ' +
                                     'autofocus tabindex=1>' +
                             '</div>' +
                             // Selection choices
@@ -594,7 +611,7 @@ moduleLayout.directive("directiveActionPanel",
                             // List
                             '<div class="table table-condensed table-bordered patient-table">' +
                                 '<div class="checkboxInTable patient-table-entry" ' +
-                                    'ng-repeat="attribute in filteredAttributes = (' + list + ' | filter:attributeModel)"' +
+                                    'ng-repeat="attribute in filteredAttributes = (' + list + ' | filter:optionListModel)"' +
                                     'ng-click="check(attribute)" ' +
                                     'ng-class="isEntrySelected($index)">' +
                                     '<div style="display: inline-block">' +

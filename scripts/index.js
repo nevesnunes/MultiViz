@@ -174,20 +174,27 @@ moduleIndex.controller('controllerAddData',
             });
         };
 
-        $scope.isDisabled = function(button) {
+        //
+        // directive-option-list API
+        //
+        $scope.optionListCondition = function(button) {
             var input = angular.element('#input-patient');
-            var inputModel = input.scope().patientModel;
+            var inputModel = input.scope().optionListModel;
 
             var emptyText = (inputModel === undefined) ||
                 (inputModel.name === "");
             var mismatchedText = (inputModel === undefined) ||
                 !($scope.patientListContainsName(inputModel.name));
-            return emptyText || mismatchedText;
+            // Pass if button is not disabled
+            return !(emptyText || mismatchedText);
+        };
+        $scope.optionListAction = function(button, optionListModel) {
+            $scope.gotoViews(button, optionListModel);
         };
 
         $scope.setTooltipText = function(button) {
             var input = angular.element('#input-patient');
-            var inputModel = input.scope().patientModel;
+            var inputModel = input.scope().optionListModel;
 
             var emptyText = (inputModel === undefined) ||
                 (inputModel.name === "");
@@ -203,13 +210,13 @@ moduleIndex.controller('controllerAddData',
         };
     });
 
-    $scope.gotoViews = function(button, patientModel) {
-        var dataToShare = $scope.getPatientByID(patientModel.id);
+    $scope.gotoViews = function(button, optionListModel) {
+        var dataToShare = $scope.getPatientByID(optionListModel.id);
 
         // User only introduced text, thus no id was assigned;
         // we have to search with this text
         if (dataToShare === undefined) {
-            dataToShare = $scope.getPatientByName(patientModel.name);
+            dataToShare = $scope.getPatientByName(optionListModel.name);
         } 
         patientData.setData(patientData.KEY_PATIENT, dataToShare);
 
@@ -218,9 +225,9 @@ moduleIndex.controller('controllerAddData',
 
     $scope.selectEntry = function(button, patient) {
         var input = angular.element('#input-patient').scope();
-        input.patientModel = $scope.clonePatient(patient);
+        input.optionListModel = $scope.clonePatient(patient);
 
-        patientData.setData(patientData.KEY_PATIENT, input.patientModel);
+        patientData.setData(patientData.KEY_PATIENT, input.optionListModel);
     };
 }]);
 
@@ -337,15 +344,23 @@ moduleIndex.directive('directiveOptionList', ['$compile', '$timeout', 'patientDa
                             // Enter
                             case 13: {
                                 // Input matches an existing entry
-                                if (!scope.isDisabled()) {
-                                    scope.gotoViews(event, scope.patientModel);
+                                if (scope.optionListCondition()) {
+                                    // Instant selection
+                                    if(!scope.optionListModel) {
+                                        scope.optionListModel =
+                                            elems[scope.getSelectedOption()];
+                                    }
+                                    scope.optionListAction(
+                                        event, scope.optionListModel);
                                 // Either fill in the selected entry or
                                 // clear the input when no entry is available
                                 } else {
+                                    // FIXME: Refactor to be generic
                                     var input = angular.element('#input-patient');
-                                    input.scope().patientModel = scope.clonePatient(
+                                    var newModel = scope.clonePatient(
                                         elems[scope.getSelectedOption()]
                                     );
+                                    input.scope().optionListModel = newModel;
                                     input.focus();
 
                                     scope.setSelectedOption(0);
