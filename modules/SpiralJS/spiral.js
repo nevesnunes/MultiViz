@@ -29,7 +29,8 @@ function Spiral(parameters) {
         currentMedication: parameters.currentMedication,
         intervalDates: [],
         intervalPos: [],
-        isBeingCreated: true
+        isBeingCreated: true,
+        isIntervalBeingChanged: false
     };
 
     // Compute position
@@ -44,27 +45,31 @@ function Spiral(parameters) {
             .range([height, 0])
             .domain([-this.option.svgHeight, this.option.svgHeight]);
 
-    // Make initial svg element
+    // Make initial element properties
     var svg = d3.select('#' + this.option.targetElement);
-    var contents = svg.append('div')
-        .attr('id', this.option.targetElement + "-contents");
-    var rightContents = contents.append('div')
+    svg.select('#' + this.option.targetElement + "-details")
         .style('float', 'right');
-    rightContents.append('div')
-        .attr('id', this.option.targetElement + "-attribute-text")
+    svg.select('#' + this.option.targetElement + "-attribute-text")
         // Align with axis
         .style('margin-left',
             (this.option.margin.left + this.option.marginLine) + "px")
         .style('margin-bottom', "20px");
-    rightContents.append('div')
-        .attr('id', this.option.targetElement + "-svg-line")
+    svg.select('#' + this.option.targetElement + "-current-binning")
+        // Align with axis
+        .style('margin-left',
+            (this.option.margin.left + this.option.marginLine) + "px")
+        .style('margin-bottom', "20px");
+    svg.select('#' + this.option.targetElement + "-svg-line-text")
+        // Align with axis
+        .style('margin-left',
+            (this.option.margin.left + this.option.marginLine) + "px");
+    svg.select('#' + this.option.targetElement + "-svg-line")
         .append("svg")
         .append("g")
             .attr("transform", "translate(" +
                 (this.option.margin.left + this.option.marginLine) + "," +
                 (this.option.padding / 2) + ")");
-    contents.append('div')
-        .attr('id', this.option.targetElement + "-svg-spiral")
+    svg.select('#' + this.option.targetElement + "-svg-spiral")
         .style('float', 'left')
         .append("svg")
         .append("g")
@@ -97,10 +102,12 @@ Spiral.prototype.renderNoData = function() {
     var option = self.option;
 
     option.html.select('#' + option.targetElement + "-attribute-text")
-        .html('<p><b>' +
+        .html('<h4>' +
                 option.currentMedication +
-            '</b></p>' +
+            '</h4>' +
             '<p>Nenhuma contagem registada.</p>');
+    d3.select('#' + option.targetElement + "-svg-line-text")
+        .html('');
     option.html.selectAll("svg").selectAll("g").selectAll("path").remove();
 
     // Don't leave empty space in svg
@@ -114,14 +121,16 @@ Spiral.prototype.render = function() {
     var option = self.option;
 
     d3.select('#' + option.targetElement + "-attribute-text")
-        .html('<b>' +
+        .html('<h4><b>' +
                 option.currentMedication +
-            '</b><br/>' +
+            '</b></h4>' +
             'Frequência prescrita: ' +
                 option.expectedFrequency +
             '<br/>' +
             'Intervalo: ' +
                 option.startDate + ' - ' + option.endDate);
+    d3.select('#' + option.targetElement + "-svg-line-text")
+        .html('<span>Intervalo:</span>');
     d3.select('#' + option.targetElement + "-binning")
         .html(option.functions.translateInterval(option.binning));
 
@@ -195,10 +204,11 @@ Spiral.prototype.render = function() {
         });
 
         var buckets = option.colors.length;
-        var colorScale = d3.scaleQuantile()
-            .domain([0, buckets - 1, d3.max(option.spiralData, function(d) {
+        var dataExtent = d3.extent(option.spiralData, function(d) {
                 return d[2].value;
-            })])
+            });
+        var colorScale = d3.scaleQuantile()
+            .domain(dataExtent)
             .range(option.colors);
 
         var sectorsTip = d3.tip()
@@ -224,7 +234,11 @@ Spiral.prototype.render = function() {
                     return colorScale(d[2].value);
                 })
                 .on("mouseover", function(d) {
-                    sectorsTip.show(d);
+                    // Prevent tooltip from being left over
+                    // when interacting with some problematic d3 functions,
+                    // such as brushing callbacks
+                    if (!option.isIntervalBeingChanged)
+                        sectorsTip.show(d);
                 })
                 .on("mouseout", function(d) {
                     sectorsTip.hide(d);
@@ -308,6 +322,8 @@ Spiral.prototype.render = function() {
         // Temporal line brush
         //
         var brushed = function() {
+            option.isIntervalBeingChanged = false;
+
             // ignore brush-by-zoom
             if ((d3.event.sourceEvent && 
                     d3.event.sourceEvent.type === "zoom") ||
@@ -352,6 +368,9 @@ Spiral.prototype.render = function() {
                 [0, 0],
                 [option.lineRange.x, option.lineRange.y + 10]
             ])
+            .on("start", function() {
+                option.isIntervalBeingChanged = true;
+            })
             .on("end", brushed);
         svgLine.selectAll(".temporal-line-brush").remove();
         svgLine.append("g")

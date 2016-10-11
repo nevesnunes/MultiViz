@@ -276,10 +276,14 @@ moduleLayout.directive("directiveActionPanel",
                 updateActionPanel("<span>TODO</span>");
             };
 
+            scope.cancelAction = function() {
+                scope.makeDefaultActions();
+            };
+
             scope.cancelSplit = function() {
                 scope.nodeToSplit = undefined;
 
-                scope.makeDefaultActions();
+                scope.cancelAction();
             };
 
             scope.makeViewChooser = function() {
@@ -291,8 +295,7 @@ moduleLayout.directive("directiveActionPanel",
                         method: "cancelSplit()",
                         title:  "Cancelar",
                         img:    "images/controls/black/remove.svg"
-                    }) +
-                    '</button>';
+                    });
                 }
                 var html = cancelButton +
                     '<h4>Escolha uma visualização:</h4>' +
@@ -468,42 +471,70 @@ moduleLayout.directive("directiveActionPanel",
                 });
                 scope.callBackArguments = callBackArguments;
 
-                // Attribute lists
-                var html = '<div>' +
-                    '<h4>Escolha um atributo:</h4>' +
-                    '<div class="dropdown">' +
-                        '<button type="button" href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Medicações <span class="caret"></span></button>' +
-                        '<ul class="dropdown-menu">' +
-                            '<li><a href="#">TODO</a></li>' +
-                        '</ul>' +
-                    '</div>' +
-                    '<p/>' +
-                    // Search
-                    '<div class="right-inner-addon">' +
-                        '<i class="glyphicon glyphicon-search"></i>' +
-                        '<input type="text" ' +
-                            'id="input-patient" ' +
-                            'class="form-control" ' +
-                            'placeholder="Procurar..." ' +
-                            'ng-model="attributeModel" ' +
-                            'autofocus tabindex=1>' +
-                    '</div>' +
-                    '<p/>' +
-                    // List
-                    '<div class="table table-condensed table-bordered patient-table">' +
-                        '<div class="checkboxInTable patient-table-entry" ' +
-                            'ng-repeat="attribute in filteredAttributes = (defaultActionsList | filter:attributeModel)"' +
-                            'ng-click="callWithSavedAttribute(\'' + callbackName + '\', callBackArguments, attribute)" ' +
-                            'ng-class="isEntrySelected($index)">' +
-                            '<div style="display: inline-block">' +
-                                '<div style="display: inline-block" ' +
-                                    'ng-class="isEntryCurrentPatientAttribute(attribute)">' +
+                var cancelButton = '';
+                if (nodes.getRootNode() !== undefined) {
+                    cancelButton = utils.makeImgButton({
+                        clazz:  "btn-secondary custom-btn-secondary",
+                        placement: "left",
+                        method: "cancelSplit()",
+                        title:  "Cancelar",
+                        img:    "images/controls/black/remove.svg"
+                    });
+                }
+                var html = cancelButton +
+                    '<div>' +
+                        // Attribute lists
+                        '<h4>Escolha um atributo:</h4>' +
+                        '<div class="dropdown">' +
+                            '<button type="button" href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Medicações <span class="caret"></span></button>' +
+                            '<ul class="dropdown-menu">' +
+                                '<li><a href="#">TODO</a></li>' +
+                            '</ul>' +
+                        '</div>' +
+                        '<p/>' +
+                        // Search
+                        '<div class="right-inner-addon">' +
+                            '<i class="glyphicon glyphicon-search"></i>' +
+                            '<input type="text" ' +
+                                'id="input-patient" ' +
+                                'class="form-control" ' +
+                                'placeholder="Procurar..." ' +
+                                'ng-model="attributeModel" ' +
+                                'autofocus tabindex=1>' +
+                        '</div>' +
+                        '<p/>' +
+                        // List
+                        '<div class="table table-condensed table-bordered patient-table">' +
+                            '<div class="checkboxInTable patient-table-entry" ' +
+                                'ng-repeat="attribute in filteredAttributes = (defaultActionsList | filter:attributeModel)"' +
+                                'ng-click="callWithSavedAttribute(\'' + callbackName + '\', callBackArguments, attribute)" ' +
+                                'ng-class="isEntrySelected($index)">' +
+                                '<div style="display: inline-block">' +
+                                    '<div style="display: inline-block" ' +
+                                        'ng-class="isEntryCurrentPatientAttribute(attribute)">' +
+                                    '</div>' +
+                                    '{{::attribute}}' +
                                 '</div>' +
-                                '{{::attribute}}' +
                             '</div>' +
                         '</div>' +
-                    '</div>' +
-                '</div>';
+                    '</div>';
+    
+                updateActionPanel(html);
+            };
+
+            scope.chooseSpiralToJoin = function() {
+                var cancelButton = utils.makeImgButton({
+                    clazz:  "btn-secondary custom-btn-secondary",
+                    placement: "left",
+                    method: "cancelAction()",
+                    title:  "Cancelar",
+                    img:    "images/controls/black/remove.svg"
+                });
+                var html = cancelButton +
+                    '<div>' +
+                        '<h4>Seleccione a espiral de destino</h4>' +
+                        '<h4>TODO</h4>' +
+                    '</div>';
     
                 updateActionPanel(html);
             };
@@ -615,6 +646,8 @@ moduleLayout.directive("directiveActionPanel",
                 scope.chooseSpiralAttribute;
             scope.APIActionPanel.makeDefaultActions =
                 scope.makeDefaultActions;
+            scope.APIActionPanel.chooseSpiralToJoin =
+                scope.chooseSpiralToJoin;
         } //link
     }; //return
 }]);
@@ -796,6 +829,10 @@ moduleLayout.directive("directivePanes",
                 });
             };
 
+            scope.joinSpiral = function(button) {
+                scope.APIActionPanel.chooseSpiralToJoin();
+            };
+
             scope.chooseAddSpiral = function(button) {
                 scope.APIActionPanel.chooseSpiralAttribute('addSpiral', button);
             };
@@ -821,10 +858,6 @@ moduleLayout.directive("directivePanes",
                 angular.element('#' + elementProperties.vizID).remove();
 
                 scope.APIActionPanel.makeDefaultActions();
-            };
-
-            scope.dragSpiral = function(button) {
-                // FIXME
             };
 
             scope.togglePinned = function(button) {
@@ -925,6 +958,39 @@ moduleLayout.directive("directivePanes",
                     spiralObject = viz.vizObject;
                 }
 
+                var binningHTML = '<div ' +
+                            'id="' + vizID + '-current-binning">' +
+                        '<span>Agrupamento:</span>' +
+                        '<div class="dropdown">' +
+                            '<button type="button" href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">' +
+                                '<span id="' + vizID+ '-binning"></span>' +
+                                '<span class="caret"></span>' +
+                            '</button>' +
+                            '<ul class="dropdown-menu">' +
+                                '<li><a href="#" ' +
+                                    'data-id="' + vizID + '" ' +
+                                    'data-node-id="' + id + '" ' +
+                                    'ng-click="setBinning($event, \'days\')">Dia</a>' +
+                                '</li>' +
+                                '<li><a href="#" ' +
+                                    'data-id="' + vizID + '" ' +
+                                    'data-node-id="' + id + '" ' +
+                                    'ng-click="setBinning($event, \'weeks\')">Semana</a>' +
+                                '</li>' +
+                                '<li><a href="#" ' +
+                                    'data-id="' + vizID + '" ' +
+                                    'data-node-id="' + id + '" ' +
+                                    'ng-click="setBinning($event, \'months\')">Mês</a>' +
+                                '</li>' +
+                                '<li><a href="#" ' +
+                                    'data-id="' + vizID + '" ' +
+                                    'data-node-id="' + id + '" ' +
+                                    'ng-click="setBinning($event, \'years\')">Ano</a>' +
+                                '</li>' +
+                            '</ul>' +
+                        '</div>' +
+                    '</div>';
+
                 var html = '<div ' +
                     'id="' + vizID + '" ' +
                     'data-node-id="' + id + '" ' +
@@ -940,8 +1006,8 @@ moduleLayout.directive("directivePanes",
                         utils.makeImgButton({
                             id:     vizID,
                             nodeID: id,
-                            method: "dragSpiral($event)",
-                            title:  "Arrastar Espiral",
+                            method: "joinSpiral($event)",
+                            title:  "Juntar Espirais",
                             img:    "images/controls/drag.svg"
                         }) +
                         utils.makeImgButton({
@@ -966,36 +1032,16 @@ moduleLayout.directive("directivePanes",
                     // FIXME: remove
                     vizID +
                     '</div>' +
-                    '<div>' +
-                        '<span>Agrupamento:</span>' +
-                        '<div class="dropdown">' +
-                            '<button type="button" href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">' +
-                                '<span id="' + vizID+ '-binning"></span>' +
-                                '<span class="caret"></span></button>' +
-                            '<ul class="dropdown-menu">' +
-                                '<li><a href="#" ' +
-                                    'data-id="' + vizID + '" ' +
-                                    'data-node-id="' + id + '" ' +
-                                    'ng-click="setBinning($event, \'days\')">Dia</a>' +
-                                '</li>' +
-                                '<li><a href="#" ' +
-                                    'data-id="' + vizID + '" ' +
-                                    'data-node-id="' + id + '" ' +
-                                    'ng-click="setBinning($event, \'weeks\')">Semana</a>' +
-                                '</li>' +
-                                '<li><a href="#" ' +
-                                    'data-id="' + vizID + '" ' +
-                                    'data-node-id="' + id + '" ' +
-                                    'ng-click="setBinning($event, \'months\')">Mês</a>' +
-                                '</li>' +
-                                '<li><a href="#" ' +
-                                    'data-id="' + vizID + '" ' +
-                                    'data-node-id="' + id + '" ' +
-                                    'ng-click="setBinning($event, \'years\')">Ano</a>' +
-                                '</li>' +
-                            '</ul>' +
+                    '<div id="' + vizID + '-contents">' +
+                        '<div id="' + vizID + '-details">' +
+                            '<div id="' + vizID + '-attribute-text" />' +
+                            binningHTML +
+                            '<div id="' + vizID + '-svg-line-text" />' +
+                            '<div id="' + vizID + '-svg-line" />' +
+                        '</div>' +
+                        '<div id="' + vizID + '-svg-spiral" />' +
                     '</div>' +
-                    '</div>';
+                '</div>';
                 var target = angular.element('#' + id);
                 target.append($compile(html)(scope));
 

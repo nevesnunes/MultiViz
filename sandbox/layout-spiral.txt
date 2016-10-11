@@ -1,0 +1,8 @@
+#spiral-1
+    block
+    spiral-1-contents
+        spiral-1-details "float:right"
+            agrupamento
+            spiral-1-attribute-text
+            spiral-1-svg-line
+        spiral-1-svg-spiral "float:left"
