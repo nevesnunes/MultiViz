@@ -383,11 +383,20 @@ moduleVisualizations.factory('HeatMapVisualization',
                 (diseaseNames.length + 1.5) * gridHeight);
     };
 
+    HeatMapVisualization.prototype.remove = function(nodeID, vizID) {
+        // TODO
+    };
+
     HeatMapVisualization.prototype.update = function(nodeID, vizID, state) {
         this.diseases = state.diseases;
         this.medications = state.medications;
         this.populate(this.dataIncidences, nodeID);
     };
+
+    visualizations.validateInterface(
+        HeatMapVisualization.prototype,
+        "HeatMapVisualization"
+    );
 
     return HeatMapVisualization;
 }]);

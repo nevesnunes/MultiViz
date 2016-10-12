@@ -686,21 +686,22 @@ moduleLayout.directive("directivePanes",
             // FIXME: Split size changes should be tracked
             function makeSplitComponent(orientation, node) {
                 return '<div data-split-pane-component data-' + 
-                    orientation + '="50%">' +
-                    makeChildrenLayout(node) +
+                        orientation + '="50%">' +
+                        makeChildrenLayout(node) +
                     '</div>';
             }
 
             function makeSplitDivider(orientation) {
 				return '<div data-split-pane-divider data-' + 
-                    orientation + '="5px"></div>';
+                        orientation + '="5px">' +
+                    '</div>';
             }
 
             function makeSplitPane(orientation, node1, node2) {
                 return '<div data-split-pane>' +
-                    makeSplitComponent(orientation, node1) +
-                    makeSplitDivider(orientation) +
-                    makeSplitComponent(orientation, node2) +
+                        makeSplitComponent(orientation, node1) +
+                        makeSplitDivider(orientation) +
+                        makeSplitComponent(orientation, node2) +
                     '</div>';
             }
 
@@ -865,14 +866,25 @@ moduleLayout.directive("directivePanes",
             scope.removeSpiral = function(button) {
                 var elementProperties = extractPropertiesFromElement(button);
 
+                // Remove d3 handlers
+                var viz = nodes.getVizByIDs(
+                    elementProperties.nodeID,
+                    elementProperties.vizID
+                );
+                var vizObject = viz.vizObject;
+                vizObject.remove(
+                    elementProperties.nodeID,
+                    elementProperties.vizID
+                );
+
+                // Remove DOM
+                angular.element('#' + elementProperties.vizID).remove();
+
                 // Untrack in node visualizations
                 nodes.removeViz({
                     nodeID: elementProperties.nodeID,
                     vizID: elementProperties.vizID
                 });
-
-                // Remove from DOM
-                angular.element('#' + elementProperties.vizID).remove();
 
                 scope.APIActionPanel.makeDefaultActions();
             };
@@ -1202,6 +1214,7 @@ moduleLayout.directive("directivePanes",
 
                     scope.updateLayout();
                 } else {
+                    // TODO: Call each visualization's remove()
                     scope.newLayout();
                 }
             };

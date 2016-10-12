@@ -6,6 +6,26 @@ var moduleVisualizations = angular.module('moduleVisualizations',
 moduleVisualizations.factory('visualizations',
         ['patientData', 'retrievePatientData', 'utils', 'nodes',
         function(patientData, retrievePatientData, utils, nodes) {
+    // Each visualization's public interface (used by layout directives)
+    // consists of the following methods
+    var interfaceNames = [
+        'make', 'remove', 'update'
+    ];
+    
+    // Check if a object implements a function with the provided signature
+    var isImplemented = function(object, name) {
+        return (typeof object[name] === 'function');
+    };
+
+    // Check if the visualization implements the interface
+    // defined in the factory
+    var validateInterface = function(object, objectName) {
+        for (var i in interfaceNames)
+            if (!isImplemented(object, interfaceNames[i]))
+                console.log('[Error] @validateInterface: ' + objectName +
+                    ' does not implement "' + interfaceNames[i] + '"');
+    };
+
     var customDarkGreys = 
             ["#bdbdbd","#969696","#737373","#525252","#252525","#000000"],
         buckets = customDarkGreys.length,
@@ -167,6 +187,7 @@ moduleVisualizations.factory('visualizations',
     };
 
     return {
+        validateInterface: validateInterface,
         colors: colors,
         processSelectedList: processSelectedList,
         diffInterval: diffInterval,

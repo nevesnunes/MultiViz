@@ -255,11 +255,15 @@ moduleVisualizations.factory('SpiralVisualization',
     };
 
     SpiralVisualization.prototype.populate = function(data, brushedData, id) {
-        // TODO: vizs need to store nodeID
+        // TODO: vizs need to store/receive nodeID
         //var isMaximized = (nodes.getCurrentNode().model.id === id);
 
         this.spiral.processData(data, brushedData);
         this.spiral.render();
+    };
+
+    SpiralVisualization.prototype.remove = function(nodeID, vizID) {
+        this.spiral.remove();
     };
 
     SpiralVisualization.prototype.update = function(nodeID, vizID, state) {
@@ -287,6 +291,11 @@ moduleVisualizations.factory('SpiralVisualization',
             this.makeBins();
         }
     };
+
+    visualizations.validateInterface(
+        SpiralVisualization.prototype,
+        "SpiralVisualization"
+    );
 
     return SpiralVisualization;
 }]);

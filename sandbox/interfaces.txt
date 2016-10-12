@@ -1,0 +1,25 @@
+# GC
+
+- nullify
+- pass to localStorage
+- less DOM access
+
+# Interfaces
+
+### 1
+- new viz will call a method in visualizations to check if all methods in an interface are implemented
+- call visualizations.method(vizObj) will call vizObj.method()
+    - packed all methods into one `functions` object
+
+// Check if the object implements a function with the provided signature
+var isImplemented = function(object, name, length) {
+return (typeof object[name] === 'function') &&
+    (object[name].length === length);
+}
+
+### 2
+;; returns a function of the type #'(lambda (x y z &optional a b c)
+
+(defun get-higher-level-method-impl (some-type-of-qualifier) 
+    (cond ((eq 'foo) #'the-foo-version)
+          ((eq 'bar) #'the-bar-version)))

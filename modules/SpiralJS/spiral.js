@@ -116,6 +116,23 @@ Spiral.prototype.renderNoData = function() {
             .attr("height", 0);
 };
 
+Spiral.prototype.remove = function() {
+    var self = this;
+    var option = self.option;
+    var svg = option.html
+        .select('#' + this.option.targetElement + "-svg-spiral")
+        .selectAll("svg");
+    var spiralPaths = svg.selectAll("g").selectAll(".spiral-sector");
+    spiralPaths
+        .on("mouseover", null)
+        .on("mouseout", null)
+        .remove();
+
+    // TODO: legend and brush
+
+    svg.remove();
+};
+
 Spiral.prototype.render = function() {
     var self = this;
     var option = self.option;
@@ -192,7 +209,7 @@ Spiral.prototype.render = function() {
             var point2 = self.cartesian(startOuterRadius, start);
             var point3 = self.cartesian(endOuterRadius, end);
             var point4 = self.cartesian(endInnerRadius, end);
-            var arcPath = "M" + startPoint[0] + " " + startPoint[1] +
+            datum[1] = "M" + startPoint[0] + " " + startPoint[1] +
                 "L" + point2[0] + " " + point2[1] +
                 "Q" + outerControlPoint[0] + " " + outerControlPoint[1] +
                     " " + point3[0] + " " + point3[1] +
@@ -200,7 +217,6 @@ Spiral.prototype.render = function() {
                 "Q" + innerControlPoint[0] + " " + innerControlPoint[1] +
                     " " + startPoint[0] + " " + startPoint[1] +
                 "Z";
-            datum[1] = arcPath;
         });
 
         var buckets = option.colors.length;

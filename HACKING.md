@@ -11,13 +11,14 @@ We use two controllers: One for the top main panel, another for layout directive
 ### Visualizations
 Holds common functionality used by each specific visualization.
 
-Each visualization's public interface (used by layout directives) consists of the following methods:
-- make()
-- update()
-
 # Documentation
 Complex methods or objects are documented with JSDoc
 
 # Notes
+
+### Style Guides
+
+### Other
 - ECMAScript version 6
 - Angular 1
+- NPM
