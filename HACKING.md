@@ -17,6 +17,7 @@ Complex methods or objects are documented with JSDoc
 # Notes
 
 ### Style Guides
+https://github.com/mgechev/angularjs-style-guide
 
 ### Other
 - ECMAScript version 6
