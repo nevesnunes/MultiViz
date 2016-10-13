@@ -33,6 +33,10 @@ function Spiral(parameters) {
         isIntervalBeingChanged: false
     };
 
+    this.make();
+}
+
+Spiral.prototype.make = function() {
     // Compute position
     var width = this.option.svgWidth - 
             this.option.margin.left - this.option.margin.right;
@@ -77,7 +81,7 @@ function Spiral(parameters) {
                 this.option.margin.left + "," +
                 this.option.margin.top + ")");
     this.option.html = svg;
-}
+};
 
 Spiral.prototype.set = function(key, value) {
     this.option[key] = value;
@@ -119,23 +123,34 @@ Spiral.prototype.renderNoData = function() {
 Spiral.prototype.remove = function() {
     var self = this;
     var option = self.option;
+
     var svg = option.html
         .select('#' + this.option.targetElement + "-svg-spiral")
         .selectAll("svg");
     var spiralPaths = svg.selectAll("g").selectAll(".spiral-sector");
     spiralPaths
         .on("mouseover", null)
-        .on("mouseout", null)
+        .on("mouseout", null);
+    svg.selectAll("g").selectAll(".spiral-sector")
+        .remove();
+
+    var svgLine = option.html
+        .select('#' + this.option.targetElement + "-svg-line")
+        .selectAll("svg");
+    var linePaths = svgLine.selectAll("g").selectAll(".temporal-line");
+    svgLine.selectAll("g").selectAll(".temporal-line")
         .remove();
 
     // TODO: legend and brush
 
+    svgLine.remove();
     svg.remove();
 };
 
-Spiral.prototype.render = function() {
+Spiral.prototype.render = function(reusePaths) {
     var self = this;
     var option = self.option;
+    reusePaths = reusePaths || false;
 
     d3.select('#' + option.targetElement + "-attribute-text")
         .html('<h4><b>' +
@@ -184,40 +199,42 @@ Spiral.prototype.render = function() {
         // boundaries and the control points for curvature of lines. Unfortunately
         // d3.js offers no functions that produce separate paths,
         // so we have to create each svg path manually...
-        option.spiralData.forEach(function(datum, t) {
-            t = t + 2 * (option.lineWidth / option.spacing);
-            var start = startAngle(t, option.period);
-            var end = endAngle(t, option.period);
+        if (!reusePaths) {
+            option.spiralData.forEach(function(datum, t) {
+                t = t + 2 * (option.lineWidth / option.spacing);
+                var start = startAngle(t, option.period);
+                var end = endAngle(t, option.period);
 
-            var startCenter = radius(option.spacing, start);
-            var endCenter = radius(option.spacing, end);
-            var startInnerRadius = startCenter - option.lineWidth * 0.5;
-            var startOuterRadius = startCenter + option.lineWidth * 0.5;
-            var endInnerRadius = endCenter - option.lineWidth * 0.5;
-            var endOuterRadius = endCenter + option.lineWidth * 0.5;
+                var startCenter = radius(option.spacing, start);
+                var endCenter = radius(option.spacing, end);
+                var startInnerRadius = startCenter - option.lineWidth * 0.5;
+                var startOuterRadius = startCenter + option.lineWidth * 0.5;
+                var endInnerRadius = endCenter - option.lineWidth * 0.5;
+                var endOuterRadius = endCenter + option.lineWidth * 0.5;
 
-            var ctrlInnerRad = 0.01;
-            var ctrlOuterRad = 0.01;
-            var angle = theta(t, option.period);
-            var rad = radius(option.spacing, angle);
-            var innerControlPoint = self.cartesian(
-                rad - option.lineWidth * 0.5 + ctrlInnerRad, angle);
-            var outerControlPoint = self.cartesian(
-                rad + option.lineWidth * 0.5 + ctrlOuterRad, angle);
+                var ctrlInnerRad = 0.01;
+                var ctrlOuterRad = 0.01;
+                var angle = theta(t, option.period);
+                var rad = radius(option.spacing, angle);
+                var innerControlPoint = self.cartesian(
+                    rad - option.lineWidth * 0.5 + ctrlInnerRad, angle);
+                var outerControlPoint = self.cartesian(
+                    rad + option.lineWidth * 0.5 + ctrlOuterRad, angle);
 
-            var startPoint = self.cartesian(startInnerRadius, start);
-            var point2 = self.cartesian(startOuterRadius, start);
-            var point3 = self.cartesian(endOuterRadius, end);
-            var point4 = self.cartesian(endInnerRadius, end);
-            datum[1] = "M" + startPoint[0] + " " + startPoint[1] +
-                "L" + point2[0] + " " + point2[1] +
-                "Q" + outerControlPoint[0] + " " + outerControlPoint[1] +
-                    " " + point3[0] + " " + point3[1] +
-                "L" + point4[0] + " " + point4[1] +
-                "Q" + innerControlPoint[0] + " " + innerControlPoint[1] +
-                    " " + startPoint[0] + " " + startPoint[1] +
-                "Z";
-        });
+                var startPoint = self.cartesian(startInnerRadius, start);
+                var point2 = self.cartesian(startOuterRadius, start);
+                var point3 = self.cartesian(endOuterRadius, end);
+                var point4 = self.cartesian(endInnerRadius, end);
+                datum[1] = "M" + startPoint[0] + " " + startPoint[1] +
+                    "L" + point2[0] + " " + point2[1] +
+                    "Q" + outerControlPoint[0] + " " + outerControlPoint[1] +
+                        " " + point3[0] + " " + point3[1] +
+                    "L" + point4[0] + " " + point4[1] +
+                    "Q" + innerControlPoint[0] + " " + innerControlPoint[1] +
+                        " " + startPoint[0] + " " + startPoint[1] +
+                    "Z";
+            });
+        }
 
         var buckets = option.colors.length;
         var dataExtent = d3.extent(option.spiralData, function(d) {

@@ -90,6 +90,7 @@ moduleVisualizations.factory('SpiralVisualization',
     };
 
     SpiralVisualization.prototype.makeBins = function() {
+        // Extract patient data
         var patient = patientData.getAttribute(patientData.KEY_PATIENT);
         var patientMedicationIndex = utils.arrayObjectIndexOf(
                 patient.medications, this.currentMedication, "name");
@@ -99,11 +100,6 @@ moduleVisualizations.factory('SpiralVisualization',
 
         // Check if interval was defined in temporal line brush;
         // Otherwise, use expected start and end dates
-        var startMoment = moment(patientMedications.startDate);
-        var endMoment = moment(patientMedications.endDate);
-        var recordedStartMoment = moment(recordedFrequency[0]);
-        var recordedEndMoment = moment(
-                recordedFrequency[recordedFrequency.length - 1]);
         var intervalStartMoment = moment(recordedFrequency[0]);
         var intervalEndMoment = moment(
                 recordedFrequency[recordedFrequency.length - 1]);
@@ -126,7 +122,11 @@ moduleVisualizations.factory('SpiralVisualization',
             return;
         }
 
+        var startMoment = moment(patientMedications.startDate);
+        var endMoment = moment(patientMedications.endDate);
         var countTimeSpan = endMoment.diff(startMoment, interval);
+        // The time span should always be greater then zero
+        countTimeSpan = Math.max(countTimeSpan, 1);
 
         // Bin data if expected interval is too large;
         // If the user didn't set a specific binning, we compute the most
@@ -194,7 +194,7 @@ moduleVisualizations.factory('SpiralVisualization',
 
                 // If moment is contained in the brush interval, add date to
                 // brushed data container
-                if ((currentMoment.diff(intervalStartMoment, interval) > 0) &&
+                if ((currentMoment.diff(intervalStartMoment, interval) >= 0) &&
                         (currentMoment.diff(intervalEndMoment, interval) <= 0)) {
                     brushedData.push({
                         value: accumulatorBinDays,
@@ -238,6 +238,9 @@ moduleVisualizations.factory('SpiralVisualization',
             spacing *= 1.25 * (countPoints / 10);
         spacing *= period / 7;
 
+        var recordedStartMoment = moment(recordedFrequency[0]);
+        var recordedEndMoment = moment(
+                recordedFrequency[recordedFrequency.length - 1]);
         this.spiral
             .set('numberOfPoints', countPoints)
             .set('period', period)
@@ -264,6 +267,23 @@ moduleVisualizations.factory('SpiralVisualization',
 
     SpiralVisualization.prototype.remove = function(nodeID, vizID) {
         this.spiral.remove();
+    };
+
+    // Used to recreate visualization nodes during layout updates.
+    // Unfortunately there is no easy way to store previous nodes while
+    // retaining their functionality, but we can still avoid
+    // recreating the visualization object and computing all it's paths.
+    SpiralVisualization.prototype.remake = function(nodeID, vizID) {
+        // Remove previous nodes/handlers, since they are invalidated by the
+        // new DOM layout
+        this.spiral.remove();
+
+        // Add attributes and svgs to the new DOM targets. Note that the target
+        // element ID is still the same.
+        this.spiral.make();
+
+        // Render paths, reusing data stored in the visualization object
+        this.spiral.render(true);
     };
 
     SpiralVisualization.prototype.update = function(nodeID, vizID, state) {

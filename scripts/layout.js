@@ -116,8 +116,7 @@ moduleLayout.factory("nodes",
             return node1.model.id === data.nodeID;
         });
         var index = utils.arrayObjectIndexOf(node.model.vizs, data.vizID, "id");
-        if (data.currentVizID !== undefined)
-            node.model.currentVizID = data.currentVizID;
+        node.model.currentVizID = data.currentVizID || node.model.currentVizID;
         if (index > -1) {
             node.model.vizs[index].isValid = true;
             node.model.vizs[index].vizObject = data.vizObject;
@@ -126,9 +125,18 @@ moduleLayout.factory("nodes",
                 id: data.vizID,
                 isChecked: data.isChecked || false,
                 isValid: data.isValid || true,
-                vizObject: data.vizObject
+                vizObject: data.vizObject ||
+                    node.model.vizObject,
+                currentMedication: data.currentMedication ||
+                    node.model.currentMedication
             });
         }
+    };
+
+    // Check if the view is maximized. This is used to avoid unnecessary
+    // calls to updateLayout()
+    var isMaximized = function(id) {
+        return currentNode.model.id === id;
     };
 
     // Print node tree layout to console
@@ -165,6 +173,7 @@ moduleLayout.factory("nodes",
         getVizs: getVizs,
         getVizByID: getVizByID,
         getVizByIDs: getVizByIDs,
+        isMaximized: isMaximized,
         removeViz: removeViz,
         updateViz: updateViz
     };
@@ -561,9 +570,8 @@ moduleLayout.directive("directiveActionPanel",
                 var rootHasNoChildren = 
                     (nodes.getRootNode() !== undefined) &&
                     (!nodes.getRootNode().hasChildren());
-                var viewNotRoot =
-                    nodes.getCurrentNode().model.id !==
-                    nodes.getRootNode().model.id;
+                var viewNotRoot = !(nodes.isMaximized(
+                    nodes.getRootNode().model.id));
                 if (rootHasNoChildren || viewNotRoot) {
                     if (nodes.getCurrentNode().model.vizType ===
                             scope.vizType.HEAT_MAP) {
@@ -857,16 +865,20 @@ moduleLayout.directive("directivePanes",
 
             scope.addSpiral = function(button) {
                 var id = angular.element(button.target).data('id');
-                makeSpiral(id, SpiralVisualization.prototype.makeID());
-            
-                // Maximize view, in order for added visualizations to be seen
+                nodes.updateViz({
+                    nodeID: id,
+                    vizID: SpiralVisualization.prototype.makeID(),
+                    currentMedication: scope.currentMedication.name
+                });
+
+                // Maximize view in order for added visualizations to be seen
                 scope.paneMaximize(button);
             };
 
             scope.removeSpiral = function(button) {
                 var elementProperties = extractPropertiesFromElement(button);
 
-                // Remove d3 handlers
+                // Remove d3 nodes/handlers
                 var viz = nodes.getVizByIDs(
                     elementProperties.nodeID,
                     elementProperties.vizID
@@ -942,7 +954,13 @@ moduleLayout.directive("directivePanes",
                 var id = node.model.id;
                 var spirals = node.model.vizs;
                 if (spirals.length === 0) {
-                    makeSpiral(id, SpiralVisualization.prototype.makeID());
+                    var vizID = SpiralVisualization.prototype.makeID();
+                    nodes.updateViz({
+                        nodeID: id,
+                        vizID: vizID,
+                        currentMedication: scope.currentMedication.name
+                    });
+                    makeSpiral(id, vizID);
                 } else {
                     for (var i = 0; i < spirals.length; i++) {
                         // Draw all spirals
@@ -977,10 +995,11 @@ moduleLayout.directive("directivePanes",
                 var isChecked = (nodes.getVizs(id).length === 0);
                 var viz = nodes.getVizByIDs(id, vizID);
                 var spiralObject;
-                if (!viz) {
+                var isNotCreated = !(viz.vizObject);
+                if (isNotCreated) {
                     spiralObject = new SpiralVisualization({
                         medications: scope.selectedMedications,
-                        currentMedication: scope.currentMedication.name
+                        currentMedication: viz.currentMedication
                     });
                 } else {
                     isChecked = isChecked || viz.isChecked;
@@ -1074,7 +1093,12 @@ moduleLayout.directive("directivePanes",
                 var target = angular.element('#' + id);
                 target.append($compile(html)(scope));
 
-                spiralObject.make(id, vizID);
+                // Add d3 elements
+                if (isNotCreated) {
+                    spiralObject.make(id, vizID);
+                } else {
+                    spiralObject.remake(id, vizID);
+                }
 
                 // Save visualization for d3 updates
                 nodes.updateViz({
@@ -1174,7 +1198,7 @@ moduleLayout.directive("directivePanes",
                 });
 
                 // Colapse the view if it is maximized
-                if (nodes.getCurrentNode().model.id === id) {
+                if (nodes.isMaximized(id)) {
                     nodes.setCurrentNode(nodes.getRootNode());
                 }
 
@@ -1225,6 +1249,7 @@ moduleLayout.directive("directivePanes",
                 var node = nodes.getRootNode().first(function (node1) {
                     return node1.model.id === id;
                 });
+
                 nodes.setCurrentNode(node);
 
                 scope.updateLayout();
