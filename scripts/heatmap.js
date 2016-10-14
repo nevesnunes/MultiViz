@@ -32,8 +32,11 @@ moduleVisualizations.factory('HeatMapVisualization',
         this.diseases = options.diseases;
         this.medications = options.medications;
 
-        this.dataIncidences = null;
         this.html = null;
+
+        // Specific state is maintained in a separate object,
+        // which we will use in our facade
+        this.visualizationRenderer = null;
     };
 
     // Fixed properties
@@ -72,7 +75,7 @@ moduleVisualizations.factory('HeatMapVisualization',
                 '</p>';
     };
 
-    HeatMapVisualization.prototype.make = function(elementID, heatMapID) {
+    HeatMapVisualization.prototype.makeSVG = function(elementID, heatMapID) {
         var self = this;
 
         if (elementID === undefined) {
@@ -86,51 +89,73 @@ moduleVisualizations.factory('HeatMapVisualization',
             .append("g")
                 .attr("transform", "translate(" +
                     margin.left + "," + margin.top + ")");
-        this.html = svg;
+        self.html = svg;
+    };
+
+    HeatMapVisualization.prototype.make = function(elementID, heatMapID) {
+        var self = this;
+
+        self.makeSVG(elementID, heatMapID);
+        self.populate(elementID, heatMapID);
+    };
+
+    HeatMapVisualization.prototype.populate = function(elementID, heatMapID) {
+        var self = this;
 
         var patientDataPromise = 
             retrievePatientData.retrieveData('incidences.json');
         patientDataPromise.then(function(data) {
-            self.dataIncidences = data;
-            self.populate(self.dataIncidences, elementID);
+            var diseaseNames = visualizations.processSelectedList(
+                self.diseases);
+            var medicationNames = visualizations.processSelectedList(
+                self.medications);
+
+            // json data contains all attributes, which need to be filtered
+            // first by user selected attributes
+            var filteredData = data.filter(function(d) {
+                return (diseaseNames.indexOf(d.disease) !== -1) &&
+                    (medicationNames.indexOf(d.medication) !== -1);
+            }); 
+
+            // We now remove attributes from the lists that don't have
+            // matches in filteredData (i.e. no cells for that attribute
+            // have values)
+            diseaseNames = (function(list, filteredMatrix) {
+                return list.filter(function(name) {
+                    var index = utils.arrayObjectIndexOf(
+                        filteredMatrix, name, "disease");
+                    return index !== -1;
+                });
+            })(diseaseNames, filteredData);
+            medicationNames = (function(list, filteredMatrix) {
+                return list.filter(function(name) {
+                    var index = utils.arrayObjectIndexOf(
+                        filteredMatrix, name, "medication");
+                    return index !== -1;
+                });
+            })(medicationNames, filteredData);
+
+            self.visualizationRenderer = {
+                dataIncidences: data,
+                filteredData: filteredData,
+                diseaseNames: diseaseNames,
+                medicationNames: medicationNames
+            };
+
+            self.render();
         }, function(error) {
             console.log("[INFO] d3.js parsing results: " + error);
         });
     };
 
-    HeatMapVisualization.prototype.populate = function(data, id) {
-        var a = this.diseases;
-        var svg = this.html;
-        var diseaseNames = visualizations.processSelectedList(
-            this.diseases);
-        var medicationNames = visualizations.processSelectedList(
-            this.medications);
+    HeatMapVisualization.prototype.render = function() {
+        var self = this;
 
-        // json data contains all attributes, which need to be filtered
-        // first by user selected attributes
-        var filteredData = data.filter(function(d) {
-            return (diseaseNames.indexOf(d.disease) !== -1) &&
-                (medicationNames.indexOf(d.medication) !== -1);
-        }); 
-
-        // We now remove attributes from the lists that don't have
-        // matches in filteredData (i.e. no cells for that attribute
-        // have values)
-        diseaseNames = (function(list, filteredMatrix) {
-            return list.filter(function(name) {
-                var index = utils.arrayObjectIndexOf(
-                    filteredMatrix, name, "disease");
-                return index !== -1;
-            });
-        })(diseaseNames, filteredData);
-        medicationNames = (function(list, filteredMatrix) {
-            return list.filter(function(name) {
-                var index = utils.arrayObjectIndexOf(
-                    filteredMatrix, name, "medication");
-                return index !== -1;
-            });
-        })(medicationNames, filteredData);
-
+        var svg = self.html;
+        var data = self.visualizationRenderer.dataIncidences; 
+        var filteredData = self.visualizationRenderer.filteredData;
+        var diseaseNames = self.visualizationRenderer.diseaseNames;
+        var medicationNames = self.visualizationRenderer.medicationNames;
         var rectWidth = 200;
 
         var diseaseLabels = svg.selectAll(".rect-disease-label")
@@ -384,18 +409,36 @@ moduleVisualizations.factory('HeatMapVisualization',
     };
 
     HeatMapVisualization.prototype.remove = function(nodeID, vizID) {
-        // TODO
+        var svg = this.html;
+        var cells = svg.selectAll(".attribute-cell");
+        cells
+            .on("mouseover", null)
+            .on("mouseout", null);
+        svg.selectAll(".attribute-cell")
+            .remove();
+    };
+
+    HeatMapVisualization.prototype.remake = function(nodeID, vizID) {
+        // Remove previous nodes/handlers, since they are invalidated by the
+        // new DOM layout
+        this.remove(nodeID, vizID);
+
+        // Add attributes and svgs to the new DOM targets. Note that the target
+        // element ID is still the same.
+        this.makeSVG(nodeID, vizID);
+
+        // Render paths, reusing data stored in the visualization object
+        this.render();
     };
 
     HeatMapVisualization.prototype.update = function(nodeID, vizID, state) {
         this.diseases = state.diseases;
         this.medications = state.medications;
-        this.populate(this.dataIncidences, nodeID);
+        this.populate(nodeID, vizID);
     };
 
     visualizations.validateInterface(
-        HeatMapVisualization.prototype,
-        "HeatMapVisualization"
+        HeatMapVisualization.prototype, "HeatMapVisualization"
     );
 
     return HeatMapVisualization;

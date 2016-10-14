@@ -9,7 +9,15 @@ moduleVisualizations.factory('visualizations',
     // Each visualization's public interface (used by layout directives)
     // consists of the following methods
     var interfaceNames = [
-        'make', 'remove', 'update'
+        'make',
+        
+        'remove',
+        
+        // Used to recreate visualization nodes during layout updates.
+        // Unfortunately there is no easy way to store previous nodes while
+        // retaining their functionality, but we can still avoid
+        // recreating the visualization object and computing all it's paths.
+        'update'
     ];
     
     // Check if a object implements a function with the provided signature

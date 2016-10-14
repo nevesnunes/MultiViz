@@ -23,9 +23,9 @@ moduleVisualizations.factory('SpiralVisualization',
         this.medications = options.medications;
         this.currentMedication = options.currentMedication;
 
-        // This visualization maintains it's state in it's own object,
+        // Specific state is maintained in a separate object,
         // which we will use in our facade
-        this.spiral = null;
+        this.visualizationRenderer = null;
 
         this.binning = null;
     };
@@ -64,7 +64,7 @@ moduleVisualizations.factory('SpiralVisualization',
         }
 
         var size = 300;
-        this.spiral = new Spiral({
+        this.visualizationRenderer = new Spiral({
             svgWidth: size,
             svgHeight: size + 50,
             margin: {
@@ -104,7 +104,7 @@ moduleVisualizations.factory('SpiralVisualization',
         var intervalEndMoment = moment(
                 recordedFrequency[recordedFrequency.length - 1]);
         var interval = visualizations.translateFrequency(expectedFrequency);
-        var intervalDates = this.spiral.getIntervalDates();
+        var intervalDates = this.visualizationRenderer.getIntervalDates();
         if (intervalDates.length > 0) {
             // Brush intervals may specify dates outside of the recorded range, so
             // we only apply them if they are inside this range
@@ -118,7 +118,7 @@ moduleVisualizations.factory('SpiralVisualization',
 
         // No recorded data available
         if (recordedFrequency.length === 0) {
-            this.spiral.renderNoData();
+            this.visualizationRenderer.renderNoData();
             return;
         }
 
@@ -241,7 +241,7 @@ moduleVisualizations.factory('SpiralVisualization',
         var recordedStartMoment = moment(recordedFrequency[0]);
         var recordedEndMoment = moment(
                 recordedFrequency[recordedFrequency.length - 1]);
-        this.spiral
+        this.visualizationRenderer
             .set('numberOfPoints', countPoints)
             .set('period', period)
             .set('spacing', spacing)
@@ -261,36 +261,32 @@ moduleVisualizations.factory('SpiralVisualization',
         // TODO: vizs need to store/receive nodeID
         //var isMaximized = (nodes.getCurrentNode().model.id === id);
 
-        this.spiral.processData(data, brushedData);
-        this.spiral.render();
+        this.visualizationRenderer.processData(data, brushedData);
+        this.visualizationRenderer.render();
     };
 
     SpiralVisualization.prototype.remove = function(nodeID, vizID) {
-        this.spiral.remove();
+        this.visualizationRenderer.remove();
     };
 
-    // Used to recreate visualization nodes during layout updates.
-    // Unfortunately there is no easy way to store previous nodes while
-    // retaining their functionality, but we can still avoid
-    // recreating the visualization object and computing all it's paths.
     SpiralVisualization.prototype.remake = function(nodeID, vizID) {
         // Remove previous nodes/handlers, since they are invalidated by the
         // new DOM layout
-        this.spiral.remove();
+        this.visualizationRenderer.remove();
 
         // Add attributes and svgs to the new DOM targets. Note that the target
         // element ID is still the same.
-        this.spiral.make();
+        this.visualizationRenderer.make();
 
         // Render paths, reusing data stored in the visualization object
-        this.spiral.render(true);
+        this.visualizationRenderer.render(true);
     };
 
     SpiralVisualization.prototype.update = function(nodeID, vizID, state) {
         var spiral = nodes.getVizByIDs(nodeID, vizID);
         if (state.binning) {
             this.binning = state.binning;
-            this.spiral.set('binning', this.binning);
+            this.visualizationRenderer.set('binning', this.binning);
 
             this.makeBins();
         }
@@ -301,7 +297,7 @@ moduleVisualizations.factory('SpiralVisualization',
             if (this.currentMedication !== state.currentMedication) {
                 this.binning = null;
                 this.currentMedication = state.currentMedication;
-                this.spiral
+                this.visualizationRenderer
                     .set('currentMedication', this.currentMedication)
                     // Invalidate previous brushing
                     .set('intervalDates', [])
@@ -313,8 +309,7 @@ moduleVisualizations.factory('SpiralVisualization',
     };
 
     visualizations.validateInterface(
-        SpiralVisualization.prototype,
-        "SpiralVisualization"
+        SpiralVisualization.prototype, "SpiralVisualization"
     );
 
     return SpiralVisualization;

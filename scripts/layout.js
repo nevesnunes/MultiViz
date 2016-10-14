@@ -115,8 +115,8 @@ moduleLayout.factory("nodes",
         var node = rootNode.first(function(node1) {
             return node1.model.id === data.nodeID;
         });
-        var index = utils.arrayObjectIndexOf(node.model.vizs, data.vizID, "id");
         node.model.currentVizID = data.currentVizID || node.model.currentVizID;
+        var index = utils.arrayObjectIndexOf(node.model.vizs, data.vizID, "id");
         if (index > -1) {
             node.model.vizs[index].isValid = true;
             node.model.vizs[index].vizObject = data.vizObject;
@@ -832,7 +832,7 @@ moduleLayout.directive("directivePanes",
 
             // Redraw visualizations
             scope.updateFromSelections = function(state) {
-                // FIXME
+                // FIXME: Are selections changed in multi-view layout?
                 var node = nodes.getCurrentNode();
                 var viz = nodes.getVizByIDs(
                     node.model.id, node.model.currentVizID);
@@ -1114,11 +1114,12 @@ moduleLayout.directive("directivePanes",
             // - then, d3 elements
             var makeHeatMap = function(node) {
                 var id = node.model.id;
-                // FIXME: We assume a node will only have one heatmap
+                // We assume a node will only have one heatmap
                 var heatMap = node.model.vizs[0];
                 var heatMapID;
                 var heatMapObject;
-                if (!heatMap) {
+                var isNotCreated = !(heatMap);
+                if (isNotCreated) {
                     heatMapID = HeatMapVisualization.prototype.makeID();
                     heatMapObject = new HeatMapVisualization({
                         diseases: scope.selectedDiseases,
@@ -1140,7 +1141,12 @@ moduleLayout.directive("directivePanes",
                 var target = angular.element('#' + id);
                 target.append($compile(html)(scope));
 
-                heatMapObject.make(id, heatMapID);
+                // Add d3 elements
+                if (isNotCreated) {
+                    heatMapObject.make(id, heatMapID);
+                } else {
+                    heatMapObject.remake(id, heatMapID);
+                }
 
                 // Save visualization for d3 updates
                 nodes.updateViz({
