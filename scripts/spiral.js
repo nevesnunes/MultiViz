@@ -28,6 +28,7 @@ moduleVisualizations.factory('SpiralVisualization',
         this.visualizationRenderer = null;
 
         this.binning = null;
+        this.expectedFrequency = null;
     };
 
     var COUNT_MAX_THRESHOLD = 150;
@@ -97,6 +98,7 @@ moduleVisualizations.factory('SpiralVisualization',
         var patientMedications = patient.medications[patientMedicationIndex];
         var expectedFrequency = patientMedications.expectedFrequency;
         var recordedFrequency = patientMedications.recordedFrequency;
+        this.expectedFrequency = expectedFrequency;
 
         // Check if interval was defined in temporal line brush;
         // Otherwise, use expected start and end dates
@@ -306,6 +308,35 @@ moduleVisualizations.factory('SpiralVisualization',
 
             this.makeBins();
         }
+    };
+
+    var possibleBinnings = [
+        { bin: 'days', label: 'Dia' },
+        { bin: 'weeks', label: 'Semana' },
+        { bin: 'months', label: 'Mês' },
+        { bin: 'years', label: 'Ano' }
+    ];
+    SpiralVisualization.prototype.extractAvailableBinnings = function() {
+        var availableBinnings = [];
+        if ((!this.binning) || (!this.expectedFrequency))
+            return availableBinnings;
+
+        // Skip binnings which have more granularity than that of the 
+        // expected frequency
+        var expectedBin = visualizations.translateFrequency(
+            this.expectedFrequency);
+        var index;
+        for (index = 0; index < possibleBinnings.length; index++) {
+            if (possibleBinnings[index].bin === expectedBin)
+                break;
+        }
+
+        // Add all compatible binnings
+        for (; index < possibleBinnings.length; index++) {
+            availableBinnings.push(possibleBinnings[index]);
+        }
+
+        return availableBinnings;
     };
 
     visualizations.validateInterface(

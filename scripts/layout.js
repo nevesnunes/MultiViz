@@ -385,6 +385,9 @@ moduleLayout.directive("directiveActionPanel",
                     medications: scope.selectedMedications,
                     currentMedication: scope.currentMedication.name
                 });
+
+                scope.APIPanes.updateBinningElements();
+
                 scope.APIActionPanel.makeDefaultActions();
             };
 
@@ -986,6 +989,65 @@ moduleLayout.directive("directivePanes",
                 scope.APIActionPanel.chooseSpiralAttribute('checkSingle');
             };
 
+            var makeCurrentBinningHTML = function(vizID) {
+                return '<div ' +
+                        'id="' + vizID + '-current-binning">' +
+                    '<span>Agrupamento:</span>' +
+                    '<div class="dropdown">' +
+                        '<button type="button" href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">' +
+                            '<span id="' + vizID+ '-binning"></span>' +
+                            '<span class="caret"></span>' +
+                        '</button>' +
+                        '<ul class="dropdown-menu" ' +
+                            'id="' + vizID + '-binning-options">' +
+                        '</ul>' +
+                    '</div>' +
+                '</div>';
+            };
+
+            scope.updateBinningElements = function() {
+                // FIXME: Are selections changed in multi-view layout?
+                var node = nodes.getCurrentNode();
+                var id = node.model.id;
+                var vizID = node.model.currentVizID;
+                var viz = nodes.getVizByIDs(id, vizID);
+                var spiralObject = viz.vizObject;
+
+                // Binning container
+                var currentBinningElement = 
+                    angular.element('#' + vizID + '-current-binning');
+                currentBinningElement
+                    .html(makeCurrentBinningHTML(vizID));
+
+                // Binning options
+                var binningScope = currentBinningElement.scope();
+                binningScope.availableBinnings =
+                    spiralObject.extractAvailableBinnings();
+                if (binningScope.availableBinnings.length > 0) {
+                    // Label for current binning
+                    angular.element('#' + vizID + "-binning")
+                        .html(visualizations.translateInterval(
+                            spiralObject.binning));
+
+                    var binningOptionsHTML =
+                        '<li ng-repeat="binning in availableBinnings">' +
+                            '<a href="#" ' +
+                                'data-id="' + vizID + '" ' +
+                                'data-node-id="' + id + '" ' +
+                                'ng-click="setBinning($event, binning.bin)">' +
+                                '{{::binning.label}}' +
+                            '</a>' +
+                        '</li>';
+                    var binningOptionsTarget = angular.element(
+                        '#' + vizID + '-binning-options');
+                    binningOptionsTarget.html(
+                        $compile(binningOptionsHTML)(binningScope));
+                } else {
+                    angular.element('#' + vizID + '-current-binning')
+                        .html('');
+                }
+            };
+
             // Three step creation: 
             // - first, angular elements we need for d3 to use;
             // - second, d3 elements
@@ -1007,19 +1069,6 @@ moduleLayout.directive("directivePanes",
                     spiralObject = viz.vizObject;
                 }
 
-                var binningHTML = '<div ' +
-                        'id="' + vizID + '-current-binning">' +
-                    '<span>Agrupamento:</span>' +
-                    '<div class="dropdown">' +
-                        '<button type="button" href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">' +
-                            '<span id="' + vizID+ '-binning"></span>' +
-                            '<span class="caret"></span>' +
-                        '</button>' +
-                        '<ul class="dropdown-menu" ' +
-                            'id="' + vizID + '-binning-options">' +
-                        '</ul>' +
-                    '</div>' +
-                '</div>';
                 var html = '<div ' +
                     'id="' + vizID + '" ' +
                     'data-node-id="' + id + '" ' +
@@ -1064,7 +1113,7 @@ moduleLayout.directive("directivePanes",
                     '<div id="' + vizID + '-contents">' +
                         '<div id="' + vizID + '-details">' +
                             '<div id="' + vizID + '-attribute-text" />' +
-                            binningHTML +
+                            makeCurrentBinningHTML(vizID) +
                             '<div id="' + vizID + '-svg-line-text" />' +
                             '<div id="' + vizID + '-svg-line" />' +
                         '</div>' +
@@ -1082,25 +1131,26 @@ moduleLayout.directive("directivePanes",
                 }
 
                 // Add binning options to target defined previously
-                // FIXME: hardcoded
-                scope.availableBinnings = [
-                    { bin: 'days', label: 'Dia' },
-                    { bin: 'weeks', label: 'Semana' },
-                    { bin: 'months', label: 'Mês' },
-                    { bin: 'years', label: 'Ano' }
-                ];
+                // FIXME: This affects other spirals...
+                scope.availableBinnings =
+                    spiralObject.extractAvailableBinnings();
                 if (scope.availableBinnings.length > 0) {
                     var binningOptionsHTML =
                         '<li ng-repeat="binning in availableBinnings">' +
                             '<a href="#" ' +
                                 'data-id="' + vizID + '" ' +
                                 'data-node-id="' + id + '" ' +
-                                'ng-click="setBinning($event, binning.bin)">{{::binning.label}}</a>' +
+                                'ng-click="setBinning($event, binning.bin)">' +
+                                '{{::binning.label}}' +
+                            '</a>' +
                         '</li>';
                     var binningOptionsTarget = angular.element(
                         '#' + vizID + '-binning-options');
-                    binningOptionsTarget.append(
+                    binningOptionsTarget.html(
                         $compile(binningOptionsHTML)(scope));
+                } else {
+                    angular.element('#' + vizID + '-current-binning')
+                        .html('');
                 }
 
                 // Save visualization for d3 updates
@@ -1354,6 +1404,7 @@ moduleLayout.directive("directivePanes",
             scope.APIPanes.updateLayout = scope.updateLayout; 
             scope.APIPanes.newLayout = scope.newLayout;
             scope.APIPanes.updateFromSelections = scope.updateFromSelections;
+            scope.APIPanes.updateBinningElements = scope.updateBinningElements;
             scope.APIPanes.addSpiral = scope.addSpiral;
 
             // Initialize
