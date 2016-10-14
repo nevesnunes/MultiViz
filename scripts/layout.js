@@ -999,10 +999,42 @@ moduleLayout.directive("directivePanes",
                             '<span class="caret"></span>' +
                         '</button>' +
                         '<ul class="dropdown-menu" ' +
-                            'id="' + vizID + '-binning-options">' +
+                            'id="' + vizID + '-binning-options" ' +
+                            'directive-spiral-binning>' +
                         '</ul>' +
                     '</div>' +
                 '</div>';
+            };
+
+            var updateBinningOptions = function(id, vizID, spiralObject) {
+                var availableBinnings = spiralObject.extractAvailableBinnings();
+                if (availableBinnings.length > 0) {
+                    // Label for current binning
+                    angular.element('#' + vizID + "-binning")
+                        .html(visualizations.translateInterval(
+                            spiralObject.binning));
+
+                    // Binning options
+                    var binningOptionsHTML = "";
+                    for (var i = 0; i < availableBinnings.length; i++) {
+                        binningOptionsHTML += '<li>' +
+                            '<a href="#" ' +
+                                'data-id="' + vizID + '" ' +
+                                'data-node-id="' + id + '" ' +
+                                'ng-click="setBinning($event, \'' +
+                                    availableBinnings[i].bin + '\')">' +
+                                availableBinnings[i].label +
+                            '</a>' +
+                        '</li>';
+                    }
+                    var binningOptionsTarget = angular.element(
+                        '#' + vizID + '-binning-options');
+                    binningOptionsTarget.html(
+                        $compile(binningOptionsHTML)(scope));
+                } else {
+                    angular.element('#' + vizID + '-current-binning')
+                        .html('');
+                }
             };
 
             scope.updateBinningElements = function() {
@@ -1019,33 +1051,11 @@ moduleLayout.directive("directivePanes",
                 currentBinningElement
                     .html(makeCurrentBinningHTML(vizID));
 
-                // Binning options
-                var binningScope = currentBinningElement.scope();
-                binningScope.availableBinnings =
-                    spiralObject.extractAvailableBinnings();
-                if (binningScope.availableBinnings.length > 0) {
-                    // Label for current binning
-                    angular.element('#' + vizID + "-binning")
-                        .html(visualizations.translateInterval(
-                            spiralObject.binning));
-
-                    var binningOptionsHTML =
-                        '<li ng-repeat="binning in availableBinnings">' +
-                            '<a href="#" ' +
-                                'data-id="' + vizID + '" ' +
-                                'data-node-id="' + id + '" ' +
-                                'ng-click="setBinning($event, binning.bin)">' +
-                                '{{::binning.label}}' +
-                            '</a>' +
-                        '</li>';
-                    var binningOptionsTarget = angular.element(
-                        '#' + vizID + '-binning-options');
-                    binningOptionsTarget.html(
-                        $compile(binningOptionsHTML)(binningScope));
-                } else {
-                    angular.element('#' + vizID + '-current-binning')
-                        .html('');
-                }
+                // Add binning options to target defined previously
+                updateBinningOptions(
+                    id,
+                    vizID,
+                    spiralObject);
             };
 
             // Three step creation: 
@@ -1131,27 +1141,10 @@ moduleLayout.directive("directivePanes",
                 }
 
                 // Add binning options to target defined previously
-                // FIXME: This affects other spirals...
-                scope.availableBinnings =
-                    spiralObject.extractAvailableBinnings();
-                if (scope.availableBinnings.length > 0) {
-                    var binningOptionsHTML =
-                        '<li ng-repeat="binning in availableBinnings">' +
-                            '<a href="#" ' +
-                                'data-id="' + vizID + '" ' +
-                                'data-node-id="' + id + '" ' +
-                                'ng-click="setBinning($event, binning.bin)">' +
-                                '{{::binning.label}}' +
-                            '</a>' +
-                        '</li>';
-                    var binningOptionsTarget = angular.element(
-                        '#' + vizID + '-binning-options');
-                    binningOptionsTarget.html(
-                        $compile(binningOptionsHTML)(scope));
-                } else {
-                    angular.element('#' + vizID + '-current-binning')
-                        .html('');
-                }
+                updateBinningOptions(
+                    id,
+                    vizID,
+                    spiralObject);
 
                 // Save visualization for d3 updates
                 nodes.updateViz({

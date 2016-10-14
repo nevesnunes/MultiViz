@@ -1,7 +1,6 @@
 var moduleVisualizations = angular.module('moduleVisualizations');
 
-moduleVisualizations.directive('directiveSpiralTooltip',
-        function() {
+moduleVisualizations.directive('directiveSpiralTooltip', function() {
     return {
         link: function (scope, element, attrs) {
             scope.setTooltipText = function(button) {
