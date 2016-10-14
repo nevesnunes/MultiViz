@@ -116,20 +116,21 @@ moduleLayout.factory("nodes",
             return node1.model.id === data.nodeID;
         });
         node.model.currentVizID = data.currentVizID || node.model.currentVizID;
+        var newViz = {
+            id: data.vizID,
+            isChecked: data.isChecked || false,
+            isValid: data.isValid || true,
+            vizObject: data.vizObject ||
+                node.model.vizObject,
+            currentMedication: data.currentMedication ||
+                node.model.currentMedication
+        };
+
         var index = utils.arrayObjectIndexOf(node.model.vizs, data.vizID, "id");
         if (index > -1) {
-            node.model.vizs[index].isValid = true;
-            node.model.vizs[index].vizObject = data.vizObject;
+            node.model.vizs[index] = newViz;
         } else {
-            node.model.vizs.push({
-                id: data.vizID,
-                isChecked: data.isChecked || false,
-                isValid: data.isValid || true,
-                vizObject: data.vizObject ||
-                    node.model.vizObject,
-                currentMedication: data.currentMedication ||
-                    node.model.currentMedication
-            });
+            node.model.vizs.push(newViz);
         }
     };
 
@@ -1065,7 +1066,8 @@ moduleLayout.directive("directivePanes",
             var makeSpiral = function(id, vizID) {
                 // If it's the only visualization in the view,
                 // consider it checked
-                var isChecked = (nodes.getVizs(id).length === 0);
+                // FIXME: length never 0
+                var isChecked = (nodes.getVizs(id).length < 2);
                 var viz = nodes.getVizByIDs(id, vizID);
                 var spiralObject;
                 var isNotCreated = !(viz.vizObject);
@@ -1145,6 +1147,8 @@ moduleLayout.directive("directivePanes",
                     id,
                     vizID,
                     spiralObject);
+
+                spiralObject.modifyDetailsVisibility(nodes.isMaximized(id));
 
                 // Save visualization for d3 updates
                 nodes.updateViz({

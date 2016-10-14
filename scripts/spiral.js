@@ -338,9 +338,18 @@ moduleVisualizations.factory('SpiralVisualization',
         return availableBinnings;
     };
 
+    SpiralVisualization.prototype.modifyDetailsVisibility =
+            function(isMaximized) {
+        if (isMaximized) {
+            this.visualizationRenderer.renderVisibleDetails();
+        } else {
+            this.visualizationRenderer.renderNoVisibleDetails();
+        }
+    };
+
     visualizations.validateInterface(
         SpiralVisualization.prototype, "SpiralVisualization"
     );
-
+            
     return SpiralVisualization;
 }]);

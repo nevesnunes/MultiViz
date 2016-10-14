@@ -101,6 +101,22 @@ Spiral.prototype.getIntervalDates = function() {
     return this.option.intervalDates;
 };
 
+Spiral.prototype.renderVisibleDetails = function() {
+    var svg = d3.select('#' + this.option.targetElement);
+    svg.select('#' + this.option.targetElement + "-details")
+        .style("visibility", "initial")
+        .style("width", "initial")
+        .style("height", "initial");
+};
+
+Spiral.prototype.renderNoVisibleDetails = function() {
+    var svg = d3.select('#' + this.option.targetElement);
+    svg.select('#' + this.option.targetElement + "-details")
+        .style("visibility", "hidden")
+        .style("width", 0)
+        .style("height", 0);
+};
+
 Spiral.prototype.renderNoData = function() {
     var self = this;
     var option = self.option;
