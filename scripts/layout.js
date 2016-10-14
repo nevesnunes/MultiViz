@@ -986,9 +986,10 @@ moduleLayout.directive("directivePanes",
                 scope.APIActionPanel.chooseSpiralAttribute('checkSingle');
             };
 
-            // Two step creation: 
-            // - first, angular elements we need to compile;
-            // - then, d3 elements
+            // Three step creation: 
+            // - first, angular elements we need for d3 to use;
+            // - second, d3 elements
+            // - finally, angular elements which use computed data.
             var makeSpiral = function(id, vizID) {
                 // If it's the only visualization in the view,
                 // consider it checked
@@ -1007,38 +1008,18 @@ moduleLayout.directive("directivePanes",
                 }
 
                 var binningHTML = '<div ' +
-                            'id="' + vizID + '-current-binning">' +
-                        '<span>Agrupamento:</span>' +
-                        '<div class="dropdown">' +
-                            '<button type="button" href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">' +
-                                '<span id="' + vizID+ '-binning"></span>' +
-                                '<span class="caret"></span>' +
-                            '</button>' +
-                            '<ul class="dropdown-menu">' +
-                                '<li><a href="#" ' +
-                                    'data-id="' + vizID + '" ' +
-                                    'data-node-id="' + id + '" ' +
-                                    'ng-click="setBinning($event, \'days\')">Dia</a>' +
-                                '</li>' +
-                                '<li><a href="#" ' +
-                                    'data-id="' + vizID + '" ' +
-                                    'data-node-id="' + id + '" ' +
-                                    'ng-click="setBinning($event, \'weeks\')">Semana</a>' +
-                                '</li>' +
-                                '<li><a href="#" ' +
-                                    'data-id="' + vizID + '" ' +
-                                    'data-node-id="' + id + '" ' +
-                                    'ng-click="setBinning($event, \'months\')">Mês</a>' +
-                                '</li>' +
-                                '<li><a href="#" ' +
-                                    'data-id="' + vizID + '" ' +
-                                    'data-node-id="' + id + '" ' +
-                                    'ng-click="setBinning($event, \'years\')">Ano</a>' +
-                                '</li>' +
-                            '</ul>' +
-                        '</div>' +
-                    '</div>';
-
+                        'id="' + vizID + '-current-binning">' +
+                    '<span>Agrupamento:</span>' +
+                    '<div class="dropdown">' +
+                        '<button type="button" href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">' +
+                            '<span id="' + vizID+ '-binning"></span>' +
+                            '<span class="caret"></span>' +
+                        '</button>' +
+                        '<ul class="dropdown-menu" ' +
+                            'id="' + vizID + '-binning-options">' +
+                        '</ul>' +
+                    '</div>' +
+                '</div>';
                 var html = '<div ' +
                     'id="' + vizID + '" ' +
                     'data-node-id="' + id + '" ' +
@@ -1100,6 +1081,28 @@ moduleLayout.directive("directivePanes",
                     spiralObject.remake(id, vizID);
                 }
 
+                // Add binning options to target defined previously
+                // FIXME: hardcoded
+                scope.availableBinnings = [
+                    { bin: 'days', label: 'Dia' },
+                    { bin: 'weeks', label: 'Semana' },
+                    { bin: 'months', label: 'Mês' },
+                    { bin: 'years', label: 'Ano' }
+                ];
+                if (scope.availableBinnings.length > 0) {
+                    var binningOptionsHTML =
+                        '<li ng-repeat="binning in availableBinnings">' +
+                            '<a href="#" ' +
+                                'data-id="' + vizID + '" ' +
+                                'data-node-id="' + id + '" ' +
+                                'ng-click="setBinning($event, binning.bin)">{{::binning.label}}</a>' +
+                        '</li>';
+                    var binningOptionsTarget = angular.element(
+                        '#' + vizID + '-binning-options');
+                    binningOptionsTarget.append(
+                        $compile(binningOptionsHTML)(scope));
+                }
+
                 // Save visualization for d3 updates
                 nodes.updateViz({
                     nodeID: id,
@@ -1110,7 +1113,7 @@ moduleLayout.directive("directivePanes",
             };
 
             // Two step creation: 
-            // - first, angular elements we need to compile;
+            // - first, angular elements we need for d3 to use;
             // - then, d3 elements
             var makeHeatMap = function(node) {
                 var id = node.model.id;
