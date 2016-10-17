@@ -35,24 +35,25 @@ moduleVisualizations.factory('HeatMapVisualization',
         this.html = null;
 
         // FIXME: This could be switchable by the user...
-        this.renderer = renderer.DIM; 
+        this.renderer = renderer.SIM; 
+
+        // Dynamic properties
+        this.margin = {
+            top: (this.renderer === renderer.SIM) ? 40 : 80,
+            right: 0,
+            bottom: 150,
+            left: (this.renderer === renderer.SIM) ? 0 : 200
+        };
+        this.width = 800 - this.margin.left - this.margin.right;
+        this.height = 420 - this.margin.top - this.margin.bottom;
+        this.gridHeight = Math.floor(this.height / 8);
+        this.gridWidth = this.gridHeight * 
+            ((this.renderer === renderer.SIM) ? 1 : 2);
 
         // Specific state is maintained in a separate object,
         // which we will use in our facade
         this.visualizationRenderer = null;
     };
-
-    // Fixed properties
-    var margin = {
-            top: 80,
-            right: 0,
-            bottom: 150,
-            left: 200
-        },
-        width = 800 - margin.left - margin.right,
-        height = 420 - margin.top - margin.bottom,
-        gridHeight = Math.floor(height / 8),
-        gridWidth = gridHeight * 2;
 
     // Unique identifier
     var heatmapID = 0;
@@ -87,11 +88,12 @@ moduleVisualizations.factory('HeatMapVisualization',
         }
         
         var svg = d3.select("#" + heatMapID).append("svg")
-                .attr("width", width + margin.left + margin.right)
-                .attr("height", height + margin.top + margin.bottom)
+                .attr("width", self.width + self.margin.left + self.margin.right)
+                .attr("height", self.height + self.margin.top + self.margin.bottom)
             .append("g")
                 .attr("transform", "translate(" +
-                    margin.left + "," + margin.top + ")");
+                    self.margin.left + "," + self.margin.top + ")");
+        self.targetElement = heatMapID;
         self.html = svg;
     };
 
@@ -154,12 +156,30 @@ moduleVisualizations.factory('HeatMapVisualization',
                     return index !== -1;
                 });
             })(medicationNames, filteredData);
+            var similarityNames = diseaseNames.concat(medicationNames);
+
+            var filteredSimilarityData = data.filter(function(d) {
+                var arrayToUse = (d.first.type === 'disease') ?
+                    diseaseNames :
+                    medicationNames;
+                var areTypesValid =
+                    (arrayToUse.indexOf(d.first.name) !== -1);
+                arrayToUse = (d.second.type === 'disease') ?
+                    diseaseNames :
+                    medicationNames;
+                areTypesValid = areTypesValid && 
+                    (arrayToUse.indexOf(d.second.name) !== -1);
+
+                return areTypesValid;
+            });
 
             self.visualizationRenderer = {
                 dataIncidences: data,
                 filteredData: filteredData,
+                filteredSimilarityData: filteredSimilarityData,
                 diseaseNames: diseaseNames,
-                medicationNames: medicationNames
+                medicationNames: medicationNames,
+                similarityNames: similarityNames
             };
 
             self.render();
@@ -168,7 +188,7 @@ moduleVisualizations.factory('HeatMapVisualization',
         });
     };
 
-    HeatMapVisualization.prototype.render_2_dimensional_matrix = function() {
+    HeatMapVisualization.prototype.render2DimensionalMatrix = function() {
         var self = this;
 
         var svg = self.html;
@@ -185,10 +205,10 @@ moduleVisualizations.factory('HeatMapVisualization',
             .attr("class", "rect-disease-label rect-label")
             .attr("x", -labelWidth)
             .attr("width", labelWidth)
-            .attr("height", gridHeight)
+            .attr("height", self.gridHeight)
             .merge(diseaseLabels)
                 .attr("y", function(d, i) {
-                    return (1 + i) * gridHeight;
+                    return (1 + i) * self.gridHeight;
                 });
         diseaseLabels.exit().remove();
 
@@ -199,10 +219,10 @@ moduleVisualizations.factory('HeatMapVisualization',
             .attr("class", "text-disease-label text-label")
             .style("text-anchor", "end")
             .attr("x", 0)
-            .attr("transform", "translate(-5," + gridHeight / 1.5 + ")")
+            .attr("transform", "translate(-5," + self.gridHeight / 1.5 + ")")
             .merge(diseaseLabels)
                 .attr("y", function(d, i) {
-                    return (1 + i) * gridHeight;
+                    return (1 + i) * self.gridHeight;
                 })
                 .text(function(d) {
                     return d;
@@ -216,11 +236,11 @@ moduleVisualizations.factory('HeatMapVisualization',
             .attr("class", "rect-medication-label rect-label")
             .attr("x", -labelWidth)
             .attr("width", labelWidth)
-            .attr("height", gridHeight)
+            .attr("height", self.gridHeight)
             .merge(medicationLabels)
                 .attr("transform", function(d, i) {
-                    return "translate(" + ((1.75 + i) * gridWidth) + ", " + 
-                            (-(1 * gridHeight)) + ")rotate(20)";
+                    return "translate(" + ((1.75 + i) * self.gridWidth) + ", " + 
+                            (-(1 * self.gridHeight)) + ")rotate(20)";
                 });
         medicationLabels.exit().remove();
 
@@ -230,12 +250,12 @@ moduleVisualizations.factory('HeatMapVisualization',
         medicationLabelsGroup.append("text")
             .attr("class", "text-medication-label text-label")
             .style("text-anchor", "end")
-            .attr("y", gridHeight / 2)
-            .attr("transform", "translate(-5," + gridHeight * 0.25 + ")")
+            .attr("y", self.gridHeight / 2)
+            .attr("transform", "translate(-5," + self.gridHeight * 0.25 + ")")
             .merge(medicationLabels)
                 .attr("transform", function(d, i) {
-                    return "translate(" + ((1.75 + i) * gridWidth) + ", " + 
-                            (-(1 * gridHeight)) + ")rotate(20)";
+                    return "translate(" + ((1.75 + i) * self.gridWidth) + ", " + 
+                            (-(1 * self.gridHeight)) + ")rotate(20)";
                 })
                 .text(function(d) {
                     return d;
@@ -278,14 +298,14 @@ moduleVisualizations.factory('HeatMapVisualization',
             .data(cellsData);
         cells.enter().append("rect")
             .attr("class", "attribute-cell bordered")
-            .attr("width", gridWidth)
-            .attr("height", gridHeight)
+            .attr("width", self.gridWidth)
+            .attr("height", self.gridHeight)
             .merge(cells)
                 .attr("x", function(d) {
-                    return (1 + medicationNames.indexOf(d.medication)) * gridWidth;
+                    return (1 + medicationNames.indexOf(d.medication)) * self.gridWidth;
                 })
                 .attr("y", function(d) {
-                    return (1 + diseaseNames.indexOf(d.disease)) * gridHeight;
+                    return (1 + diseaseNames.indexOf(d.disease)) * self.gridHeight;
                 })
                 .style("fill", function(d) {
                     return colorScale(d.incidences);
@@ -390,11 +410,11 @@ moduleVisualizations.factory('HeatMapVisualization',
             });
         patientMedicationsCells.enter().append("rect")
             .attr("class", "attribute-cell bordered")
-            .attr("width", gridWidth)
-            .attr("height", gridHeight)
+            .attr("width", self.gridWidth)
+            .attr("height", self.gridHeight)
             .merge(cells)
                 .attr("x", function(d) {
-                    return (1 + medicationNames.indexOf(d.medication)) * gridWidth;
+                    return (1 + medicationNames.indexOf(d.medication)) * self.gridWidth;
                 })
                 .attr("y", function(d) {
                     return 0;
@@ -430,14 +450,14 @@ moduleVisualizations.factory('HeatMapVisualization',
             });
         patientDiseasesCells.enter().append("rect")
             .attr("class", "attribute-cell bordered")
-            .attr("width", gridWidth)
-            .attr("height", gridHeight)
+            .attr("width", self.gridWidth)
+            .attr("height", self.gridHeight)
             .merge(cells)
                 .attr("x", function(d) {
                     return 0;
                 })
                 .attr("y", function(d) {
-                    return (1 + diseaseNames.indexOf(d.disease)) * gridHeight;
+                    return (1 + diseaseNames.indexOf(d.disease)) * self.gridHeight;
                 })
                 .style("fill", function(d) {
                     return "#ff0000";
@@ -456,26 +476,173 @@ moduleVisualizations.factory('HeatMapVisualization',
         visualizations.makeLegend(
                 svg, 
                 colorScale, 
-                gridWidth, 
-                gridHeight,
-                gridWidth,
-                (diseaseNames.length + 1.5) * gridHeight);
+                self.gridWidth, 
+                self.gridHeight,
+                self.gridWidth,
+                (diseaseNames.length + 1.5) * self.gridHeight);
     };
 
-    HeatMapVisualization.prototype.render_similarity_matrix = function() {
+    HeatMapVisualization.prototype.renderSimilarityMatrix = function() {
+        var self = this;
+
+        var svg = self.html;
+        var filteredSimilarityData = 
+            self.visualizationRenderer.filteredSimilarityData;
+        var similarityNames = self.visualizationRenderer.similarityNames;
+
+        var labelWidth = 200;
+        var attributeLabels = svg.selectAll(".rect-attribute-label")
+            .data(similarityNames);
+        var attributeLabelsGroup = attributeLabels.enter();
+        attributeLabelsGroup.append("rect")
+            .attr("class", "rect-attribute-label rect-label")
+            .attr("x", -labelWidth)
+            .attr("width", labelWidth)
+            .attr("height", self.gridHeight)
+            .merge(attributeLabels)
+                .attr("x", function(d, i) {
+                    return (i + 1) * self.gridWidth;
+                })
+                .attr("y", function(d, i) {
+                    return (i - 1) * self.gridHeight;
+                });
+        attributeLabels.exit().remove();
+
+        attributeLabels = svg.selectAll(".text-attribute-label")
+            .data(similarityNames);
+        attributeLabelsGroup = attributeLabels.enter();
+        attributeLabelsGroup.append("text")
+            .attr("class", "text-attribute-label text-label")
+            .style("text-anchor", "start")
+            .attr("transform", "translate(" +
+                5 + "," +
+                self.gridHeight / 1.5 + ")")
+            .merge(attributeLabels)
+                .attr("x", function(d, i) {
+                    return (i + 1) * self.gridWidth;
+                })
+                .attr("y", function(d, i) {
+                    return (i - 1) * self.gridHeight;
+                })
+                .text(function(d) {
+                    return d;
+                });
+        attributeLabels.exit().remove();
+
+        var colorScale = d3.scaleQuantile()
+            .domain([0, visualizations.buckets - 1,
+                    d3.max(filteredSimilarityData, function(d) {
+                return d.incidences;
+            })])
+            .range(visualizations.colors);
+
+        var cellsTip = d3.tip()
+            .attr('class', 'tooltip tooltip-element tooltip-d3')
+            .offset([0, -5])
+            .direction('w')
+            .html(function(d) {
+                return "Número de pacientes: " + d.incidences;
+            });
+        svg.call(cellsTip);
+        var cells = svg.selectAll(".attribute-cell")
+            .data(filteredSimilarityData);
+        cells.enter().append("rect")
+            .attr("class", "attribute-cell bordered")
+            .attr("width", self.gridWidth)
+            .attr("height", self.gridHeight)
+            .merge(cells)
+                .attr("x", function(d) {
+                    if ( d.first.name === "Doença da Tiroide" && d.second.name === "Enfarte Miocárdio") {
+                    console.log("esquisito");
+                    console.log(similarityNames.indexOf(d.first.name));
+                    console.log(similarityNames.indexOf(d.second.name));
+                    }
+                    var targetIndex = Math.min(
+                        similarityNames.indexOf(d.first.name),
+                        similarityNames.indexOf(d.second.name)
+                    );
+                    return (1 + targetIndex) * self.gridWidth;
+                })
+                .attr("y", function(d) {
+                    var targetIndex = Math.max(
+                        similarityNames.indexOf(d.first.name),
+                        similarityNames.indexOf(d.second.name)
+                    );
+                    return (-1 + targetIndex) * self.gridHeight;
+                })
+                .style("fill", function(d) {
+                    return colorScale(d.incidences);
+                })
+                .on("mouseover", function(d) {
+                    cellsTip.show(d);
+
+                    // Style labels
+                    svg.selectAll(".text-attribute-label")
+                        .attr("class", function(a) {
+                            return ((a === d.first.name) ||
+                                    (a === d.second.name)) ?
+                                "text-attribute-label text-label-selected" :
+                                "text-attribute-label text-label";
+                        });
+                    svg.selectAll(".rect-attribute-label")
+                        .attr("class", function(a) {
+                            return ((a === d.first.name) ||
+                                    (a === d.second.name)) ?
+                                "rect-attribute-label rect-label-selected" :
+                                "rect-attribute-label rect-label";
+                        });
+
+                    // Sort paths for correct hover styling
+                    svg.selectAll(".attribute-cell")
+                        .sort(function (a, b) {
+                            // a is not the hovered element, send "a" to the back
+                            if (a != d) return -1;
+                            // a is the hovered element, bring "a" to the front
+                            else return 1;                             
+                        });
+                })
+                .on("mouseout", function(d) {
+                    cellsTip.hide(d);
+                    
+                    // Style labels
+                    svg.selectAll(".text-attribute-label")
+                        .attr("class", "text-attribute-label text-label ");
+                    svg.selectAll(".rect-attribute-label")
+                        .attr("class", "rect-attribute-label rect-label");
+                });
+        cells.exit().remove();
+
+        visualizations.makeLegend(
+                svg, 
+                colorScale, 
+                self.gridHeight * 2, 
+                self.gridHeight,
+                self.gridHeight,
+                (similarityNames.length + 1.5) * self.gridHeight);
     };
 
     var renderer = Object.freeze({
-        DIM: HeatMapVisualization.prototype.render_2_dimensional_matrix,
-        SIM: HeatMapVisualization.prototype.render_similarity_matrix
+        DIM: HeatMapVisualization.prototype.render2DimensionalMatrix,
+        SIM: HeatMapVisualization.prototype.renderSimilarityMatrix
     });
 
     HeatMapVisualization.prototype.render = function() {
-        this.renderer();
+        var self = this;
+
+        if (self.renderer === renderer.SIM) {
+            d3.select("#" + self.targetElement).selectAll("svg")
+                .attr("height",
+                    (self.visualizationRenderer.similarityNames.length *
+                    self.gridHeight) +
+                    self.margin.top + self.margin.bottom);
+        }
+        self.renderer();
     };
 
     HeatMapVisualization.prototype.remove = function(nodeID, vizID) {
-        var svg = this.html;
+        var self = this;
+
+        var svg = self.html;
         var cells = svg.selectAll(".attribute-cell");
         cells
             .on("mouseover", null)
@@ -485,22 +652,26 @@ moduleVisualizations.factory('HeatMapVisualization',
     };
 
     HeatMapVisualization.prototype.remake = function(nodeID, vizID) {
+        var self = this;
+
         // Remove previous nodes/handlers, since they are invalidated by the
         // new DOM layout
-        this.remove(nodeID, vizID);
+        self.remove(nodeID, vizID);
 
         // Add attributes and svgs to the new DOM targets. Note that the target
         // element ID is still the same.
-        this.makeSVG(nodeID, vizID);
+        self.makeSVG(nodeID, vizID);
 
         // Render paths, reusing data stored in the visualization object
-        this.render();
+        self.render();
     };
 
     HeatMapVisualization.prototype.update = function(nodeID, vizID, state) {
-        this.diseases = state.diseases;
-        this.medications = state.medications;
-        this.populate(nodeID, vizID);
+        var self = this;
+
+        self.diseases = state.diseases;
+        self.medications = state.medications;
+        self.populate(nodeID, vizID);
     };
 
     visualizations.validateInterface(
