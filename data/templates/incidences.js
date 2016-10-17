@@ -16,17 +16,60 @@ var generator = (function() {
 		var diseases = ['Artrite', 'Candidiase Oral', 'Doença Cardíaca Congénita', 'Doença da Tiroide', 'Doença Venérea', 'Enfarte Miocárdio', 'Febre Reumática', 'Gânglios aumentados de volume', 'Glaucoma', 'Osteoporose'];
 		var medications = ['Anti-hipertensor', 'Broncodilatador', 'Anti-depressor', 'Anti-ácidos', 'Estatinas', 'Anti-diabéticos', 'Análgésicos', 'Aspirina', 'Esteróides'];
 
-		// Create pairs with all possible combinations
+		// Create pairs with all combinations of different attributes
 		var pairs = [];
-		for (var i = 0; i < diseases.length; i++) {
-			for (var j = 0; j < medications.length; j++) {
+        var i, j;
+		for (i = 0; i < diseases.length; i++) {
+			for (j = 0; j < medications.length; j++) {
 				// Check if the complementary pair doesn't exist
 				// before pushing a new pair
 				if (pairIndexOf(pairs, [j, i], "id") === -1) {
 					pairs.push({
 						id: [i, j],
-						disease: diseases[i],
-						medication: medications[j]
+						first: { type: 'disease', name: diseases[i] },
+						second: { type: 'medication', name: medications[j] }
+					});
+				}
+			}
+		}
+
+		// Create pairs with all combinations of diseases
+		for (i = 0; i < diseases.length; i++) {
+			for (j = 0; j < diseases.length; j++) {
+                if (i === j)
+                    continue;
+
+				// Check if the complementary pair doesn't exist
+				// before pushing a new pair
+				if (pairIndexOf(
+                        pairs,
+                        ["disease-" + j, "disease-" + i],
+                        "id") === -1) {
+					pairs.push({
+						id: ["disease-" + i, "disease-" + j],
+						first: { type: 'disease', name: diseases[i] },
+						second: { type: 'disease', name: diseases[j] }
+					});
+				}
+			}
+		}
+
+		// Create pairs with all combinations of diseases
+		for (i = 0; i < medications.length; i++) {
+			for (j = 0; j < medications.length; j++) {
+                if (i === j)
+                    continue;
+
+				// Check if the complementary pair doesn't exist
+				// before pushing a new pair
+				if (pairIndexOf(
+                        pairs,
+                        ["medication-" + j, "medication-" + i],
+                        "id") === -1) {
+					pairs.push({
+						id: ["medication-" + i, "medication-" + j],
+						first: { type: 'medication', name: medications[i] },
+						second: { type: 'medication', name: medications[j] }
 					});
 				}
 			}
@@ -50,8 +93,8 @@ var generator = (function() {
 
 		return {
 			incidences: incidences,
-			disease: pair.disease,
-			medication: pair.medication
+			first: pair.first,
+			second: pair.second
 		};
 	};
 

@@ -47,16 +47,37 @@ moduleUtils.factory('utils', function() {
             '</button>';
     };
 
-    var arrayObjectIndexOf = function(myArray, searchTerm, property) {
-        for (var i = 0, len = myArray.length; i < len; i++) {
-            if (myArray[i][property] === searchTerm)
+    var arrayObjectIndexOf = function(array, searchTerm, property) {
+        for (var i = 0, len = array.length; i < len; i++) {
+            if (array[i][property] === searchTerm)
                 return i;
         }
         return -1;
     };
 
+    var arrayObjectPairIndexOf = function(parameters) {
+        for (var i = 0, len = parameters.array.length; i < len; i++) {
+            var pairElement = parameters.array[i][parameters.propertyOfPair];
+            if ((pairElement[parameters.propertyOfType] ===
+                    parameters.typeTerm) &&
+                    (pairElement[parameters.propertyOfValue] ===
+                    parameters.valueTerm))
+                return i;
+        }
+        return -1;
+    };
+
+    var extractValueFromPair = function(parameters) {
+        return (parameters.pair.first[parameters.propertyOfType] ===
+                parameters.typeTerm) ?
+            parameters.pair.first[parameters.propertyOfValue] :
+            parameters.pair.second[parameters.propertyOfValue];
+    };
+
     return {
         arrayObjectIndexOf: arrayObjectIndexOf,
+        arrayObjectPairIndexOf: arrayObjectPairIndexOf,
+        extractValueFromPair: extractValueFromPair,
         makeImgButton: makeImgButton
     };
 });

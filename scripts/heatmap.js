@@ -35,7 +35,7 @@ moduleVisualizations.factory('HeatMapVisualization',
         this.html = null;
 
         // FIXME: This could be switchable by the user...
-        this.renderer = renderer.SIM; 
+        this.renderer = renderer.DIM; 
 
         // Specific state is maintained in a separate object,
         // which we will use in our facade
@@ -115,25 +115,42 @@ moduleVisualizations.factory('HeatMapVisualization',
 
             // json data contains all attributes, which need to be filtered
             // first by user selected attributes
+            // FIXME: Hardcoded
             var filteredData = data.filter(function(d) {
-                return (diseaseNames.indexOf(d.disease) !== -1) &&
-                    (medicationNames.indexOf(d.medication) !== -1);
+                var isValidPair = ((d.first.type === 'disease') &&
+                        (d.second.type === 'medication'));
+                return isValidPair &&
+                    (diseaseNames.indexOf(d.first.name) !== -1) &&
+                    (medicationNames.indexOf(d.second.name) !== -1);
             }); 
 
             // We now remove attributes from the lists that don't have
             // matches in filteredData (i.e. no cells for that attribute
             // have values)
+            // FIXME: Hardcoded
             diseaseNames = (function(list, filteredMatrix) {
                 return list.filter(function(name) {
-                    var index = utils.arrayObjectIndexOf(
-                        filteredMatrix, name, "disease");
+                    var index = utils.arrayObjectPairIndexOf({
+                        array: filteredMatrix,
+                        propertyOfPair: "first",
+                        propertyOfType: "type",
+                        typeTerm: "disease",
+                        propertyOfValue: "name",
+                        valueTerm: name
+                    });
                     return index !== -1;
                 });
             })(diseaseNames, filteredData);
             medicationNames = (function(list, filteredMatrix) {
                 return list.filter(function(name) {
-                    var index = utils.arrayObjectIndexOf(
-                        filteredMatrix, name, "medication");
+                    var index = utils.arrayObjectPairIndexOf({
+                        array: filteredMatrix,
+                        propertyOfPair: "second",
+                        propertyOfType: "type",
+                        typeTerm: "medication",
+                        propertyOfValue: "name",
+                        valueTerm: name
+                    });
                     return index !== -1;
                 });
             })(medicationNames, filteredData);
@@ -151,9 +168,6 @@ moduleVisualizations.factory('HeatMapVisualization',
         });
     };
 
-    HeatMapVisualization.prototype.render_similarity_matrix = function() {
-    };
-
     HeatMapVisualization.prototype.render_2_dimensional_matrix = function() {
         var self = this;
 
@@ -163,14 +177,14 @@ moduleVisualizations.factory('HeatMapVisualization',
         var diseaseNames = self.visualizationRenderer.diseaseNames;
         var medicationNames = self.visualizationRenderer.medicationNames;
 
-        var rectWidth = 200;
+        var labelWidth = 200;
         var diseaseLabels = svg.selectAll(".rect-disease-label")
             .data(diseaseNames);
         var diseaseLabelsGroup = diseaseLabels.enter();
         diseaseLabelsGroup.append("rect")
             .attr("class", "rect-disease-label rect-label")
-            .attr("x", -rectWidth)
-            .attr("width", rectWidth)
+            .attr("x", -labelWidth)
+            .attr("width", labelWidth)
             .attr("height", gridHeight)
             .merge(diseaseLabels)
                 .attr("y", function(d, i) {
@@ -200,8 +214,8 @@ moduleVisualizations.factory('HeatMapVisualization',
         var medicationLabelsGroup = medicationLabels.enter();
         medicationLabelsGroup.append("rect")
             .attr("class", "rect-medication-label rect-label")
-            .attr("x", -rectWidth)
-            .attr("width", rectWidth)
+            .attr("x", -labelWidth)
+            .attr("width", labelWidth)
             .attr("height", gridHeight)
             .merge(medicationLabels)
                 .attr("transform", function(d, i) {
@@ -235,6 +249,23 @@ moduleVisualizations.factory('HeatMapVisualization',
             })])
             .range(visualizations.colors);
 
+        var cellsData = filteredData.map(function(d) {
+            return {
+                incidences: d.incidences,
+                disease: utils.extractValueFromPair({
+                    pair: d,
+                    propertyOfType: "type",
+                    typeTerm: "disease",
+                    propertyOfValue: "name"
+                }),
+                medication: utils.extractValueFromPair({
+                    pair: d,
+                    propertyOfType: "type",
+                    typeTerm: "medication",
+                    propertyOfValue: "name"
+                })
+            };
+        });
         var cellsTip = d3.tip()
             .attr('class', 'tooltip tooltip-element tooltip-d3')
             .offset([-10, 0])
@@ -244,7 +275,7 @@ moduleVisualizations.factory('HeatMapVisualization',
             });
         svg.call(cellsTip);
         var cells = svg.selectAll(".attribute-cell")
-            .data(filteredData);
+            .data(cellsData);
         cells.enter().append("rect")
             .attr("class", "attribute-cell bordered")
             .attr("width", gridWidth)
@@ -325,7 +356,24 @@ moduleVisualizations.factory('HeatMapVisualization',
             return obj.name;
         });
 
-        var filteredPatientMedicationsData = data
+        var labelData = data.map(function(d) {
+            return {
+                incidences: d.incidences,
+                disease: utils.extractValueFromPair({
+                    pair: d,
+                    propertyOfType: "type",
+                    typeTerm: "disease",
+                    propertyOfValue: "name"
+                }),
+                medication: utils.extractValueFromPair({
+                    pair: d,
+                    propertyOfType: "type",
+                    typeTerm: "medication",
+                    propertyOfValue: "name"
+                })
+            };
+        });
+        var filteredPatientMedicationsData = labelData
             .filter(function(d) {
                 return (patientMedicationNames.indexOf(d.medication) !== -1) &&
                     (medicationNames.indexOf(d.medication) !== -1);
@@ -365,7 +413,7 @@ moduleVisualizations.factory('HeatMapVisualization',
                 });
         patientMedicationsCells.exit().remove();
 
-        var filteredPatientDiseasesData = data
+        var filteredPatientDiseasesData = labelData
             .filter(function(d) {
                 return (patientDiseaseNames.indexOf(d.disease) !== -1) &&
                     (diseaseNames.indexOf(d.disease) !== -1);
@@ -412,6 +460,9 @@ moduleVisualizations.factory('HeatMapVisualization',
                 gridHeight,
                 gridWidth,
                 (diseaseNames.length + 1.5) * gridHeight);
+    };
+
+    HeatMapVisualization.prototype.render_similarity_matrix = function() {
     };
 
     var renderer = Object.freeze({
