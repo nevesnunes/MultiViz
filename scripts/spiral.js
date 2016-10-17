@@ -21,6 +21,7 @@ moduleVisualizations.factory('SpiralVisualization',
         // Patient attribute lists
         this.medications = options.medications;
         this.currentMedication = options.currentMedication;
+        this.hasData = true;
 
         // Specific state is maintained in a separate object,
         // which we will use in our facade
@@ -119,6 +120,9 @@ moduleVisualizations.factory('SpiralVisualization',
 
         // No recorded data available
         if (recordedFrequency.length === 0) {
+            // Remember this check for visualization updates
+            this.hasData = false;
+
             this.visualizationRenderer.renderNoData();
             return;
         }
@@ -280,7 +284,11 @@ moduleVisualizations.factory('SpiralVisualization',
         this.visualizationRenderer.make();
 
         // Render paths, reusing data stored in the visualization object
-        this.visualizationRenderer.render(true);
+        if (this.hasData) {
+            this.visualizationRenderer.render(true);
+        } else {
+            this.visualizationRenderer.renderNoData();
+        }
     };
 
     SpiralVisualization.prototype.update = function(nodeID, vizID, state) {
@@ -340,7 +348,8 @@ moduleVisualizations.factory('SpiralVisualization',
 
     SpiralVisualization.prototype.modifyDetailsVisibility =
             function(isMaximized) {
-        if (isMaximized) {
+        // When we don't have data, we simply show all the attribute text
+        if (isMaximized || !(this.hasData)) {
             this.visualizationRenderer.renderVisibleDetails();
         } else {
             this.visualizationRenderer.renderNoVisibleDetails();

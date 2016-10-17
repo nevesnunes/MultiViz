@@ -34,6 +34,9 @@ moduleVisualizations.factory('HeatMapVisualization',
 
         this.html = null;
 
+        // FIXME: This could be switchable by the user...
+        this.renderer = renderer.SIM; 
+
         // Specific state is maintained in a separate object,
         // which we will use in our facade
         this.visualizationRenderer = null;
@@ -148,7 +151,10 @@ moduleVisualizations.factory('HeatMapVisualization',
         });
     };
 
-    HeatMapVisualization.prototype.render = function() {
+    HeatMapVisualization.prototype.render_similarity_matrix = function() {
+    };
+
+    HeatMapVisualization.prototype.render_2_dimensional_matrix = function() {
         var self = this;
 
         var svg = self.html;
@@ -156,8 +162,8 @@ moduleVisualizations.factory('HeatMapVisualization',
         var filteredData = self.visualizationRenderer.filteredData;
         var diseaseNames = self.visualizationRenderer.diseaseNames;
         var medicationNames = self.visualizationRenderer.medicationNames;
-        var rectWidth = 200;
 
+        var rectWidth = 200;
         var diseaseLabels = svg.selectAll(".rect-disease-label")
             .data(diseaseNames);
         var diseaseLabelsGroup = diseaseLabels.enter();
@@ -406,6 +412,15 @@ moduleVisualizations.factory('HeatMapVisualization',
                 gridHeight,
                 gridWidth,
                 (diseaseNames.length + 1.5) * gridHeight);
+    };
+
+    var renderer = Object.freeze({
+        DIM: HeatMapVisualization.prototype.render_2_dimensional_matrix,
+        SIM: HeatMapVisualization.prototype.render_similarity_matrix
+    });
+
+    HeatMapVisualization.prototype.render = function() {
+        this.renderer();
     };
 
     HeatMapVisualization.prototype.remove = function(nodeID, vizID) {

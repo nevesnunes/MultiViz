@@ -51,6 +51,8 @@ Spiral.prototype.make = function() {
 
     // Make initial element properties
     var svg = d3.select('#' + this.option.targetElement);
+
+    // Details
     svg.select('#' + this.option.targetElement + "-details")
         .style('float', 'right');
     svg.select('#' + this.option.targetElement + "-attribute-text")
@@ -73,8 +75,15 @@ Spiral.prototype.make = function() {
             .attr("transform", "translate(" +
                 (this.option.margin.left + this.option.marginLine) + "," +
                 (this.option.padding / 2) + ")");
+
+    // Main
+    svg.select('#' + this.option.targetElement + "-main")
+        .style('float', 'left');
+    svg.select('#' + this.option.targetElement + "-title")
+        .style('margin-left',
+            (this.option.margin.left) + "px")
+        .style("width", this.option.svgWidth);
     svg.select('#' + this.option.targetElement + "-svg-spiral")
-        .style('float', 'left')
         .append("svg")
         .append("g")
             .attr("transform", "translate(" +
@@ -107,6 +116,10 @@ Spiral.prototype.renderVisibleDetails = function() {
         .style("visibility", "initial")
         .style("width", "initial")
         .style("height", "initial");
+    svg.select('#' + this.option.targetElement + "-title")
+        .style("visibility", "hidden")
+        .style("width", 0)
+        .style("height", 0);
 };
 
 Spiral.prototype.renderNoVisibleDetails = function() {
@@ -115,6 +128,10 @@ Spiral.prototype.renderNoVisibleDetails = function() {
         .style("visibility", "hidden")
         .style("width", 0)
         .style("height", 0);
+    svg.select('#' + this.option.targetElement + "-title")
+        .style("visibility", "initial")
+        .style("width", "initial")
+        .style("height", "initial");
 };
 
 Spiral.prototype.renderNoData = function() {
@@ -122,9 +139,11 @@ Spiral.prototype.renderNoData = function() {
     var option = self.option;
 
     option.html.select('#' + option.targetElement + "-attribute-text")
-        .html('<h4>' +
+        .style('margin-left',
+            (option.margin.left) + "px")
+        .html('<h4><b>' +
                 option.currentMedication +
-            '</h4>' +
+            '</h4></b>' +
             '<p>Nenhuma contagem registada.</p>');
     d3.select('#' + option.targetElement + "-svg-line-text")
         .html('');
@@ -168,6 +187,10 @@ Spiral.prototype.render = function(reusePaths) {
     var option = self.option;
     reusePaths = reusePaths || false;
 
+    d3.select('#' + option.targetElement + "-title")
+        .html('<h4><b>' +
+                option.currentMedication +
+            '</b></h4>');
     d3.select('#' + option.targetElement + "-attribute-text")
         .html('<h4><b>' +
                 option.currentMedication +

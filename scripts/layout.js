@@ -1129,7 +1129,10 @@ moduleLayout.directive("directivePanes",
                             '<div id="' + vizID + '-svg-line-text" />' +
                             '<div id="' + vizID + '-svg-line" />' +
                         '</div>' +
-                        '<div id="' + vizID + '-svg-spiral" />' +
+                        '<div id="' + vizID + '-main">' +
+                            '<div id="' + vizID + '-title" />' +
+                            '<div id="' + vizID + '-svg-spiral" />' +
+                        '</div>' +
                     '</div>' +
                 '</div>';
                 var target = angular.element('#' + id);
