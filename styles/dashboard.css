@@ -227,7 +227,7 @@ body {
 .patient-table-entry-selected,
 .entrySelected {
     background-color: #c4e3f3;
-    color: #31708f;
+    color: #000;
 }
 
 .buttonSelected {
@@ -268,7 +268,6 @@ rect.handle.handle--w:active {
 
 .tooltip-element {
     position: absolute;
-    text-align: center;
     padding: .5em;
     background: #000;
     border: 0px;
@@ -325,10 +324,19 @@ rect.handle.handle--w:active {
     pointer-events: none;
 }
 
+/* Westward tooltips */
+.tooltip-d3.w:after {
+    content: "\25B6";
+    margin: -6px 0 0 -1px;
+    top: 50%;
+    left: 100%;
+    pointer-events: none;
+}
+
 /* Eastward tooltips */
 .tooltip-d3.e:after {
     content: "\25C0";
-    margin: -4px 0 0 0;
+    margin: -6px 0 0 0;
     top: 50%;
     left: -8px;
     pointer-events: none;
@@ -339,6 +347,16 @@ rect.handle.handle--w:active {
     content: "\25BC";
     margin: -4px 0 0 0;
     top: 100%;
+    left: 0;
+    text-align: center;
+    pointer-events: none;
+}
+
+/* Southward tooltips */
+.tooltip-d3.s:after {
+    content: "\25B2";
+    margin: 0 0 1px 0;
+    top: -8px;
     left: 0;
     text-align: center;
     pointer-events: none;

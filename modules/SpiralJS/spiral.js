@@ -288,9 +288,11 @@ Spiral.prototype.render = function(reusePaths) {
             .offset([-10, 0])
             .direction('n')
             .html(function(d) {
-                return "<span>Contagem: " + d[2].value + "</span><br/>" +
-                    "<span>Dose: " + d[2].dosage + "</span><br/>" +
-                    "<span>Datas: " + d[2].date + "</span>";
+                return "<div style=\"text-align: left\">" +
+                    "<span><b>Contagem:</b> " + d[2].value + "</span><br/>" +
+                    "<span><b>Dose:</b> " + d[2].dosage + "</span><br/>" +
+                    "<span><b>Datas:</b> " + d[2].date + "</span>" +
+                "</div>";
             });
         svg.call(sectorsTip);
         var spiralPaths = svg.selectAll("g").selectAll(".spiral-sector")

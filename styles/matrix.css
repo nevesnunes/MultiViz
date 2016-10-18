@@ -27,8 +27,7 @@ rect.bordered:hover {
 .text-label-selected {
   font-size: 0.9em;
   font-family: sans-serif;
-  font-weight: bold;
-  fill: #31708f !important;
+  fill: #000 !important;
 }
 
 text.axis {
