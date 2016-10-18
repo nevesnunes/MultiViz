@@ -110,27 +110,29 @@ moduleVisualizations.factory('HeatMapVisualization',
         var patientDataPromise = 
             retrievePatientData.retrieveData('incidences.json');
         patientDataPromise.then(function(data) {
-            var diseaseNames = visualizations.processSelectedList(
+            var allDiseaseNames = visualizations.processSelectedList(
                 self.diseases);
-            var medicationNames = visualizations.processSelectedList(
+            var allMedicationNames = visualizations.processSelectedList(
                 self.medications);
 
-            // json data contains all attributes, which need to be filtered
+            // Retrieve all matches of different attributes;
+            // JSON data contains all attributes, which need to be filtered
             // first by user selected attributes
             // FIXME: Hardcoded
             var filteredData = data.filter(function(d) {
                 var isValidPair = ((d.first.type === 'disease') &&
                         (d.second.type === 'medication'));
                 return isValidPair &&
-                    (diseaseNames.indexOf(d.first.name) !== -1) &&
-                    (medicationNames.indexOf(d.second.name) !== -1);
+                    (allDiseaseNames.indexOf(d.first.name) !== -1) &&
+                    (allMedicationNames.indexOf(d.second.name) !== -1);
             }); 
 
             // We now remove attributes from the lists that don't have
-            // matches in filteredData (i.e. no cells for that attribute
+            // matches in filtered data (i.e. no cells for that attribute
             // have values)
             // FIXME: Hardcoded
-            diseaseNames = (function(list, filteredMatrix) {
+            var longestNameLength = 0;
+            var diseaseNames = (function(list, filteredMatrix) {
                 return list.filter(function(name) {
                     var index = utils.arrayObjectPairIndexOf({
                         array: filteredMatrix,
@@ -140,10 +142,15 @@ moduleVisualizations.factory('HeatMapVisualization',
                         propertyOfValue: "name",
                         valueTerm: name
                     });
-                    return index !== -1;
+                    var isPresent = (index !== -1);
+                    if (isPresent && longestNameLength < name.length) {
+                        longestNameLength = name.length;
+                    }
+
+                    return isPresent;
                 });
-            })(diseaseNames, filteredData);
-            medicationNames = (function(list, filteredMatrix) {
+            })(allDiseaseNames, filteredData);
+            var medicationNames = (function(list, filteredMatrix) {
                 return list.filter(function(name) {
                     var index = utils.arrayObjectPairIndexOf({
                         array: filteredMatrix,
@@ -153,24 +160,73 @@ moduleVisualizations.factory('HeatMapVisualization',
                         propertyOfValue: "name",
                         valueTerm: name
                     });
-                    return index !== -1;
-                });
-            })(medicationNames, filteredData);
-            var similarityNames = diseaseNames.concat(medicationNames);
+                    var isPresent = (index !== -1);
+                    if (isPresent && longestNameLength < name.length) {
+                        longestNameLength = name.length;
+                    }
 
+                    return isPresent;
+                });
+            })(allMedicationNames, filteredData);
+
+            // Retrieve all matches of any combination of attributes;
+            // JSON data contains all attributes, which need to be filtered
+            // first by user selected attributes
             var filteredSimilarityData = data.filter(function(d) {
                 var arrayToUse = (d.first.type === 'disease') ?
-                    diseaseNames :
-                    medicationNames;
+                    allDiseaseNames :
+                    allMedicationNames;
                 var areTypesValid =
                     (arrayToUse.indexOf(d.first.name) !== -1);
                 arrayToUse = (d.second.type === 'disease') ?
-                    diseaseNames :
-                    medicationNames;
+                    allDiseaseNames :
+                    allMedicationNames;
                 areTypesValid = areTypesValid && 
                     (arrayToUse.indexOf(d.second.name) !== -1);
 
                 return areTypesValid;
+            });
+
+            // We now remove attributes from the lists that don't have
+            // matches in filtered data (i.e. no cells for that attribute
+            // have values)
+            var names = [
+                { array: allDiseaseNames, type: "disease" },
+                { array: allMedicationNames, type: "medication" }
+            ];
+            var similarityNames = [];
+            var longestSimilarityNameLength = 0;
+            names.forEach(function(namesObject) {
+                similarityNames = similarityNames.concat( 
+                    (function(list, filteredMatrix) {
+                        return list.filter(function(name) {
+                            var indexFirst = utils.arrayObjectPairIndexOf({
+                                array: filteredMatrix,
+                                propertyOfPair: "first",
+                                propertyOfType: "type",
+                                typeTerm: namesObject.type,
+                                propertyOfValue: "name",
+                                valueTerm: name
+                            });
+                            var indexSecond = utils.arrayObjectPairIndexOf({
+                                array: filteredMatrix,
+                                propertyOfPair: "second",
+                                propertyOfType: "type",
+                                typeTerm: namesObject.type,
+                                propertyOfValue: "name",
+                                valueTerm: name
+                            });
+                            var isPresent = (indexFirst !== -1) ||
+                                (indexSecond !== -1);
+                            if (isPresent &&
+                                    longestSimilarityNameLength < name.length) {
+                                longestSimilarityNameLength = name.length;
+                            }
+
+                            return isPresent;
+                        });
+                    })(namesObject.array, filteredSimilarityData)
+                );
             });
 
             self.visualizationRenderer = {
@@ -179,12 +235,14 @@ moduleVisualizations.factory('HeatMapVisualization',
                 filteredSimilarityData: filteredSimilarityData,
                 diseaseNames: diseaseNames,
                 medicationNames: medicationNames,
-                similarityNames: similarityNames
+                longestNameLength: longestNameLength,
+                similarityNames: similarityNames,
+                longestSimilarityNameLength: longestSimilarityNameLength
             };
 
             self.render();
         }, function(error) {
-            console.log("[INFO] d3.js parsing results: " + error);
+            console.log("[ERROR] d3.js parsing results: " + error);
         });
     };
 
@@ -197,7 +255,7 @@ moduleVisualizations.factory('HeatMapVisualization',
         var diseaseNames = self.visualizationRenderer.diseaseNames;
         var medicationNames = self.visualizationRenderer.medicationNames;
 
-        var labelWidth = 200;
+        var labelWidth = self.visualizationRenderer.longestNameLength * 8;
         var diseaseLabels = svg.selectAll(".rect-disease-label")
             .data(diseaseNames);
         var diseaseLabelsGroup = diseaseLabels.enter();
@@ -490,7 +548,9 @@ moduleVisualizations.factory('HeatMapVisualization',
             self.visualizationRenderer.filteredSimilarityData;
         var similarityNames = self.visualizationRenderer.similarityNames;
 
-        var labelWidth = 200;
+        var labelWidth = self.visualizationRenderer
+            .longestSimilarityNameLength * 8;
+        var cellSizeOffset = 4;
         var attributeLabels = svg.selectAll(".rect-attribute-label")
             .data(similarityNames);
         var attributeLabelsGroup = attributeLabels.enter();
@@ -501,10 +561,10 @@ moduleVisualizations.factory('HeatMapVisualization',
             .attr("height", self.gridHeight)
             .merge(attributeLabels)
                 .attr("x", function(d, i) {
-                    return (i + 1) * self.gridWidth;
+                    return (i + 1) * self.gridWidth - cellSizeOffset / 2;
                 })
                 .attr("y", function(d, i) {
-                    return (i - 1) * self.gridHeight;
+                    return (i - 1) * self.gridHeight - cellSizeOffset / 2;
                 });
         attributeLabels.exit().remove();
 
@@ -519,10 +579,10 @@ moduleVisualizations.factory('HeatMapVisualization',
                 self.gridHeight / 1.5 + ")")
             .merge(attributeLabels)
                 .attr("x", function(d, i) {
-                    return (i + 1) * self.gridWidth;
+                    return (i + 1) * self.gridWidth - cellSizeOffset / 2;
                 })
                 .attr("y", function(d, i) {
-                    return (i - 1) * self.gridHeight;
+                    return (i - 1) * self.gridHeight - cellSizeOffset / 2;
                 })
                 .text(function(d) {
                     return d;
@@ -548,15 +608,10 @@ moduleVisualizations.factory('HeatMapVisualization',
             .data(filteredSimilarityData);
         cells.enter().append("rect")
             .attr("class", "attribute-cell bordered")
-            .attr("width", self.gridWidth)
-            .attr("height", self.gridHeight)
+            .attr("width", self.gridWidth - cellSizeOffset)
+            .attr("height", self.gridHeight - cellSizeOffset)
             .merge(cells)
                 .attr("x", function(d) {
-                    if ( d.first.name === "Doença da Tiroide" && d.second.name === "Enfarte Miocárdio") {
-                    console.log("esquisito");
-                    console.log(similarityNames.indexOf(d.first.name));
-                    console.log(similarityNames.indexOf(d.second.name));
-                    }
                     var targetIndex = Math.min(
                         similarityNames.indexOf(d.first.name),
                         similarityNames.indexOf(d.second.name)
