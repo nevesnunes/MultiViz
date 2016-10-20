@@ -547,18 +547,17 @@ moduleVisualizations.factory('HeatMapVisualization',
             self.visualizationRenderer.filteredSimilarityData;
         var similarityNames = self.visualizationRenderer.similarityNames;
 
-        var labelWidth = self.visualizationRenderer
-            .longestSimilarityNameLength * 8;
+        var labelWidth = self.visualizationRenderer.longestSimilarityNameLength *
+            8;
         var cellSizeOffset = 4;
         var attributeLabels = svg.selectAll(".rect-attribute-label")
             .data(similarityNames);
         var attributeLabelsGroup = attributeLabels.enter();
         attributeLabelsGroup.append("rect")
             .attr("class", "rect-attribute-label rect-label")
-            .attr("x", -labelWidth)
-            .attr("width", labelWidth)
             .attr("height", self.gridHeight)
             .merge(attributeLabels)
+                .attr("width", labelWidth)
                 .attr("x", function(d, i) {
                     return (i + 1) * self.gridWidth - cellSizeOffset / 2;
                 })
