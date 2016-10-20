@@ -644,7 +644,12 @@ moduleVisualizations.factory('HeatMapVisualization',
             .offset([0, -10])
             .direction('w')
             .html(function(d) {
-                return "<b>Número de pacientes:</b> " + d.incidences;
+                return "<div style=\"text-align: left\">" +
+                    "<span><b>Atributos:</b> " + d.first.name + " / " + 
+                        d.second.name + "</span><br/>" +
+                    "<span><b>Número de pacientes:</b> " +
+                        d.incidences + "</span>" +
+                "</div>";
             });
         svg.call(cellsTip);
         var cells = svg.selectAll(".attribute-cell")
