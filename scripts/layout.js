@@ -34,6 +34,9 @@ moduleLayout.factory("nodes",
      * @property {string} currentVizID - id of visualization to be displayed 
      * on single/maximized view
      *
+     * @property {bool} skipCreation - checked in layout update in order to
+     * create a visualization only in an empty view
+     *
      * @property {string[]} children - two child nodes
      */
     var makeNode = function(model) {
@@ -44,6 +47,7 @@ moduleLayout.factory("nodes",
             vizType: model.vizType,
             vizs: model.vizs,
             currentVizID: model.currentVizID,
+            skipCreation: model.skipCreation,
             children: model.children
         });
 
@@ -90,6 +94,8 @@ moduleLayout.factory("nodes",
         var node = rootNode.first(function(node1) {
             return node1.model.id === data.nodeID;
         });
+        node.model.skipCreation = data.skipCreation || node.model.skipCreation;
+
         var index = utils.arrayObjectIndexOf(node.model.vizs, data.vizID, "id");
         if (index > -1) {
             console.log("[INFO] @removeViz: removed " + data.vizID);
@@ -116,6 +122,8 @@ moduleLayout.factory("nodes",
             return node1.model.id === data.nodeID;
         });
         node.model.currentVizID = data.currentVizID || node.model.currentVizID;
+        node.model.skipCreation = data.skipCreation || node.model.skipCreation;
+
         var newViz = {
             id: data.vizID,
             isChecked: data.isChecked || false,
@@ -872,7 +880,8 @@ moduleLayout.directive("directivePanes",
                 nodes.updateViz({
                     nodeID: id,
                     vizID: SpiralVisualization.prototype.makeID(),
-                    currentMedication: scope.currentMedication.name
+                    currentMedication: scope.currentMedication.name,
+                    skipCreation: false
                 });
 
                 // Maximize view in order for added visualizations to be seen
@@ -899,7 +908,8 @@ moduleLayout.directive("directivePanes",
                 // Untrack in node visualizations
                 nodes.removeViz({
                     nodeID: elementProperties.nodeID,
-                    vizID: elementProperties.vizID
+                    vizID: elementProperties.vizID,
+                    skipCreation: true
                 });
 
                 scope.APIActionPanel.makeDefaultActions();
@@ -957,7 +967,9 @@ moduleLayout.directive("directivePanes",
             var makeSpirals = function(node) {
                 var id = node.model.id;
                 var spirals = node.model.vizs;
-                if (spirals.length === 0) {
+
+                // FIXME: Implement a skipCreation instead of these checks
+                if ((!node.model.skipCreation) && (spirals.length === 0)) {
                     var vizID = SpiralVisualization.prototype.makeID();
                     nodes.updateViz({
                         nodeID: id,
@@ -976,6 +988,9 @@ moduleLayout.directive("directivePanes",
                             makeSpiral(id, spirals[i].id);
                         }
                     }
+
+                    if (spirals.length === 0)
+                        return;
 
                     // If no checked visualizations where found, automatically
                     // check the first one
@@ -1379,6 +1394,7 @@ moduleLayout.directive("directivePanes",
                         vizType: vizType,
                         vizs: [],
                         currentVizID: undefined,
+                        skipCreation: false,
                         children: []
                     }));
                 } else {
@@ -1394,6 +1410,7 @@ moduleLayout.directive("directivePanes",
                             vizType: node.model.vizType,
                             vizs: node.model.vizs,
                             currentVizID: node.model.currentVizID,
+                            skipCreation: true,
                             children: []
                         }));
                         node.addChild(nodes.makeNode({
@@ -1403,6 +1420,7 @@ moduleLayout.directive("directivePanes",
                             vizType: vizType,
                             vizs: [],
                             currentVizID: undefined,
+                            skipCreation: false,
                             children: []
                         }));
 
