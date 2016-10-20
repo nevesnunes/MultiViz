@@ -118,6 +118,14 @@ moduleVisualizations.factory('SpiralVisualization',
             }
         }
 
+        // Special case: Only one data point causes interval start and end to be
+        // the same, so we rectify that here
+        var startMoment = moment(patientMedications.startDate);
+        var endMoment = moment(patientMedications.endDate);
+        if (intervalStartMoment.diff(intervalEndMoment, 'days') === 0) {
+            intervalStartMoment = startMoment.clone();
+        }
+
         // No recorded data available;
         // Remember this check for visualization updates
         if (recordedFrequency.length === 0) {
@@ -129,8 +137,6 @@ moduleVisualizations.factory('SpiralVisualization',
             this.hasData = true;
         }
 
-        var startMoment = moment(patientMedications.startDate);
-        var endMoment = moment(patientMedications.endDate);
         var countTimeSpan = endMoment.diff(startMoment, interval);
         // The time span should always be greater then zero
         countTimeSpan = Math.max(countTimeSpan, 1);
@@ -183,7 +189,10 @@ moduleVisualizations.factory('SpiralVisualization',
 
             // A recorded value in the current date is present:
             // Save it and advance to the next recorded date
-            if (diffDates === 0) {
+            if ((diffDates === 0) ||
+                // Special case: Recorded moment not reached by time span
+                // FIXME: dirty workaround
+                ((diffDates < 0) && (i == countTimeSpan - 1))) {
                 accumulatorBinDays++;
                 currentDateIndex++;
             }
