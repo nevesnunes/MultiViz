@@ -903,10 +903,6 @@ moduleLayout.directive("directivePanes",
                 });
 
                 scope.APIActionPanel.makeDefaultActions();
-
-                // Update view so that checks are done for changes in
-                // number of visualizations in the view
-                scope.updateLayout();
             };
 
             scope.togglePinned = function(button) {
