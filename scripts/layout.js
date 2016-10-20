@@ -1066,8 +1066,9 @@ moduleLayout.directive("directivePanes",
             var makeSpiral = function(id, vizID) {
                 // If it's the only visualization in the view,
                 // consider it checked
-                // FIXME: length never 0
                 var isChecked = (nodes.getVizs(id).length < 2);
+
+                // Reuse visualization object if it exists
                 var viz = nodes.getVizByIDs(id, vizID);
                 var spiralObject;
                 var isNotCreated = !(viz.vizObject);
@@ -1080,45 +1081,55 @@ moduleLayout.directive("directivePanes",
                     isChecked = isChecked || viz.isChecked;
                     spiralObject = viz.vizObject;
                 }
+                
+                var isMaximized = nodes.isMaximized(id);
+
+                // NOTE: Due to the maximized view check, we assume all
+                // defined handlers for each button will only work for
+                // the current view's node
+                var buttonsHTML = "";
+                if (isMaximized) {
+                    buttonsHTML += utils.makeImgButton({
+                        id:     vizID,
+                        nodeID: id,
+                        method: "updateFromSpiralAttribute($event)",
+                        title:  "Substituir atributo",
+                        img:    "images/controls/config.svg"
+                    }) +
+                    utils.makeImgButton({
+                        id:     vizID,
+                        nodeID: id,
+                        method: "joinSpiral($event)",
+                        title:  "Juntar Espirais",
+                        img:    "images/controls/drag.svg"
+                    }) +
+                    utils.makeImgButton({
+                        id:           vizID,
+                        nodeID:       id,
+                        checkable:    true,
+                        method:       "togglePinnedSpiral($event)",
+                        title:        "Marcar Espiral como visualização principal",
+                        img:          "images/controls/pin.svg",
+                        isChecked:    isChecked,
+                        clazzChecked: "custom-btn-checked",
+                        titleChecked: "Desmarcar Espiral como visualização principal",
+                        imgChecked:   "images/controls/checked.svg"
+                    }) +
+                    utils.makeImgButton({
+                        id:     vizID,
+                        nodeID: id,
+                        method: "removeSpiral($event)",
+                        title:  "Remover Espiral",
+                        img:    "images/controls/remove.svg"
+                    });
+                }
 
                 var html = '<div ' +
                     'id="' + vizID + '" ' +
                     'data-node-id="' + id + '" ' +
                     'class="viz-spiral">' +
                     '<div style="display: block">' + 
-                        utils.makeImgButton({
-                            id:     vizID,
-                            nodeID: id,
-                            method: "updateFromSpiralAttribute($event)",
-                            title:  "Substituir atributo",
-                            img:    "images/controls/config.svg"
-                        }) +
-                        utils.makeImgButton({
-                            id:     vizID,
-                            nodeID: id,
-                            method: "joinSpiral($event)",
-                            title:  "Juntar Espirais",
-                            img:    "images/controls/drag.svg"
-                        }) +
-                        utils.makeImgButton({
-                            id:           vizID,
-                            nodeID:       id,
-                            checkable:    true,
-                            method:       "togglePinnedSpiral($event)",
-                            title:        "Marcar Espiral como visualização principal",
-                            img:          "images/controls/pin.svg",
-                            isChecked:    isChecked,
-                            clazzChecked: "custom-btn-checked",
-                            titleChecked: "Desmarcar Espiral como visualização principal",
-                            imgChecked:   "images/controls/checked.svg"
-                        }) +
-                        utils.makeImgButton({
-                            id:     vizID,
-                            nodeID: id,
-                            method: "removeSpiral($event)",
-                            title:  "Remover Espiral",
-                            img:    "images/controls/remove.svg"
-                        }) +
+                        buttonsHTML +
                     // FIXME: remove
                     vizID +
                     '</div>' +
@@ -1151,7 +1162,8 @@ moduleLayout.directive("directivePanes",
                     vizID,
                     spiralObject);
 
-                spiralObject.modifyDetailsVisibility(nodes.isMaximized(id));
+                // All elements created, now set their visibility
+                spiralObject.modifyDetailsVisibility(isMaximized);
 
                 // Save visualization for d3 updates
                 nodes.updateViz({

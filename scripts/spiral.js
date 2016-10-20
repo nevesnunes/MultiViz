@@ -118,13 +118,15 @@ moduleVisualizations.factory('SpiralVisualization',
             }
         }
 
-        // No recorded data available
+        // No recorded data available;
+        // Remember this check for visualization updates
         if (recordedFrequency.length === 0) {
-            // Remember this check for visualization updates
             this.hasData = false;
 
             this.visualizationRenderer.renderNoData();
             return;
+        } else {
+            this.hasData = true;
         }
 
         var startMoment = moment(patientMedications.startDate);
