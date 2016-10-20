@@ -903,6 +903,10 @@ moduleLayout.directive("directivePanes",
                 });
 
                 scope.APIActionPanel.makeDefaultActions();
+
+                // Update view so that checks are done for changes in
+                // number of visualizations in the view
+                scope.updateLayout();
             };
 
             scope.togglePinned = function(button) {
@@ -966,14 +970,22 @@ moduleLayout.directive("directivePanes",
                     });
                     makeSpiral(id, vizID);
                 } else {
+                    var isAnyVizChecked = false;
                     for (var i = 0; i < spirals.length; i++) {
                         // Draw all spirals
-                        if (nodes.getCurrentNode().model.id === id) {
-                            makeSpiral(id, spirals[i].id);
-                        // Draw checked spirals
-                        } else if (spirals[i].isChecked) {
+                        if ((nodes.getCurrentNode().model.id === id) ||
+                                // Draw checked spirals
+                                (spirals[i].isChecked)) {
+                            isAnyVizChecked = true;
                             makeSpiral(id, spirals[i].id);
                         }
+                    }
+
+                    // If no checked visualizations where found, automatically
+                    // check the first one
+                    if (!isAnyVizChecked) {
+                        spirals[0].isChecked = true;
+                        makeSpiral(id, spirals[0].id);
                     }
                 }
             };
