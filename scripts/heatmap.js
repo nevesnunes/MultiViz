@@ -37,24 +37,6 @@ moduleVisualizations.factory('HeatMapVisualization',
         // FIXME: This could be switchable by the user...
         this.renderer = renderer.SIM; 
 
-        // Dynamic properties
-        this.margin = (this.renderer === renderer.SIM) ? {
-            top: 40,
-            right: 0,
-            bottom: 150,
-            left: 0
-        } : {
-            top: 80,
-            right: 0,
-            bottom: 150,
-            left: 200
-        };
-        this.width = 800 - this.margin.left - this.margin.right;
-        this.height = 420 - this.margin.top - this.margin.bottom;
-        this.gridHeight = Math.floor(this.height / 8);
-        this.gridWidth = this.gridHeight * 
-            ((this.renderer === renderer.SIM) ? 1 : 2);
-
         // Specific state is maintained in a separate object,
         // which we will use in our facade
         this.visualizationRenderer = null;
@@ -85,13 +67,31 @@ moduleVisualizations.factory('HeatMapVisualization',
     };
 
     HeatMapVisualization.prototype.makeSVG = function(elementID, heatMapID) {
-        var self = this;
+        // Dynamic properties
+        this.margin = (this.renderer === renderer.SIM) ? {
+            top: 40,
+            right: 0,
+            bottom: 150,
+            left: 0
+        } : {
+            top: 80,
+            right: 0,
+            bottom: 150,
+            left: 200
+        };
+        this.width = 800 - this.margin.left - this.margin.right;
+        this.height = 420 - this.margin.top - this.margin.bottom;
+        this.gridHeight = Math.floor(this.height / 8);
+        this.gridWidth = this.gridHeight * 
+            ((this.renderer === renderer.SIM) ? 1 : 2);
 
         if (elementID === undefined) {
             console.log("[WARN] @make: undefined id.");
             return;
         }
         
+        var self = this;
+
         var svg = d3.select("#" + heatMapID).append("svg")
                 .attr("width", self.width + self.margin.left + self.margin.right)
                 .attr("height", self.height + self.margin.top + self.margin.bottom)
@@ -767,6 +767,23 @@ moduleVisualizations.factory('HeatMapVisualization',
 
         // Render paths, reusing data stored in the visualization object
         self.render();
+    };
+
+    HeatMapVisualization.prototype.isRendererActive = function(type) {
+        var self = this;
+
+        return self.renderer === renderer[type];
+    };
+
+    HeatMapVisualization.prototype.switchRenderer = function(nodeID, vizID, type) {
+        var self = this;
+
+        self.renderer = renderer[type];
+
+        // Remove previous svg, since the new visualization will be appended
+        d3.select("#" + vizID).select("svg").remove();
+
+        self.remake(nodeID, vizID);
     };
 
     HeatMapVisualization.prototype.update = function(nodeID, vizID, state) {

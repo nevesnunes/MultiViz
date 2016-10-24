@@ -1197,6 +1197,20 @@ moduleLayout.directive("directivePanes",
                 });
             };
 
+            scope.setMatrixType = function(nodeID, vizID, type) {
+                var vizs = nodes.getVizs(nodeID);
+                // FIXME: Hardcoded
+                vizs[0].vizObject.switchRenderer(nodeID, vizID, type);
+            };
+
+            scope.isMatrixTypeActive = function(nodeID, vizID, type) {
+                var vizs = nodes.getVizs(nodeID);
+                // FIXME: Hardcoded
+                return (vizs[0].vizObject.isRendererActive(type)) ?
+                    "buttonSelected" :
+                    "";
+            };
+
             // Two step creation: 
             // - first, angular elements we need for d3 to use;
             // - then, d3 elements
@@ -1219,12 +1233,42 @@ moduleLayout.directive("directivePanes",
                 }
 
                 var html = '<div ' +
-                    'id="' + heatMapID + '" ' +
-                    'data-node-id="' + id + '">' +
-                    // FIXME: remove
-                    '<div style="display: block">' + 
-                    heatMapID +
-                    '</div>' +
+                        'id="' + heatMapID + '" ' +
+                        'data-node-id="' + id + '">' +
+                        // FIXME: remove
+                        '<div style="display: block">' + 
+                            heatMapID +
+                        '</div>' +
+                        // Matrix type switching
+                        '<div class="btn-group" ' +
+                            'role="group" aria-label="...">' +
+                            '<button type="button" ' +
+                                'id="' + heatMapID + '-type-pairs" ' +
+                                'class="btn btn-default" ' +
+                                'ng-class="isMatrixTypeActive(\'' + 
+                                    id + '\', \'' +
+                                    heatMapID + '\', \'' +
+                                    'DIM' + '\')" ' +
+                                'ng-click="setMatrixType(\'' + 
+                                    id + '\', \'' +
+                                    heatMapID + '\', \'' +
+                                    'DIM' + '\')" ' +
+                                '>' +
+                                'Combinar pares distintos</button>' +
+                            '<button type="button" ' +
+                                'id="' + heatMapID + '-type-all" ' +
+                                'class="btn btn-default" ' +
+                                'ng-class="isMatrixTypeActive(\'' + 
+                                    id + '\', \'' +
+                                    heatMapID + '\', \'' +
+                                    'SIM' + '\')" ' +
+                                'ng-click="setMatrixType(\'' + 
+                                    id + '\', \'' +
+                                    heatMapID + '\', \'' +
+                                    'SIM' + '\')" ' +
+                                '>' +
+                                'Combinar todos</button>' +
+                        '</div>' +
                     '</div>';
                 var target = angular.element('#' + id);
                 target.append($compile(html)(scope));
