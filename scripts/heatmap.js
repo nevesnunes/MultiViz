@@ -463,13 +463,7 @@ moduleVisualizations.factory('HeatMapVisualization',
             .filter(function(d) {
                 return (patientMedicationNames.indexOf(d.medication) !== -1) &&
                     (medicationNames.indexOf(d.medication) !== -1);
-            })
-            .map(function(d) {
-                return {
-                    medication: d.medication,
-                    isMark: true
-                };
-            }); 
+            });
         var cellSizeOffset = 2;
         var markSize = self.gridHeight - cellSizeOffset * 4;
         var patientMedicationsCells = svg.selectAll(".attribute-mark-column")
@@ -495,13 +489,7 @@ moduleVisualizations.factory('HeatMapVisualization',
             .filter(function(d) {
                 return (patientDiseaseNames.indexOf(d.disease) !== -1) &&
                     (diseaseNames.indexOf(d.disease) !== -1);
-            })
-            .map(function(d) {
-                return {
-                    disease: d.disease,
-                    isMark: true
-                };
-            }); 
+            });
         var patientDiseasesCells = svg.selectAll(".attribute-mark-line")
             .data(filteredPatientDiseasesData, function(d) {
                 return diseaseNames.indexOf(d.disease);
