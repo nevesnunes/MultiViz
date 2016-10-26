@@ -21,6 +21,7 @@ moduleVisualizations.factory('SpiralVisualization',
         // Patient attribute lists
         this.medications = options.medications;
         this.currentMedication = options.currentMedication;
+        this.currentAttributeType = attributeType.DISEASES;
         this.hasData = true;
 
         // Specific state is maintained in a separate object,
@@ -365,6 +366,24 @@ moduleVisualizations.factory('SpiralVisualization',
         } else {
             this.visualizationRenderer.renderNoVisibleDetails();
         }
+    };
+
+    var attributeType = Object.freeze({
+        NONE: "none",
+        DISEASES: "diseases",
+        MEDICATIONS: "medications"
+    });
+
+    SpiralVisualization.prototype.isAttributeTypeActive = function(type) {
+        return this.currentAttributeType === type;
+    };
+
+    SpiralVisualization.prototype.getAttributeTypes = function(type) {
+        return attributeType;
+    };
+
+    SpiralVisualization.prototype.setCurrentAttributeType = function(type) {
+        this.currentAttributeType = type;
     };
 
     visualizations.validateInterface(

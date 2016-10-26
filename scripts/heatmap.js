@@ -29,13 +29,15 @@ moduleVisualizations.factory('HeatMapVisualization',
         function(visualizations, patientData, retrievePatientData, utils, nodes) {
     var HeatMapVisualization = function(options) {
         // Patient attribute lists
-        this.diseases = options.diseases;
-        this.medications = options.medications;
+        this.patientLists = {
+            diseases: options.diseases.slice(),
+            medications: options.medications.slice()
+        };
 
         this.html = null;
 
-        // FIXME: This could be switchable by the user...
         this.renderer = renderer.SIM; 
+        this.currentAttributeType = attributeType.DISEASES;
 
         // Specific state is maintained in a separate object,
         // which we will use in our facade
@@ -116,14 +118,14 @@ moduleVisualizations.factory('HeatMapVisualization',
             retrievePatientData.retrieveData('incidences.json');
         patientDataPromise.then(function(data) {
             var allDiseaseNames = visualizations.processSelectedList(
-                self.diseases);
+                self.patientLists.diseases);
             var allMedicationNames = visualizations.processSelectedList(
-                self.medications);
+                self.patientLists.medications);
 
             // Retrieve all matches of different attributes;
             // JSON data contains all attributes, which need to be filtered
             // first by user selected attributes
-            // FIXME: Hardcoded
+            // FIXME: Hardcoded pair order
             var filteredData = data.filter(function(d) {
                 var isValidPair = ((d.first.type === 'disease') &&
                         (d.second.type === 'medication'));
@@ -260,6 +262,7 @@ moduleVisualizations.factory('HeatMapVisualization',
         var diseaseNames = self.visualizationRenderer.diseaseNames;
         var medicationNames = self.visualizationRenderer.medicationNames;
 
+        // Label width must be wide enough to span all text
         var labelWidth = self.visualizationRenderer.longestNameLength * 8;
         var diseaseLabels = svg.selectAll(".rect-disease-label")
             .data(diseaseNames);
@@ -458,14 +461,16 @@ moduleVisualizations.factory('HeatMapVisualization',
             };
         });
 
+        // Mark properties
+        var cellSizeOffset = 2;
+        var markSize = self.gridHeight - cellSizeOffset * 4;
+
         // Identify which data belongs to patient attributes
         var filteredPatientMedicationsData = labelData
             .filter(function(d) {
                 return (patientMedicationNames.indexOf(d.medication) !== -1) &&
                     (medicationNames.indexOf(d.medication) !== -1);
             });
-        var cellSizeOffset = 2;
-        var markSize = self.gridHeight - cellSizeOffset * 4;
         var patientMedicationsCells = svg.selectAll(".attribute-mark-column")
             .data(filteredPatientMedicationsData, function(d) {
                 return medicationNames.indexOf(d.medication);
@@ -496,8 +501,8 @@ moduleVisualizations.factory('HeatMapVisualization',
             });
         patientDiseasesCells.enter().append("rect")
             .attr("class", "attribute-mark-line markPresent")
-            .attr("width", self.gridHeight - cellSizeOffset * 4)
-            .attr("height", self.gridHeight - cellSizeOffset * 4)
+            .attr("width", markSize)
+            .attr("height", markSize)
             .merge(patientDiseasesCells)
                 .attr("x", function(d) {
                     return ((self.gridWidth - markSize) / 2);
@@ -526,6 +531,7 @@ moduleVisualizations.factory('HeatMapVisualization',
             self.visualizationRenderer.filteredSimilarityData;
         var similarityNames = self.visualizationRenderer.similarityNames;
 
+        // Label width must be wide enough to span all text
         var labelWidth = self.visualizationRenderer.longestSimilarityNameLength *
             8;
         var cellSizeOffset = 4;
@@ -581,7 +587,7 @@ moduleVisualizations.factory('HeatMapVisualization',
         // will be. Therefore, we select them again and store their bounding box
         // for later use.
         textData = [];
-        var attributeLabelsTexts = d3.selectAll(".text-attribute-label");
+        var attributeLabelsTexts = svg.selectAll(".text-attribute-label");
         attributeLabelsTexts.each(function(d, i) {            
             var text = d3.select(this);
             textData.push({
@@ -706,6 +712,12 @@ moduleVisualizations.factory('HeatMapVisualization',
                 (similarityNames.length) * self.gridHeight);
     };
 
+    var attributeType = Object.freeze({
+        NONE: "none",
+        DISEASES: "diseases",
+        MEDICATIONS: "medications"
+    });
+
     var renderer = Object.freeze({
         DIM: HeatMapVisualization.prototype.render2DimensionalMatrix,
         SIM: HeatMapVisualization.prototype.renderSimilarityMatrix
@@ -714,6 +726,8 @@ moduleVisualizations.factory('HeatMapVisualization',
     HeatMapVisualization.prototype.render = function() {
         var self = this;
 
+        // Height for the similarity matrix is computed here
+        // since it depends on filtered data
         if (self.renderer === renderer.SIM) {
             d3.select("#" + self.targetElement).selectAll("svg")
                 .attr("height",
@@ -751,10 +765,20 @@ moduleVisualizations.factory('HeatMapVisualization',
         self.render();
     };
 
-    HeatMapVisualization.prototype.isRendererActive = function(type) {
-        var self = this;
+    HeatMapVisualization.prototype.isAttributeTypeActive = function(type) {
+        return this.currentAttributeType === type;
+    };
 
-        return self.renderer === renderer[type];
+    HeatMapVisualization.prototype.getAttributeTypes = function(type) {
+        return attributeType;
+    };
+
+    HeatMapVisualization.prototype.setCurrentAttributeType = function(type) {
+        this.currentAttributeType = type;
+    };
+
+    HeatMapVisualization.prototype.isRendererActive = function(type) {
+        return this.renderer === renderer[type];
     };
 
     HeatMapVisualization.prototype.switchRenderer = function(nodeID, vizID, type) {
@@ -771,8 +795,8 @@ moduleVisualizations.factory('HeatMapVisualization',
     HeatMapVisualization.prototype.update = function(nodeID, vizID, state) {
         var self = this;
 
-        self.diseases = state.diseases;
-        self.medications = state.medications;
+        self.patientLists.diseases = state.diseases.slice();
+        self.patientLists.medications = state.medications.slice();
         self.populate(nodeID, vizID);
     };
 
