@@ -332,6 +332,7 @@ moduleVisualizations.factory('HeatMapVisualization',
             })])
             .range(visualizations.colors);
 
+        // Map data to a format easier to manage in cell selections
         var cellsData = filteredData.map(function(d) {
             return {
                 incidences: d.incidences,
@@ -456,6 +457,8 @@ moduleVisualizations.factory('HeatMapVisualization',
                 })
             };
         });
+
+        // Identify which data belongs to patient attributes
         var filteredPatientMedicationsData = labelData
             .filter(function(d) {
                 return (patientMedicationNames.indexOf(d.medication) !== -1) &&
@@ -467,29 +470,24 @@ moduleVisualizations.factory('HeatMapVisualization',
                     isMark: true
                 };
             }); 
+        var cellSizeOffset = 2;
+        var markSize = self.gridHeight - cellSizeOffset * 4;
         var patientMedicationsCells = svg.selectAll(".attribute-mark-column")
             .data(filteredPatientMedicationsData, function(d) {
                 return medicationNames.indexOf(d.medication);
             });
         patientMedicationsCells.enter().append("rect")
-            .attr("class", "attribute-cell bordered markPresent")
-            .attr("width", self.gridWidth)
-            .attr("height", self.gridHeight)
-            .merge(cells)
+            .attr("class", "attribute-mark-column markPresent")
+            .attr("width", markSize)
+            .attr("height",markSize)
+            .merge(patientMedicationsCells)
                 .attr("x", function(d) {
-                    return (1 + medicationNames.indexOf(d.medication)) * self.gridWidth;
+                    return (1 + medicationNames.indexOf(d.medication)) *
+                        self.gridWidth +
+                        ((self.gridWidth - markSize) / 2);
                 })
                 .attr("y", function(d) {
-                    return 0;
-                })
-                .on("mouseover", function(d) {
-                    // select the parent and sort the paths
-                    svg.selectAll(".attribute-cell").sort(function (a, b) {
-                        // a is not the hovered element, send "a" to the back
-                        if (a != d) return -1;
-                        // a is the hovered element, bring "a" to the front
-                        else return 1;                             
-                    });
+                    return (self.gridHeight - markSize) / 2;
                 });
         patientMedicationsCells.exit().remove();
 
@@ -509,24 +507,17 @@ moduleVisualizations.factory('HeatMapVisualization',
                 return diseaseNames.indexOf(d.disease);
             });
         patientDiseasesCells.enter().append("rect")
-            .attr("class", "attribute-cell bordered markPresent")
-            .attr("width", self.gridWidth)
-            .attr("height", self.gridHeight)
-            .merge(cells)
+            .attr("class", "attribute-mark-line markPresent")
+            .attr("width", self.gridHeight - cellSizeOffset * 4)
+            .attr("height", self.gridHeight - cellSizeOffset * 4)
+            .merge(patientDiseasesCells)
                 .attr("x", function(d) {
-                    return 0;
+                    return ((self.gridWidth - markSize) / 2);
                 })
                 .attr("y", function(d) {
-                    return (1 + diseaseNames.indexOf(d.disease)) * self.gridHeight;
-                })
-                .on("mouseover", function(d) {
-                    // select the parent and sort the paths
-                    svg.selectAll(".attribute-cell").sort(function (a, b) {
-                        // a is not the hovered element, send "a" to the back
-                        if (a != d) return -1;
-                        // a is the hovered element, bring "a" to the front
-                        else return 1;                             
-                    });
+                    return (1 + diseaseNames.indexOf(d.disease)) *
+                        self.gridHeight +
+                        ((self.gridHeight - markSize) / 2);
                 });
         patientDiseasesCells.exit().remove();
 
@@ -598,7 +589,9 @@ moduleVisualizations.factory('HeatMapVisualization',
         var patientSimilarityNames =
             patientDiseaseNames.concat(patientMedicationNames);
 
-        // FIXME: Talk about why groups suck and we do this
+        // We need text elements to be drawn before knowing how wide they
+        // will be. Therefore, we select them again and store their bounding box
+        // for later use.
         textData = [];
         var attributeLabelsTexts = d3.selectAll(".text-attribute-label");
         attributeLabelsTexts.each(function(d, i) {            
@@ -608,6 +601,7 @@ moduleVisualizations.factory('HeatMapVisualization',
                 width: text.node().getBBox().width 
             });
         });
+
         attributeLabels = svg.selectAll(".patient-attribute-mark")
             .data(similarityNames);
         attributeLabelsGroup = attributeLabels.enter();
