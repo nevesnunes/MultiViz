@@ -178,6 +178,7 @@ moduleLayout.factory("nodes",
             node.model.nodeHTML.remove();
     };
 
+    // Create a scope from the current one with extra handlers
     var scopeCloneWithHandlers = function(sourceScope, targetScope, handlers) {
         targetScope = sourceScope.$new();
         targetScope.$on('$destroy', function() {
@@ -188,6 +189,7 @@ moduleLayout.factory("nodes",
         return targetScope;
     };
 
+    // Keep track of handlers assigned to compiled DOM elements
     var scopeAddHandlers = function(scopeObject, handlers) {
         scopeObject.handlers = [];
         handlers.forEach(function(handlerObject) {
@@ -199,6 +201,7 @@ moduleLayout.factory("nodes",
         });
     };
 
+    // Remove invalid handlers that are still callable
     var scopeDestroyHandlers = function(scopeObject) {
         if (scopeObject.handlers.length === 0)
             console.log(
@@ -318,7 +321,7 @@ moduleLayout.directive("directiveActionPanel",
 
             var currentHTML;
             var updateActionPanel = function(html) {
-                // Remove uneeded scope and DOM elements
+                // Remove previous scope and DOM elements
                 if (currentScope)
                     currentScope.$destroy();
                 if (currentHTML)
@@ -604,7 +607,8 @@ moduleLayout.directive("directiveActionPanel",
                         var attributeTypes = vizObject
                             .getAttributeTypes();
                         var array = [];
-                        var patient = patientData.getAttribute(patientData.KEY_PATIENT);
+                        var patient = patientData.getAttribute(
+                            patientData.KEY_PATIENT);
                         if (currentAttributeType ===
                                 attributeTypes.DISEASES) {
                             array = patient.diseases.map(function(obj) {
@@ -640,13 +644,14 @@ moduleLayout.directive("directiveActionPanel",
             // both visualization creation and modification, each of these cases 
             // will pass their specific behaviour as a callback
             scope.chooseSpiralAttribute = function(
-                    callbackName, callBackArguments) {
+                    callbackName,
+                    callBackArguments) {
                 scope.patient = 
-                        patientData.getAttribute(patientData.KEY_PATIENT);
+                    patientData.getAttribute(patientData.KEY_PATIENT);
                 scope.defaultActionsList = 
-                        scope.patient.medications.map(function(obj) {
-                    return obj.name;
-                });
+                    scope.patient.medications.map(function(obj) {
+                        return obj.name;
+                    });
                 scope.callBackArguments = callBackArguments;
 
                 //
@@ -742,11 +747,15 @@ moduleLayout.directive("directiveActionPanel",
                 var viewNotRoot = !(nodes.isMaximized(
                     nodes.getRootNode().model.id));
                 if (rootHasNoChildren || viewNotRoot) {
-                    if (nodes.getCurrentNode().model.vizType ===
+                    var currentNode = nodes.getCurrentNode();
+                    if (currentNode.model.vizType ===
                             scope.vizType.HEAT_MAP) {
-                        var vizObject = nodes.getVizs(
-                            nodes.getCurrentNode().model.id)[0].vizObject;
-                        var currentAttributeType = vizObject.currentAttributeType;
+                        var vizObject = nodes.getVizByIDs(
+                                currentNode.model.id,
+                                currentNode.model.currentVizID)
+                            .vizObject;
+                        var currentAttributeType = vizObject
+                            .currentAttributeType;
                         var attributeTypes = vizObject
                             .getAttributeTypes();
 
@@ -816,23 +825,23 @@ moduleLayout.directive("directiveActionPanel",
                                 '</div>' +
                             '</div>' +
                         '</div>';
-                    } else if (nodes.getCurrentNode().model.vizType ===
+                    } else if (currentNode.model.vizType ===
                             scope.vizType.SPIRAL) {
                         scope.patient = 
                                 patientData.getAttribute(patientData.KEY_PATIENT);
                         scope.defaultActionsList = 
                                 scope.patient.medications.map(function(obj) {
-                            return obj.name;
-                        });
+                                    return obj.name;
+                                });
 
                         html = '<div>' +
-                            '<h4>Spiral actions</h4>' +
-                        '</div>';
+                                '<h4>Spiral actions</h4>' +
+                            '</div>';
                     } else {
                         html = "<span>TODO</span>";
                     }
                 // No specific options to be displayed;
-                // describe possible actions
+                // Describe possible actions
                 } else {
                     html = '<span>Pode <b>Maximizar</b> ( <img src="images/controls/black/maximize.svg" class="custom-btn-svg"> ) uma vista para configurar os atributos visíveis.</span>';
                 }
@@ -1136,8 +1145,6 @@ moduleLayout.directive("directivePanes",
             var makeSpirals = function(node) {
                 var id = node.model.id;
                 var spirals = node.model.vizs;
-
-                // FIXME: Implement a skipCreation instead of these checks
                 if ((!node.model.skipCreation) && (spirals.length === 0)) {
                     var vizID = SpiralVisualization.prototype.makeID();
                     nodes.updateViz({
@@ -1490,7 +1497,7 @@ moduleLayout.directive("directivePanes",
             var currentScope;
             var currentHTML;
             scope.updateLayout = function() {
-                // Remove uneeded scope and DOM elements
+                // Remove previous scope and DOM elements
                 if (currentScope)
                     currentScope.$destroy();
                 if (currentHTML)
