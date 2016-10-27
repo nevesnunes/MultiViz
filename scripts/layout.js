@@ -122,9 +122,11 @@ moduleLayout.factory("nodes",
         node.model.currentVizID = data.currentVizID || node.model.currentVizID;
         node.model.skipCreation = data.skipCreation || node.model.skipCreation;
 
-        detachNode(node);
-        node.model.nodeScope = data.nodeScope;
-        node.model.nodeHTML = data.nodeHTML;
+        if (data.nodeScope && data.nodeHTML) {
+            detachNode(node);
+            node.model.nodeScope = data.nodeScope;
+            node.model.nodeHTML = data.nodeHTML;
+        }
 
         var newViz = {
             id: data.vizID,
@@ -1336,8 +1338,10 @@ moduleLayout.directive("directivePanes",
                         '</div>' +
                     '</div>' +
                 '</div>';
-                var targetScope = scope.$new();
-                var targetHTML = $compile(html)(targetScope);
+
+                // TODO: getViz failing to find some id, investigate if
+                // we need to clone scope for each spiral
+                var targetHTML = $compile(html)(scope);
                 var target = angular.element('#' + id);
                 target.append(targetHTML);
 
@@ -1362,9 +1366,7 @@ moduleLayout.directive("directivePanes",
                     nodeID: id,
                     vizID: vizID,
                     isChecked: isChecked,
-                    vizObject: spiralObject,
-                    nodeHTML: targetHTML,
-                    nodeScope: targetScope
+                    vizObject: spiralObject
                 });
             };
 
