@@ -1,6 +1,6 @@
 # Architecture
 An overview is shown in the following graph:
-[modules](architecture/png/modules.png)
+![](architecture/png/modules.png)
 
 We create all needed elements with Angular. D3.js job's is just to fill them with visualization svgs and dynamic property values related to the specific visualization. This way, we define the DOM layout all at once in the same places.
 
@@ -12,10 +12,12 @@ Many elements are compiled manually, therefore we need to clean them ourselves. 
 ### Visualizations
 Holds common functionality used by each specific visualization.
 
-# Documentation
-Complex methods or objects are documented with JSDoc style comments.
+<div style="page-break-after: always;"></div>
 
 # Notes
+
+### Documentation
+Complex methods or objects are documented with JSDoc style comments.
 
 ### Style Guides
 https://github.com/mgechev/angularjs-style-guide
