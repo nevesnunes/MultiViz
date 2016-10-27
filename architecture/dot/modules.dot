@@ -2,13 +2,13 @@ digraph dependencies {
   node[shape="ellipse",style="filled",colorscheme=paired12]
 
   
+    "moduleVisualizations"[label="moduleVisualizations", color=1]
+  
     "moduleIndex"[label="moduleIndex", color=1]
   
     "moduleSplits"[label="moduleSplits", color=1]
   
     "moduleUtils"[label="moduleUtils", color=1]
-  
-    "moduleVisualizations"[label="moduleVisualizations", color=1]
   
     "moduleLayout"[label="moduleLayout", color=1]
   
@@ -18,17 +18,17 @@ digraph dependencies {
   node[shape="ellipse",style="filled",color=2]
   
     
+      "moduleIndex" -> "moduleVisualizations"
+    
+      "moduleUtils" -> "moduleVisualizations"
+    
+  
+    
   
     
       "shagstrom.angular-split-pane" -> "moduleSplits"
     
   
-    
-  
-    
-      "moduleIndex" -> "moduleVisualizations"
-    
-      "moduleUtils" -> "moduleVisualizations"
     
   
     

@@ -124,16 +124,16 @@ moduleLayout.factory("nodes",
         node.model.currentVizID = data.currentVizID || node.model.currentVizID;
         node.model.skipCreation = data.skipCreation || node.model.skipCreation;
 
-        // Nuke unneeded child scopes
-        if (node.model.nodeHTML)
-            node.model.nodeHTML.remove();
-
         // Nuke unneeded DOM child
         if (node.model.nodeScope)
             node.model.nodeScope.$destroy();
 
-        node.model.nodeHTML = data.nodeHTML;
+        // Nuke unneeded child scopes
+        if (node.model.nodeHTML)
+            node.model.nodeHTML.remove();
+
         node.model.nodeScope = data.nodeScope;
+        node.model.nodeHTML = data.nodeHTML;
 
         var newViz = {
             id: data.vizID,
@@ -284,12 +284,12 @@ moduleLayout.directive("directiveActionPanel",
             var currentHTML;
             var updateActionPanel = function(html) {
                 // Nuke unneeded child scopes
-                currentScope.$destroy();
+                if (currentScope)
+                    currentScope.$destroy();
 
                 // Nuke unneeded DOM child
-                if (currentHTML) {
+                if (currentHTML)
                     currentHTML.remove();
-                }
 
                 currentScope = scope.$new();
                 currentHTML = $compile(html)(currentScope);
@@ -364,16 +364,16 @@ moduleLayout.directive("directiveActionPanel",
                 updateActionPanel(html);
             };
 
-            scope.setAttributeType = function(type) {
+            currentScope.setAttributeType = function(type) {
                 var nodeID = nodes.getCurrentNode().model.id;
                 var vizs = nodes.getVizs(nodeID);
                 // FIXME: Hardcoded
                 vizs[0].vizObject.setCurrentAttributeType(type);
 
-                scope.makeDefaultActions();
+                currentScope.makeDefaultActions();
             };
 
-            scope.isAttributeTypeActive = function(type) {
+            currentScope.isAttributeTypeActive = function(type) {
                 var nodeID = nodes.getCurrentNode().model.id;
                 var vizs = nodes.getVizs(nodeID);
                 // FIXME: Hardcoded
@@ -812,6 +812,9 @@ moduleLayout.directive("directivePanes",
 	return { 
         scope: true,
         link: function(scope, element, attrs) {
+            var currentScope = scope.$new();
+            var currentHTML;
+
             scope.splitType = Object.freeze({
                 NONE: "none",
                 VERTICAL: "vertical",
@@ -1316,13 +1319,13 @@ moduleLayout.directive("directivePanes",
                 });
             };
 
-            scope.setMatrixType = function(nodeID, vizID, type) {
+            currentScope.setMatrixType = function(nodeID, vizID, type) {
                 var vizs = nodes.getVizs(nodeID);
                 // FIXME: Hardcoded
                 vizs[0].vizObject.switchRenderer(nodeID, vizID, type);
             };
 
-            scope.isMatrixTypeActive = function(nodeID, vizID, type) {
+            currentScope.isMatrixTypeActive = function(nodeID, vizID, type) {
                 if (nodes.isMaximized(nodeID)) {
                     var vizs = nodes.getVizs(nodeID);
                     // FIXME: Hardcoded
@@ -1417,8 +1420,6 @@ moduleLayout.directive("directivePanes",
             };
 
             // Make html node layout
-            var currentScope = scope.$new();
-            var currentHTML;
             scope.updateLayout = function() {
                 // Nuke unneeded child scopes
                 if (currentScope)
@@ -1485,8 +1486,8 @@ moduleLayout.directive("directivePanes",
                 scope.APIActionPanel.cancelSplit();
 
                 // Remove uneeded child scope and elements
-                node.model.nodeHTML.remove();
                 node.model.nodeScope.$destroy();
+                node.model.nodeHTML.remove();
 
                 // Update parent
                 var parentNode = node.parent;
