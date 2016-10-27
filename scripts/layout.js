@@ -40,7 +40,7 @@ moduleLayout.factory("nodes",
      * @property {string[]} children - two child nodes
      */
     var makeNode = function(model) {
-        var node = treeModel.parse({
+        return treeModel.parse({
             id: model.id,
             level: model.level,
             splitType: model.splitType,
@@ -50,8 +50,6 @@ moduleLayout.factory("nodes",
             skipCreation: model.skipCreation,
             children: model.children
         });
-
-        return node;
     };
 
     var getVizs = function(nodeID) {
@@ -124,14 +122,7 @@ moduleLayout.factory("nodes",
         node.model.currentVizID = data.currentVizID || node.model.currentVizID;
         node.model.skipCreation = data.skipCreation || node.model.skipCreation;
 
-        // Nuke unneeded DOM child
-        if (node.model.nodeScope)
-            node.model.nodeScope.$destroy();
-
-        // Nuke unneeded child scopes
-        if (node.model.nodeHTML)
-            node.model.nodeHTML.remove();
-
+        detachNode(node);
         node.model.nodeScope = data.nodeScope;
         node.model.nodeHTML = data.nodeHTML;
 
@@ -177,6 +168,45 @@ moduleLayout.factory("nodes",
             console.log(nodesToPrint[i]);
     };
 
+    // Remove uneeded scope and DOM elements
+    var detachNode = function(node) {
+        if (node.model.nodeScope)
+            node.model.nodeScope.$destroy();
+        if (node.model.nodeHTML)
+            node.model.nodeHTML.remove();
+    };
+
+    var scopeCloneWithHandlers = function(sourceScope, targetScope, handlers) {
+        targetScope = sourceScope.$new();
+        targetScope.$on('$destroy', function() {
+            scopeDestroyHandlers(targetScope);
+        });
+        scopeAddHandlers(targetScope, handlers);
+
+        return targetScope;
+    };
+
+    var scopeAddHandlers = function(scopeObject, handlers) {
+        scopeObject.handlers = [];
+        handlers.forEach(function(handlerObject) {
+            if (scopeObject[handlerObject.name])
+                console.log(
+                    "[WARN] @scopeAddHandlers: property already exists!");
+            scopeObject[handlerObject.name] = handlerObject.handler;
+            scopeObject.handlers.push(handlerObject.name);
+        });
+    };
+
+    var scopeDestroyHandlers = function(scopeObject) {
+        if (scopeObject.handlers.length === 0)
+            console.log(
+                "[INFO] @scopeDestroyHandlers: No handlers found.");
+        scopeObject.handlers.forEach(function(name) {
+            scopeObject[name] = null;
+        });
+        scopeObject.handlers = null;
+    };
+
     var getCurrentNode = function() { return currentNode; };
     var setCurrentNode = function(node) { currentNode = node; };
 
@@ -195,7 +225,9 @@ moduleLayout.factory("nodes",
         getVizByIDs: getVizByIDs,
         isMaximized: isMaximized,
         removeViz: removeViz,
-        updateViz: updateViz
+        updateViz: updateViz,
+        detachNode: detachNode,
+        scopeCloneWithHandlers: scopeCloneWithHandlers
     };
 }]);
 
@@ -280,18 +312,28 @@ moduleLayout.directive("directiveActionPanel",
 	return { 
         scope: true,
         link: function(scope, element, attrs) {
-            var currentScope = scope.$new();
+            var currentScope;
+
             var currentHTML;
             var updateActionPanel = function(html) {
-                // Nuke unneeded child scopes
+                // Remove uneeded scope and DOM elements
                 if (currentScope)
                     currentScope.$destroy();
-
-                // Nuke unneeded DOM child
                 if (currentHTML)
                     currentHTML.remove();
 
-                currentScope = scope.$new();
+                currentScope = nodes.scopeCloneWithHandlers(
+                    scope,
+                    currentScope,
+                    [ { 
+                        name: "isAttributeTypeActive",
+                        handler: isAttributeTypeActive
+                    }, { 
+                        name: "setAttributeType",
+                        handler: setAttributeType
+                    }
+                ]);
+
                 currentHTML = $compile(html)(currentScope);
                 element.html(currentHTML);
             };
@@ -364,20 +406,30 @@ moduleLayout.directive("directiveActionPanel",
                 updateActionPanel(html);
             };
 
-            currentScope.setAttributeType = function(type) {
-                var nodeID = nodes.getCurrentNode().model.id;
-                var vizs = nodes.getVizs(nodeID);
-                // FIXME: Hardcoded
-                vizs[0].vizObject.setCurrentAttributeType(type);
+            var setAttributeType = function(type) {
+                var node = nodes.getCurrentNode();
+                var viz = nodes.getVizByIDs(
+                    node.model.id, node.model.currentVizID);
+                viz.vizObject.setCurrentAttributeType(type);
 
-                currentScope.makeDefaultActions();
+                scope.makeDefaultActions();
             };
 
-            currentScope.isAttributeTypeActive = function(type) {
-                var nodeID = nodes.getCurrentNode().model.id;
-                var vizs = nodes.getVizs(nodeID);
-                // FIXME: Hardcoded
-                return (vizs[0].vizObject.isAttributeTypeActive(type)) ?
+            var isAttributeTypeActive = function(type) {
+                var el = angular.element('#btnDiseases');
+                if (el.length) {
+                } else {
+                    var a = this;
+                    var b = element;
+                    console.log("NOPE");
+                    console.log(scope);
+                    console.log(currentScope);
+                    console.log(element);
+                }
+                var node = nodes.getCurrentNode();
+                var viz = nodes.getVizByIDs(
+                    node.model.id, node.model.currentVizID);
+                return (viz.vizObject.isAttributeTypeActive(type)) ?
                     "buttonSelected" :
                     "";
             };
@@ -812,9 +864,6 @@ moduleLayout.directive("directivePanes",
 	return { 
         scope: true,
         link: function(scope, element, attrs) {
-            var currentScope = scope.$new();
-            var currentHTML;
-
             scope.splitType = Object.freeze({
                 NONE: "none",
                 VERTICAL: "vertical",
@@ -1319,17 +1368,21 @@ moduleLayout.directive("directivePanes",
                 });
             };
 
-            currentScope.setMatrixType = function(nodeID, vizID, type) {
-                var vizs = nodes.getVizs(nodeID);
-                // FIXME: Hardcoded
-                vizs[0].vizObject.switchRenderer(nodeID, vizID, type);
+            var setMatrixType = function(nodeID, vizID, type) {
+                var node = nodes.getRootNode().first(function (node1) {
+                    return node1.model.id === nodeID;
+                });
+                var viz = nodes.getVizByIDs(nodeID, node.model.currentVizID);
+                viz.vizObject.switchRenderer(nodeID, vizID, type);
             };
 
-            currentScope.isMatrixTypeActive = function(nodeID, vizID, type) {
+            var isMatrixTypeActive = function(nodeID, vizID, type) {
                 if (nodes.isMaximized(nodeID)) {
-                    var vizs = nodes.getVizs(nodeID);
-                    // FIXME: Hardcoded
-                    return (vizs[0].vizObject.isRendererActive(type)) ?
+                    var node = nodes.getRootNode().first(function (node1) {
+                        return node1.model.id === nodeID;
+                    });
+                    var viz = nodes.getVizByIDs(nodeID, node.model.currentVizID);
+                    return (viz.vizObject.isRendererActive(type)) ?
                         "buttonSelected" :
                         "";
                 } else {
@@ -1396,7 +1449,19 @@ moduleLayout.directive("directivePanes",
                                 'Combinar todos</button>' +
                         '</div>' +
                     '</div>';
-                var targetScope = scope.$new();
+
+                var targetScope = nodes.scopeCloneWithHandlers(
+                    scope,
+                    targetScope,
+                    [ {
+                        name: "isMatrixTypeActive",
+                        handler: isMatrixTypeActive
+                    }, {
+                        name: "setMatrixType",
+                        handler: setMatrixType
+                    }
+                ]);
+
                 var targetHTML = $compile(html)(targetScope);
                 var target = angular.element('#' + id);
                 target.append(targetHTML);
@@ -1420,12 +1485,12 @@ moduleLayout.directive("directivePanes",
             };
 
             // Make html node layout
+            var currentScope;
+            var currentHTML;
             scope.updateLayout = function() {
-                // Nuke unneeded child scopes
+                // Remove uneeded scope and DOM elements
                 if (currentScope)
                     currentScope.$destroy();
-
-                // Nuke unneeded DOM child
                 if (currentHTML)
                     currentHTML.remove();
 
@@ -1485,9 +1550,7 @@ moduleLayout.directive("directivePanes",
                 // Cancel any pending splits
                 scope.APIActionPanel.cancelSplit();
 
-                // Remove uneeded child scope and elements
-                node.model.nodeScope.$destroy();
-                node.model.nodeHTML.remove();
+                nodes.detachNode(node);
 
                 // Update parent
                 var parentNode = node.parent;
@@ -1519,6 +1582,8 @@ moduleLayout.directive("directivePanes",
                             node.parent = nodes.makeNode(otherChildNode.model);
                         }
                     }
+
+                    nodes.detachNode(otherChildNode);
 
                     scope.updateLayout();
                 } else {
@@ -1613,6 +1678,8 @@ moduleLayout.directive("directivePanes",
                             skipCreation: false,
                             children: []
                         }));
+
+                        nodes.detachNode(node);
 
                         // Update child properties
                         // TODO: vizs need to update nodeID
