@@ -205,7 +205,8 @@ Spiral.prototype.render = function(reusePaths) {
     d3.select('#' + option.targetElement + "-binning")
         .html(option.functions.translateInterval(option.binning));
 
-    // Always set size, since it may have been modified previously
+    // Set svg size,
+    // since it may have been modified previously
     var svg = option.html
         .select('#' + this.option.targetElement + "-svg-spiral")
         .selectAll("svg")
@@ -216,6 +217,14 @@ Spiral.prototype.render = function(reusePaths) {
         .selectAll("svg")
         .attr("width", this.option.lineRange.x + this.option.marginLine * 2)
         .attr("height", this.option.lineRange.y + this.option.padding * 4);
+
+    // Set attribute text style,
+    // since it may have been modified from a empty data render
+    option.html.select('#' + this.option.targetElement + "-attribute-text")
+        // Align with axis
+        .style('margin-left',
+            (this.option.margin.left + this.option.marginLine) + "px")
+        .style('margin-bottom', "20px");
 
     if (option.graphType === "points") {
         svg.selectAll("g").selectAll("dot")

@@ -108,8 +108,8 @@ moduleVisualizations.factory('SpiralVisualization',
         var interval = visualizations.translateFrequency(expectedFrequency);
         var intervalDates = this.visualizationRenderer.getIntervalDates();
         if (intervalDates.length > 0) {
-            // Brush intervals may specify dates outside of the recorded range, so
-            // we only apply them if they are inside this range
+            // Brush intervals may specify dates outside of the recorded range,
+            // so we only apply them if they are inside this range
             if (intervalStartMoment.diff(intervalDates[0], interval) <= 0) {
                 intervalStartMoment = intervalDates[0];
             }
