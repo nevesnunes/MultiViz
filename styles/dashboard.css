@@ -312,6 +312,7 @@ rect.handle.handle--w:active {
 
 .tooltip-d3 {
     border: 1px solid #000 !important;
+    max-width: 20em;
     pointer-events: none;
 }
 

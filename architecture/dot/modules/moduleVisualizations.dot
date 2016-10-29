@@ -23,6 +23,12 @@ digraph dependencies {
     
 
     
+      "HeatMapVisualization"[label="HeatMapVisualization", color=6]
+      "moduleVisualizations" -> "HeatMapVisualization"
+    
+      "SpiralVisualization"[label="SpiralVisualization", color=6]
+      "moduleVisualizations" -> "SpiralVisualization"
+    
       "visualizations"[label="visualizations", color=6]
       "moduleVisualizations" -> "visualizations"
     
@@ -62,8 +68,45 @@ digraph dependencies {
 
     
       
+        "visualizations"[label="visualizations"]
+        "visualizations" -> "HeatMapVisualization"
+      
+        "patientData"[label="patientData"]
+        "patientData" -> "HeatMapVisualization"
+      
+        "retrievePatientData"[label="retrievePatientData"]
+        "retrievePatientData" -> "HeatMapVisualization"
+      
+        "utils"[label="utils"]
+        "utils" -> "HeatMapVisualization"
+      
+        "nodes"[label="nodes"]
+        "nodes" -> "HeatMapVisualization"
+      
+    
+      
+        "visualizations"[label="visualizations"]
+        "visualizations" -> "SpiralVisualization"
+      
+        "patientData"[label="patientData"]
+        "patientData" -> "SpiralVisualization"
+      
+        "retrievePatientData"[label="retrievePatientData"]
+        "retrievePatientData" -> "SpiralVisualization"
+      
+        "utils"[label="utils"]
+        "utils" -> "SpiralVisualization"
+      
+        "nodes"[label="nodes"]
+        "nodes" -> "SpiralVisualization"
+      
+    
+      
         "patientData"[label="patientData"]
         "patientData" -> "visualizations"
+      
+        "retrievePatientData"[label="retrievePatientData"]
+        "retrievePatientData" -> "visualizations"
       
         "utils"[label="utils"]
         "utils" -> "visualizations"

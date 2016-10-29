@@ -34,20 +34,22 @@ moduleLayout.factory("nodes",
      * @property {string} currentVizID - id of visualization to be displayed 
      * on single/maximized view
      *
+     * @property {bool} skipCreation - checked in layout update in order to
+     * create a visualization only in an empty view
+     *
      * @property {string[]} children - two child nodes
      */
     var makeNode = function(model) {
-        var node = treeModel.parse({
+        return treeModel.parse({
             id: model.id,
             level: model.level,
             splitType: model.splitType,
             vizType: model.vizType,
             vizs: model.vizs,
             currentVizID: model.currentVizID,
+            skipCreation: model.skipCreation,
             children: model.children
         });
-
-        return node;
     };
 
     var getVizs = function(nodeID) {
@@ -72,7 +74,7 @@ moduleLayout.factory("nodes",
 
     var getVizByID = function(vizID) {
         var viz = null;
-        nodes.getRootNode().walk(function(node) {
+        rootNode.walk(function(node) {
             var index = utils.arrayObjectIndexOf(
                 node.model.vizs, vizID, "id");
             if ((index !== -1) && (viz === null)) {
@@ -90,6 +92,8 @@ moduleLayout.factory("nodes",
         var node = rootNode.first(function(node1) {
             return node1.model.id === data.nodeID;
         });
+        node.model.skipCreation = data.skipCreation || node.model.skipCreation;
+
         var index = utils.arrayObjectIndexOf(node.model.vizs, data.vizID, "id");
         if (index > -1) {
             console.log("[INFO] @removeViz: removed " + data.vizID);
@@ -116,6 +120,14 @@ moduleLayout.factory("nodes",
             return node1.model.id === data.nodeID;
         });
         node.model.currentVizID = data.currentVizID || node.model.currentVizID;
+        node.model.skipCreation = data.skipCreation || node.model.skipCreation;
+
+        if (data.nodeScope && data.nodeHTML) {
+            detachNode(node);
+            node.model.nodeScope = data.nodeScope;
+            node.model.nodeHTML = data.nodeHTML;
+        }
+
         var newViz = {
             id: data.vizID,
             isChecked: data.isChecked || false,
@@ -158,6 +170,48 @@ moduleLayout.factory("nodes",
             console.log(nodesToPrint[i]);
     };
 
+    // Remove uneeded scope and DOM elements
+    var detachNode = function(node) {
+        if (node.model.nodeScope)
+            node.model.nodeScope.$destroy();
+        if (node.model.nodeHTML)
+            node.model.nodeHTML.remove();
+    };
+
+    // Create a scope from the current one with extra handlers
+    var scopeCloneWithHandlers = function(sourceScope, targetScope, handlers) {
+        targetScope = sourceScope.$new();
+        targetScope.$on('$destroy', function() {
+            scopeDestroyHandlers(targetScope);
+        });
+        scopeAddHandlers(targetScope, handlers);
+
+        return targetScope;
+    };
+
+    // Keep track of handlers assigned to compiled DOM elements
+    var scopeAddHandlers = function(scopeObject, handlers) {
+        scopeObject.handlers = [];
+        handlers.forEach(function(handlerObject) {
+            if (scopeObject[handlerObject.name])
+                console.log(
+                    "[WARN] @scopeAddHandlers: property already exists!");
+            scopeObject[handlerObject.name] = handlerObject.handler;
+            scopeObject.handlers.push(handlerObject.name);
+        });
+    };
+
+    // Remove invalid handlers that are still callable
+    var scopeDestroyHandlers = function(scopeObject) {
+        if (scopeObject.handlers.length === 0)
+            console.log(
+                "[INFO] @scopeDestroyHandlers: No handlers found.");
+        scopeObject.handlers.forEach(function(name) {
+            scopeObject[name] = null;
+        });
+        scopeObject.handlers = null;
+    };
+
     var getCurrentNode = function() { return currentNode; };
     var setCurrentNode = function(node) { currentNode = node; };
 
@@ -176,7 +230,9 @@ moduleLayout.factory("nodes",
         getVizByIDs: getVizByIDs,
         isMaximized: isMaximized,
         removeViz: removeViz,
-        updateViz: updateViz
+        updateViz: updateViz,
+        detachNode: detachNode,
+        scopeCloneWithHandlers: scopeCloneWithHandlers
     };
 }]);
 
@@ -256,15 +312,35 @@ moduleLayout.controller('controllerLayout',
 }]);
 
 moduleLayout.directive("directiveActionPanel",
-        ['$compile', '$timeout', 'visualizations', 'patientData', 'utils', 'nodes',
-        function($compile, $timeout, visualizations, patientData, utils, nodes) {
+        ['$compile', 'visualizations', 'patientData', 'utils', 'nodes',
+        function($compile, visualizations, patientData, utils, nodes) {
 	return { 
         scope: true,
         link: function(scope, element, attrs) {
+            var currentScope;
+
+            var currentHTML;
             var updateActionPanel = function(html) {
-                element.html($compile(
-                    html
-                )(scope));
+                // Remove previous scope and DOM elements
+                if (currentScope)
+                    currentScope.$destroy();
+                if (currentHTML)
+                    currentHTML.remove();
+
+                currentScope = nodes.scopeCloneWithHandlers(
+                    scope,
+                    currentScope,
+                    [ { 
+                        name: "isAttributeTypeActive",
+                        handler: isAttributeTypeActive
+                    }, { 
+                        name: "setAttributeType",
+                        handler: setAttributeType
+                    }
+                ]);
+
+                currentHTML = $compile(html)(currentScope);
+                element.html(currentHTML);
             };
 
             scope.chooseSpiral = function() {
@@ -335,18 +411,30 @@ moduleLayout.directive("directiveActionPanel",
                 updateActionPanel(html);
             };
 
-            scope.attributeType = Object.freeze({
-                NONE: "none",
-                DISEASES: "diseases",
-                MEDICATIONS: "medications"
-            });
-            scope.currentAttributeType = scope.attributeType.DISEASES;
-            scope.setAttributeType = function(type) {
-                scope.currentAttributeType = type;
+            var setAttributeType = function(type) {
+                var node = nodes.getCurrentNode();
+                var viz = nodes.getVizByIDs(
+                    node.model.id, node.model.currentVizID);
+                viz.vizObject.setCurrentAttributeType(type);
+
                 scope.makeDefaultActions();
             };
-            scope.isAttributeTypeActive = function(type) {
-                return (type === scope.currentAttributeType) ?
+
+            var isAttributeTypeActive = function(type) {
+                var el = angular.element('#btnDiseases');
+                if (el.length) {
+                } else {
+                    var a = this;
+                    var b = element;
+                    console.log("NOPE");
+                    console.log(scope);
+                    console.log(currentScope);
+                    console.log(element);
+                }
+                var node = nodes.getCurrentNode();
+                var viz = nodes.getVizByIDs(
+                    node.model.id, node.model.currentVizID);
+                return (viz.vizObject.isAttributeTypeActive(type)) ?
                     "buttonSelected" :
                     "";
             };
@@ -358,21 +446,36 @@ moduleLayout.directive("directiveActionPanel",
 
             // Select a property from the view's active property list
             scope.check = function(name) {
+                // FIXME: Hardcoded
+                var vizObject = nodes.getVizs(
+                    nodes.getCurrentNode().model.id)[0].vizObject;
+                var currentAttributeType = vizObject.currentAttributeType;
+                var attributeTypes = vizObject
+                    .getAttributeTypes();
+
                 var array;
-                var attributeType;
-                if (scope.currentAttributeType ===
-                        scope.attributeType.DISEASES) {
-                    array = scope.selectedDiseases;
-                } else if (scope.currentAttributeType ===
-                        scope.attributeType.MEDICATIONS) {
-                    array = scope.selectedMedications;
+                if (currentAttributeType ===
+                        attributeTypes.DISEASES) {
+                    array = vizObject.patientLists.diseases;
+                } else if (currentAttributeType ===
+                        attributeTypes.MEDICATIONS) {
+                    array = vizObject.patientLists.medications;
                 }
 
                 var index = utils.arrayObjectIndexOf(array, name, "name");
                 if (index === -1)
                     return;
 
-                array[index].selected = !(array[index].selected);
+                array[index] = {
+                    name: array[index].name,
+                    selected: !(array[index].selected)
+                };
+
+                // Set the visualization's stored patient lists
+                scope.selectedDiseases =
+                    vizObject.patientLists.diseases;
+                scope.selectedMedications =
+                    vizObject.patientLists.medications;
 
                 updateFromSelections({
                     diseases: scope.selectedDiseases,
@@ -394,15 +497,35 @@ moduleLayout.directive("directiveActionPanel",
 
             // Select all properties from the view's active property list
             scope.checkAll = function() {
-                var array = [];
-                if (scope.currentAttributeType === 'diseases') {
-                    array = scope.selectedDiseases;
-                } else if (scope.currentAttributeType === 'medications') {
-                    array = scope.selectedMedications;
+                var vizObject = nodes.getVizs(
+                    nodes.getCurrentNode().model.id)[0].vizObject;
+                var currentAttributeType = vizObject.currentAttributeType;
+                var attributeTypes = vizObject
+                    .getAttributeTypes();
+
+                var makeCheckedObject = function(obj) {
+                    return {
+                        name: obj.name,
+                        selected: true
+                    };
+                };
+                if (currentAttributeType ===
+                        attributeTypes.DISEASES) {
+                    vizObject.patientLists.diseases =
+                        vizObject.patientLists.diseases
+                        .map(makeCheckedObject);
+                } else if (currentAttributeType ===
+                        attributeTypes.MEDICATIONS) {
+                    vizObject.patientLists.medications =
+                        vizObject.patientLists.medications
+                        .map(makeCheckedObject);
                 }
 
-                for (var i = 0, len = array.length; i < len; i++)
-                    array[i].selected = true;
+                // Set the visualization's stored patient lists
+                scope.selectedDiseases =
+                    vizObject.patientLists.diseases;
+                scope.selectedMedications =
+                    vizObject.patientLists.medications;
 
                 updateFromSelections({
                     diseases: scope.selectedDiseases,
@@ -412,15 +535,35 @@ moduleLayout.directive("directiveActionPanel",
 
             // Select no properties from the view's active property list
             scope.checkNone = function() {
-                var array = [];
-                if (scope.currentAttributeType === 'diseases') {
-                    array = scope.selectedDiseases;
-                } else if (scope.currentAttributeType === 'medications') {
-                    array = scope.selectedMedications;
+                var vizObject = nodes.getVizs(
+                    nodes.getCurrentNode().model.id)[0].vizObject;
+                var currentAttributeType = vizObject.currentAttributeType;
+                var attributeTypes = vizObject
+                    .getAttributeTypes();
+
+                var makeCheckedObject = function(obj) {
+                    return {
+                        name: obj.name,
+                        selected: false
+                    };
+                };
+                if (currentAttributeType ===
+                        attributeTypes.DISEASES) {
+                    vizObject.patientLists.diseases =
+                        vizObject.patientLists.diseases
+                        .map(makeCheckedObject);
+                } else if (currentAttributeType ===
+                        attributeTypes.MEDICATIONS) {
+                    vizObject.patientLists.medications =
+                        vizObject.patientLists.medications
+                        .map(makeCheckedObject);
                 }
 
-                for (var i = 0, len = array.length; i < len; i++)
-                    array[i].selected = false;
+                // Set the visualization's stored patient lists
+                scope.selectedDiseases =
+                    vizObject.patientLists.diseases;
+                scope.selectedMedications =
+                    vizObject.patientLists.medications;
 
                 updateFromSelections({
                     diseases: scope.selectedDiseases,
@@ -429,11 +572,18 @@ moduleLayout.directive("directiveActionPanel",
             };
 
             scope.isSelected = function(name) {
+                var vizObject = nodes.getVizs(
+                    nodes.getCurrentNode().model.id)[0].vizObject;
+                var currentAttributeType = vizObject.currentAttributeType;
+                var attributeTypes = vizObject
+                    .getAttributeTypes();
                 var array = [];
-                if (scope.currentAttributeType === 'diseases') {
-                    array = scope.selectedDiseases;
-                } else if (scope.currentAttributeType === 'medications') {
-                    array = scope.selectedMedications;
+                if (currentAttributeType ===
+                        attributeTypes.DISEASES) {
+                    array = vizObject.patientLists.diseases;
+                } else if (currentAttributeType ===
+                        attributeTypes.MEDICATIONS) {
+                    array = vizObject.patientLists.medications;
                 }
 
                 var index = utils.arrayObjectIndexOf(array, name, "name");
@@ -444,22 +594,41 @@ moduleLayout.directive("directiveActionPanel",
             };
             
             scope.isEntryCurrentPatientAttribute = function(name) {
-                var array = [];
-                var patient = patientData.getAttribute(patientData.KEY_PATIENT);
-                if (scope.currentAttributeType === 'diseases') {
-                    array = patient.diseases.map(function(obj) {
-                        return obj.name;
-                    });
-                } else if (scope.currentAttributeType === 'medications') {
-                    array = patient.medications.map(function(obj) {
-                        return obj.name;
-                    });
+                // FIXME: These checks are due to spirals not being created
+                // immediately like heatmaps, we can probably avoid them...
+                var currentNode = nodes.getCurrentNode();
+                if (currentNode) {
+                    var vizID = currentNode.model.currentVizID;
+                    var viz = nodes.getVizByIDs(
+                        currentNode.model.id, currentNode.model.currentVizID);
+                    if (viz) {
+                        var vizObject = viz.vizObject;
+                        var currentAttributeType = vizObject.currentAttributeType;
+                        var attributeTypes = vizObject
+                            .getAttributeTypes();
+                        var array = [];
+                        var patient = patientData.getAttribute(
+                            patientData.KEY_PATIENT);
+                        if (currentAttributeType ===
+                                attributeTypes.DISEASES) {
+                            array = patient.diseases.map(function(obj) {
+                                return obj.name;
+                            });
+                        } else if (currentAttributeType ===
+                                attributeTypes.MEDICATIONS) {
+                            array = patient.medications.map(function(obj) {
+                                return obj.name;
+                            });
+                        }
+
+                        var index = array.indexOf(name);
+                        return (index === -1) ?
+                            "markPatientAttribute" :
+                            "markPatientAttribute markPresent";
+                    }
                 }
 
-                var index = array.indexOf(name);
-                return (index === -1) ?
-                    "markPatientAttribute" :
-                    "markPatientAttribute markPresent";
+                return "markPatientAttribute";
             };
 
             // Set shared state and invoke a callback that uses it; We need to
@@ -475,13 +644,14 @@ moduleLayout.directive("directiveActionPanel",
             // both visualization creation and modification, each of these cases 
             // will pass their specific behaviour as a callback
             scope.chooseSpiralAttribute = function(
-                    callbackName, callBackArguments) {
+                    callbackName,
+                    callBackArguments) {
                 scope.patient = 
-                        patientData.getAttribute(patientData.KEY_PATIENT);
+                    patientData.getAttribute(patientData.KEY_PATIENT);
                 scope.defaultActionsList = 
-                        scope.patient.medications.map(function(obj) {
-                    return obj.name;
-                });
+                    scope.patient.medications.map(function(obj) {
+                        return obj.name;
+                    });
                 scope.callBackArguments = callBackArguments;
 
                 //
@@ -577,9 +747,25 @@ moduleLayout.directive("directiveActionPanel",
                 var viewNotRoot = !(nodes.isMaximized(
                     nodes.getRootNode().model.id));
                 if (rootHasNoChildren || viewNotRoot) {
-                    if (nodes.getCurrentNode().model.vizType ===
+                    var currentNode = nodes.getCurrentNode();
+                    if (currentNode.model.vizType ===
                             scope.vizType.HEAT_MAP) {
-                        var list = scope.currentAttributeType + "Names";
+                        var vizObject = nodes.getVizByIDs(
+                                currentNode.model.id,
+                                currentNode.model.currentVizID)
+                            .vizObject;
+                        var currentAttributeType = vizObject
+                            .currentAttributeType;
+                        var attributeTypes = vizObject
+                            .getAttributeTypes();
+
+                        var list = currentAttributeType + "Names";
+
+                        // Set the visualization's stored patient lists
+                        scope.selectedDiseases =
+                            vizObject.patientLists.diseases;
+                        scope.selectedMedications =
+                            vizObject.patientLists.medications;
 
                         // Attribute lists
                         html = '<div>' +
@@ -589,17 +775,17 @@ moduleLayout.directive("directiveActionPanel",
                                 'id="btnDiseases" ' +
                                 'class="btn btn-default" ' +
                                 'ng-class="isAttributeTypeActive(\'' + 
-                                    scope.attributeType.DISEASES + '\')" ' +
+                                    attributeTypes.DISEASES + '\')" ' +
                                 'ng-click="setAttributeType(\'' + 
-                                    scope.attributeType.DISEASES + '\')">' +
+                                    attributeTypes.DISEASES + '\')">' +
                                 'Doenças</button>' +
                             '<button type="button" ' +
                                 'id="btnMedications" ' +
                                 'class="btn btn-default" ' +
                                 'ng-class="isAttributeTypeActive(\'' + 
-                                    scope.attributeType.MEDICATIONS + '\')" ' +
+                                    attributeTypes.MEDICATIONS + '\')" ' +
                                 'ng-click="setAttributeType(\'' + 
-                                    scope.attributeType.MEDICATIONS + '\')">' +
+                                    attributeTypes.MEDICATIONS + '\')">' +
                                 'Medicações</button>' +
                             '</div>' +
                             '<p/>' +
@@ -639,23 +825,23 @@ moduleLayout.directive("directiveActionPanel",
                                 '</div>' +
                             '</div>' +
                         '</div>';
-                    } else if (nodes.getCurrentNode().model.vizType ===
+                    } else if (currentNode.model.vizType ===
                             scope.vizType.SPIRAL) {
                         scope.patient = 
                                 patientData.getAttribute(patientData.KEY_PATIENT);
                         scope.defaultActionsList = 
                                 scope.patient.medications.map(function(obj) {
-                            return obj.name;
-                        });
+                                    return obj.name;
+                                });
 
                         html = '<div>' +
-                            '<h4>Spiral actions</h4>' +
-                        '</div>';
+                                '<h4>Spiral actions</h4>' +
+                            '</div>';
                     } else {
                         html = "<span>TODO</span>";
                     }
                 // No specific options to be displayed;
-                // describe possible actions
+                // Describe possible actions
                 } else {
                     html = '<span>Pode <b>Maximizar</b> ( <img src="images/controls/black/maximize.svg" class="custom-btn-svg"> ) uma vista para configurar os atributos visíveis.</span>';
                 }
@@ -682,9 +868,9 @@ moduleLayout.directive("directiveActionPanel",
 }]);
 
 moduleLayout.directive("directivePanes",
-        ['$compile', '$timeout', 'utils', 'nodes', 'patientData',
+        ['$compile', 'utils', 'nodes', 'patientData',
             'visualizations', 'HeatMapVisualization', 'SpiralVisualization',
-        function($compile, $timeout, utils, nodes, patientData,
+        function($compile, utils, nodes, patientData,
             visualizations, HeatMapVisualization, SpiralVisualization) {
 	return { 
         scope: true,
@@ -872,7 +1058,8 @@ moduleLayout.directive("directivePanes",
                 nodes.updateViz({
                     nodeID: id,
                     vizID: SpiralVisualization.prototype.makeID(),
-                    currentMedication: scope.currentMedication.name
+                    currentMedication: scope.currentMedication.name,
+                    skipCreation: false
                 });
 
                 // Maximize view in order for added visualizations to be seen
@@ -899,7 +1086,8 @@ moduleLayout.directive("directivePanes",
                 // Untrack in node visualizations
                 nodes.removeViz({
                     nodeID: elementProperties.nodeID,
-                    vizID: elementProperties.vizID
+                    vizID: elementProperties.vizID,
+                    skipCreation: true
                 });
 
                 scope.APIActionPanel.makeDefaultActions();
@@ -957,7 +1145,7 @@ moduleLayout.directive("directivePanes",
             var makeSpirals = function(node) {
                 var id = node.model.id;
                 var spirals = node.model.vizs;
-                if (spirals.length === 0) {
+                if ((!node.model.skipCreation) && (spirals.length === 0)) {
                     var vizID = SpiralVisualization.prototype.makeID();
                     nodes.updateViz({
                         nodeID: id,
@@ -966,14 +1154,25 @@ moduleLayout.directive("directivePanes",
                     });
                     makeSpiral(id, vizID);
                 } else {
+                    var isAnyVizChecked = false;
                     for (var i = 0; i < spirals.length; i++) {
                         // Draw all spirals
-                        if (nodes.getCurrentNode().model.id === id) {
-                            makeSpiral(id, spirals[i].id);
-                        // Draw checked spirals
-                        } else if (spirals[i].isChecked) {
+                        if ((nodes.getCurrentNode().model.id === id) ||
+                                // Draw checked spirals
+                                (spirals[i].isChecked)) {
+                            isAnyVizChecked = true;
                             makeSpiral(id, spirals[i].id);
                         }
+                    }
+
+                    if (spirals.length === 0)
+                        return;
+
+                    // If no checked visualizations where found, automatically
+                    // check the first one
+                    if (!isAnyVizChecked) {
+                        spirals[0].isChecked = true;
+                        makeSpiral(id, spirals[0].id);
                     }
                 }
             };
@@ -1066,8 +1265,9 @@ moduleLayout.directive("directivePanes",
             var makeSpiral = function(id, vizID) {
                 // If it's the only visualization in the view,
                 // consider it checked
-                // FIXME: length never 0
                 var isChecked = (nodes.getVizs(id).length < 2);
+
+                // Reuse visualization object if it exists
                 var viz = nodes.getVizByIDs(id, vizID);
                 var spiralObject;
                 var isNotCreated = !(viz.vizObject);
@@ -1080,45 +1280,55 @@ moduleLayout.directive("directivePanes",
                     isChecked = isChecked || viz.isChecked;
                     spiralObject = viz.vizObject;
                 }
+                
+                var isMaximized = nodes.isMaximized(id);
+
+                // NOTE: Due to the maximized view check, we assume all
+                // defined handlers for each button will only work for
+                // the current view's node
+                var buttonsHTML = "";
+                if (isMaximized) {
+                    buttonsHTML += utils.makeImgButton({
+                        id:     vizID,
+                        nodeID: id,
+                        method: "updateFromSpiralAttribute($event)",
+                        title:  "Substituir atributo",
+                        img:    "images/controls/config.svg"
+                    }) +
+                    utils.makeImgButton({
+                        id:     vizID,
+                        nodeID: id,
+                        method: "joinSpiral($event)",
+                        title:  "Juntar Espirais",
+                        img:    "images/controls/drag.svg"
+                    }) +
+                    utils.makeImgButton({
+                        id:           vizID,
+                        nodeID:       id,
+                        checkable:    true,
+                        method:       "togglePinnedSpiral($event)",
+                        title:        "Marcar Espiral como visualização principal",
+                        img:          "images/controls/pin.svg",
+                        isChecked:    isChecked,
+                        clazzChecked: "custom-btn-checked",
+                        titleChecked: "Desmarcar Espiral como visualização principal",
+                        imgChecked:   "images/controls/checked.svg"
+                    }) +
+                    utils.makeImgButton({
+                        id:     vizID,
+                        nodeID: id,
+                        method: "removeSpiral($event)",
+                        title:  "Remover Espiral",
+                        img:    "images/controls/remove.svg"
+                    });
+                }
 
                 var html = '<div ' +
                     'id="' + vizID + '" ' +
                     'data-node-id="' + id + '" ' +
                     'class="viz-spiral">' +
                     '<div style="display: block">' + 
-                        utils.makeImgButton({
-                            id:     vizID,
-                            nodeID: id,
-                            method: "updateFromSpiralAttribute($event)",
-                            title:  "Substituir atributo",
-                            img:    "images/controls/config.svg"
-                        }) +
-                        utils.makeImgButton({
-                            id:     vizID,
-                            nodeID: id,
-                            method: "joinSpiral($event)",
-                            title:  "Juntar Espirais",
-                            img:    "images/controls/drag.svg"
-                        }) +
-                        utils.makeImgButton({
-                            id:           vizID,
-                            nodeID:       id,
-                            checkable:    true,
-                            method:       "togglePinnedSpiral($event)",
-                            title:        "Marcar Espiral como visualização principal",
-                            img:          "images/controls/pin.svg",
-                            isChecked:    isChecked,
-                            clazzChecked: "custom-btn-checked",
-                            titleChecked: "Desmarcar Espiral como visualização principal",
-                            imgChecked:   "images/controls/checked.svg"
-                        }) +
-                        utils.makeImgButton({
-                            id:     vizID,
-                            nodeID: id,
-                            method: "removeSpiral($event)",
-                            title:  "Remover Espiral",
-                            img:    "images/controls/remove.svg"
-                        }) +
+                        buttonsHTML +
                     // FIXME: remove
                     vizID +
                     '</div>' +
@@ -1135,8 +1345,12 @@ moduleLayout.directive("directivePanes",
                         '</div>' +
                     '</div>' +
                 '</div>';
+
+                // TODO: getViz failing to find some id, investigate if
+                // we need to clone scope for each spiral
+                var targetHTML = $compile(html)(scope);
                 var target = angular.element('#' + id);
-                target.append($compile(html)(scope));
+                target.append(targetHTML);
 
                 // Add d3 elements
                 if (isNotCreated) {
@@ -1151,7 +1365,8 @@ moduleLayout.directive("directivePanes",
                     vizID,
                     spiralObject);
 
-                spiralObject.modifyDetailsVisibility(nodes.isMaximized(id));
+                // All elements created, now set their visibility
+                spiralObject.modifyDetailsVisibility(isMaximized);
 
                 // Save visualization for d3 updates
                 nodes.updateViz({
@@ -1162,6 +1377,28 @@ moduleLayout.directive("directivePanes",
                 });
             };
 
+            var setMatrixType = function(nodeID, vizID, type) {
+                var node = nodes.getRootNode().first(function (node1) {
+                    return node1.model.id === nodeID;
+                });
+                var viz = nodes.getVizByIDs(nodeID, node.model.currentVizID);
+                viz.vizObject.switchRenderer(nodeID, vizID, type);
+            };
+
+            var isMatrixTypeActive = function(nodeID, vizID, type) {
+                if (nodes.isMaximized(nodeID)) {
+                    var node = nodes.getRootNode().first(function (node1) {
+                        return node1.model.id === nodeID;
+                    });
+                    var viz = nodes.getVizByIDs(nodeID, node.model.currentVizID);
+                    return (viz.vizObject.isRendererActive(type)) ?
+                        "buttonSelected" :
+                        "";
+                } else {
+                    return "";
+                }
+            };
+
             // Two step creation: 
             // - first, angular elements we need for d3 to use;
             // - then, d3 elements
@@ -1170,35 +1407,79 @@ moduleLayout.directive("directivePanes",
                 // We assume a node will only have one heatmap
                 var heatMap = node.model.vizs[0];
                 var heatMapID;
-                var heatMapObject;
+                var vizObject;
                 var isNotCreated = !(heatMap);
                 if (isNotCreated) {
                     heatMapID = HeatMapVisualization.prototype.makeID();
-                    heatMapObject = new HeatMapVisualization({
+                    vizObject = new HeatMapVisualization({
                         diseases: scope.selectedDiseases,
                         medications: scope.selectedMedications
                     });
                 } else {
                     heatMapID = heatMap.id;
-                    heatMapObject = heatMap.vizObject;
+                    vizObject = heatMap.vizObject;
                 }
 
                 var html = '<div ' +
-                    'id="' + heatMapID + '" ' +
-                    'data-node-id="' + id + '">' +
-                    // FIXME: remove
-                    '<div style="display: block">' + 
-                    heatMapID +
-                    '</div>' +
+                        'id="' + heatMapID + '" ' +
+                        'data-node-id="' + id + '">' +
+                        // FIXME: remove
+                        '<div style="display: block">' + 
+                            heatMapID +
+                        '</div>' +
+                        // Matrix type switching
+                        '<div class="btn-group" ' +
+                            'role="group" aria-label="...">' +
+                            '<button type="button" ' +
+                                'id="' + heatMapID + '-type-pairs" ' +
+                                'class="btn btn-default" ' +
+                                'ng-class="isMatrixTypeActive(\'' + 
+                                    id + '\', \'' +
+                                    heatMapID + '\', \'' +
+                                    'DIM' + '\')" ' +
+                                'ng-click="setMatrixType(\'' + 
+                                    id + '\', \'' +
+                                    heatMapID + '\', \'' +
+                                    'DIM' + '\')" ' +
+                                '>' +
+                                'Combinar pares distintos</button>' +
+                            '<button type="button" ' +
+                                'id="' + heatMapID + '-type-all" ' +
+                                'class="btn btn-default" ' +
+                                'ng-class="isMatrixTypeActive(\'' + 
+                                    id + '\', \'' +
+                                    heatMapID + '\', \'' +
+                                    'SIM' + '\')" ' +
+                                'ng-click="setMatrixType(\'' + 
+                                    id + '\', \'' +
+                                    heatMapID + '\', \'' +
+                                    'SIM' + '\')" ' +
+                                '>' +
+                                'Combinar todos</button>' +
+                        '</div>' +
                     '</div>';
+
+                var targetScope = nodes.scopeCloneWithHandlers(
+                    scope,
+                    targetScope,
+                    [ {
+                        name: "isMatrixTypeActive",
+                        handler: isMatrixTypeActive
+                    }, {
+                        name: "setMatrixType",
+                        handler: setMatrixType
+                    }
+                ]);
+
+                var targetHTML = $compile(html)(targetScope);
                 var target = angular.element('#' + id);
-                target.append($compile(html)(scope));
+                target.append(targetHTML);
 
                 // Add d3 elements
                 if (isNotCreated) {
-                    heatMapObject.make(id, heatMapID);
+                    vizObject.make(id, heatMapID);
                 } else {
-                    heatMapObject.remake(id, heatMapID);
+                    vizObject.remake(id, heatMapID);
                 }
 
                 // Save visualization for d3 updates
@@ -1206,23 +1487,37 @@ moduleLayout.directive("directivePanes",
                     nodeID: id,
                     vizID: heatMapID,
                     currentVizID: heatMapID,
-                    vizObject: heatMapObject
+                    vizObject: vizObject,
+                    nodeHTML: targetHTML,
+                    nodeScope: targetScope
                 });
             };
 
             // Make html node layout
+            var currentScope;
+            var currentHTML;
             scope.updateLayout = function() {
+                // Remove previous scope and DOM elements
+                if (currentScope)
+                    currentScope.$destroy();
+                if (currentHTML)
+                    currentHTML.remove();
+
                 // No nodes available: make first view functionality
                 if (nodes.getCurrentNode() === undefined) {
-                    // There may be a previous view: nuke the layout
-                    element.html($compile('')(scope));
+                    // There may be a previous view: make empty layout
+                    currentScope = scope.$new();
+                    currentHTML = $compile('')(currentScope);
+                    element.html(currentHTML);
 
                     scope.APIActionPanel.makeViewChooser();
                 } else {
-                    // Generate views
-                    element.html($compile(
+                    // Make views
+                    currentScope = scope.$new();
+                    currentHTML = $compile(
                         makeChildrenLayout(nodes.getCurrentNode())
-                    )(scope));
+                    )(currentScope);
+                    element.html(currentHTML);
 
                     // Insert visualizations into generated views
                     nodes.getCurrentNode().walk(function(node) {
@@ -1264,6 +1559,8 @@ moduleLayout.directive("directivePanes",
                 // Cancel any pending splits
                 scope.APIActionPanel.cancelSplit();
 
+                nodes.detachNode(node);
+
                 // Update parent
                 var parentNode = node.parent;
                 if (parentNode !== undefined) {
@@ -1294,6 +1591,8 @@ moduleLayout.directive("directivePanes",
                             node.parent = nodes.makeNode(otherChildNode.model);
                         }
                     }
+
+                    nodes.detachNode(otherChildNode);
 
                     scope.updateLayout();
                 } else {
@@ -1359,6 +1658,7 @@ moduleLayout.directive("directivePanes",
                         vizType: vizType,
                         vizs: [],
                         currentVizID: undefined,
+                        skipCreation: false,
                         children: []
                     }));
                 } else {
@@ -1374,6 +1674,7 @@ moduleLayout.directive("directivePanes",
                             vizType: node.model.vizType,
                             vizs: node.model.vizs,
                             currentVizID: node.model.currentVizID,
+                            skipCreation: true,
                             children: []
                         }));
                         node.addChild(nodes.makeNode({
@@ -1383,8 +1684,11 @@ moduleLayout.directive("directivePanes",
                             vizType: vizType,
                             vizs: [],
                             currentVizID: undefined,
+                            skipCreation: false,
                             children: []
                         }));
+
+                        nodes.detachNode(node);
 
                         // Update child properties
                         // TODO: vizs need to update nodeID

@@ -91,6 +91,12 @@ digraph dependencies {
         "visualizations"[label="visualizations"]
         "visualizations" -> "directivePanes"
       
+        "HeatMapVisualization"[label="HeatMapVisualization"]
+        "HeatMapVisualization" -> "directivePanes"
+      
+        "SpiralVisualization"[label="SpiralVisualization"]
+        "SpiralVisualization" -> "directivePanes"
+      
     
 
 

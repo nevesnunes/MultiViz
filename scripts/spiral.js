@@ -21,6 +21,7 @@ moduleVisualizations.factory('SpiralVisualization',
         // Patient attribute lists
         this.medications = options.medications;
         this.currentMedication = options.currentMedication;
+        this.currentAttributeType = attributeType.DISEASES;
         this.hasData = true;
 
         // Specific state is maintained in a separate object,
@@ -118,17 +119,25 @@ moduleVisualizations.factory('SpiralVisualization',
             }
         }
 
-        // No recorded data available
+        // Special case: Only one data point causes interval start and end to be
+        // the same, so we rectify that here
+        var startMoment = moment(patientMedications.startDate);
+        var endMoment = moment(patientMedications.endDate);
+        if (intervalStartMoment.diff(intervalEndMoment, 'days') === 0) {
+            intervalStartMoment = startMoment.clone();
+        }
+
+        // No recorded data available;
+        // Remember this check for visualization updates
         if (recordedFrequency.length === 0) {
-            // Remember this check for visualization updates
             this.hasData = false;
 
             this.visualizationRenderer.renderNoData();
             return;
+        } else {
+            this.hasData = true;
         }
 
-        var startMoment = moment(patientMedications.startDate);
-        var endMoment = moment(patientMedications.endDate);
         var countTimeSpan = endMoment.diff(startMoment, interval);
         // The time span should always be greater then zero
         countTimeSpan = Math.max(countTimeSpan, 1);
@@ -181,7 +190,10 @@ moduleVisualizations.factory('SpiralVisualization',
 
             // A recorded value in the current date is present:
             // Save it and advance to the next recorded date
-            if (diffDates === 0) {
+            if ((diffDates === 0) ||
+                // Special case: Recorded moment not reached by time span
+                // FIXME: dirty workaround
+                ((diffDates < 0) && (i == countTimeSpan - 1))) {
                 accumulatorBinDays++;
                 currentDateIndex++;
             }
@@ -354,6 +366,24 @@ moduleVisualizations.factory('SpiralVisualization',
         } else {
             this.visualizationRenderer.renderNoVisibleDetails();
         }
+    };
+
+    var attributeType = Object.freeze({
+        NONE: "none",
+        DISEASES: "diseases",
+        MEDICATIONS: "medications"
+    });
+
+    SpiralVisualization.prototype.isAttributeTypeActive = function(type) {
+        return this.currentAttributeType === type;
+    };
+
+    SpiralVisualization.prototype.getAttributeTypes = function(type) {
+        return attributeType;
+    };
+
+    SpiralVisualization.prototype.setCurrentAttributeType = function(type) {
+        this.currentAttributeType = type;
     };
 
     visualizations.validateInterface(

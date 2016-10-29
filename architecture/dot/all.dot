@@ -3,13 +3,13 @@ digraph dependencies {
 
     node[shape="component"]
     
+      "moduleVisualizations"[label="moduleVisualizations", color=1]
+    
       "moduleIndex"[label="moduleIndex", color=1]
     
       "moduleSplits"[label="moduleSplits", color=1]
     
       "moduleUtils"[label="moduleUtils", color=1]
-    
-      "moduleVisualizations"[label="moduleVisualizations", color=1]
     
       "moduleLayout"[label="moduleLayout", color=1]
     
@@ -18,17 +18,17 @@ digraph dependencies {
 
     
       
+        "moduleVisualizations" -> "moduleIndex"
+      
+        "moduleVisualizations" -> "moduleUtils"
+      
+    
+      
     
       
         "moduleSplits" -> "shagstrom.angular-split-pane"
       
     
-      
-    
-      
-        "moduleVisualizations" -> "moduleIndex"
-      
-        "moduleVisualizations" -> "moduleUtils"
       
     
       
@@ -50,6 +50,134 @@ digraph dependencies {
 
     node[shape="ellipse"]
 
+
+    
+      
+
+      
+
+      
+
+      
+        "HeatMapVisualization"[label="HeatMapVisualization", color=6]
+      
+        "SpiralVisualization"[label="SpiralVisualization", color=6]
+      
+        "visualizations"[label="visualizations", color=6]
+      
+
+
+      node[shape="cds"]
+
+      
+
+      
+        "directiveHeatMapTooltip"[label="directiveHeatMapTooltip", color=3]
+      
+        "directiveSpiralTooltip"[label="directiveSpiralTooltip", color=3]
+      
+
+
+
+
+
+      node[shape="ellipse"]
+      
+
+      
+        "moduleVisualizations" -> "directiveHeatMapTooltip"
+      
+        "moduleVisualizations" -> "directiveSpiralTooltip"
+      
+
+      
+
+      
+
+      
+        "moduleVisualizations" -> "HeatMapVisualization"
+      
+        "moduleVisualizations" -> "SpiralVisualization"
+      
+        "moduleVisualizations" -> "visualizations"
+      
+
+      
+
+
+
+
+
+
+
+
+
+
+
+      node[shape="ellipse",style="filled", color=8]
+      
+
+      
+        
+      
+        
+      
+
+      
+
+      
+
+      
+        
+          "visualizations"[label="visualizations"]
+          "visualizations" -> "HeatMapVisualization"
+        
+          "patientData"[label="patientData"]
+          "patientData" -> "HeatMapVisualization"
+        
+          "retrievePatientData"[label="retrievePatientData"]
+          "retrievePatientData" -> "HeatMapVisualization"
+        
+          "utils"[label="utils"]
+          "utils" -> "HeatMapVisualization"
+        
+          "nodes"[label="nodes"]
+          "nodes" -> "HeatMapVisualization"
+        
+      
+        
+          "visualizations"[label="visualizations"]
+          "visualizations" -> "SpiralVisualization"
+        
+          "patientData"[label="patientData"]
+          "patientData" -> "SpiralVisualization"
+        
+          "retrievePatientData"[label="retrievePatientData"]
+          "retrievePatientData" -> "SpiralVisualization"
+        
+          "utils"[label="utils"]
+          "utils" -> "SpiralVisualization"
+        
+          "nodes"[label="nodes"]
+          "nodes" -> "SpiralVisualization"
+        
+      
+        
+          "patientData"[label="patientData"]
+          "patientData" -> "visualizations"
+        
+          "retrievePatientData"[label="retrievePatientData"]
+          "retrievePatientData" -> "visualizations"
+        
+          "utils"[label="utils"]
+          "utils" -> "visualizations"
+        
+          "nodes"[label="nodes"]
+          "nodes" -> "visualizations"
+        
+      
+
+      
 
     
       
@@ -298,89 +426,6 @@ digraph dependencies {
       
 
       
-
-      
-
-      
-        "visualizations"[label="visualizations", color=6]
-      
-
-
-      node[shape="cds"]
-
-      
-
-      
-        "directiveHeatMapTooltip"[label="directiveHeatMapTooltip", color=3]
-      
-        "directiveSpiralTooltip"[label="directiveSpiralTooltip", color=3]
-      
-
-
-
-
-
-      node[shape="ellipse"]
-      
-
-      
-        "moduleVisualizations" -> "directiveHeatMapTooltip"
-      
-        "moduleVisualizations" -> "directiveSpiralTooltip"
-      
-
-      
-
-      
-
-      
-        "moduleVisualizations" -> "visualizations"
-      
-
-      
-
-
-
-
-
-
-
-
-
-
-
-      node[shape="ellipse",style="filled", color=8]
-      
-
-      
-        
-      
-        
-      
-
-      
-
-      
-
-      
-        
-          "patientData"[label="patientData"]
-          "patientData" -> "visualizations"
-        
-          "utils"[label="utils"]
-          "utils" -> "visualizations"
-        
-          "nodes"[label="nodes"]
-          "nodes" -> "visualizations"
-        
-      
-
-      
-
-    
-      
-
-      
         "controllerMainPanel"[label="controllerMainPanel", color=4]
       
         "controllerLayout"[label="controllerLayout", color=4]
@@ -476,6 +521,12 @@ digraph dependencies {
         
           "visualizations"[label="visualizations"]
           "visualizations" -> "directivePanes"
+        
+          "HeatMapVisualization"[label="HeatMapVisualization"]
+          "HeatMapVisualization" -> "directivePanes"
+        
+          "SpiralVisualization"[label="SpiralVisualization"]
+          "SpiralVisualization" -> "directivePanes"
         
       
 
