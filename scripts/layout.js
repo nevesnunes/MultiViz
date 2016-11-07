@@ -247,7 +247,8 @@ moduleLayout.controller('controllerMainPanel',
     $scope.patient = patientData.getAttribute(patientData.KEY_PATIENT);
     
     var retrievedLastVisit = new Date($scope.patient.lastVisit);
-    $scope.dateLastVisit = moment(retrievedLastVisit).format('YYYY/MM/DD');
+    $scope.dateLastVisit = moment(retrievedLastVisit).format('YYYY/MM/DD') +
+        " (" + $scope.patient.lastVisitPeriod + ")";
 }]);
 
 moduleLayout.directive("directiveMainPanel", function() {

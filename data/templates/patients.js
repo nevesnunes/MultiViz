@@ -25,18 +25,11 @@ var generator = (function() {
         return { name: element };
     };
 
-    var diseaseObjectGenerator = function(element) {
-        return {
-            name: element,
-            startDate: randomDate(new Date(2012, 0, 1), new Date())
-        };
-    };
-
     var genericFrequencies = [
-            'Anual',
-            'Mensal',
-            'Semanal',
-            'Diário'
+        'Anual',
+        'Mensal',
+        'Semanal',
+        'Diário'
     ];
 
     var makeRandomDays = function(frequency, startDate, endDate) {
@@ -99,6 +92,46 @@ var generator = (function() {
         console.log('days: ' + endMoment.diff(startMoment, 'days'));
     };
 
+    //
+    // Diseases
+    //
+    var diseases = [
+        'Artrite',
+        'Candidiase Oral',
+        'Doença Cardíaca Congénita',
+        'Doença da Tiroide',
+        'Doença Venérea',
+        'Enfarte Miocárdio',
+        'Febre Reumática',
+        'Gânglios aumentados de volume',
+        'Glaucoma',
+        'Osteoporose'
+    ];
+    var diseaseObjectGenerator = function(element) {
+        var startDate = randomDate(new Date(2012, 0, 1), new Date());
+        var endDate = randomDate(startDate, new Date());
+
+        return {
+            name: element,
+            startDate: startDate,
+            endDate: endDate
+        };
+    };
+
+    //
+    // Medications
+    //
+    var medications = [
+        'Anti-hipertensor',
+        'Broncodilatador',
+        'Anti-depressor',
+        'Anti-ácidos',
+        'Estatinas',
+        'Anti-diabéticos',
+        'Análgésicos',
+        'Aspirina',
+        'Esteróides'
+    ];
     var medicationObjectGenerator = function(element) {
         var startDate = randomDate(new Date(2012, 0, 1), new Date());
         var endDate = randomDate(startDate, new Date());
@@ -117,7 +150,19 @@ var generator = (function() {
         };
     };
 
-    var habits = ['Fruta', 'Biscoitos e bolos', 'Geleia e mel', 'Pastilhas com açúcar', 'Doces', 'Limonada e refrigerantes', 'Chá com açúcar', 'Café com açúcar'];
+    //
+    // Food
+    //
+    var habits = [
+        'Fruta',
+        'Biscoitos e bolos',
+        'Geleia e mel',
+        'Pastilhas com açúcar',
+        'Doces',
+        'Limonada e refrigerantes',
+        'Chá com açúcar',
+        'Café com açúcar'
+    ];
     var habitFrequencies = [
             { name: 'Nunca', value: null, factor: null },
             { name: 'Várias vezes por mês', value: 14, factor: 1 },
@@ -133,6 +178,103 @@ var generator = (function() {
         };
     };
 
+    //
+    // Higiene
+    //
+    var habitsHigiene = [
+        'Escova de dentes manual',
+        'Escova de dentes mecânica',
+        'Palitos de madeira',
+        'Palitos de plástico',
+        'Carvão vegetal',
+        'Pastilha elástica',
+        'Fio Dentário',
+        'Escovilhão Dentário',
+    ];
+    var habitsHigieneWithType = [
+        'Colutório',
+        'Prótese Dentária'
+    ];
+    var habitsHigieneBrushingFrequency;
+    var habitsHigieneObjectGenerator = function(element) {
+        // FIXME
+    };
+
+    //
+    // General
+    //
+    var habitsGeneral = [
+        'Fumador',
+        'Consumidor de Alcool',
+        'Consumidor de Estupefacientes'
+    ];
+    var habitsGeneralObjectGenerator = function(element) {
+        // FIXME
+    };
+
+    //
+    // Bio-Metrics
+    //
+    var bioMetricsLabExams = [
+        'Glicémia',
+        'Colestrol Total',
+        'HDL',
+        'LDL',
+        'Proteína C',
+        'Índice artériogénico'
+    ];
+    var bioMetricsExtraOralExams = [
+        'Configuração crâniofacial',
+        'Assimetrias ou alterações faciais',
+        'Dimensão vertical',
+        'Limitação dos movimentos mandibulares',
+        'Presença sons articulares',
+        'Sintomatologia dolorosa da ATM'
+    ];
+    var bioMetricsIntraOralExams = [
+        'Alterações dos tecidos moles',
+        'Hemorragia gengival',
+        'Mobilididade dentária',
+        'Alterações das estruturas dentárias'
+    ];
+    var bioMetricsComplementaryExams;
+    var bioMetricsObjectGenerator = function(element) {
+        // FIXME
+    };
+
+    //
+    // Diagnosis
+    //
+    var diagnosis;
+    var reasonOfVisit = [
+        'Revisão',
+        'Estético',
+        'Funcional',
+        'Algia'
+    ];
+    // FIXME
+
+    //
+    // Treatment Plan
+    //
+    var treatmentPlans = [
+        'MDP',
+        'Endodontia',
+        'Cirurgia',
+        'Dentisteria Operatória',
+        'Periodontologia',
+        'Reabilitação Oral',
+        'Implantologia',
+        'Odontopediatria',
+        'Odontogeriatria',
+        'Patologia Oral',
+        'Ortodontia'
+    ];
+    // FIXME
+
+    //
+    // Utility methods
+    //
     var arrayObjectIndexOf = function(myArray, searchTerm, property) {
         for (var i = 0, len = myArray.length; i < len; i++) {
             if (myArray[i][property] === searchTerm)
@@ -159,22 +301,48 @@ var generator = (function() {
         return array[~~(Math.random() * array.length)];
     };
 
-    var diseases = ['Artrite', 'Candidiase Oral', 'Doença Cardíaca Congénita', 'Doença da Tiroide', 'Doença Venérea', 'Enfarte Miocárdio', 'Febre Reumática', 'Gânglios aumentados de volume', 'Glaucoma', 'Osteoporose'];
-    var medications = ['Anti-hipertensor', 'Broncodilatador', 'Anti-depressor', 'Anti-ácidos', 'Estatinas', 'Anti-diabéticos', 'Análgésicos', 'Aspirina', 'Esteróides'];
 	var makeInstance = function() {
+        // ID
         var id = uuid.v1();
         var name =
                 pickRandomElement(firstNames) +
                 ' ' +
                 pickRandomElement(lastNames);
+
+        // Categories
 		var pickedDiseases = makeRandomArray(
                 diseases, diseaseObjectGenerator, "name");
 		var pickedMedications = makeRandomArray(
                 medications, medicationObjectGenerator, "name");
 		var pickedHabits = makeRandomArray(
                 habits, habitObjectGenerator, "name");
+
+        // Bio-Metrics
 		var age = Math.floor(Math.random() * (100 - 1)) + 1;
+        var ageGroup; // FIXME
+
+        // Last Visit
         var lastVisit = randomDate(new Date(2012, 0, 1), new Date());
+        var lastVisitPeriod = "";
+        var lastVisitMoment = moment(lastVisit);
+        var todayMoment = moment(new Date());
+        var diffLastVisitToTodayYears =
+                todayMoment.diff(lastVisitMoment, 'years');
+        var diffLastVisitToTodayMonths =
+                todayMoment.diff(lastVisitMoment, 'months');
+        if (diffLastVisitToTodayYears < 0) {
+            if (diffLastVisitToTodayMonths < 6) {
+                lastVisitPeriod = "Menos de 6 meses";
+            } else {
+                lastVisitPeriod = "6 a 12 meses";
+            }
+        } else if (diffLastVisitToTodayYears < 2) {
+            lastVisitPeriod = "Mais que 1 ano e menos que 2 anos";
+        } else if (diffLastVisitToTodayYears < 5) {
+            lastVisitPeriod = "Mais que 2 anos e menos que 5 anos";
+        } else {
+            lastVisitPeriod = "Mais que 5 anos";
+        }
 
 		return {
 			id: id,
@@ -183,7 +351,8 @@ var generator = (function() {
 			diseases: pickedDiseases,
 			medications: pickedMedications,
             habits: pickedHabits,
-            lastVisit: lastVisit
+            lastVisit: lastVisit,
+            lastVisitPeriod: lastVisitPeriod
 		};
 	};
 
