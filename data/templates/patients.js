@@ -213,9 +213,9 @@ var generator = (function() {
     };
 
     //
-    // Bio-Metrics
+    // Biomedical
     //
-    var bioMetricsLabExams = [
+    var biomedicalLabExams = [
         'Glicémia',
         'Colestrol Total',
         'HDL',
@@ -223,7 +223,7 @@ var generator = (function() {
         'Proteína C',
         'Índice artériogénico'
     ];
-    var bioMetricsExtraOralExams = [
+    var biomedicalExtraOralExams = [
         'Configuração crâniofacial',
         'Assimetrias ou alterações faciais',
         'Dimensão vertical',
@@ -231,14 +231,14 @@ var generator = (function() {
         'Presença sons articulares',
         'Sintomatologia dolorosa da ATM'
     ];
-    var bioMetricsIntraOralExams = [
+    var biomedicalIntraOralExams = [
         'Alterações dos tecidos moles',
         'Hemorragia gengival',
         'Mobilididade dentária',
         'Alterações das estruturas dentárias'
     ];
-    var bioMetricsComplementaryExams;
-    var bioMetricsObjectGenerator = function(element) {
+    var biomedicalComplementaryExams;
+    var biomedicalObjectGenerator = function(element) {
         // FIXME
     };
 
@@ -317,7 +317,7 @@ var generator = (function() {
 		var pickedHabits = makeRandomArray(
                 habits, habitObjectGenerator, "name");
 
-        // Bio-Metrics
+        // Biomedical
 		var age = Math.floor(Math.random() * (100 - 1)) + 1;
         var ageGroup; // FIXME
 
