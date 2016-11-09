@@ -164,12 +164,12 @@ var generator = (function() {
         'Café com açúcar'
     ];
     var habitFrequencies = [
-            { name: 'Nunca', value: null, factor: null },
-            { name: 'Várias vezes por mês', value: 14, factor: 1 },
-            { name: 'Uma vez por semana', value: 7, factor: 1 },
-            { name: 'Várias vezes por semana', value: 3, factor: 1 },
-            { name: 'Todos os dias', value: 1, factor: 1 },
-            { name: 'Várias vezes ao dia', value: 1, factor: 2 },
+        { name: 'Nunca', value: null, factor: null },
+        { name: 'Várias vezes por mês', value: 14, factor: 1 },
+        { name: 'Uma vez por semana', value: 7, factor: 1 },
+        { name: 'Várias vezes por semana', value: 3, factor: 1 },
+        { name: 'Todos os dias', value: 1, factor: 1 },
+        { name: 'Várias vezes ao dia', value: 1, factor: 2 },
     ];
     var habitObjectGenerator = function(element) {
         return {
@@ -192,9 +192,26 @@ var generator = (function() {
         'Escovilhão Dentário',
     ];
     var habitsHigieneWithType = [
-        'Colutório',
-        'Prótese Dentária'
+        { name: 'Colutório', type: null, specifyDuration: false },
+        { name: 'Prótese Dentária',
+            type: [
+                'Fixa sobre dentes',
+                'Fixa sobre implantes',
+                'Prótese removivel esquelética',
+                'Prótese removivel acrílica'
+            ],
+            specifyDuration: true
+        }
     ];
+    var habitHigieneFrequencies = [
+        { name: 'Nunca', value: null, factor: null },
+        { name: 'Uma vez por mês', value: 30, factor: 1 },
+        { name: '2-3 vezes por mês', value: 14, factor: 1 },
+        { name: '1 vez por semana', value: 7, factor: 1 },
+        { name: '2-6 vezes por semana', value: 2, factor: 1 },
+        { name: '1 vez por dia', value: 1, factor: 1 },
+        { name: '2 ou mais vezes ao dia', value: 1, factor: 2 },
+    ]; //FIXME: values
     var habitsHigieneBrushingFrequency;
     var habitsHigieneObjectGenerator = function(element) {
         // FIXME
@@ -246,13 +263,24 @@ var generator = (function() {
     // Diagnosis
     //
     var diagnosis;
+    var lastDentalCorrectionDate;
+    var rangeTeethPain = [0, 10]; // 10 = Worst pain possible
+    var reasonOfLastVisit = [
+        { name: 'Aconselhamento', hasDescription: false },
+        { name: 'Dor ou complicações com os dentes, gengivas ou boca',
+            hasDescription: true },
+        { name: 'Tratamento', hasDescription: true },
+        { name: 'Check-up de rotina', hasDescription: false }
+    ];
     var reasonOfVisit = [
         'Revisão',
         'Estético',
         'Funcional',
         'Algia'
     ];
-    // FIXME
+    var diagnosisObjectGenerator = function(element) {
+        // FIXME
+    };
 
     //
     // Treatment Plan
@@ -270,7 +298,9 @@ var generator = (function() {
         'Patologia Oral',
         'Ortodontia'
     ];
-    // FIXME
+    var treatmentObjectGenerator = function(element) {
+        // FIXME
+    };
 
     //
     // Utility methods
@@ -319,7 +349,26 @@ var generator = (function() {
 
         // Biomedical
 		var age = Math.floor(Math.random() * (100 - 1)) + 1;
-        var ageGroup; // FIXME
+        var ageGroup;
+        if (age >= 16 && age <= 25)
+            ageGroup = "16-25";
+        else if (age >= 26 && age <= 35)
+            ageGroup = "26-35";
+        else if (age >= 36 && age <= 45)
+            ageGroup = "36-45";
+        else if (age >= 46 && age <= 55)
+            ageGroup = "46-55";
+        else if (age >= 56 && age <= 65)
+            ageGroup = "56-65";
+        else if (age >= 66 && age <= 75)
+            ageGroup = "66-75";
+        else if (age >= 76 && age <= 85)
+            ageGroup = "76-85";
+        else if (age >= 86 && age <= 95)
+            ageGroup = "86-95";
+        else
+            ageGroup = ">96";
+        // FIXME: Add more
 
         // Last Visit
         var lastVisit = randomDate(new Date(2012, 0, 1), new Date());
@@ -348,6 +397,7 @@ var generator = (function() {
 			id: id,
 			name: name,
 			age: age,
+			ageGroup: ageGroup,
 			diseases: pickedDiseases,
 			medications: pickedMedications,
             habits: pickedHabits,
