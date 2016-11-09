@@ -139,6 +139,7 @@ moduleVisualizations.factory('SpiralVisualization',
         }
 
         var countTimeSpan = endMoment.diff(startMoment, interval);
+
         // The time span should always be greater then zero
         countTimeSpan = Math.max(countTimeSpan, 1);
 
@@ -165,6 +166,7 @@ moduleVisualizations.factory('SpiralVisualization',
             }
             this.binning = binInterval;
         }
+
         // The difference for the bin interval may be zero, but the time span
         // should always be greater then zero
         binTimeSpan = Math.max(binTimeSpan, 1);
@@ -176,7 +178,8 @@ moduleVisualizations.factory('SpiralVisualization',
         else if (binInterval === 'months')
             period = 12;
 
-        // Populate data by checking if values are present for each given moment
+        // Populate data by checking if values are present
+        // for each possible moment
         var data = [];
         var brushedData = [];
         var currentMoment = startMoment.clone();	
@@ -191,26 +194,39 @@ moduleVisualizations.factory('SpiralVisualization',
             // A recorded value in the current date is present:
             // Save it and advance to the next recorded date
             if ((diffDates === 0) ||
-                // Special case: Recorded moment not reached by time span
-                // FIXME: dirty workaround
-                ((diffDates < 0) && (i == countTimeSpan - 1))) {
+                    // Recorded moment not reached by time span
+                    // FIXME: dirty workaround
+                    ((i == countTimeSpan - 1) && (diffDates < 0))) {
                 accumulatorBinDays++;
                 currentDateIndex++;
+            }
+
+            // The last recorded index may be outside the points considered in
+            // the time span, so we adjust the count to consider this index
+            // FIXME: dirty workaround
+            if ((i == countTimeSpan - 1) &&
+                    (currentDateIndex < recordedFrequency.length)) {
+                countTimeSpan += 1;
             }
 
             // The bin interval ended or point limit reached:
             // Add accumulated values to data
             if ((diffBinDate === 0) || (i == countTimeSpan - 1)) {
+                // Last bin ends in recorded last date
+                if (i == countTimeSpan - 1)
+                    currentBinMoment = recordedMoment.clone();
+
                 var startDateString = previousBinMoment.format('YYYY/MM/DD');
                 var endDateString = currentBinMoment.format('YYYY/MM/DD');
-                var dateString = startDateString;
+                var dateString;
                 if (binFactor > 0) {
-                    dateString += ' - ';
-                    dateString += endDateString;
+                    dateString = startDateString + ' - ' + endDateString;
+                } else {
+                    dateString = endDateString;
                 }
 
                 // If moment is contained in the brush interval, add date to
-                // brushed data container
+                // brushed data
                 if ((currentMoment.diff(intervalStartMoment, interval) >= 0) &&
                         (currentMoment.diff(intervalEndMoment, interval) <= 0)) {
                     brushedData.push({
@@ -238,7 +254,7 @@ moduleVisualizations.factory('SpiralVisualization',
                 currentBinMoment.add(1, binInterval);
             }
 
-            // Advance to the next expected date
+            // Advance to the next possible date
             currentMoment.add(1, interval);	
         }
 

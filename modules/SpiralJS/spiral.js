@@ -398,8 +398,8 @@ Spiral.prototype.render = function(reusePaths) {
         var brushed = function() {
             option.isIntervalBeingChanged = false;
 
-            // ignore brush-by-zoom
             if ((d3.event.sourceEvent && 
+                    // Ignore brush-by-zoom
                     d3.event.sourceEvent.type === "zoom") ||
                     // Ignore empty selections.
                     (!d3.event.selection)) {
@@ -415,11 +415,13 @@ Spiral.prototype.render = function(reusePaths) {
             } else {
                 var d0 = d3.event.selection.map(x2.invert),
                     d1 = d0.map(d3.timeDay.round);
+
                 // Record the new dates to be used when calculating new bins
                 option.intervalDates = [
                     moment(d1[0]),
                     moment(d1[1])
                 ];
+
                 // Record selection coordinates in order to restore them
                 // after the new bins are made
                 option.intervalPos = [
