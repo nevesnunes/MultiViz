@@ -368,6 +368,9 @@ var generator = (function() {
             ageGroup = "86-95";
         else
             ageGroup = ">96";
+		var weight = Math.floor(Math.random() * (200 - 1)) + 1;
+		var height = Math.floor(Math.random() * (200 - 1)) + 1;
+        var IMC = height / (weight * weight);
         // FIXME: Add more
 
         // Last Visit

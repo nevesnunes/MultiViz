@@ -138,18 +138,12 @@ moduleVisualizations.factory('SpiralVisualization',
             this.hasData = true;
         }
 
-        var countTimeSpan = endMoment.diff(startMoment, interval);
-
-        // The time span should always be greater then zero
-        countTimeSpan = Math.max(countTimeSpan, 1);
-
         // Bin data if expected interval is too large;
         // If the user didn't set a specific binning, we compute the most
         // adequate one based on interval range
         var binFactor = 0;
         var binInterval = interval;
         var binTimeSpan = intervalEndMoment.diff(intervalStartMoment, interval);
-
         if (this.binning !== null) {
             while (visualizations.diffInterval(binInterval, this.binning) > 0) {
                 binFactor++;
@@ -183,45 +177,74 @@ moduleVisualizations.factory('SpiralVisualization',
         var data = [];
         var brushedData = [];
         var currentMoment = startMoment.clone();	
-        var previousBinMoment = currentMoment.clone();
-        var currentBinMoment = previousBinMoment.clone().add(1, binInterval);
+        var previousBinMoment = moment(recordedFrequency[0]);
+        var currentBinMoment;
+
+        // If our bin interval is a single value, then the previous and
+        // current bin moments are the same
+        if (binFactor > 0) {
+            currentBinMoment = previousBinMoment.clone().add(1, binInterval);
+        } else {
+            currentBinMoment = previousBinMoment.clone();
+        }
+
+        // Instead of relying in time difference between the
+        // start moment and the end moment, we compute the difference between the
+        // current moment and the last recorded moment.
+        // This way we avoid incorrect time span counting due to factors such as
+        // daylight saving time adjustments between dates.
+        var lastRecordedMoment = moment(recordedFrequency[
+            recordedFrequency.length - 1
+        ]);
+        var isBeforeEndDate = true;
+        var isFirstDate = false;
+        var isLastDate = false;
+
         var accumulatorBinDays = 0;
-        for (var i = 0, currentDateIndex = 0; i < countTimeSpan; i++) {
+        for (var i = 0, currentDateIndex = 0; !isLastDate; i++) {
             var recordedMoment = moment(recordedFrequency[currentDateIndex]);
             var diffDates = currentMoment.diff(recordedMoment, interval);
             var diffBinDate = currentMoment.diff(currentBinMoment, interval);
+
+            isBeforeEndDate = 
+                (currentMoment.diff(lastRecordedMoment, interval) <= 0);
+            isFirstDate = (currentDateIndex === 0);
+            isLastDate = (currentDateIndex == recordedFrequency.length - 1);
 
             // A recorded value in the current date is present:
             // Save it and advance to the next recorded date
             if ((diffDates === 0) ||
                     // Recorded moment not reached by time span
                     // FIXME: dirty workaround
-                    ((i == countTimeSpan - 1) && (diffDates < 0))) {
+                    ((!isBeforeEndDate || isLastDate) && (diffDates < 0))) {
                 accumulatorBinDays++;
                 currentDateIndex++;
             }
 
-            // The last recorded index may be outside the points considered in
-            // the time span, so we adjust the count to consider this index
-            // FIXME: dirty workaround
-            if ((i == countTimeSpan - 1) &&
-                    (currentDateIndex < recordedFrequency.length)) {
-                countTimeSpan += 1;
-            }
-
             // The bin interval ended or point limit reached:
             // Add accumulated values to data
-            if ((diffBinDate === 0) || (i == countTimeSpan - 1)) {
-                // Last bin ends in recorded last date
-                if (i == countTimeSpan - 1)
+            if ((diffBinDate === 0) || isLastDate) {
+                // First and last bins should limit interval with recorded date
+                if (isFirstDate || isLastDate)
                     currentBinMoment = recordedMoment.clone();
 
-                var startDateString = previousBinMoment.format('YYYY/MM/DD');
-                var endDateString = currentBinMoment.format('YYYY/MM/DD');
+                var startDateString;
+                var endDateString;
                 var dateString;
                 if (binFactor > 0) {
+                    startDateString = previousBinMoment.format('YYYY/MM/DD');
+                    endDateString = currentBinMoment.format('YYYY/MM/DD');
                     dateString = startDateString + ' - ' + endDateString;
                 } else {
+                    // If our bin interval is a single value, then
+                    // use the recorded date, otherwise a user may think the
+                    // bin date is the recorded date
+                    if (accumulatorBinDays > 0) {
+                        startDateString = recordedMoment.format('YYYY/MM/DD');
+                    } else {
+                        startDateString = currentBinMoment.format('YYYY/MM/DD');
+                    }
+                    endDateString = startDateString;
                     dateString = endDateString;
                 }
 
