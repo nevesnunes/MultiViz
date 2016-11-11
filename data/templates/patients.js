@@ -163,7 +163,7 @@ var generator = (function() {
         'Chá com açúcar',
         'Café com açúcar'
     ];
-    var habitFrequencies = [
+    var habitsFrequencies = [
         { name: 'Nunca', value: null, factor: null },
         { name: 'Várias vezes por mês', value: 14, factor: 1 },
         { name: 'Uma vez por semana', value: 7, factor: 1 },
@@ -171,10 +171,10 @@ var generator = (function() {
         { name: 'Todos os dias', value: 1, factor: 1 },
         { name: 'Várias vezes ao dia', value: 1, factor: 2 },
     ];
-    var habitObjectGenerator = function(element) {
+    var habitsObjectGenerator = function(element) {
         return {
             name: element,
-            frequency: pickRandomElement(habitFrequencies)
+            frequency: pickRandomElement(habitsFrequencies)
         };
     };
 
@@ -203,7 +203,7 @@ var generator = (function() {
             specifyDuration: true
         }
     ];
-    var habitHigieneFrequencies = [
+    var habitsHigieneFrequencies = [
         { name: 'Nunca', value: null, factor: null },
         { name: 'Uma vez por mês', value: 30, factor: 1 },
         { name: '2-3 vezes por mês', value: 14, factor: 1 },
@@ -211,10 +211,14 @@ var generator = (function() {
         { name: '2-6 vezes por semana', value: 2, factor: 1 },
         { name: '1 vez por dia', value: 1, factor: 1 },
         { name: '2 ou mais vezes ao dia', value: 1, factor: 2 },
-    ]; //FIXME: values
+    ];
     var habitsHigieneBrushingFrequency;
     var habitsHigieneObjectGenerator = function(element) {
-        // FIXME
+        return {
+            name: element,
+            frequency: pickRandomElement(habitsHigieneFrequencies),
+            typedFrequency: pickRandomElementOrNone(habitsHigieneWithType)
+        };
     };
 
     //
@@ -225,8 +229,10 @@ var generator = (function() {
         'Consumidor de Alcool',
         'Consumidor de Estupefacientes'
     ];
-    var habitsGeneralObjectGenerator = function(element) {
-        // FIXME
+    var habitsGeneralObjectGenerator = function() {
+        return {
+            type: pickRandomElementOrNone(habitsGeneral)
+        };
     };
 
     //
@@ -255,8 +261,45 @@ var generator = (function() {
         'Alterações das estruturas dentárias'
     ];
     var biomedicalComplementaryExams;
-    var biomedicalObjectGenerator = function(element) {
-        // FIXME
+    var biomedicalObjectGenerator = function() {
+		var age = Math.floor(Math.random() * (100 - 1)) + 1;
+        var ageGroup;
+        if (age >= 16 && age <= 25)
+            ageGroup = "16-25";
+        else if (age >= 26 && age <= 35)
+            ageGroup = "26-35";
+        else if (age >= 36 && age <= 45)
+            ageGroup = "36-45";
+        else if (age >= 46 && age <= 55)
+            ageGroup = "46-55";
+        else if (age >= 56 && age <= 65)
+            ageGroup = "56-65";
+        else if (age >= 66 && age <= 75)
+            ageGroup = "66-75";
+        else if (age >= 76 && age <= 85)
+            ageGroup = "76-85";
+        else if (age >= 86 && age <= 95)
+            ageGroup = "86-95";
+        else
+            ageGroup = ">96";
+		var weight = Math.floor(Math.random() * (200 - 1)) + 1;
+		var height = Math.floor(Math.random() * (200 - 1)) + 1;
+
+        // Body-Mass Index
+        var BMI = height / (weight * weight);
+
+        // INR (viscosidade do sangue)
+        // FIXME: INR
+        
+        // FIXME: exams
+        
+        return {
+            age: age,
+            ageGroup: ageGroup,
+            weight: weight,
+            height: height,
+            BMI: BMI
+        };
     };
 
     //
@@ -266,11 +309,19 @@ var generator = (function() {
     var lastDentalCorrectionDate;
     var rangeTeethPain = [0, 10]; // 10 = Worst pain possible
     var reasonOfLastVisit = [
-        { name: 'Aconselhamento', hasDescription: false },
-        { name: 'Dor ou complicações com os dentes, gengivas ou boca',
-            hasDescription: true },
-        { name: 'Tratamento', hasDescription: true },
-        { name: 'Check-up de rotina', hasDescription: false }
+        {
+            name: 'Aconselhamento',
+            hasDescription: false
+        }, {
+            name: 'Dor ou complicações com os dentes, gengivas ou boca',
+            hasDescription: true
+        }, {
+            name: 'Tratamento',
+            hasDescription: true
+        }, {
+            name: 'Check-up de rotina',
+            hasDescription: false
+        }
     ];
     var reasonOfVisit = [
         'Revisão',
@@ -320,7 +371,11 @@ var generator = (function() {
             // Check if element wasn't already picked
             var element = pickRandomElement(array);
             if (arrayObjectIndexOf(pickedElements, element, property) === -1) {
-                pickedElements.push(objectGenerator(element));
+                var generatedObject = objectGenerator(element);
+                // Skip objects that have a null/undefined property
+                if (generatedObject[property]) {
+                    pickedElements.push(generatedObject);
+                }
             }
 		}
 
@@ -329,6 +384,11 @@ var generator = (function() {
 
     var pickRandomElement = function(array) {
         return array[~~(Math.random() * array.length)];
+    };
+
+    var pickRandomElementOrNone = function(array) {
+        var chance = Math.floor(Math.random() * (4 - 1)) + 1;
+        return (chance < 3) ? null : array[~~(Math.random() * array.length)];
     };
 
 	var makeInstance = function() {
@@ -345,33 +405,14 @@ var generator = (function() {
 		var pickedMedications = makeRandomArray(
                 medications, medicationObjectGenerator, "name");
 		var pickedHabits = makeRandomArray(
-                habits, habitObjectGenerator, "name");
+                habits, habitsObjectGenerator, "name");
+		var pickedHabitsHigiene = makeRandomArray(
+                habitsHigiene, habitsHigieneObjectGenerator, "name");
+        var pickedHabitsGeneral = makeRandomArray(
+                habitsGeneral, habitsGeneralObjectGenerator, "type");
 
         // Biomedical
-		var age = Math.floor(Math.random() * (100 - 1)) + 1;
-        var ageGroup;
-        if (age >= 16 && age <= 25)
-            ageGroup = "16-25";
-        else if (age >= 26 && age <= 35)
-            ageGroup = "26-35";
-        else if (age >= 36 && age <= 45)
-            ageGroup = "36-45";
-        else if (age >= 46 && age <= 55)
-            ageGroup = "46-55";
-        else if (age >= 56 && age <= 65)
-            ageGroup = "56-65";
-        else if (age >= 66 && age <= 75)
-            ageGroup = "66-75";
-        else if (age >= 76 && age <= 85)
-            ageGroup = "76-85";
-        else if (age >= 86 && age <= 95)
-            ageGroup = "86-95";
-        else
-            ageGroup = ">96";
-		var weight = Math.floor(Math.random() * (200 - 1)) + 1;
-		var height = Math.floor(Math.random() * (200 - 1)) + 1;
-        var IMC = height / (weight * weight);
-        // FIXME: Add more
+        var pickedBiomedicalAttributes = biomedicalObjectGenerator();
 
         // Last Visit
         var lastVisit = randomDate(new Date(2012, 0, 1), new Date());
@@ -399,11 +440,12 @@ var generator = (function() {
 		return {
 			id: id,
 			name: name,
-			age: age,
-			ageGroup: ageGroup,
+            biomedicalAttributes: pickedBiomedicalAttributes,
 			diseases: pickedDiseases,
 			medications: pickedMedications,
             habits: pickedHabits,
+            habitsHigiene: pickedHabitsHigiene,
+            habitsGeneral: pickedHabitsGeneral,
             lastVisit: lastVisit,
             lastVisitPeriod: lastVisitPeriod
 		};
