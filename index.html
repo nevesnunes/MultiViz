@@ -33,8 +33,8 @@
                                 </div>
                                 <p></p>
                                 <div class="table table-condensed table-bordered patient-table">
-                                    <div ng-repeat="patient in filteredAttributes = (patientList | filter:optionListModel.name)" ng-click="selectEntry($event, patient)">
-                                        <div ng-focus="focusedEntry($event, patient)" class="patient-table-entry" ng-class="isEntrySelected($index)">{{::patient.name}}</div>
+                                    <div ng-repeat="patient in filteredAttributes = (patientList | filter: optionListModel.name:optionListModel.id)" ng-click="selectEntry($event, patient)">
+                                        <div ng-focus="focusedEntry($event, patient)" class="patient-table-entry" ng-class="isEntrySelected($index)"><b>Nome: </b>{{::patient.name}} <b>ID: </b>{{::patient.id}}</div>
                                     </div>
                                 </div>
 
