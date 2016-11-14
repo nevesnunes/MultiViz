@@ -24,7 +24,8 @@ function Spiral(parameters) {
         tickMarkNumber: parameters.tickMarkNumber || [],
         tickMarkLabels: parameters.tickMarkLabels || [],
         color: parameters.color || 'black',
-        colors: parameters.colors || ["#bdbdbd","#969696","#737373","#525252","#252525","#000000"],
+        colors: parameters.colors ||
+            ["#bdbdbd","#969696","#737373","#525252","#252525","#000000"],
         functions: parameters.functions || {},
         currentMedication: parameters.currentMedication,
         intervalDates: [],
@@ -288,9 +289,14 @@ Spiral.prototype.render = function(reusePaths) {
         var dataExtent = d3.extent(option.spiralData, function(d) {
                 return d[2].value;
             });
-        var colorScale = d3.scaleQuantile()
+        var colorScaleSplitter = d3.scaleQuantile()
             .domain(dataExtent)
             .range(option.colors);
+        var colorScale = function(data) {
+            return (data === 0) ?
+                "#ffffff" :
+                colorScaleSplitter(data);
+        };
 
         var sectorsTip = d3.tip()
             .attr('class', 'tooltip tooltip-element tooltip-d3')
@@ -337,7 +343,7 @@ Spiral.prototype.render = function(reusePaths) {
         var gridHeight = gridWidth / 2;
         option.functions.makeLegend(
                 svg, 
-                colorScale, 
+                colorScaleSplitter, 
                 gridWidth, 
                 gridHeight,
                 option.padding, 
@@ -407,8 +413,8 @@ Spiral.prototype.render = function(reusePaths) {
         var brushed = function() {
             option.isIntervalBeingChanged = false;
 
-            // ignore brush-by-zoom
             if ((d3.event.sourceEvent && 
+                    // Ignore brush-by-zoom
                     d3.event.sourceEvent.type === "zoom") ||
                     // Ignore empty selections.
                     (!d3.event.selection)) {
@@ -424,11 +430,13 @@ Spiral.prototype.render = function(reusePaths) {
             } else {
                 var d0 = d3.event.selection.map(x2.invert),
                     d1 = d0.map(d3.timeDay.round);
+
                 // Record the new dates to be used when calculating new bins
                 option.intervalDates = [
                     moment(d1[0]),
                     moment(d1[1])
                 ];
+
                 // Record selection coordinates in order to restore them
                 // after the new bins are made
                 option.intervalPos = [

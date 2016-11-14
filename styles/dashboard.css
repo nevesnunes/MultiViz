@@ -2,9 +2,11 @@
  * Base structure
  */
 
+
 /* Move down content because we have a fixed navbar that is 50px tall */
+
 body {
-  padding-top: 50px;
+    padding-top: 50px;
 }
 
 
@@ -13,57 +15,69 @@ body {
  */
 
 .sub-header {
-  padding-bottom: 10px;
-  border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
 }
+
 
 /*
  * Top navigation
  * Hide default border to remove 1px line.
  */
+
 .navbar-fixed-top {
-  border: 0;
+    border: 0;
 }
+
 
 /*
  * Sidebar
  */
 
+
 /* Hide for mobile, show later */
+
 .sidebar {
-  display: none;
-}
-@media (min-width: 768px) {
-  .sidebar {
-    position: fixed;
-    top: 51px;
-    bottom: 0;
-    left: 0;
-    z-index: 1000;
-    display: block;
-    padding: 20px;
-    overflow-x: hidden;
-    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
-    background-color: #f5f5f5;
-    border-right: 1px solid #eee;
-  }
+    display: none;
 }
 
+@media (min-width: 768px) {
+    .sidebar {
+        position: fixed;
+        top: 51px;
+        bottom: 0;
+        left: 0;
+        z-index: 1000;
+        display: block;
+        padding: 20px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        /* Scrollable contents if viewport is shorter than content. */
+        background-color: #f5f5f5;
+        border-right: 1px solid #eee;
+    }
+}
+
+
 /* Sidebar navigation */
+
 .nav-sidebar {
-  margin-right: -21px; /* 20px padding + 1px border */
-  margin-bottom: 20px;
-  margin-left: -20px;
+    margin-right: -21px;
+    /* 20px padding + 1px border */
+    margin-bottom: 20px;
+    margin-left: -20px;
 }
-.nav-sidebar > li > a {
-  padding-right: 20px;
-  padding-left: 20px;
+
+.nav-sidebar>li>a {
+    padding-right: 20px;
+    padding-left: 20px;
 }
-.nav-sidebar > .active > a,
-.nav-sidebar > .active > a:hover,
-.nav-sidebar > .active > a:focus {
-  color: #fff;
-  background-color: #428bca;
+
+.nav-sidebar>.active>a,
+.nav-sidebar>.active>a:hover,
+.nav-sidebar>.active>a:focus {
+    color: #fff;
+    background-color: #428bca;
 }
 
 
@@ -72,11 +86,11 @@ body {
  */
 
 .main {
-  padding: 20px;
+    padding: 20px;
 }
 
 .main .page-header {
-  margin-top: 0;
+    margin-top: 0;
 }
 
 
@@ -85,26 +99,30 @@ body {
  */
 
 .placeholders {
-  margin-bottom: 30px;
-  text-align: center;
+    margin-bottom: 30px;
+    text-align: center;
 }
+
 .placeholders h4 {
-  margin-bottom: 0;
+    margin-bottom: 0;
 }
+
 .placeholder {
-  margin-bottom: 20px;
+    margin-bottom: 20px;
 }
+
 .placeholder img {
-  display: inline-block;
-  border-radius: 50%;
+    display: inline-block;
+    border-radius: 50%;
 }
+
 
 /*
  * Custom elements
  */
 
 .help {
-    cursor: help; 
+    cursor: help;
 }
 
 .discrete-link {
@@ -124,16 +142,17 @@ body {
 }
 
 .bold-text {
-  font-weight: bold;
+    font-weight: bold;
 }
 
 .custom-container-padding {
-  padding-left: 0; 
+    padding-left: 0;
 }
 
 .custom-container-width {
-  width: 100%;
+    width: 100%;
 }
+
 
 /* Action Panel */
 
@@ -160,9 +179,12 @@ body {
     padding-bottom: 10px;
 }
 
+
 /* Panes */
 
+
 /* Panes need all surrounding containers to impose minimum height */
+
 .panes {
     height: 100%;
     min-height: 100%;
@@ -174,17 +196,23 @@ body {
     margin-left: auto;
 }
 
-.main, .pretty-split-pane-frame {background: #ddd;}
+.main,
+.pretty-split-pane-frame {
+    background: #ddd;
+}
+
 
 /* 
  * Due to pane limitations, we display information in fixed containers,
  * forcing side panels and body to be adjusted.
  */
+
 .infobar {
     top: 50px;
     background: #fff;
     border-bottom: 1px solid grey;
-    z-index: 1001; /* below navbar */
+    z-index: 1001;
+    /* below navbar */
 }
 
 .bar-text {
@@ -203,6 +231,7 @@ body {
 body {
     padding-top: 50px;
 }
+
 
 /* Tables & Menus */
 
@@ -237,7 +266,7 @@ body {
 }
 
 .inline-wrapper {
-  display: inline-block;
+    display: inline-block;
 }
 
 .area {
@@ -264,6 +293,7 @@ rect.handle.handle--w:active {
     pointer-events: all;
 }
 
+
 /* Tooltips */
 
 .tooltip-element {
@@ -274,39 +304,46 @@ rect.handle.handle--w:active {
     border-radius: 6px;
     font-size: 11px;
     color: white;
-    opacity: 0.9; 
+    opacity: 0.9;
     font-family: sans-serif;
 }
 
 .tooltip {
-  position: fixed; /* fix occlusion issues */
+    position: fixed;
+    /* fix occlusion issues */
 }
 
-.tooltip > p {
-  text-align: left;
+.tooltip>p {
+    text-align: left;
 }
 
 .tooltip-inner {
-  max-width: 20em;
+    max-width: 20em;
 }
 
 .tooltip-wrapper {
-  display: inline-block; /* display: block works as well */
+    display: inline-block;
+    /* display: block works as well */
 }
 
 .fade {
-  transition: none;
+    -webkit-transition: opacity 0.1s ease-in-out;
+    -moz-transition: opacity 0.1s ease-in-out;
+    -ms-transition: opacity 0.1s ease-in-out;
+    -o-transition: opacity 0.1s ease-in-out;
+    transition: opacity 0.1s ease-in-out;
 }
 
 .tooltip-wrapper .btn[disabled] {
-  /* don't let button block mouse events from reaching wrapper */
-  pointer-events: none;
+    /* don't let button block mouse events from reaching wrapper */
+    pointer-events: none;
 }
 
 .tooltip-wrapper.disabled {
-  /* OPTIONAL pointer-events setting above blocks cursor setting, so set it here */
-  cursor: not-allowed;
+    /* OPTIONAL pointer-events setting above blocks cursor setting, so set it here */
+    cursor: not-allowed;
 }
+
 
 /* Creates a small triangle extender for the tooltip */
 
@@ -314,6 +351,11 @@ rect.handle.handle--w:active {
     border: 1px solid #000 !important;
     max-width: 20em;
     pointer-events: none;
+    -webkit-transition: opacity 0.1s ease-in-out;
+    -moz-transition: opacity 0.1s ease-in-out;
+    -ms-transition: opacity 0.1s ease-in-out;
+    -o-transition: opacity 0.1s ease-in-out;
+    transition: opacity 0.1s ease-in-out;
 }
 
 .tooltip-d3:after {
@@ -325,7 +367,9 @@ rect.handle.handle--w:active {
     pointer-events: none;
 }
 
+
 /* Westward tooltips */
+
 .tooltip-d3.w:after {
     content: "\25B6";
     margin: -6px 0 0 -1px;
@@ -334,7 +378,9 @@ rect.handle.handle--w:active {
     pointer-events: none;
 }
 
+
 /* Eastward tooltips */
+
 .tooltip-d3.e:after {
     content: "\25C0";
     margin: -6px 0 0 0;
@@ -343,7 +389,9 @@ rect.handle.handle--w:active {
     pointer-events: none;
 }
 
+
 /* Northward tooltips */
+
 .tooltip-d3.n:after {
     content: "\25BC";
     margin: -4px 0 0 0;
@@ -353,7 +401,9 @@ rect.handle.handle--w:active {
     pointer-events: none;
 }
 
+
 /* Southward tooltips */
+
 .tooltip-d3.s:after {
     content: "\25B2";
     margin: 0 0 1px 0;

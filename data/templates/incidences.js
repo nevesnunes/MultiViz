@@ -13,8 +13,29 @@ var generator = (function() {
 			return -1;
 		};
 
-		var diseases = ['Artrite', 'Candidiase Oral', 'Doença Cardíaca Congénita', 'Doença da Tiroide', 'Doença Venérea', 'Enfarte Miocárdio', 'Febre Reumática', 'Gânglios aumentados de volume', 'Glaucoma', 'Osteoporose'];
-		var medications = ['Anti-hipertensor', 'Broncodilatador', 'Anti-depressor', 'Anti-ácidos', 'Estatinas', 'Anti-diabéticos', 'Análgésicos', 'Aspirina', 'Esteróides'];
+		var diseases = [
+            'Artrite',
+            'Candidiase Oral',
+            'Doença Cardíaca Congénita',
+            'Doença da Tiroide',
+            'Doença Venérea',
+            'Enfarte Miocárdio',
+            'Febre Reumática',
+            'Gânglios aumentados de volume',
+            'Glaucoma',
+            'Osteoporose'
+        ];
+		var medications = [
+            'Anti-hipertensor',
+            'Broncodilatador',
+            'Anti-depressor',
+            'Anti-ácidos',
+            'Estatinas',
+            'Anti-diabéticos',
+            'Análgésicos',
+            'Aspirina',
+            'Esteróides'
+        ];
 
 		// Create pairs with all combinations of different attributes
 		var pairs = [];

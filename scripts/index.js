@@ -128,11 +128,16 @@ moduleIndex.controller('controllerAddData',
                 index: index,
                 id: data.id,
                 name: data.name,
-                age: data.age,
+                age: data.biomedicalAttributes.age,
+                ageGroup: data.biomedicalAttributes.ageGroup,
+                biomedicalAttributes: data.biomedicalAttributes,
                 diseases: data.diseases,
                 medications: data.medications,
                 habits: data.habits,
-                lastVisit: data.lastVisit
+                habitsHigiene: data.habitsHigiene,
+                habitsGeneral: data.habitsGeneral,
+                lastVisit: data.lastVisit,
+                lastVisitPeriod: data.lastVisitPeriod
             };
         });
         patientData.setData(patientData.KEY_PATIENTS, result);
@@ -145,10 +150,15 @@ moduleIndex.controller('controllerAddData',
                     id: obj.id,
                     name: obj.name,
                     age: obj.age,
+                    ageGroup: obj.ageGroup,
+                    biomedicalAttributes: obj.biomedicalAttributes,
                     diseases: obj.diseases,
                     medications: obj.medications,
                     habits: obj.habits,
-                    lastVisit: obj.lastVisit
+                    habitsHigiene: obj.habitsHigiene,
+                    habitsGeneral: obj.habitsGeneral,
+                    lastVisit: obj.lastVisit,
+                    lastVisitPeriod: obj.lastVisitPeriod
                 };
         };
 
