@@ -39,6 +39,9 @@ moduleVisualizations.factory('visualizations',
         buckets = customDarkGreys.length,
         colors = customDarkGreys;
 
+    var customGreens =
+            ["#c7e9c0","#a1d99b","#74c476","#41ab5d","#238b45","#005a32"];
+
     var processSelectedList = function(list) {
         return list.filter(function(obj) {
             return obj.selected;
@@ -197,6 +200,7 @@ moduleVisualizations.factory('visualizations',
     return {
         validateInterface: validateInterface,
         colors: colors,
+        customGreens: customGreens,
         processSelectedList: processSelectedList,
         diffInterval: diffInterval,
         nextInterval: nextInterval,

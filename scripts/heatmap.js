@@ -262,6 +262,15 @@ moduleVisualizations.factory('HeatMapVisualization',
         var diseaseNames = self.visualizationRenderer.diseaseNames;
         var medicationNames = self.visualizationRenderer.medicationNames;
 
+        // Patient attribute lists
+        var patient = patientData.getAttribute(patientData.KEY_PATIENT);
+        var patientDiseaseNames = patient.diseases.map(function(obj) {
+            return obj.name;
+        });
+        var patientMedicationNames = patient.medications.map(function(obj) {
+            return obj.name;
+        });
+
         // Label width must be wide enough to span all text
         var labelWidth = self.visualizationRenderer.longestNameLength * 8;
         var diseaseLabels = svg.selectAll(".rect-disease-label")
@@ -334,6 +343,12 @@ moduleVisualizations.factory('HeatMapVisualization',
                 return d.incidences;
             })])
             .range(visualizations.colors);
+        var colorScaleMarks = d3.scaleQuantile()
+            .domain([0, visualizations.buckets - 1,
+                    d3.max(filteredData, function(d) {
+                return d.incidences;
+            })])
+            .range(visualizations.customGreens);
 
         // Map data to a format easier to manage in cell selections
         var cellsData = filteredData.map(function(d) {
@@ -375,7 +390,12 @@ moduleVisualizations.factory('HeatMapVisualization',
                     return (1 + diseaseNames.indexOf(d.disease)) * self.gridHeight;
                 })
                 .style("fill", function(d) {
-                    return colorScale(d.incidences);
+                    var isPatientAttribute =
+                        (patientMedicationNames.indexOf(d.medication) !== -1) &&
+                        (patientDiseaseNames.indexOf(d.disease) !== -1);
+                    return (isPatientAttribute) ?
+                        colorScaleMarks(d.incidences) :
+                        colorScale(d.incidences);
                 })
                 .on("mouseover", function(d) {
                     cellsTip.show(d);
@@ -433,15 +453,6 @@ moduleVisualizations.factory('HeatMapVisualization',
                         .attr("class", "rect-disease-label rect-label");
                 });
         cells.exit().remove();
-
-        // Patient attribute lists
-        var patient = patientData.getAttribute(patientData.KEY_PATIENT);
-        var patientDiseaseNames = patient.diseases.map(function(obj) {
-            return obj.name;
-        });
-        var patientMedicationNames = patient.medications.map(function(obj) {
-            return obj.name;
-        });
 
         var labelData = data.map(function(d) {
             return {
@@ -531,6 +542,17 @@ moduleVisualizations.factory('HeatMapVisualization',
             self.visualizationRenderer.filteredSimilarityData;
         var similarityNames = self.visualizationRenderer.similarityNames;
 
+        // Patient attribute lists
+        var patient = patientData.getAttribute(patientData.KEY_PATIENT);
+        var patientDiseaseNames = patient.diseases.map(function(obj) {
+            return obj.name;
+        });
+        var patientMedicationNames = patient.medications.map(function(obj) {
+            return obj.name;
+        });
+        var patientSimilarityNames =
+            patientDiseaseNames.concat(patientMedicationNames);
+
         // Label width must be wide enough to span all text
         var labelWidth = self.visualizationRenderer.longestSimilarityNameLength *
             8;
@@ -571,17 +593,6 @@ moduleVisualizations.factory('HeatMapVisualization',
                     return d;
                 });
         attributeLabels.exit().remove();
-
-        // Patient attribute lists
-        var patient = patientData.getAttribute(patientData.KEY_PATIENT);
-        var patientDiseaseNames = patient.diseases.map(function(obj) {
-            return obj.name;
-        });
-        var patientMedicationNames = patient.medications.map(function(obj) {
-            return obj.name;
-        });
-        var patientSimilarityNames =
-            patientDiseaseNames.concat(patientMedicationNames);
 
         // We need text elements to be drawn before knowing how wide they
         // will be. Therefore, we select them again and store their bounding box
@@ -626,6 +637,12 @@ moduleVisualizations.factory('HeatMapVisualization',
                 return d.incidences;
             })])
             .range(visualizations.colors);
+        var colorScaleMarks = d3.scaleQuantile()
+            .domain([0, visualizations.buckets - 1,
+                    d3.max(filteredSimilarityData, function(d) {
+                return d.incidences;
+            })])
+            .range(visualizations.customGreens);
 
         var cellsTip = d3.tip()
             .attr('class', 'tooltip tooltip-element tooltip-d3')
@@ -662,7 +679,14 @@ moduleVisualizations.factory('HeatMapVisualization',
                     return (-1 + targetIndex) * self.gridHeight;
                 })
                 .style("fill", function(d) {
-                    return colorScale(d.incidences);
+                    var isPatientAttribute =
+                        ((patientMedicationNames.indexOf(d.first.name) !== -1) &&
+                        (patientDiseaseNames.indexOf(d.second.name) !== -1)) ||
+                        ((patientMedicationNames.indexOf(d.second.name) !== -1) &&
+                        (patientDiseaseNames.indexOf(d.first.name) !== -1));
+                    return (isPatientAttribute) ?
+                        colorScaleMarks(d.incidences) :
+                        colorScale(d.incidences);
                 })
                 .on("mouseover", function(d) {
                     cellsTip.show(d);
