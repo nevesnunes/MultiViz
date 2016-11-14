@@ -17,6 +17,50 @@ var generator = (function() {
 		};
 
 		// Create pairs with all combinations of different attributes
+        var processPairOfArrays = function(pairOfArrays) {
+            var array1 = pairOfArrays[0].array;
+            var array1ID = pairOfArrays[0].id;
+            var array2 = pairOfArrays[1].array;
+            var array2ID = pairOfArrays[1].id;
+            for (i = 0; i < array1.length; i++) {
+                for (j = 0; j < array2.length; j++) {
+                    if (array1[i].name === array2[j].name)
+                        continue;
+
+                    // Also check if complementary pair exists
+                    // before pushing a new pair
+                    pairIndex = pairIndexOf(
+                            pairs,
+                            [array2[j].name, array1[i].name],
+                            "id");
+                    if (pairIndex === -1) {
+                        pairIndex = pairIndexOf(
+                                pairs,
+                                [array1[i].name, array2[j].name],
+                                "id");
+                    }
+                    if (pairIndex === -1) {
+                        pairs.push({
+                            id: [array1[i].name, array2[j].name],
+                            incidences: 1,
+                            patientIDs: [patients[patientsIndex].id],
+                            patientNames: [patients[patientsIndex].name],
+                            first: { type: array1ID, name: array1[i].name },
+                            second: { type: array2ID, name: array2[j].name }
+                        });
+                    } else {
+                        if (pairs[pairIndex].patientIDs.indexOf(
+                                patients[patientsIndex].id) === -1) {
+                            pairs[pairIndex].incidences += 1;
+                            pairs[pairIndex].patientIDs.push(
+                                patients[patientsIndex].id);
+                            pairs[pairIndex].patientNames.push(
+                                patients[patientsIndex].name);
+                        }
+                    }
+                }
+            }
+        };
 		var pairs = [];
         var i, j, patientsIndex, pairIndex;
 		for (patientsIndex = 0;
@@ -24,96 +68,22 @@ var generator = (function() {
                 patientsIndex++) {
             var diseases = patients[patientsIndex].diseases;
             var medications = patients[patientsIndex].medications;
-            for (i = 0; i < diseases.length; i++) {
-                for (j = 0; j < medications.length; j++) {
-                    // Also check if complementary pair exists
-                    // before pushing a new pair
-                    pairIndex = pairIndexOf(
-                            pairs,
-                            [medications[j].name, diseases[i].name],
-                            "id");
-                    if (pairIndex === -1) {
-                        pairIndex = pairIndexOf(
-                                pairs,
-                                [diseases[i].name, medications[j].name],
-                                "id");
-                    }
-                    if (pairIndex === -1) {
-                        pairs.push({
-                            id: [diseases[i].name, medications[j].name],
-                            incidences: 1,
-                            patientIDs: [patients[patientsIndex].id],
-                            patientNames: [patients[patientsIndex].name],
-                            first: { type: 'disease', name: diseases[i].name },
-                            second: { type: 'medication', name: medications[j].name }
-                        });
-                    } else {
-                        pairs[pairIndex].incidences += 1;
-                        pairs[pairIndex].patientIDs.push(
-                            patients[patientsIndex].id);
-                        pairs[pairIndex].patientNames.push(
-                            patients[patientsIndex].name);
-                    }
-                }
-            }
+            var arraysToIterate = [
+                [
+                    { array: diseases, id: 'disease' },
+                    { array: diseases, id: 'disease' }
+                ],
+                [
+                    { array: medications, id: 'medication' },
+                    { array: medications, id: 'medication' }
+                ],
+                [
+                    { array: diseases, id: 'disease' },
+                    { array: medications, id: 'medication' }
+                ],
+            ];
 
-            // Create pairs with all combinations of diseases
-            for (i = 0; i < diseases.length; i++) {
-                for (j = 0; j < diseases.length; j++) {
-                    if (i === j)
-                        continue;
-
-                    pairIndex = pairIndexOf(
-                            pairs,
-                            [diseases[i].name, diseases[j].name],
-                            "id");
-                    if (pairIndex === -1) {
-                        pairs.push({
-                            id: [diseases[i].name, diseases[j].name],
-                            incidences: 1,
-                            patientIDs: [patients[patientsIndex].id],
-                            patientNames: [patients[patientsIndex].name],
-                            first: { type: 'disease', name: diseases[i].name },
-                            second: { type: 'disease', name: diseases[j].name }
-                        });
-                    } else {
-                        pairs[pairIndex].incidences += 1;
-                        pairs[pairIndex].patientIDs.push(
-                            patients[patientsIndex].id);
-                        pairs[pairIndex].patientNames.push(
-                            patients[patientsIndex].name);
-                    }
-                }
-            }
-
-            // Create pairs with all combinations of diseases
-            for (i = 0; i < medications.length; i++) {
-                for (j = 0; j < medications.length; j++) {
-                    if (i === j)
-                        continue;
-
-                    pairIndex = pairIndexOf(
-                            pairs,
-                            [medications[i].name, medications[j].name],
-                            "id");
-                    if (pairIndex === -1) {
-                        pairs.push({
-                            id: [medications[i].name, medications[j].name],
-                            incidences: 1,
-                            patientIDs: [patients[patientsIndex].id],
-                            patientNames: [patients[patientsIndex].name],
-                            first: { type: 'medication', name: medications[i].name },
-                            second: { type: 'medication', name: medications[j].name }
-                        });
-                    } else {
-                        pairs[pairIndex].incidences += 1;
-                        pairs[pairIndex].patientIDs.push(
-                            patients[patientsIndex].id);
-                        pairs[pairIndex].patientNames.push(
-                            patients[patientsIndex].name);
-                    }
-                }
-            }
+            arraysToIterate.forEach(processPairOfArrays);
         }
 
         iterations = pairs.length;

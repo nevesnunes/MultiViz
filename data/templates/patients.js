@@ -365,9 +365,18 @@ var generator = (function() {
     };
 
     var makeRandomArray = function(array, objectGenerator, property) {
+		// Randomize the array
+		array.sort(function () {
+			return Math.random() - 0.5;
+		});
+
 		var length = Math.floor(Math.random() * (array.length - 1)) + 1;
 		var pickedElements = [];
 		for (var i = 0; i < length; i++) {
+            var chance = Math.floor(Math.random() * (4 - 1)) + 1;
+            if (chance < 3)
+                continue;
+
             // Check if element wasn't already picked
             var element = pickRandomElement(array);
             if (arrayObjectIndexOf(pickedElements, element, property) === -1) {
