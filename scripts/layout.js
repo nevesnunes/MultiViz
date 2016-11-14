@@ -1308,11 +1308,11 @@ moduleLayout.directive("directivePanes",
                         nodeID:       id,
                         checkable:    true,
                         method:       "togglePinnedSpiral($event)",
-                        title:        "Marcar Espiral como visualização principal",
+                        title:        "Marcar espiral como visualização principal",
                         img:          "images/controls/pin.svg",
                         isChecked:    isChecked,
                         clazzChecked: "custom-btn-checked",
-                        titleChecked: "Desmarcar Espiral como visualização principal",
+                        titleChecked: "Desmarcar espiral como visualização principal",
                         imgChecked:   "images/controls/checked.svg"
                     }) +
                     utils.makeImgButton({
@@ -1407,56 +1407,111 @@ moduleLayout.directive("directivePanes",
                 var id = node.model.id;
                 // We assume a node will only have one heatmap
                 var heatMap = node.model.vizs[0];
-                var heatMapID;
+                var vizID;
                 var vizObject;
                 var isNotCreated = !(heatMap);
                 if (isNotCreated) {
-                    heatMapID = HeatMapVisualization.prototype.makeID();
+                    vizID = HeatMapVisualization.prototype.makeID();
                     vizObject = new HeatMapVisualization({
                         diseases: scope.selectedDiseases,
                         medications: scope.selectedMedications
                     });
                 } else {
-                    heatMapID = heatMap.id;
+                    vizID = heatMap.id;
                     vizObject = heatMap.vizObject;
                 }
 
-                var html = '<div ' +
-                        'id="' + heatMapID + '" ' +
-                        'data-node-id="' + id + '">' +
-                        // FIXME: remove
+                // Switch between pair-wise or many-to-many
+                // attribute comparisons
+                var matrixSwitcherHTML = '<div>' +
                         '<div style="display: block">' + 
-                            heatMapID +
+                            '<span>Combinação de atributos:</span>' +
                         '</div>' +
-                        // Matrix type switching
                         '<div class="btn-group" ' +
-                            'role="group" aria-label="...">' +
+                                'role="group" aria-label="...">' +
                             '<button type="button" ' +
-                                'id="' + heatMapID + '-type-pairs" ' +
+                                'id="' + vizID + '-type-pairs" ' +
                                 'class="btn btn-default" ' +
                                 'ng-class="isMatrixTypeActive(\'' + 
                                     id + '\', \'' +
-                                    heatMapID + '\', \'' +
+                                    vizID + '\', \'' +
                                     'DIM' + '\')" ' +
                                 'ng-click="setMatrixType(\'' + 
                                     id + '\', \'' +
-                                    heatMapID + '\', \'' +
+                                    vizID + '\', \'' +
                                     'DIM' + '\')" ' +
                                 '>' +
-                                'Combinar pares distintos</button>' +
+                                'Pares distintos</button>' +
                             '<button type="button" ' +
-                                'id="' + heatMapID + '-type-all" ' +
+                                'id="' + vizID + '-type-all" ' +
                                 'class="btn btn-default" ' +
                                 'ng-class="isMatrixTypeActive(\'' + 
                                     id + '\', \'' +
-                                    heatMapID + '\', \'' +
+                                    vizID + '\', \'' +
                                     'SIM' + '\')" ' +
                                 'ng-click="setMatrixType(\'' + 
                                     id + '\', \'' +
-                                    heatMapID + '\', \'' +
+                                    vizID + '\', \'' +
                                     'SIM' + '\')" ' +
                                 '>' +
-                                'Combinar todos</button>' +
+                                'Todos os pares</button>' +
+                        '</div>' +
+                    '</div>';
+
+                var availableSortings = [
+                    { value: 'ALPHABETIC', label: 'Alfabética'},
+                    { value: 'FREQUENCY_HIGHER', label: 'Frequência (>)'},
+                    { value: 'FREQUENCY_LOWER', label: 'Frequência (<)'}
+                ];
+                var sortOptionsHTML = '';
+                for (i = 0; i < availableSortings.length; i++) {
+                    sortOptionsHTML += '<li>' +
+                        '<a href="#" ' +
+                            'data-id="' + vizID + '" ' +
+                            'data-node-id="' + id + '" ' +
+                            'ng-click="setSort($event, \'' +
+                                availableSortings[i].value + '\')">' +
+                            availableSortings[i].label +
+                        '</a>' +
+                    '</li>';
+                }
+                
+                var sortHTML = '<div ' +
+                        'id="' + vizID + '-current-sort" ' +
+                        'style="margin-left: 2em">' +
+                    '<span>Ordenação:</span>' +
+                    '<div class="dropdown">' +
+                        '<button type="button" href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">' +
+                            '<span id="' + vizID+ '-sort"></span>' +
+                            '<span class="caret"></span>' +
+                        '</button>' +
+                        '<ul class="dropdown-menu" ' +
+                            'id="' + vizID + '-sort-options">' +
+                            sortOptionsHTML +
+                        '</ul>' +
+                    '</div>' +
+                '</div>';
+
+                var html = '<div ' +
+                        'id="' + vizID + '" ' +
+                        'data-node-id="' + id + '">' +
+                        '<div style="display: block">' + 
+                            // FIXME: remove
+                            vizID +
+                        '</div>' +
+                        '<div>' + 
+                            '<div id="' + vizID + '-switcher">' +
+                                matrixSwitcherHTML +
+                            '</div>' +
+                            '<div id="' + vizID + '-sorting">' +
+                                sortHTML +
+                            '</div>' +
+                        '</div>' +
+                        '<div id="' + vizID + '-contents">' +
+                            '<div id="' + vizID + '-main">' +
+                            '</div>' +
+                            '<div id="' + vizID + '-details">' +
+                            '</div>' +
                         '</div>' +
                     '</div>';
 
@@ -1478,16 +1533,20 @@ moduleLayout.directive("directivePanes",
 
                 // Add d3 elements
                 if (isNotCreated) {
-                    vizObject.make(id, heatMapID);
+                    vizObject.make(id, vizID);
                 } else {
-                    vizObject.remake(id, heatMapID);
+                    vizObject.remake(id, vizID);
                 }
+
+                // Label for current sorting
+                angular.element('#' + vizID + "-sort")
+                    .html('TODO');
 
                 // Save visualization for d3 updates
                 nodes.updateViz({
                     nodeID: id,
-                    vizID: heatMapID,
-                    currentVizID: heatMapID,
+                    vizID: vizID,
+                    currentVizID: vizID,
                     vizObject: vizObject,
                     nodeHTML: targetHTML,
                     nodeScope: targetScope

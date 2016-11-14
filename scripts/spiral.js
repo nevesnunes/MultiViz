@@ -7,7 +7,9 @@ moduleVisualizations.directive('directiveSpiralTooltip', function() {
                 scope.tooltipText = 
                     "<div style=\"text-align: left\" class=\"p\">" +
                         "Encontre padrões temporais em atributos " +
-                        "do paciente actual." +
+                        "do paciente actual. As <b>datas mais recentes</b> " +
+                        "correspondem a sectores mais afastados do " +
+                        "centro de uma espiral." +
                     "</div>";
             };
         }

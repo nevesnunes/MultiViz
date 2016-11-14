@@ -94,12 +94,22 @@ moduleVisualizations.factory('HeatMapVisualization',
         
         var self = this;
 
-        var svg = d3.select("#" + heatMapID).append("svg")
+        var svg = d3.select("#" + heatMapID + "-main")
+            .append("svg")
                 .attr("width", self.width + self.margin.left + self.margin.right)
                 .attr("height", self.height + self.margin.top + self.margin.bottom)
             .append("g")
                 .attr("transform", "translate(" +
                     self.margin.left + "," + self.margin.top + ")");
+        d3.select("#" + heatMapID + "-main")
+            .style('float', 'left');
+        d3.select('#' + heatMapID + "-details")
+            .style('float', 'left');
+        d3.select('#' + heatMapID + "-switcher")
+            .style('float', 'left');
+        d3.select('#' + heatMapID + "-sorting")
+            .style('float', 'left');
+
         self.targetElement = heatMapID;
         self.html = svg;
     };
