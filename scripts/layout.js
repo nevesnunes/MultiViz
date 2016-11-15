@@ -684,7 +684,7 @@ moduleLayout.directive("directiveActionPanel",
                         // Attribute lists
                         '<h4>Escolha um atributo:</h4>' +
                         '<div class="dropdown">' +
-                            '<button type="button" href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Medicações <span class="caret"></span></button>' +
+                            '<button type="button" href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Medicações <span class="caret custom-caret-margin"></span></button>' +
                             '<ul class="dropdown-menu">' +
                                 '<li><a href="#">TODO</a></li>' +
                             '</ul>' +
@@ -1197,7 +1197,7 @@ moduleLayout.directive("directivePanes",
                     '<div class="dropdown">' +
                         '<button type="button" href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">' +
                             '<span id="' + vizID+ '-binning"></span>' +
-                            '<span class="caret"></span>' +
+                            '<span class="caret custom-caret-margin"></span>' +
                         '</button>' +
                         '<ul class="dropdown-menu" ' +
                             'id="' + vizID + '-binning-options" ' +
@@ -1378,6 +1378,20 @@ moduleLayout.directive("directivePanes",
                 });
             };
 
+            scope.setSort = function(button, sorting) {
+                var elementProperties = extractPropertiesFromElement(button);
+
+                // Update node properties
+                var node = nodes.getRootNode().first(function (node1) {
+                    return node1.model.id === elementProperties.nodeID;
+                });
+                node.model.currentVizID = elementProperties.vizID;
+
+                scope.updateFromSelections({
+                    sorting: sorting
+                });
+            };
+
             var setMatrixType = function(nodeID, vizID, type) {
                 var node = nodes.getRootNode().first(function (node1) {
                     return node1.model.id === nodeID;
@@ -1458,20 +1472,15 @@ moduleLayout.directive("directivePanes",
                         '</div>' +
                     '</div>';
 
-                var availableSortings = [
-                    { value: 'ALPHABETIC', label: 'Alfabética'},
-                    { value: 'FREQUENCY_HIGHER', label: 'Frequência (>)'},
-                    { value: 'FREQUENCY_LOWER', label: 'Frequência (<)'}
-                ];
                 var sortOptionsHTML = '';
-                for (i = 0; i < availableSortings.length; i++) {
+                for (i = 0; i < vizObject.availableSortings.length; i++) {
                     sortOptionsHTML += '<li>' +
                         '<a href="#" ' +
                             'data-id="' + vizID + '" ' +
                             'data-node-id="' + id + '" ' +
                             'ng-click="setSort($event, \'' +
-                                availableSortings[i].value + '\')">' +
-                            availableSortings[i].label +
+                                vizObject.availableSortings[i].key + '\')">' +
+                            vizObject.availableSortings[i].label +
                         '</a>' +
                     '</li>';
                 }
@@ -1483,7 +1492,7 @@ moduleLayout.directive("directivePanes",
                     '<div class="dropdown">' +
                         '<button type="button" href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">' +
                             '<span id="' + vizID+ '-sort"></span>' +
-                            '<span class="caret"></span>' +
+                            '<span class="caret custom-caret-margin"></span>' +
                         '</button>' +
                         '<ul class="dropdown-menu" ' +
                             'id="' + vizID + '-sort-options">' +
@@ -1537,10 +1546,6 @@ moduleLayout.directive("directivePanes",
                 } else {
                     vizObject.remake(id, vizID);
                 }
-
-                // Label for current sorting
-                angular.element('#' + vizID + "-sort")
-                    .html('TODO');
 
                 // Save visualization for d3 updates
                 nodes.updateViz({

@@ -36,6 +36,15 @@ moduleVisualizations.factory('HeatMapVisualization',
 
         this.html = null;
 
+        this.availableSortings = [
+            { key: 'ALPHABETIC', label: 'Alfabética'},
+            { key: 'FREQUENCY_HIGHER', label: 'Frequência (>)'},
+            { key: 'FREQUENCY_LOWER', label: 'Frequência (<)'}
+        ];
+        this.currentSorting = this.availableSortings.filter(function(sorting) {
+           return sorting.key === 'ALPHABETIC';
+        })[0];
+
         this.renderer = renderer.SIM; 
         this.currentAttributeType = attributeType.DISEASES;
 
@@ -760,6 +769,10 @@ moduleVisualizations.factory('HeatMapVisualization',
     HeatMapVisualization.prototype.render = function() {
         var self = this;
 
+        // TODO: renderer needs to see sorting
+        d3.select("#" + self.targetElement + "-sort")
+            .html(self.currentSorting.label);
+
         // Height for the similarity matrix is computed here
         // since it depends on filtered data
         if (self.renderer === renderer.SIM) {
@@ -829,8 +842,19 @@ moduleVisualizations.factory('HeatMapVisualization',
     HeatMapVisualization.prototype.update = function(nodeID, vizID, state) {
         var self = this;
 
-        self.patientLists.diseases = state.diseases.slice();
-        self.patientLists.medications = state.medications.slice();
+        // TODO: turn into option type call chain
+        if (state.sorting) {
+            self.currentSorting = self.availableSortings
+                .filter(function(sorting) {
+                    return sorting.key === state.sorting;
+                })[0];
+        }
+        if (state.diseases) {
+            self.patientLists.diseases = state.diseases.slice();
+        }
+        if (state.medications) {
+            self.patientLists.medications = state.medications.slice();
+        }
         self.populate(nodeID, vizID);
     };
 
