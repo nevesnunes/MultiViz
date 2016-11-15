@@ -377,7 +377,7 @@ moduleLayout.directive("directiveActionPanel",
                 var cancelButton = '';
                 if (nodes.getRootNode() !== undefined) {
                     cancelButton = utils.makeImgButton({
-                        clazz:  "btn-secondary custom-btn-secondary",
+                        clazz:  "btn-secondary custom-btn-secondary custom-right",
                         placement: "left",
                         method: "cancelSplit()",
                         title:  "Cancelar",
@@ -672,7 +672,7 @@ moduleLayout.directive("directiveActionPanel",
                 var cancelButton = '';
                 if (nodes.getRootNode() !== undefined) {
                     cancelButton = utils.makeImgButton({
-                        clazz:  "btn-secondary custom-btn-secondary",
+                        clazz:  "btn-secondary custom-btn-secondary custom-right",
                         placement: "left",
                         method: "cancelSplit()",
                         title:  "Cancelar",
@@ -725,7 +725,7 @@ moduleLayout.directive("directiveActionPanel",
 
             scope.chooseSpiralToJoin = function() {
                 var cancelButton = utils.makeImgButton({
-                    clazz:  "btn-secondary custom-btn-secondary",
+                    clazz:  "btn-secondary custom-btn-secondary custom-right",
                     placement: "left",
                     method: "cancelAction()",
                     title:  "Cancelar",
@@ -835,8 +835,15 @@ moduleLayout.directive("directiveActionPanel",
                                     return obj.name;
                                 });
 
+                        var spiralActions = utils.makeImgButton({
+                            clazz:  "btn-secondary custom-btn-secondary custom-center",
+                            id:     nodes.getCurrentNode().model.id,
+                            method: "chooseAddSpiral($event)",
+                            text:   "Adicionar espiral",
+                            img:    "images/controls/black/add.svg"
+                        });
                         html = '<div>' +
-                                '<h4>Spiral actions</h4>' +
+                                spiralActions +
                             '</div>';
                     } else {
                         html = "<span>TODO</span>";
@@ -848,6 +855,10 @@ moduleLayout.directive("directiveActionPanel",
                 }
             
                 updateActionPanel(html);
+            };
+
+            scope.chooseAddSpiral = function(button) {
+                scope.chooseSpiralAttribute('addSpiral', button);
             };
 
             scope.addSpiral = function(button) {
@@ -922,15 +933,6 @@ moduleLayout.directive("directivePanes",
                             .makeDescription(node.model.id);
                     }
                     visualization += descriptionHTML; 
-                    if (node.model.vizType === scope.vizType.SPIRAL) {
-                        visualization += utils.makeImgButton({
-                            style:  'display: block',
-                            id:     id,
-                            method: "chooseAddSpiral($event)",
-                            text:   "Adicionar espiral",
-                            img:    "images/controls/add.svg"
-                        });
-                    }
                     visualization += '</div>'; 
                 }
 

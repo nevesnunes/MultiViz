@@ -61,7 +61,14 @@
 .custom-btn-secondary {
     border: 1px solid #ccc;
     display: block;
+}
+
+.custom-right {
     margin: 0 0 0 auto;
+}
+.custom-center {
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .custom-btn-link {
