@@ -37,9 +37,9 @@ moduleVisualizations.factory('HeatMapVisualization',
         this.html = null;
 
         this.availableSortings = [
-            { key: 'ALPHABETIC', label: 'Alfabética'},
-            { key: 'FREQUENCY_HIGHER', label: 'Frequência (>)'},
-            { key: 'FREQUENCY_LOWER', label: 'Frequência (<)'}
+            { key: 'ALPHABETIC', label: 'Alfabética (Ascendente)'},
+            { key: 'FREQUENCY_HIGHER', label: 'Frequência (Ascendente)'},
+            { key: 'FREQUENCY_LOWER', label: 'Frequência (Descendente)'}
         ];
         this.currentSorting = this.availableSortings.filter(function(sorting) {
            return sorting.key === 'ALPHABETIC';
@@ -261,6 +261,40 @@ moduleVisualizations.factory('HeatMapVisualization',
                 { array: medicationNames },
                 { array: similarityNames }
             ];
+            var sortAscending = function(a, b) {
+                return b.count - a.count; 
+            };
+            var sortDescending = function(a, b) {
+                return a.count - b.count; 
+            };
+            var frequencySorting = function(nameObject, sortingFunction) {
+                var namesWithCountIncidences = nameObject.array
+                    .map(function(name) {
+                        return {
+                            name: name,
+                            count: 0
+                        };
+                    });
+                    namesWithCountIncidences.forEach(function(element) {
+                        var includedSimilarityData = filteredSimilarityData
+                            .filter(function(dataElement) {
+                                return (dataElement.first.name ===
+                                        element.name) ||
+                                    (dataElement.second.name ===
+                                        element.name);
+                            });
+                        var includedSum = includedSimilarityData
+                            .reduce(function(previous, current, i) {
+                                return previous + current.incidences;
+                            }, 0);
+                        element.count = includedSum;
+                    });
+                    namesWithCountIncidences.sort(sortingFunction);
+                nameObject = namesWithCountIncidences.slice()
+                    .map(function(element) {
+                        return element.name;
+                    });
+            };
             names.forEach(function(nameObject) {
                 if (self.currentSorting.key === 'ALPHABETIC') {
                     nameObject.array.sort(function(a, b) {
@@ -269,6 +303,10 @@ moduleVisualizations.factory('HeatMapVisualization',
                         return (textA < textB) ? -1 : 
                             (textA > textB) ? 1 : 0;
                     });
+                } else if (self.currentSorting.key === 'FREQUENCY_HIGHER') {
+                    frequencySorting(nameObject, sortAscending);
+                } else if (self.currentSorting.key === 'FREQUENCY_LOWER') {
+                    frequencySorting(nameObject, sortDescending);
                 }
             });
 
