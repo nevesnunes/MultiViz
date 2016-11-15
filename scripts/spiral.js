@@ -206,6 +206,10 @@ moduleVisualizations.factory('SpiralVisualization',
         var isFirstDate = false;
         var isLastDate = false;
 
+        var recordedStartMoment = moment(recordedFrequency[0]);
+        var recordedEndMoment = moment(
+                recordedFrequency[recordedFrequency.length - 1]);
+
         var accumulatorBinDays = 0;
         for (var i = 0, currentDateIndex = 0; !isLastDate; i++) {
             var recordedMoment = moment(recordedFrequency[currentDateIndex]);
@@ -278,8 +282,10 @@ moduleVisualizations.factory('SpiralVisualization',
 
                 accumulatorBinDays = 0;
 
-                // Advance to the next bin
-                previousBinMoment = currentBinMoment.clone();
+                // Advance to the next bin;
+                // Add a day to the start of the next sector,
+                // since that day has been counted in the previous sector.
+                previousBinMoment = currentBinMoment.clone().add(1, "days");
                 currentBinMoment.add(1, binInterval);
             }
 
@@ -300,9 +306,6 @@ moduleVisualizations.factory('SpiralVisualization',
             spacing *= 1.25 * (countPoints / 10);
         spacing *= period / 7;
 
-        var recordedStartMoment = moment(recordedFrequency[0]);
-        var recordedEndMoment = moment(
-                recordedFrequency[recordedFrequency.length - 1]);
         this.visualizationRenderer
             .set('numberOfPoints', countPoints)
             .set('period', period)
