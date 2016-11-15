@@ -7,7 +7,11 @@ moduleVisualizations.directive('directiveSpiralTooltip', function() {
                 scope.tooltipText = 
                     "<div style=\"text-align: left\" class=\"p\">" +
                         "Encontre padrões temporais em atributos " +
-                        "do paciente actual. As <b>datas mais recentes</b> " +
+                        "do paciente actual." +
+                    "</div>" +
+                    "</br>" +
+                    "<div style=\"text-align: left\" class=\"p\">" +
+                        "As <b>datas mais recentes</b> " +
                         "correspondem a sectores mais afastados do " +
                         "centro de uma espiral." +
                     "</div>";
@@ -52,11 +56,11 @@ moduleVisualizations.factory('SpiralVisualization',
         return '<p class="viz-title">' +
                 'Análise temporal de atributos' +
                 '  ' +
-                '<span class="tooltip-wrapper help" ' +
+                '<img class="tooltip-wrapper help" ' +
                     'title="{{tooltipText}}" ' + 
-                    'directive-tooltip directive-spiral-tooltip>' +
-                    '<img src="images/controls/info.svg">' +
-                '</span>' +
+                    'directive-tooltip directive-spiral-tooltip ' +
+                    'src="images/controls/info.svg">' +
+                '</img>' +
                 '</p>';
     };
 

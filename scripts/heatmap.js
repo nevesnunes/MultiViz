@@ -1,11 +1,10 @@
 var moduleVisualizations = angular.module('moduleVisualizations');
 
-moduleVisualizations.directive('directiveHeatMapTooltip',
-        function() {
+moduleVisualizations.directive('directiveHeatMapTooltip', function() {
     return {
         link: function (scope, element, attrs) {
             scope.setTooltipText = function(button) {
-                var text =
+                scope.tooltipText = 
                     "<div style=\"text-align: left\" class=\"p\">" +
                         "Encontre relações entre atributos " +
                         "partilhados por múltiplos pacientes." +
@@ -18,7 +17,6 @@ moduleVisualizations.directive('directiveHeatMapTooltip',
                             "markPatientAttribute markPresent markSquare\" />" +
                         ")." +
                     "</div>";
-                scope.tooltipText = text;
             };
         }
     };
