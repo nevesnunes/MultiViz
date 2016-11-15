@@ -216,13 +216,13 @@ moduleVisualizations.factory('HeatMapVisualization',
             // We now remove attributes from the lists that don't have
             // matches in filtered data (i.e. no cells for that attribute
             // have values)
-            var names = [
+            var allNames = [
                 { array: allDiseaseNames, type: "disease" },
                 { array: allMedicationNames, type: "medication" }
             ];
             var similarityNames = [];
             var longestSimilarityNameLength = 0;
-            names.forEach(function(namesObject) {
+            allNames.forEach(function(namesObject) {
                 similarityNames = similarityNames.concat( 
                     (function(list, filteredMatrix) {
                         return list.filter(function(name) {
@@ -253,6 +253,23 @@ moduleVisualizations.factory('HeatMapVisualization',
                         });
                     })(namesObject.array, filteredSimilarityData)
                 );
+            });
+
+            // Sort according to user selected sorting option
+            var names = [
+                { array: diseaseNames },
+                { array: medicationNames },
+                { array: similarityNames }
+            ];
+            names.forEach(function(nameObject) {
+                if (self.currentSorting.key === 'ALPHABETIC') {
+                    nameObject.array.sort(function(a, b) {
+                        var textA = a.toUpperCase();
+                        var textB = b.toUpperCase();
+                        return (textA < textB) ? -1 : 
+                            (textA > textB) ? 1 : 0;
+                    });
+                }
             });
 
             self.visualizationRenderer = {
@@ -769,7 +786,6 @@ moduleVisualizations.factory('HeatMapVisualization',
     HeatMapVisualization.prototype.render = function() {
         var self = this;
 
-        // TODO: renderer needs to see sorting
         d3.select("#" + self.targetElement + "-sort")
             .html(self.currentSorting.label);
 
@@ -842,7 +858,6 @@ moduleVisualizations.factory('HeatMapVisualization',
     HeatMapVisualization.prototype.update = function(nodeID, vizID, state) {
         var self = this;
 
-        // TODO: turn into option type call chain
         if (state.sorting) {
             self.currentSorting = self.availableSortings
                 .filter(function(sorting) {
