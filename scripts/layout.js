@@ -1547,6 +1547,10 @@ moduleLayout.directive("directivePanes",
                     vizObject.remake(id, vizID);
                 }
 
+                // All elements created, now set their visibility
+                var isMaximized = nodes.isMaximized(id);
+                vizObject.modifyDetailsVisibility(isMaximized);
+
                 // Save visualization for d3 updates
                 nodes.updateViz({
                     nodeID: id,

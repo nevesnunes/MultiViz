@@ -36,10 +36,28 @@ moduleVisualizations.factory('HeatMapVisualization',
 
         this.html = null;
 
+        // TODO: Update when no atributes are selected
+        this.hasData = true;
+
         this.availableSortings = [
-            { key: 'ALPHABETIC', label: 'Alfabética (Ascendente)'},
-            { key: 'FREQUENCY_HIGHER', label: 'Frequência (Ascendente)'},
-            { key: 'FREQUENCY_LOWER', label: 'Frequência (Descendente)'}
+            {
+                key: 'ALPHABETIC',
+                label: 'Alfabética (Ascendente<img ' +
+                    'src="images/controls/black/ascending.svg"' +
+                    'class="custom-btn-svg">)'
+            },
+            {
+                key: 'FREQUENCY_HIGHER',
+                label: 'Frequência (Ascendente<img ' +
+                    'src="images/controls/black/ascending.svg"' +
+                    'class="custom-btn-svg">)'
+            },
+            {
+                key: 'FREQUENCY_LOWER',
+                label: 'Frequência (Descendente<img ' +
+                    'src="images/controls/black/descending.svg"' +
+                    'class="custom-btn-svg">)'
+            }
         ];
         this.currentSorting = this.availableSortings.filter(function(sorting) {
            return sorting.key === 'ALPHABETIC';
@@ -124,10 +142,8 @@ moduleVisualizations.factory('HeatMapVisualization',
     };
 
     HeatMapVisualization.prototype.make = function(elementID, heatMapID) {
-        var self = this;
-
-        self.makeSVG(elementID, heatMapID);
-        self.populate(elementID, heatMapID);
+        this.makeSVG(elementID, heatMapID);
+        this.populate(elementID, heatMapID);
     };
 
     HeatMapVisualization.prototype.populate = function(elementID, heatMapID) {
@@ -257,15 +273,17 @@ moduleVisualizations.factory('HeatMapVisualization',
 
             // Sort according to user selected sorting option
             var names = [
-                { array: diseaseNames },
-                { array: medicationNames },
-                { array: similarityNames }
+                { array: diseaseNames, id: 'diseaseNames' },
+                { array: medicationNames, id: 'medicationNames' },
+                { array: similarityNames, id: 'similarityNames' }
             ];
             var sortAscending = function(a, b) {
-                return b.count - a.count; 
+                return (a.count < b.count) ? -1 : 
+                    (a.count > b.count) ? 1 : 0;
             };
             var sortDescending = function(a, b) {
-                return a.count - b.count; 
+                return (a.count > b.count) ? -1 : 
+                    (a.count < b.count) ? 1 : 0;
             };
             var frequencySorting = function(nameObject, sortingFunction) {
                 var namesWithCountIncidences = nameObject.array
@@ -290,24 +308,34 @@ moduleVisualizations.factory('HeatMapVisualization',
                         element.count = includedSum;
                     });
                     namesWithCountIncidences.sort(sortingFunction);
-                nameObject = namesWithCountIncidences.slice()
+                return namesWithCountIncidences.slice()
                     .map(function(element) {
                         return element.name;
                     });
             };
             names.forEach(function(nameObject) {
+                var sortedObject;
                 if (self.currentSorting.key === 'ALPHABETIC') {
-                    nameObject.array.sort(function(a, b) {
+                    sortedObject = nameObject.array.sort(function(a, b) {
                         var textA = a.toUpperCase();
                         var textB = b.toUpperCase();
                         return (textA < textB) ? -1 : 
                             (textA > textB) ? 1 : 0;
                     });
                 } else if (self.currentSorting.key === 'FREQUENCY_HIGHER') {
-                    frequencySorting(nameObject, sortAscending);
+                    sortedObject =
+                        frequencySorting(nameObject, sortAscending);
                 } else if (self.currentSorting.key === 'FREQUENCY_LOWER') {
-                    frequencySorting(nameObject, sortDescending);
+                    sortedObject =
+                        frequencySorting(nameObject, sortDescending);
                 }
+
+                if (nameObject.id === 'diseaseNames')
+                    diseaseNames = sortedObject.slice();
+                else if (nameObject.id === 'medicationNames')
+                    medicationNames = sortedObject.slice();
+                else if (nameObject.id === 'similarityNames')
+                    similarityNames = sortedObject.slice();
             });
 
             self.visualizationRenderer = {
@@ -891,6 +919,38 @@ moduleVisualizations.factory('HeatMapVisualization',
         d3.select("#" + vizID).select("svg").remove();
 
         self.remake(nodeID, vizID);
+    };
+
+    HeatMapVisualization.prototype.renderVisibleDetails = function() {
+        d3.select("#" + this.targetElement + "-switcher")
+            .style("visibility", "initial")
+            .style("width", "initial")
+            .style("height", "initial");
+        d3.select("#" + this.targetElement + "-sorting")
+            .style("visibility", "initial")
+            .style("width", "initial")
+            .style("height", "initial");
+    };
+
+    HeatMapVisualization.prototype.renderNoVisibleDetails = function() {
+        d3.select("#" + this.targetElement + "-switcher")
+            .style("visibility", "hidden")
+            .style("width", 0)
+            .style("height", 0);
+        d3.select("#" + this.targetElement + "-sorting")
+            .style("visibility", "hidden")
+            .style("width", 0)
+            .style("height", 0);
+    };
+
+    HeatMapVisualization.prototype.modifyDetailsVisibility =
+            function(isMaximized) {
+        // When we don't have data, we simply show all the attribute text
+        if (isMaximized || !(this.hasData)) {
+            this.renderVisibleDetails();
+        } else {
+            this.renderNoVisibleDetails();
+        }
     };
 
     HeatMapVisualization.prototype.update = function(nodeID, vizID, state) {
