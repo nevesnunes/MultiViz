@@ -2,203 +2,150 @@
     {
         "incidences": 1,
         "patientIDs": [
-            "7acca6b8-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Saidee Jelks"
+            "ccccf6a0-ab40-11e6-9356-cd3743a9084e"
         ],
         "first": {
             "type": "disease",
-            "name": "Febre Reumática"
+            "name": "Glaucoma"
         },
         "second": {
-            "type": "medication",
-            "name": "Anti-ácidos"
+            "type": "disease",
+            "name": "Doença Venérea"
         }
     },
     {
         "incidences": 1,
         "patientIDs": [
-            "7acca6b8-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Saidee Jelks"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Anti-ácidos"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Aspirina"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "7acca6b3-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Clementine Fianna"
+            "ccccf6a0-ab40-11e6-9356-cd3743a9084e"
         ],
         "first": {
             "type": "disease",
-            "name": "Doença da Tiroide"
+            "name": "Glaucoma"
         },
         "second": {
-            "type": "medication",
-            "name": "Aspirina"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "7acca6b3-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Clementine Fianna"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Doença da Tiroide"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Osteoporose"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "7acc7fa0-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Elsey Phineas"
-        ],
-        "first": {
             "type": "disease",
             "name": "Febre Reumática"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Broncodilatador"
         }
     },
     {
         "incidences": 1,
         "patientIDs": [
-            "7acc7fa0-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Elsey Phineas"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Esteróides"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-hipertensor"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "7acc7fa0-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Elsey Phineas"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Broncodilatador"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-hipertensor"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "7acc7fa0-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Elsey Phineas"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Broncodilatador"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Esteróides"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "7acc7fa0-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Elsey Phineas"
+            "cccccf90-ab40-11e6-9356-cd3743a9084e"
         ],
         "first": {
             "type": "disease",
             "name": "Candidiase Oral"
         },
         "second": {
-            "type": "disease",
-            "name": "Febre Reumática"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "7acc0a74-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acca6b4-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Abby Drummond",
-            "Deerdre Babcock"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Enfarte Miocárdio"
-        },
-        "second": {
             "type": "medication",
-            "name": "Broncodilatador"
+            "name": "Anti-ácidos"
         }
     },
     {
         "incidences": 1,
         "patientIDs": [
-            "7acc0a71-aa65-11e6-8c6a-e33e6f0fa82b"
+            "cccc8171-ab40-11e6-9356-cd3743a9084e"
         ],
-        "patientNames": [
-            "Sharai Alia"
+        "first": {
+            "type": "disease",
+            "name": "Doença Venérea"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Análgésicos"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "cccc8170-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Candidiase Oral"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Esteróides"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "cccc8170-ab40-11e6-9356-cd3743a9084e"
         ],
         "first": {
             "type": "disease",
             "name": "Gânglios aumentados de volume"
         },
         "second": {
+            "type": "medication",
+            "name": "Esteróides"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "cccc5a63-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
             "type": "disease",
-            "name": "Osteoporose"
+            "name": "Febre Reumática"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Aspirina"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "cccc5a61-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Doença Venérea"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-ácidos"
         }
     },
     {
         "incidences": 3,
         "patientIDs": [
-            "7acbe365-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acca6b2-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acca6b7-aa65-11e6-8c6a-e33e6f0fa82b"
+            "cccc0c44-ab40-11e6-9356-cd3743a9084e",
+            "cccc8171-ab40-11e6-9356-cd3743a9084e",
+            "cccc8174-ab40-11e6-9356-cd3743a9084e"
         ],
-        "patientNames": [
-            "Kriste Connell",
-            "Jayme Ekaterina",
-            "Ashia Austina"
+        "first": {
+            "type": "disease",
+            "name": "Doença Venérea"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-hipertensor"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "cccc0c44-ab40-11e6-9356-cd3743a9084e",
+            "cccc8171-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Artrite"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Doença Venérea"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "cccbe535-ab40-11e6-9356-cd3743a9084e"
         ],
         "first": {
             "type": "disease",
@@ -206,107 +153,72 @@
         },
         "second": {
             "type": "disease",
+            "name": "Artrite"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "cccbe534-ab40-11e6-9356-cd3743a9084e",
+            "cccc0c42-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Glaucoma"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-diabéticos"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "cccbe534-ab40-11e6-9356-cd3743a9084e",
+            "cccbe535-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Doença Cardíaca Congénita"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-diabéticos"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "cccbe533-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
             "name": "Doença da Tiroide"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Broncodilatador"
         }
     },
     {
         "incidences": 2,
         "patientIDs": [
-            "7acbe360-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acc7fa0-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Clareta Lowis",
-            "Elsey Phineas"
+            "cccbe533-ab40-11e6-9356-cd3743a9084e",
+            "cccbe535-ab40-11e6-9356-cd3743a9084e"
         ],
         "first": {
             "type": "disease",
-            "name": "Glaucoma"
+            "name": "Candidiase Oral"
         },
         "second": {
-            "type": "medication",
-            "name": "Esteróides"
+            "type": "disease",
+            "name": "Doença Cardíaca Congénita"
         }
     },
     {
         "incidences": 1,
         "patientIDs": [
-            "7acbe360-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Clareta Lowis"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Glaucoma"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-diabéticos"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "7acbe360-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acc3180-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Clareta Lowis",
-            "Shelagh Krongold"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Enfarte Miocárdio"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-diabéticos"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "7acbe360-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acc7fa0-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Clareta Lowis",
-            "Elsey Phineas"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Febre Reumática"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Esteróides"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "7acbe360-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Clareta Lowis"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Doença Venérea"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Esteróides"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "7acbe360-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Clareta Lowis"
+            "cccbe532-ab40-11e6-9356-cd3743a9084e"
         ],
         "first": {
             "type": "disease",
@@ -314,52 +226,27 @@
         },
         "second": {
             "type": "medication",
-            "name": "Anti-diabéticos"
+            "name": "Anti-hipertensor"
         }
     },
     {
         "incidences": 1,
         "patientIDs": [
-            "7acbe360-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Clareta Lowis"
+            "cccbe532-ab40-11e6-9356-cd3743a9084e"
         ],
         "first": {
-            "type": "disease",
-            "name": "Doença Venérea"
+            "type": "medication",
+            "name": "Broncodilatador"
         },
         "second": {
-            "type": "disease",
-            "name": "Enfarte Miocárdio"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "7acbe360-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acca6b8-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Clareta Lowis",
-            "Saidee Jelks"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Doença Venérea"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Febre Reumática"
+            "type": "medication",
+            "name": "Anti-ácidos"
         }
     },
     {
         "incidences": 1,
         "patientIDs": [
-            "7acb9542-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Dreddy Boudreaux"
+            "cccbe530-ab40-11e6-9356-cd3743a9084e"
         ],
         "first": {
             "type": "disease",
@@ -367,166 +254,29 @@
         },
         "second": {
             "type": "disease",
-            "name": "Doença Venérea"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "7acb6e34-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acc5890-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Joceline Odysseus",
-            "Viviana Maletta"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Anti-diabéticos"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-depressor"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "7acb6e34-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Joceline Odysseus"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Esteróides"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-depressor"
+            "name": "Doença da Tiroide"
         }
     },
     {
         "incidences": 3,
         "patientIDs": [
-            "7acb6e32-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acbe360-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acca6b8-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Micky Claudius",
-            "Clareta Lowis",
-            "Saidee Jelks"
+            "cccbe530-ab40-11e6-9356-cd3743a9084e",
+            "cccbe533-ab40-11e6-9356-cd3743a9084e",
+            "cccc5a61-ab40-11e6-9356-cd3743a9084e"
         ],
         "first": {
             "type": "disease",
-            "name": "Glaucoma"
+            "name": "Doença Venérea"
         },
         "second": {
-            "type": "medication",
-            "name": "Aspirina"
+            "type": "disease",
+            "name": "Doença da Tiroide"
         }
     },
     {
         "incidences": 1,
         "patientIDs": [
-            "7acb4721-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Chelsey Dorrie"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Gânglios aumentados de volume"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-depressor"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "7acb4721-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Chelsey Dorrie"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Gânglios aumentados de volume"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-ácidos"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "7acb4721-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acb6e35-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Chelsey Dorrie",
-            "Anet Frerichs"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Doença da Tiroide"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-hipertensor"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "7acb4721-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acbe365-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Chelsey Dorrie",
-            "Kriste Connell"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Doença da Tiroide"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-depressor"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "7acb4721-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acbe365-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Chelsey Dorrie",
-            "Kriste Connell"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Doença da Tiroide"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-ácidos"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "7acb4721-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acb9541-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Chelsey Dorrie",
-            "Tammara Usanis"
+            "cccbbe21-ab40-11e6-9356-cd3743a9084e"
         ],
         "first": {
             "type": "medication",
@@ -534,56 +284,35 @@
         },
         "second": {
             "type": "medication",
-            "name": "Anti-hipertensor"
+            "name": "Broncodilatador"
         }
     },
     {
-        "incidences": 1,
+        "incidences": 4,
         "patientIDs": [
-            "7acb4721-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Chelsey Dorrie"
+            "cccbbe20-ab40-11e6-9356-cd3743a9084e",
+            "cccbe533-ab40-11e6-9356-cd3743a9084e",
+            "cccccf90-ab40-11e6-9356-cd3743a9084e",
+            "ccccf6a0-ab40-11e6-9356-cd3743a9084e"
         ],
         "first": {
-            "type": "medication",
-            "name": "Anti-ácidos"
+            "type": "disease",
+            "name": "Febre Reumática"
         },
         "second": {
-            "type": "medication",
-            "name": "Anti-hipertensor"
+            "type": "disease",
+            "name": "Candidiase Oral"
         }
     },
     {
         "incidences": 2,
         "patientIDs": [
-            "7acb4721-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acbe365-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Chelsey Dorrie",
-            "Kriste Connell"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Anti-ácidos"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-depressor"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "7acb4721-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Chelsey Dorrie"
+            "cccbbe20-ab40-11e6-9356-cd3743a9084e",
+            "ccccf6a1-ab40-11e6-9356-cd3743a9084e"
         ],
         "first": {
             "type": "disease",
-            "name": "Doença da Tiroide"
+            "name": "Febre Reumática"
         },
         "second": {
             "type": "disease",
@@ -593,655 +322,7 @@
     {
         "incidences": 1,
         "patientIDs": [
-            "7acb4720-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Jillian Damiano"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Artrite"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Análgésicos"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "7acb4720-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acccdc0-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Jillian Damiano",
-            "Blithe Kidder"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Artrite"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Candidiase Oral"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "7acb4720-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acb9542-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Jillian Damiano",
-            "Dreddy Boudreaux"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Doença Venérea"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Candidiase Oral"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "7acb2013-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acca6b8-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Sherilyn Ogden",
-            "Saidee Jelks"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Glaucoma"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-ácidos"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "7acb2013-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Sherilyn Ogden"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Osteoporose"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-ácidos"
-        }
-    },
-    {
-        "incidences": 4,
-        "patientIDs": [
-            "7acb2012-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acb6e33-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acbe360-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acca6b8-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Loria Reiser",
-            "Darrelle McDermott",
-            "Clareta Lowis",
-            "Saidee Jelks"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Doença Venérea"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Aspirina"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "7acb2010-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Alla Laing"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Doença da Tiroide"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-diabéticos"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "7acb2010-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Alla Laing"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Broncodilatador"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-diabéticos"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "7acaf900-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Sidonnie Anil"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Osteoporose"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-depressor"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "7acaf900-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acbe365-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Sidonnie Anil",
-            "Kriste Connell"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Doença Cardíaca Congénita"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-depressor"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "7acad1f0-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acbe360-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Maiga Newman",
-            "Clareta Lowis"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Doença Venérea"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-diabéticos"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "7acad1f0-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acca6b0-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acca6b8-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Maiga Newman",
-            "Matti Wittenburg",
-            "Saidee Jelks"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Doença Venérea"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-ácidos"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "7acaaae3-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acc7fa0-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Binnie Hogle",
-            "Elsey Phineas"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Osteoporose"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-hipertensor"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "7acaaae3-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acb6e35-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acc7fa0-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Binnie Hogle",
-            "Anet Frerichs",
-            "Elsey Phineas"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Glaucoma"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-hipertensor"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "7acaaae3-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acc7fa0-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Binnie Hogle",
-            "Elsey Phineas"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Febre Reumática"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-hipertensor"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "7acaaae3-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acca6b9-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Binnie Hogle",
-            "Julita McArthur"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Doença Cardíaca Congénita"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-hipertensor"
-        }
-    },
-    {
-        "incidences": 4,
-        "patientIDs": [
-            "7acaaae3-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acbe360-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acc7fa0-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acca6b8-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Binnie Hogle",
-            "Clareta Lowis",
-            "Elsey Phineas",
-            "Saidee Jelks"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Febre Reumática"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Glaucoma"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "7acaaae3-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acca6b2-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Binnie Hogle",
-            "Jayme Ekaterina"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Doença Cardíaca Congénita"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Glaucoma"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "7acaaae2-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acc0a71-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Kristi Ric",
-            "Sharai Alia"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Glaucoma"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Gânglios aumentados de volume"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "7acaaae2-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acc7fa0-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acccdc0-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Kristi Ric",
-            "Elsey Phineas",
-            "Blithe Kidder"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Glaucoma"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Candidiase Oral"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "7acaaae0-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acb2010-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Madeleine Eldrida",
-            "Alla Laing"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Doença da Tiroide"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Broncodilatador"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "7aca83d0-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acb6e31-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acccdc0-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Barrie Mercy",
-            "Shanta Matheny",
-            "Blithe Kidder"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Glaucoma"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Artrite"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "7aca5cc2-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acccdc0-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Candice Linkoski",
-            "Blithe Kidder"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Artrite"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Broncodilatador"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "7aca5cc2-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7aca83d0-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acb4720-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Candice Linkoski",
-            "Barrie Mercy",
-            "Jillian Damiano"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Artrite"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Doença Venérea"
-        }
-    },
-    {
-        "incidences": 4,
-        "patientIDs": [
-            "7aca5cc1-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acb6e33-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acbe360-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acca6b3-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Alissa Linetta",
-            "Darrelle McDermott",
-            "Clareta Lowis",
-            "Clementine Fianna"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Osteoporose"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Aspirina"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "7aca5cc1-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acbe360-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acc7fa0-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Alissa Linetta",
-            "Clareta Lowis",
-            "Elsey Phineas"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Osteoporose"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Esteróides"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "7aca5cc1-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acbe360-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Alissa Linetta",
-            "Clareta Lowis"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Enfarte Miocárdio"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Esteróides"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "7aca5cc1-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acc7fa0-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Alissa Linetta",
-            "Elsey Phineas"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Candidiase Oral"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Esteróides"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "7aca5cc1-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acbe360-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Alissa Linetta",
-            "Clareta Lowis"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Esteróides"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Aspirina"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "7aca5cc1-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acc7fa0-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Alissa Linetta",
-            "Elsey Phineas"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Candidiase Oral"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Osteoporose"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "7aca5cc1-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acaaae2-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Alissa Linetta",
-            "Kristi Ric"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Candidiase Oral"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Enfarte Miocárdio"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "7aca5cc0-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Matilde Joselyn"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Enfarte Miocárdio"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Análgésicos"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "7aca5cc0-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acaaae3-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Matilde Joselyn",
-            "Binnie Hogle"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Doença Cardíaca Congénita"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Febre Reumática"
-        }
-    },
-    {
-        "incidences": 4,
-        "patientIDs": [
-            "7aca5cc0-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acaaae3-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acbe360-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acc7fa0-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Matilde Joselyn",
-            "Binnie Hogle",
-            "Clareta Lowis",
-            "Elsey Phineas"
+            "cccbbe20-ab40-11e6-9356-cd3743a9084e"
         ],
         "first": {
             "type": "disease",
@@ -1253,1107 +334,58 @@
         }
     },
     {
-        "incidences": 3,
-        "patientIDs": [
-            "7aca5cc0-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acaaae3-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acaf900-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Matilde Joselyn",
-            "Binnie Hogle",
-            "Sidonnie Anil"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Osteoporose"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Doença Cardíaca Congénita"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "7aca5cc0-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acca6b2-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Matilde Joselyn",
-            "Jayme Ekaterina"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Enfarte Miocárdio"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Doença Cardíaca Congénita"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "7aca5cc0-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7aca5cc1-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acbe360-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Matilde Joselyn",
-            "Alissa Linetta",
-            "Clareta Lowis"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Enfarte Miocárdio"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Osteoporose"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "7aca0ea4-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acbe360-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acbe362-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Perry Liatrice",
-            "Clareta Lowis",
-            "Virgie Stew"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Febre Reumática"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-diabéticos"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "7aca0ea4-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7aca5cc0-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Perry Liatrice",
-            "Matilde Joselyn"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Febre Reumática"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Análgésicos"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "7aca0ea4-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Perry Liatrice"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Análgésicos"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-diabéticos"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "7aca0ea3-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Fredra Skricki"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Candidiase Oral"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-ácidos"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "7aca0ea2-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Lethia Huba"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Doença Cardíaca Congénita"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-diabéticos"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "7aca0ea2-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Lethia Huba"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Artrite"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-ácidos"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "7aca0ea2-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acad1f0-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Lethia Huba",
-            "Maiga Newman"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Anti-diabéticos"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-ácidos"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "7aca0ea2-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Lethia Huba"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Artrite"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Doença Cardíaca Congénita"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "7ac9e790-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acbe360-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Kare Adelheid",
-            "Clareta Lowis"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Aspirina"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-diabéticos"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "7ac9c080-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7aca0ea2-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acbe365-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Minni Per",
-            "Lethia Huba",
-            "Kriste Connell"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Doença Cardíaca Congénita"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-ácidos"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "7ac9c080-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7aca5cc0-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Minni Per",
-            "Matilde Joselyn"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Doença Cardíaca Congénita"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Análgésicos"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "7ac9c080-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Minni Per"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Doença Cardíaca Congénita"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Esteróides"
-        }
-    },
-    {
         "incidences": 4,
         "patientIDs": [
-            "7ac9c080-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7aca5cc0-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acaaae3-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acb6e30-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Minni Per",
-            "Matilde Joselyn",
-            "Binnie Hogle",
-            "Bethany Trace"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Doença Cardíaca Congénita"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Estatinas"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "7ac9c080-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Minni Per"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Análgésicos"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-ácidos"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "7ac9c080-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acbbc50-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Minni Per",
-            "Vanda Windsor"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Esteróides"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-ácidos"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "7ac9c080-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Minni Per"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Esteróides"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Análgésicos"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "7ac9c080-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acbbc50-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acca6b0-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Minni Per",
-            "Vanda Windsor",
-            "Matti Wittenburg"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Estatinas"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-ácidos"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "7ac99970-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Essie Adore"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Artrite"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Esteróides"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "7ac99970-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7aca0ea2-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Essie Adore",
-            "Lethia Huba"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Artrite"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-diabéticos"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "7ac99970-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acb6e34-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acbe360-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Essie Adore",
-            "Joceline Odysseus",
-            "Clareta Lowis"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Anti-diabéticos"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Esteróides"
-        }
-    },
-    {
-        "incidences": 4,
-        "patientIDs": [
-            "7ac99970-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7ac9c080-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acbbc50-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acc7fa0-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Essie Adore",
-            "Minni Per",
-            "Vanda Windsor",
-            "Elsey Phineas"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Estatinas"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Esteróides"
-        }
-    },
-    {
-        "incidences": 4,
-        "patientIDs": [
-            "7ac97260-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acb2014-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acc7fa0-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acccdc0-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Zelda Sucy",
-            "Margaux Jandy",
-            "Elsey Phineas",
-            "Blithe Kidder"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Candidiase Oral"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Broncodilatador"
-        }
-    },
-    {
-        "incidences": 5,
-        "patientIDs": [
-            "7ac97260-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7aca5cc1-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acaf901-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acaf902-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acbe361-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Zelda Sucy",
-            "Alissa Linetta",
-            "Rhody Serafine",
-            "Esther Arlin",
-            "Lind Darius"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Candidiase Oral"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Aspirina"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "7ac97260-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acb4720-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Zelda Sucy",
-            "Jillian Damiano"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Candidiase Oral"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Análgésicos"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "7ac97260-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acc0a74-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Zelda Sucy",
-            "Abby Drummond"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Aspirina"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Broncodilatador"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "7ac97260-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acca6b1-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Zelda Sucy",
-            "Nikolia Aleydis"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Análgésicos"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Aspirina"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "7ac8d620-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acb4721-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Linet Tony",
-            "Chelsey Dorrie"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Gânglios aumentados de volume"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-hipertensor"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "7ac8d620-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acb9542-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Linet Tony",
-            "Dreddy Boudreaux"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Gânglios aumentados de volume"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Estatinas"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "7ac8d620-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Linet Tony"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Gânglios aumentados de volume"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-diabéticos"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "7ac8d620-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acc7fa0-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Linet Tony",
-            "Elsey Phineas"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Candidiase Oral"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-hipertensor"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "7ac8d620-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acb9542-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acc7fa0-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Linet Tony",
-            "Dreddy Boudreaux",
-            "Elsey Phineas"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Candidiase Oral"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Estatinas"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "7ac8d620-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Linet Tony"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Candidiase Oral"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-diabéticos"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "7ac8d620-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acaaae3-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acc7fa0-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Linet Tony",
-            "Binnie Hogle",
-            "Elsey Phineas"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Estatinas"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-hipertensor"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "7ac8d620-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acc3180-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Linet Tony",
-            "Shelagh Krongold"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Anti-diabéticos"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-hipertensor"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "7ac8d620-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7ac99970-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Linet Tony",
-            "Essie Adore"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Anti-diabéticos"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Estatinas"
-        }
-    },
-    {
-        "incidences": 4,
-        "patientIDs": [
-            "7ac8d620-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7ac94b50-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acaaae2-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acb9542-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Linet Tony",
-            "Lira Krefetz",
-            "Kristi Ric",
-            "Dreddy Boudreaux"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Candidiase Oral"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Gânglios aumentados de volume"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "7ac8af11-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Sarine Andert"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Gânglios aumentados de volume"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Aspirina"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "7ac8af11-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acaaae2-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Sarine Andert",
-            "Kristi Ric"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Gânglios aumentados de volume"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Enfarte Miocárdio"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "7ac8af10-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acb6e35-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acca6b2-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Linnea Felise",
-            "Anet Frerichs",
-            "Jayme Ekaterina"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Glaucoma"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Doença da Tiroide"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "7ac8af10-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acb6e35-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acca6b2-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Linnea Felise",
-            "Anet Frerichs",
-            "Jayme Ekaterina"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Enfarte Miocárdio"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Doença da Tiroide"
-        }
-    },
-    {
-        "incidences": 6,
-        "patientIDs": [
-            "7ac8af10-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acaaae2-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acb6e31-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acb6e35-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acbe360-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acca6b2-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Linnea Felise",
-            "Kristi Ric",
-            "Shanta Matheny",
-            "Anet Frerichs",
-            "Clareta Lowis",
-            "Jayme Ekaterina"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Enfarte Miocárdio"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Glaucoma"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "7ac88800-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7ac99970-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7aca5cc2-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Del Laughlin",
-            "Essie Adore",
-            "Candice Linkoski"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Artrite"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Estatinas"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "7ac88800-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acb6e31-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Del Laughlin",
-            "Shanta Matheny"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Enfarte Miocárdio"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Artrite"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "7ac88800-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Del Laughlin"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Febre Reumática"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Artrite"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "7ac860f1-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acb6e35-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acc3180-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Gloria Tuesday",
-            "Anet Frerichs",
-            "Shelagh Krongold"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Enfarte Miocárdio"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-hipertensor"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "7ac839e0-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Eddy Ober"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Glaucoma"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Análgésicos"
-        }
-    },
-    {
-        "incidences": 4,
-        "patientIDs": [
-            "7ac839e0-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acaaae3-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acb2015-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acc7fa0-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Eddy Ober",
-            "Binnie Hogle",
-            "Ronnie Leontyne",
-            "Elsey Phineas"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Glaucoma"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Estatinas"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "7ac839e0-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acc7fa0-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acccdc0-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Eddy Ober",
-            "Elsey Phineas",
-            "Blithe Kidder"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Glaucoma"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Broncodilatador"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "7ac839e0-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7aca5cc0-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Eddy Ober",
-            "Matilde Joselyn"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Osteoporose"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Análgésicos"
-        }
-    },
-    {
-        "incidences": 6,
-        "patientIDs": [
-            "7ac839e0-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7ac8fd30-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7aca5cc0-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acaaae3-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acb2015-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acc7fa0-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Eddy Ober",
-            "Gertie Keri",
-            "Matilde Joselyn",
-            "Binnie Hogle",
-            "Ronnie Leontyne",
-            "Elsey Phineas"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Osteoporose"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Estatinas"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "7ac839e0-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7ac8fd30-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acc7fa0-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Eddy Ober",
-            "Gertie Keri",
-            "Elsey Phineas"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Osteoporose"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Broncodilatador"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "7ac839e0-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acb4720-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Eddy Ober",
-            "Jillian Damiano"
+            "cccbbe20-ab40-11e6-9356-cd3743a9084e",
+            "cccbe533-ab40-11e6-9356-cd3743a9084e",
+            "cccc0c44-ab40-11e6-9356-cd3743a9084e",
+            "ccccf6a0-ab40-11e6-9356-cd3743a9084e"
         ],
         "first": {
             "type": "disease",
             "name": "Doença Venérea"
         },
         "second": {
-            "type": "medication",
-            "name": "Análgésicos"
+            "type": "disease",
+            "name": "Candidiase Oral"
         }
     },
     {
-        "incidences": 5,
+        "incidences": 4,
         "patientIDs": [
-            "7ac839e0-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7aca5cc2-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acb2015-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acb9542-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acca6b0-aa65-11e6-8c6a-e33e6f0fa82b"
+            "cccbbe20-ab40-11e6-9356-cd3743a9084e",
+            "cccbe533-ab40-11e6-9356-cd3743a9084e",
+            "cccc8171-ab40-11e6-9356-cd3743a9084e",
+            "ccccf6a0-ab40-11e6-9356-cd3743a9084e"
         ],
-        "patientNames": [
-            "Eddy Ober",
-            "Candice Linkoski",
-            "Ronnie Leontyne",
-            "Dreddy Boudreaux",
-            "Matti Wittenburg"
+        "first": {
+            "type": "disease",
+            "name": "Doença Venérea"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Febre Reumática"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "cccbbe20-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Doença Venérea"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Osteoporose"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "cccb9713-ab40-11e6-9356-cd3743a9084e",
+            "cccca882-ab40-11e6-9356-cd3743a9084e"
         ],
         "first": {
             "type": "disease",
@@ -2365,14 +397,9 @@
         }
     },
     {
-        "incidences": 2,
+        "incidences": 1,
         "patientIDs": [
-            "7ac839e0-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7aca5cc2-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Eddy Ober",
-            "Candice Linkoski"
+            "cccb9713-ab40-11e6-9356-cd3743a9084e"
         ],
         "first": {
             "type": "disease",
@@ -2380,145 +407,132 @@
         },
         "second": {
             "type": "medication",
-            "name": "Broncodilatador"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "7ac839e0-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7ac9c080-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7aca5cc0-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Eddy Ober",
-            "Minni Per",
-            "Matilde Joselyn"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Estatinas"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Análgésicos"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "7ac839e0-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7ac97260-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Eddy Ober",
-            "Zelda Sucy"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Broncodilatador"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Análgésicos"
-        }
-    },
-    {
-        "incidences": 5,
-        "patientIDs": [
-            "7ac839e0-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7ac8fd30-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7aca5cc2-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acc7fa0-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acca6b4-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Eddy Ober",
-            "Gertie Keri",
-            "Candice Linkoski",
-            "Elsey Phineas",
-            "Deerdre Babcock"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Broncodilatador"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Estatinas"
+            "name": "Anti-diabéticos"
         }
     },
     {
         "incidences": 7,
         "patientIDs": [
-            "7ac839e0-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acaaae3-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acb2013-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acb2015-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acbe360-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acc0a71-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acc7fa0-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Eddy Ober",
-            "Binnie Hogle",
-            "Sherilyn Ogden",
-            "Ronnie Leontyne",
-            "Clareta Lowis",
-            "Sharai Alia",
-            "Elsey Phineas"
+            "cccb9712-ab40-11e6-9356-cd3743a9084e",
+            "cccbbe20-ab40-11e6-9356-cd3743a9084e",
+            "cccbe532-ab40-11e6-9356-cd3743a9084e",
+            "cccbe535-ab40-11e6-9356-cd3743a9084e",
+            "cccc0c40-ab40-11e6-9356-cd3743a9084e",
+            "cccc0c43-ab40-11e6-9356-cd3743a9084e",
+            "cccc8173-ab40-11e6-9356-cd3743a9084e"
         ],
         "first": {
             "type": "disease",
             "name": "Osteoporose"
         },
         "second": {
-            "type": "disease",
-            "name": "Glaucoma"
-        }
-    },
-    {
-        "incidences": 5,
-        "patientIDs": [
-            "7ac839e0-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7aca83d0-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acb2015-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acbe360-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acca6b8-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Eddy Ober",
-            "Barrie Mercy",
-            "Ronnie Leontyne",
-            "Clareta Lowis",
-            "Saidee Jelks"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Doença Venérea"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Glaucoma"
+            "type": "medication",
+            "name": "Broncodilatador"
         }
     },
     {
         "incidences": 4,
         "patientIDs": [
-            "7ac839e0-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acb2015-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acb6e33-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acbe360-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Eddy Ober",
-            "Ronnie Leontyne",
-            "Darrelle McDermott",
-            "Clareta Lowis"
+            "cccb9712-ab40-11e6-9356-cd3743a9084e",
+            "cccbbe20-ab40-11e6-9356-cd3743a9084e",
+            "cccbe535-ab40-11e6-9356-cd3743a9084e",
+            "cccc8170-ab40-11e6-9356-cd3743a9084e"
         ],
         "first": {
             "type": "disease",
-            "name": "Doença Venérea"
+            "name": "Candidiase Oral"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Gânglios aumentados de volume"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "cccb9712-ab40-11e6-9356-cd3743a9084e",
+            "cccbbe20-ab40-11e6-9356-cd3743a9084e",
+            "cccbe535-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Osteoporose"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Gânglios aumentados de volume"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "cccb9712-ab40-11e6-9356-cd3743a9084e",
+            "cccbbe20-ab40-11e6-9356-cd3743a9084e",
+            "cccbe535-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Osteoporose"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Candidiase Oral"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "cccb48f0-ab40-11e6-9356-cd3743a9084e",
+            "cccccf90-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Enfarte Miocárdio"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-ácidos"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "cccb48f0-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Aspirina"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-ácidos"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "cccb48f0-ab40-11e6-9356-cd3743a9084e",
+            "cccb9712-ab40-11e6-9356-cd3743a9084e",
+            "cccbe535-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Osteoporose"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Artrite"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "cccb21e5-ab40-11e6-9356-cd3743a9084e",
+            "cccc8173-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Glaucoma"
         },
         "second": {
             "type": "disease",
@@ -2526,24 +540,712 @@
         }
     },
     {
-        "incidences": 5,
+        "incidences": 3,
         "patientIDs": [
-            "7ac6b340-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7ac88800-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7aca5cc0-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acaaae3-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acc7fa0-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Eulalie Hagen",
-            "Del Laughlin",
-            "Matilde Joselyn",
-            "Binnie Hogle",
-            "Elsey Phineas"
+            "cccb21e4-ab40-11e6-9356-cd3743a9084e",
+            "cccbe533-ab40-11e6-9356-cd3743a9084e",
+            "cccc5a63-ab40-11e6-9356-cd3743a9084e"
         ],
         "first": {
             "type": "disease",
             "name": "Febre Reumática"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Doença Cardíaca Congénita"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "cccb21e3-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Artrite"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Estatinas"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "cccb21e2-ab40-11e6-9356-cd3743a9084e",
+            "cccc8173-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Glaucoma"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Broncodilatador"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "cccb21e2-ab40-11e6-9356-cd3743a9084e",
+            "cccc0c41-ab40-11e6-9356-cd3743a9084e",
+            "cccc0c42-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Glaucoma"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-hipertensor"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "cccb21e2-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Glaucoma"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Análgésicos"
+        }
+    },
+    {
+        "incidences": 5,
+        "patientIDs": [
+            "cccb21e2-ab40-11e6-9356-cd3743a9084e",
+            "cccb9712-ab40-11e6-9356-cd3743a9084e",
+            "cccbbe20-ab40-11e6-9356-cd3743a9084e",
+            "cccbe533-ab40-11e6-9356-cd3743a9084e",
+            "cccbe535-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Candidiase Oral"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Broncodilatador"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "cccb21e2-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Candidiase Oral"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Estatinas"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "cccb21e2-ab40-11e6-9356-cd3743a9084e",
+            "cccc0c44-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Candidiase Oral"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-hipertensor"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "cccb21e2-ab40-11e6-9356-cd3743a9084e",
+            "cccc0c40-ab40-11e6-9356-cd3743a9084e",
+            "cccc3351-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Estatinas"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Broncodilatador"
+        }
+    },
+    {
+        "incidences": 4,
+        "patientIDs": [
+            "cccb21e2-ab40-11e6-9356-cd3743a9084e",
+            "cccbbe23-ab40-11e6-9356-cd3743a9084e",
+            "cccbe532-ab40-11e6-9356-cd3743a9084e",
+            "cccc8171-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Anti-hipertensor"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Broncodilatador"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "cccb21e2-ab40-11e6-9356-cd3743a9084e",
+            "cccca880-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Anti-hipertensor"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Estatinas"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "cccb21e2-ab40-11e6-9356-cd3743a9084e",
+            "ccccf6a0-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Candidiase Oral"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Glaucoma"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "cccb21e1-ab40-11e6-9356-cd3743a9084e",
+            "cccb48f0-ab40-11e6-9356-cd3743a9084e",
+            "cccbe532-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Osteoporose"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-ácidos"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "cccb21e1-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Osteoporose"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-depressor"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "cccb21e0-ab40-11e6-9356-cd3743a9084e",
+            "cccc0c44-ab40-11e6-9356-cd3743a9084e",
+            "cccc8171-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Artrite"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-hipertensor"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "cccb21e0-ab40-11e6-9356-cd3743a9084e",
+            "cccb48f0-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Artrite"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-ácidos"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "cccb21e0-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Doença da Tiroide"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Artrite"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "cccad3c2-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Osteoporose"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Análgésicos"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "cccad3c2-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Enfarte Miocárdio"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Análgésicos"
+        }
+    },
+    {
+        "incidences": 6,
+        "patientIDs": [
+            "cccad3c2-ab40-11e6-9356-cd3743a9084e",
+            "cccb21e5-ab40-11e6-9356-cd3743a9084e",
+            "cccb48f0-ab40-11e6-9356-cd3743a9084e",
+            "cccc0c40-ab40-11e6-9356-cd3743a9084e",
+            "cccc0c43-ab40-11e6-9356-cd3743a9084e",
+            "cccca883-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Enfarte Miocárdio"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Osteoporose"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "cccad3c1-ab40-11e6-9356-cd3743a9084e",
+            "cccc5a61-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Doença Cardíaca Congénita"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-ácidos"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "cccaacb2-ab40-11e6-9356-cd3743a9084e",
+            "cccc0c44-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Enfarte Miocárdio"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Doença Venérea"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "cccaacb2-ab40-11e6-9356-cd3743a9084e",
+            "cccc0c40-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Doença Cardíaca Congénita"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Enfarte Miocárdio"
+        }
+    },
+    {
+        "incidences": 4,
+        "patientIDs": [
+            "cccaacb1-ab40-11e6-9356-cd3743a9084e",
+            "cccaacb2-ab40-11e6-9356-cd3743a9084e",
+            "cccc0c40-ab40-11e6-9356-cd3743a9084e",
+            "cccc0c43-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Enfarte Miocárdio"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Broncodilatador"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "cccaacb1-ab40-11e6-9356-cd3743a9084e",
+            "cccb9712-ab40-11e6-9356-cd3743a9084e",
+            "cccbe535-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Artrite"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-diabéticos"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "cccaacb1-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Febre Reumática"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-diabéticos"
+        }
+    },
+    {
+        "incidences": 5,
+        "patientIDs": [
+            "cccaacb1-ab40-11e6-9356-cd3743a9084e",
+            "cccb21e4-ab40-11e6-9356-cd3743a9084e",
+            "cccbbe20-ab40-11e6-9356-cd3743a9084e",
+            "cccbe533-ab40-11e6-9356-cd3743a9084e",
+            "cccc8171-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Febre Reumática"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Broncodilatador"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "cccaacb1-ab40-11e6-9356-cd3743a9084e",
+            "cccbbe23-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Broncodilatador"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Esteróides"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "cccaacb1-ab40-11e6-9356-cd3743a9084e",
+            "cccb48f0-ab40-11e6-9356-cd3743a9084e",
+            "cccc0c44-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Artrite"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Enfarte Miocárdio"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "cccaacb1-ab40-11e6-9356-cd3743a9084e",
+            "cccb21e0-ab40-11e6-9356-cd3743a9084e",
+            "cccc8171-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Febre Reumática"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Artrite"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "cccaacb0-ab40-11e6-9356-cd3743a9084e",
+            "cccca882-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Doença Venérea"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Aspirina"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "cccaacb0-ab40-11e6-9356-cd3743a9084e",
+            "cccbe535-ab40-11e6-9356-cd3743a9084e",
+            "cccc8173-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Aspirina"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Broncodilatador"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "ccca85a1-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Glaucoma"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Esteróides"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "ccca85a1-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Doença Cardíaca Congénita"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Esteróides"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "ccca85a1-ab40-11e6-9356-cd3743a9084e",
+            "cccbe534-ab40-11e6-9356-cd3743a9084e",
+            "cccc8173-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Doença Cardíaca Congénita"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Glaucoma"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "ccca5e93-ab40-11e6-9356-cd3743a9084e",
+            "cccb21e0-ab40-11e6-9356-cd3743a9084e",
+            "cccbe531-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Anti-ácidos"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Esteróides"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "ccca5e93-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Anti-ácidos"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-diabéticos"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "ccca5e93-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Análgésicos"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-diabéticos"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "ccca5e92-ab40-11e6-9356-cd3743a9084e",
+            "cccaacb1-ab40-11e6-9356-cd3743a9084e",
+            "cccb21e0-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Artrite"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Esteróides"
+        }
+    },
+    {
+        "incidences": 5,
+        "patientIDs": [
+            "ccca5e91-ab40-11e6-9356-cd3743a9084e",
+            "cccbe534-ab40-11e6-9356-cd3743a9084e",
+            "cccbe535-ab40-11e6-9356-cd3743a9084e",
+            "cccc5a63-ab40-11e6-9356-cd3743a9084e",
+            "cccc8173-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Doença Cardíaca Congénita"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Aspirina"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "ccca5e91-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Doença da Tiroide"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Aspirina"
+        }
+    },
+    {
+        "incidences": 4,
+        "patientIDs": [
+            "ccca5e91-ab40-11e6-9356-cd3743a9084e",
+            "cccbe530-ab40-11e6-9356-cd3743a9084e",
+            "cccbe533-ab40-11e6-9356-cd3743a9084e",
+            "cccc5a61-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Doença da Tiroide"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Doença Cardíaca Congénita"
+        }
+    },
+    {
+        "incidences": 4,
+        "patientIDs": [
+            "ccca5e91-ab40-11e6-9356-cd3743a9084e",
+            "cccbe535-ab40-11e6-9356-cd3743a9084e",
+            "cccc0c40-ab40-11e6-9356-cd3743a9084e",
+            "cccc8173-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Osteoporose"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Doença Cardíaca Congénita"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "ccca5e91-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Osteoporose"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Doença da Tiroide"
+        }
+    },
+    {
+        "incidences": 6,
+        "patientIDs": [
+            "ccca5e90-ab40-11e6-9356-cd3743a9084e",
+            "ccca5e91-ab40-11e6-9356-cd3743a9084e",
+            "cccad3c2-ab40-11e6-9356-cd3743a9084e",
+            "cccb48f0-ab40-11e6-9356-cd3743a9084e",
+            "cccbe535-ab40-11e6-9356-cd3743a9084e",
+            "cccc8173-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Osteoporose"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Aspirina"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "ccca5e90-ab40-11e6-9356-cd3743a9084e",
+            "cccc0c40-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Osteoporose"
         },
         "second": {
             "type": "medication",
@@ -2553,18 +1255,44 @@
     {
         "incidences": 3,
         "patientIDs": [
-            "7ac6b340-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acbe360-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acca6b8-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Eulalie Hagen",
-            "Clareta Lowis",
-            "Saidee Jelks"
+            "ccca5e90-ab40-11e6-9356-cd3743a9084e",
+            "cccb9712-ab40-11e6-9356-cd3743a9084e",
+            "cccbe535-ab40-11e6-9356-cd3743a9084e"
         ],
         "first": {
             "type": "disease",
-            "name": "Febre Reumática"
+            "name": "Osteoporose"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-diabéticos"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "ccca5e90-ab40-11e6-9356-cd3743a9084e",
+            "cccb9713-ab40-11e6-9356-cd3743a9084e",
+            "cccbe534-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Anti-diabéticos"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Estatinas"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "ccca3781-ab40-11e6-9356-cd3743a9084e",
+            "cccbe535-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Candidiase Oral"
         },
         "second": {
             "type": "medication",
@@ -2572,12 +1300,654 @@
         }
     },
     {
+        "incidences": 3,
+        "patientIDs": [
+            "ccca3780-ab40-11e6-9356-cd3743a9084e",
+            "cccb21e0-ab40-11e6-9356-cd3743a9084e",
+            "cccbe531-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Doença da Tiroide"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Esteróides"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "ccca3780-ab40-11e6-9356-cd3743a9084e",
+            "cccaacb1-ab40-11e6-9356-cd3743a9084e",
+            "cccca880-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Enfarte Miocárdio"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Esteróides"
+        }
+    },
+    {
+        "incidences": 4,
+        "patientIDs": [
+            "ccca3780-ab40-11e6-9356-cd3743a9084e",
+            "cccc0c41-ab40-11e6-9356-cd3743a9084e",
+            "cccc0c44-ab40-11e6-9356-cd3743a9084e",
+            "cccca880-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Enfarte Miocárdio"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-hipertensor"
+        }
+    },
+    {
+        "incidences": 4,
+        "patientIDs": [
+            "ccca1070-ab40-11e6-9356-cd3743a9084e",
+            "cccaacb1-ab40-11e6-9356-cd3743a9084e",
+            "cccb21e0-ab40-11e6-9356-cd3743a9084e",
+            "ccccf6a2-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Febre Reumática"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Esteróides"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "ccc9e960-ab40-11e6-9356-cd3743a9084e",
+            "cccb9712-ab40-11e6-9356-cd3743a9084e",
+            "cccbe535-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Candidiase Oral"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-diabéticos"
+        }
+    },
+    {
         "incidences": 1,
         "patientIDs": [
-            "7ac6b340-aa65-11e6-8c6a-e33e6f0fa82b"
+            "ccc9e960-ab40-11e6-9356-cd3743a9084e"
         ],
-        "patientNames": [
-            "Eulalie Hagen"
+        "first": {
+            "type": "disease",
+            "name": "Doença da Tiroide"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-diabéticos"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "ccc9e960-ab40-11e6-9356-cd3743a9084e",
+            "cccbe534-ab40-11e6-9356-cd3743a9084e",
+            "cccc0c42-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Anti-diabéticos"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-depressor"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "ccc9e960-ab40-11e6-9356-cd3743a9084e",
+            "cccbe533-ab40-11e6-9356-cd3743a9084e",
+            "cccc5a60-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Doença da Tiroide"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Candidiase Oral"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "ccc9e960-ab40-11e6-9356-cd3743a9084e",
+            "cccc0c44-ab40-11e6-9356-cd3743a9084e",
+            "cccccf90-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Enfarte Miocárdio"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Candidiase Oral"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "ccc9e960-ab40-11e6-9356-cd3743a9084e",
+            "ccca3780-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Enfarte Miocárdio"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Doença da Tiroide"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "ccc9c250-ab40-11e6-9356-cd3743a9084e",
+            "cccb21e0-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Esteróides"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-depressor"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "ccc99b40-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Gânglios aumentados de volume"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-ácidos"
+        }
+    },
+    {
+        "incidences": 4,
+        "patientIDs": [
+            "ccc97430-ab40-11e6-9356-cd3743a9084e",
+            "ccca85a1-ab40-11e6-9356-cd3743a9084e",
+            "cccbe534-ab40-11e6-9356-cd3743a9084e",
+            "cccc0c40-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Doença Cardíaca Congénita"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Estatinas"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "ccc94d20-ab40-11e6-9356-cd3743a9084e",
+            "cccbe534-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Doença Cardíaca Congénita"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-depressor"
+        }
+    },
+    {
+        "incidences": 4,
+        "patientIDs": [
+            "ccc92611-ab40-11e6-9356-cd3743a9084e",
+            "ccca1070-ab40-11e6-9356-cd3743a9084e",
+            "ccca5e93-ab40-11e6-9356-cd3743a9084e",
+            "ccccf6a2-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Esteróides"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Análgésicos"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "ccc92611-ab40-11e6-9356-cd3743a9084e",
+            "cccb21e2-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Estatinas"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Análgésicos"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "ccc92611-ab40-11e6-9356-cd3743a9084e",
+            "ccca85a1-ab40-11e6-9356-cd3743a9084e",
+            "cccca880-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Estatinas"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Esteróides"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "ccc92610-ab40-11e6-9356-cd3743a9084e",
+            "cccc0c42-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Anti-hipertensor"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Aspirina"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "ccc92610-ab40-11e6-9356-cd3743a9084e",
+            "ccc9c250-ab40-11e6-9356-cd3743a9084e",
+            "ccca5e92-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Esteróides"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Aspirina"
+        }
+    },
+    {
+        "incidences": 7,
+        "patientIDs": [
+            "ccc92610-ab40-11e6-9356-cd3743a9084e",
+            "ccca1070-ab40-11e6-9356-cd3743a9084e",
+            "ccca3780-ab40-11e6-9356-cd3743a9084e",
+            "cccb21e0-ab40-11e6-9356-cd3743a9084e",
+            "cccbbe23-ab40-11e6-9356-cd3743a9084e",
+            "cccca880-ab40-11e6-9356-cd3743a9084e",
+            "ccccf6a2-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Esteróides"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-hipertensor"
+        }
+    },
+    {
+        "incidences": 6,
+        "patientIDs": [
+            "ccc92610-ab40-11e6-9356-cd3743a9084e",
+            "ccca5e90-ab40-11e6-9356-cd3743a9084e",
+            "cccb48f1-ab40-11e6-9356-cd3743a9084e",
+            "cccbe534-ab40-11e6-9356-cd3743a9084e",
+            "cccbe535-ab40-11e6-9356-cd3743a9084e",
+            "cccc0c42-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Anti-diabéticos"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Aspirina"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "ccc92610-ab40-11e6-9356-cd3743a9084e",
+            "cccbbe23-ab40-11e6-9356-cd3743a9084e",
+            "cccc0c42-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Anti-diabéticos"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-hipertensor"
+        }
+    },
+    {
+        "incidences": 4,
+        "patientIDs": [
+            "ccc92610-ab40-11e6-9356-cd3743a9084e",
+            "ccca5e93-ab40-11e6-9356-cd3743a9084e",
+            "cccaacb1-ab40-11e6-9356-cd3743a9084e",
+            "cccbbe23-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Anti-diabéticos"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Esteróides"
+        }
+    },
+    {
+        "incidences": 5,
+        "patientIDs": [
+            "ccc8ff00-ab40-11e6-9356-cd3743a9084e",
+            "cccaacb1-ab40-11e6-9356-cd3743a9084e",
+            "cccb9712-ab40-11e6-9356-cd3743a9084e",
+            "cccbbe23-ab40-11e6-9356-cd3743a9084e",
+            "cccbe535-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Anti-diabéticos"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Broncodilatador"
+        }
+    },
+    {
+        "incidences": 4,
+        "patientIDs": [
+            "ccc8d7f0-ab40-11e6-9356-cd3743a9084e",
+            "cccb9712-ab40-11e6-9356-cd3743a9084e",
+            "cccb9713-ab40-11e6-9356-cd3743a9084e",
+            "cccbe535-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Gânglios aumentados de volume"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-diabéticos"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "ccc8d7f0-ab40-11e6-9356-cd3743a9084e",
+            "ccc9e960-ab40-11e6-9356-cd3743a9084e",
+            "cccaacb1-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Enfarte Miocárdio"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-diabéticos"
+        }
+    },
+    {
+        "incidences": 7,
+        "patientIDs": [
+            "ccc8b0e0-ab40-11e6-9356-cd3743a9084e",
+            "cccaacb2-ab40-11e6-9356-cd3743a9084e",
+            "cccb21e4-ab40-11e6-9356-cd3743a9084e",
+            "cccbe533-ab40-11e6-9356-cd3743a9084e",
+            "cccbe535-ab40-11e6-9356-cd3743a9084e",
+            "cccc0c40-ab40-11e6-9356-cd3743a9084e",
+            "cccc8173-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Doença Cardíaca Congénita"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Broncodilatador"
+        }
+    },
+    {
+        "incidences": 6,
+        "patientIDs": [
+            "ccc8b0e0-ab40-11e6-9356-cd3743a9084e",
+            "cccaacb0-ab40-11e6-9356-cd3743a9084e",
+            "cccaacb2-ab40-11e6-9356-cd3743a9084e",
+            "cccbbe20-ab40-11e6-9356-cd3743a9084e",
+            "cccbe533-ab40-11e6-9356-cd3743a9084e",
+            "cccc8171-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Doença Venérea"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Broncodilatador"
+        }
+    },
+    {
+        "incidences": 4,
+        "patientIDs": [
+            "ccc8b0e0-ab40-11e6-9356-cd3743a9084e",
+            "cccb9712-ab40-11e6-9356-cd3743a9084e",
+            "cccbbe20-ab40-11e6-9356-cd3743a9084e",
+            "cccbe535-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Gânglios aumentados de volume"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Broncodilatador"
+        }
+    },
+    {
+        "incidences": 6,
+        "patientIDs": [
+            "ccc8b0e0-ab40-11e6-9356-cd3743a9084e",
+            "cccaacb2-ab40-11e6-9356-cd3743a9084e",
+            "cccbe530-ab40-11e6-9356-cd3743a9084e",
+            "cccbe533-ab40-11e6-9356-cd3743a9084e",
+            "cccc5a61-ab40-11e6-9356-cd3743a9084e",
+            "cccca881-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Doença Venérea"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Doença Cardíaca Congénita"
+        }
+    },
+    {
+        "incidences": 4,
+        "patientIDs": [
+            "ccc8b0e0-ab40-11e6-9356-cd3743a9084e",
+            "ccc8d7f1-ab40-11e6-9356-cd3743a9084e",
+            "cccbe530-ab40-11e6-9356-cd3743a9084e",
+            "cccbe535-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Gânglios aumentados de volume"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Doença Cardíaca Congénita"
+        }
+    },
+    {
+        "incidences": 4,
+        "patientIDs": [
+            "ccc8b0e0-ab40-11e6-9356-cd3743a9084e",
+            "cccb9713-ab40-11e6-9356-cd3743a9084e",
+            "cccbbe20-ab40-11e6-9356-cd3743a9084e",
+            "cccbe530-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Gânglios aumentados de volume"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Doença Venérea"
+        }
+    },
+    {
+        "incidences": 4,
+        "patientIDs": [
+            "ccc889d0-ab40-11e6-9356-cd3743a9084e",
+            "cccaacb1-ab40-11e6-9356-cd3743a9084e",
+            "cccccf90-ab40-11e6-9356-cd3743a9084e",
+            "ccccf6a1-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Febre Reumática"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Enfarte Miocárdio"
+        }
+    },
+    {
+        "incidences": 4,
+        "patientIDs": [
+            "ccc862c1-ab40-11e6-9356-cd3743a9084e",
+            "cccb21e0-ab40-11e6-9356-cd3743a9084e",
+            "cccbe531-ab40-11e6-9356-cd3743a9084e",
+            "cccc5a61-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Doença da Tiroide"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-ácidos"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "ccc862c1-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Doença da Tiroide"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Análgésicos"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "ccc862c1-ab40-11e6-9356-cd3743a9084e",
+            "ccc9e960-ab40-11e6-9356-cd3743a9084e",
+            "cccb21e0-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Doença da Tiroide"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-depressor"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "ccc862c1-ab40-11e6-9356-cd3743a9084e",
+            "ccca3780-ab40-11e6-9356-cd3743a9084e",
+            "cccb21e0-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Doença da Tiroide"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-hipertensor"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "ccc862c1-ab40-11e6-9356-cd3743a9084e",
+            "cccb21e0-ab40-11e6-9356-cd3743a9084e",
+            "cccccf90-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Febre Reumática"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-ácidos"
+        }
+    },
+    {
+        "incidences": 4,
+        "patientIDs": [
+            "ccc862c1-ab40-11e6-9356-cd3743a9084e",
+            "ccca1070-ab40-11e6-9356-cd3743a9084e",
+            "cccc8171-ab40-11e6-9356-cd3743a9084e",
+            "ccccf6a2-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Febre Reumática"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Análgésicos"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "ccc862c1-ab40-11e6-9356-cd3743a9084e",
+            "cccb21e0-ab40-11e6-9356-cd3743a9084e"
         ],
         "first": {
             "type": "disease",
@@ -2589,22 +1959,470 @@
         }
     },
     {
+        "incidences": 5,
+        "patientIDs": [
+            "ccc862c1-ab40-11e6-9356-cd3743a9084e",
+            "ccca1070-ab40-11e6-9356-cd3743a9084e",
+            "cccb21e0-ab40-11e6-9356-cd3743a9084e",
+            "cccc8171-ab40-11e6-9356-cd3743a9084e",
+            "ccccf6a2-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Febre Reumática"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-hipertensor"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "ccc862c1-ab40-11e6-9356-cd3743a9084e",
+            "ccca5e93-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Análgésicos"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-ácidos"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "ccc862c1-ab40-11e6-9356-cd3743a9084e",
+            "cccb21e0-ab40-11e6-9356-cd3743a9084e",
+            "cccb21e1-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Anti-depressor"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-ácidos"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "ccc862c1-ab40-11e6-9356-cd3743a9084e",
+            "cccb21e0-ab40-11e6-9356-cd3743a9084e",
+            "cccbe532-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Anti-hipertensor"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-ácidos"
+        }
+    },
+    {
+        "incidences": 5,
+        "patientIDs": [
+            "ccc862c1-ab40-11e6-9356-cd3743a9084e",
+            "ccca1070-ab40-11e6-9356-cd3743a9084e",
+            "cccb21e2-ab40-11e6-9356-cd3743a9084e",
+            "cccc8171-ab40-11e6-9356-cd3743a9084e",
+            "ccccf6a2-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Anti-hipertensor"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Análgésicos"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "ccc862c1-ab40-11e6-9356-cd3743a9084e",
+            "cccb21e0-ab40-11e6-9356-cd3743a9084e",
+            "cccc0c42-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Anti-hipertensor"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-depressor"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "ccc862c1-ab40-11e6-9356-cd3743a9084e",
+            "cccb21e0-ab40-11e6-9356-cd3743a9084e",
+            "cccbe533-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Febre Reumática"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Doença da Tiroide"
+        }
+    },
+    {
+        "incidences": 5,
+        "patientIDs": [
+            "ccc83bb1-ab40-11e6-9356-cd3743a9084e",
+            "cccaacb1-ab40-11e6-9356-cd3743a9084e",
+            "cccb9712-ab40-11e6-9356-cd3743a9084e",
+            "cccbe535-ab40-11e6-9356-cd3743a9084e",
+            "cccc8171-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Artrite"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Broncodilatador"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "ccc83bb1-ab40-11e6-9356-cd3743a9084e",
+            "cccb21e2-ab40-11e6-9356-cd3743a9084e",
+            "cccc8171-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Análgésicos"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Broncodilatador"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "ccc83bb0-ab40-11e6-9356-cd3743a9084e",
+            "ccc9e960-ab40-11e6-9356-cd3743a9084e",
+            "ccca3781-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Candidiase Oral"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-depressor"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "ccc83bb0-ab40-11e6-9356-cd3743a9084e",
+            "cccb21e2-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Candidiase Oral"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Análgésicos"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "ccc83bb0-ab40-11e6-9356-cd3743a9084e",
+            "cccb21e0-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Artrite"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-depressor"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "ccc83bb0-ab40-11e6-9356-cd3743a9084e",
+            "ccc862c1-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Análgésicos"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-depressor"
+        }
+    },
+    {
         "incidences": 4,
         "patientIDs": [
-            "7ac6b340-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7ac88800-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7aca5cc0-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acca6b4-aa65-11e6-8c6a-e33e6f0fa82b"
+            "ccc83bb0-ab40-11e6-9356-cd3743a9084e",
+            "cccb9712-ab40-11e6-9356-cd3743a9084e",
+            "cccbe535-ab40-11e6-9356-cd3743a9084e",
+            "cccc0c44-ab40-11e6-9356-cd3743a9084e"
         ],
-        "patientNames": [
-            "Eulalie Hagen",
-            "Del Laughlin",
-            "Matilde Joselyn",
-            "Deerdre Babcock"
+        "first": {
+            "type": "disease",
+            "name": "Artrite"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Candidiase Oral"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "ccc79f70-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Gânglios aumentados de volume"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Análgésicos"
+        }
+    },
+    {
+        "incidences": 4,
+        "patientIDs": [
+            "ccc79f70-ab40-11e6-9356-cd3743a9084e",
+            "ccc83bb0-ab40-11e6-9356-cd3743a9084e",
+            "ccc83bb1-ab40-11e6-9356-cd3743a9084e",
+            "cccc8171-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Artrite"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Análgésicos"
+        }
+    },
+    {
+        "incidences": 4,
+        "patientIDs": [
+            "ccc79f70-ab40-11e6-9356-cd3743a9084e",
+            "ccca5e92-ab40-11e6-9356-cd3743a9084e",
+            "cccb48f0-ab40-11e6-9356-cd3743a9084e",
+            "cccbe535-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Artrite"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Aspirina"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "ccc79f70-ab40-11e6-9356-cd3743a9084e",
+            "cccad3c2-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Aspirina"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Análgésicos"
+        }
+    },
+    {
+        "incidences": 4,
+        "patientIDs": [
+            "ccc79f70-ab40-11e6-9356-cd3743a9084e",
+            "cccb9712-ab40-11e6-9356-cd3743a9084e",
+            "cccbe535-ab40-11e6-9356-cd3743a9084e",
+            "cccc3350-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Artrite"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Gânglios aumentados de volume"
+        }
+    },
+    {
+        "incidences": 5,
+        "patientIDs": [
+            "ccc68e00-ab40-11e6-9356-cd3743a9084e",
+            "ccca85a1-ab40-11e6-9356-cd3743a9084e",
+            "cccad3c0-ab40-11e6-9356-cd3743a9084e",
+            "cccb21e2-ab40-11e6-9356-cd3743a9084e",
+            "cccbe534-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Glaucoma"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Estatinas"
+        }
+    },
+    {
+        "incidences": 6,
+        "patientIDs": [
+            "ccc68e00-ab40-11e6-9356-cd3743a9084e",
+            "ccc862c0-ab40-11e6-9356-cd3743a9084e",
+            "cccad3c0-ab40-11e6-9356-cd3743a9084e",
+            "cccb9711-ab40-11e6-9356-cd3743a9084e",
+            "cccbe534-ab40-11e6-9356-cd3743a9084e",
+            "cccc0c42-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Glaucoma"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-depressor"
+        }
+    },
+    {
+        "incidences": 5,
+        "patientIDs": [
+            "ccc68e00-ab40-11e6-9356-cd3743a9084e",
+            "cccad3c0-ab40-11e6-9356-cd3743a9084e",
+            "cccbe534-ab40-11e6-9356-cd3743a9084e",
+            "cccc0c42-ab40-11e6-9356-cd3743a9084e",
+            "cccc8173-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Glaucoma"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Aspirina"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "ccc68e00-ab40-11e6-9356-cd3743a9084e",
+            "cccb9713-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Gânglios aumentados de volume"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Estatinas"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "ccc68e00-ab40-11e6-9356-cd3743a9084e",
+            "cccb9711-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Gânglios aumentados de volume"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-depressor"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "ccc68e00-ab40-11e6-9356-cd3743a9084e",
+            "ccc79f70-ab40-11e6-9356-cd3743a9084e",
+            "cccbe535-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Gânglios aumentados de volume"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Aspirina"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "ccc68e00-ab40-11e6-9356-cd3743a9084e",
+            "cccc0c40-ab40-11e6-9356-cd3743a9084e",
+            "cccca880-ab40-11e6-9356-cd3743a9084e"
         ],
         "first": {
             "type": "disease",
             "name": "Enfarte Miocárdio"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Estatinas"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "ccc68e00-ab40-11e6-9356-cd3743a9084e",
+            "ccc9e960-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Enfarte Miocárdio"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-depressor"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "ccc68e00-ab40-11e6-9356-cd3743a9084e",
+            "cccad3c2-ab40-11e6-9356-cd3743a9084e",
+            "cccb48f0-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Enfarte Miocárdio"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Aspirina"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "ccc68e00-ab40-11e6-9356-cd3743a9084e",
+            "cccad3c0-ab40-11e6-9356-cd3743a9084e",
+            "cccbe534-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Anti-depressor"
         },
         "second": {
             "type": "medication",
@@ -2614,52 +2432,11 @@
     {
         "incidences": 5,
         "patientIDs": [
-            "7ac6b340-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7ac8af11-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7aca5cc1-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acbe360-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acc0a74-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Eulalie Hagen",
-            "Sarine Andert",
-            "Alissa Linetta",
-            "Clareta Lowis",
-            "Abby Drummond"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Enfarte Miocárdio"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Aspirina"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "7ac6b340-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Eulalie Hagen"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Enfarte Miocárdio"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-depressor"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "7ac6b340-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Eulalie Hagen"
+            "ccc68e00-ab40-11e6-9356-cd3743a9084e",
+            "ccca5e90-ab40-11e6-9356-cd3743a9084e",
+            "cccad3c0-ab40-11e6-9356-cd3743a9084e",
+            "cccbe534-ab40-11e6-9356-cd3743a9084e",
+            "cccca882-ab40-11e6-9356-cd3743a9084e"
         ],
         "first": {
             "type": "medication",
@@ -2671,52 +2448,45 @@
         }
     },
     {
-        "incidences": 1,
+        "incidences": 6,
         "patientIDs": [
-            "7ac6b340-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Eulalie Hagen"
+            "ccc68e00-ab40-11e6-9356-cd3743a9084e",
+            "ccc9c250-ab40-11e6-9356-cd3743a9084e",
+            "ccca3781-ab40-11e6-9356-cd3743a9084e",
+            "cccad3c0-ab40-11e6-9356-cd3743a9084e",
+            "cccbe534-ab40-11e6-9356-cd3743a9084e",
+            "cccc0c42-ab40-11e6-9356-cd3743a9084e"
         ],
         "first": {
-            "type": "medication",
-            "name": "Anti-depressor"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Estatinas"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "7ac6b340-aa65-11e6-8c6a-e33e6f0fa82b"
-        ],
-        "patientNames": [
-            "Eulalie Hagen"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Anti-depressor"
-        },
-        "second": {
             "type": "medication",
             "name": "Aspirina"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-depressor"
         }
     },
     {
-        "incidences": 4,
+        "incidences": 2,
         "patientIDs": [
-            "7ac6b340-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7ac88800-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7aca5cc0-aa65-11e6-8c6a-e33e6f0fa82b",
-            "7acbe360-aa65-11e6-8c6a-e33e6f0fa82b"
+            "ccc68e00-ab40-11e6-9356-cd3743a9084e",
+            "cccb9711-ab40-11e6-9356-cd3743a9084e"
         ],
-        "patientNames": [
-            "Eulalie Hagen",
-            "Del Laughlin",
-            "Matilde Joselyn",
-            "Clareta Lowis"
+        "first": {
+            "type": "disease",
+            "name": "Gânglios aumentados de volume"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Glaucoma"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "ccc68e00-ab40-11e6-9356-cd3743a9084e",
+            "cccb21e5-ab40-11e6-9356-cd3743a9084e",
+            "cccc0c41-ab40-11e6-9356-cd3743a9084e"
         ],
         "first": {
             "type": "disease",
@@ -2724,7 +2494,23 @@
         },
         "second": {
             "type": "disease",
-            "name": "Febre Reumática"
+            "name": "Glaucoma"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "ccc68e00-ab40-11e6-9356-cd3743a9084e",
+            "ccc8d7f0-ab40-11e6-9356-cd3743a9084e",
+            "ccccf6a1-ab40-11e6-9356-cd3743a9084e"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Enfarte Miocárdio"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Gânglios aumentados de volume"
         }
     }
 ]

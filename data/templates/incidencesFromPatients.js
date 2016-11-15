@@ -44,7 +44,6 @@ var generator = (function() {
                             id: [array1[i].name, array2[j].name],
                             incidences: 1,
                             patientIDs: [patients[patientsIndex].id],
-                            patientNames: [patients[patientsIndex].name],
                             first: { type: array1ID, name: array1[i].name },
                             second: { type: array2ID, name: array2[j].name }
                         });
@@ -54,8 +53,6 @@ var generator = (function() {
                             pairs[pairIndex].incidences += 1;
                             pairs[pairIndex].patientIDs.push(
                                 patients[patientsIndex].id);
-                            pairs[pairIndex].patientNames.push(
-                                patients[patientsIndex].name);
                         }
                     }
                 }
@@ -101,7 +98,6 @@ var generator = (function() {
 		return {
 			incidences: pair.patientIDs.length,
             patientIDs: pair.patientIDs,
-            patientNames: pair.patientNames,
 			first: pair.first,
 			second: pair.second
 		};
