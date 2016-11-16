@@ -11,7 +11,7 @@ moduleVisualizations.directive('directiveHeatMapTooltip', function() {
                     "</div>" +
                     "</br>" +
                     "<div style=\"text-align: left\" class=\"p\">" +
-                        "Os atributos presentes no paciente actual " +
+                        "Os <b>atributos presentes no paciente actual</b> " +
                         "são assinalados (" +
                         "<div style=\"display: inline-block\" class=\"" +
                             "markPatientAttribute markPresent markSquare\" />" +
