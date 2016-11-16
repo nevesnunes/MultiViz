@@ -29,7 +29,7 @@ moduleUtils.factory('utils', function() {
         // Make sure all child elements have the id property, since the
         // user may click on one of them and activate functions
         // which require the id to be present in the clicked element
-        return '<button class="tooltip-wrapper btn ' +
+        return '<button class="tooltip-wrapper btn custom-btn-margin ' +
             options.clazz + '" ' +
             'ng-class="isButtonChecked()" ' +
             'style="' + options.style + '" ' +

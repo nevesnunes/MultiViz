@@ -128,12 +128,10 @@ moduleVisualizations.factory('HeatMapVisualization',
                     self.margin.left + "," + self.margin.top + ")");
         d3.select("#" + heatMapID + "-main")
             .style('float', 'left');
-        d3.select('#' + heatMapID + "-details")
-            .style('float', 'left');
-        d3.select('#' + heatMapID + "-switcher")
-            .style('float', 'left');
         d3.select('#' + heatMapID + "-sorting")
-            .style('float', 'left');
+            .style('display', 'inline-block');
+        d3.select('#' + heatMapID + "-switcher")
+            .style('display', 'inline-block');
 
         self.targetElement = heatMapID;
         self.html = svg;
@@ -921,10 +919,12 @@ moduleVisualizations.factory('HeatMapVisualization',
 
     HeatMapVisualization.prototype.renderVisibleDetails = function() {
         d3.select("#" + this.targetElement + "-switcher")
+            .style('display', 'inline-block')
             .style("visibility", "initial")
             .style("width", "initial")
             .style("height", "initial");
         d3.select("#" + this.targetElement + "-sorting")
+            .style('display', 'inline-block')
             .style("visibility", "initial")
             .style("width", "initial")
             .style("height", "initial");
@@ -932,10 +932,12 @@ moduleVisualizations.factory('HeatMapVisualization',
 
     HeatMapVisualization.prototype.renderNoVisibleDetails = function() {
         d3.select("#" + this.targetElement + "-switcher")
+            .style('display', 'none')
             .style("visibility", "hidden")
             .style("width", 0)
             .style("height", 0);
         d3.select("#" + this.targetElement + "-sorting")
+            .style('display', 'none')
             .style("visibility", "hidden")
             .style("width", 0)
             .style("height", 0);
