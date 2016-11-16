@@ -363,7 +363,19 @@ moduleLayout.directive("directiveActionPanel",
                 updateActionPanel("<span>TODO</span>");
             };
 
-            scope.cancelAction = function() {
+            // Cancels user action, with an optional callback
+            // containing cleanup routines
+            scope.cancelAction = function(callback) {
+                if (callback) {
+                    if(scope.hasOwnProperty(callback)) {
+                        scope[callback]();
+                    } else {
+                        console.log("[WARN] @cancelAction: " +
+                            "Attempt to call undefined callback: " +
+                            callback);
+                    }
+                }
+
                 scope.makeDefaultActions();
             };
 
@@ -422,16 +434,6 @@ moduleLayout.directive("directiveActionPanel",
             };
 
             var isAttributeTypeActive = function(type) {
-                var el = angular.element('#btnDiseases');
-                if (el.length) {
-                } else {
-                    var a = this;
-                    var b = element;
-                    console.log("NOPE");
-                    console.log(scope);
-                    console.log(currentScope);
-                    console.log(element);
-                }
                 var node = nodes.getCurrentNode();
                 var viz = nodes.getVizByIDs(
                     node.model.id, node.model.currentVizID);
@@ -727,7 +729,7 @@ moduleLayout.directive("directiveActionPanel",
                 var cancelButton = utils.makeImgButton({
                     clazz:  "btn-secondary custom-btn-secondary custom-right",
                     placement: "left",
-                    method: "cancelAction()",
+                    method: "cancelAction(\'cleanOverlays\')",
                     title:  "Cancelar",
                     img:    "images/controls/black/remove.svg"
                 });
@@ -738,6 +740,52 @@ moduleLayout.directive("directiveActionPanel",
                     '</div>';
     
                 updateActionPanel(html);
+
+                var currentNode = nodes.getCurrentNode();
+                var sourceID = currentNode.model.currentVizID;
+                var vizs = currentNode.model.vizs;
+                for (var i = 0; i < vizs.length; i++) {
+                    var vizID = vizs[i].id;
+
+                    var vizHeight = angular.element('#' + vizID)[0]
+                        .offsetHeight;
+                    // Set fallback value close to drawn SVG elements
+                    if (!vizHeight)
+                        vizHeight = 350;
+
+                    var overlayClass = (vizID === sourceID) ?
+                        'viz-overlay-source' :
+                        'viz-overlay-target';
+                    var overlayHTML =
+                        '<div class="viz-overlay ' + overlayClass + '" ' +
+                            'style="height: ' + vizHeight + 'px" ' +
+                            'id="overlay-' + vizID + '" ' +
+                            'ng-click="makeJoinSpiral(\'' + vizID + '\')">';
+                    overlayHTML += (vizID === sourceID) ?
+                        '<div class="viz-overlay-target-text">' +
+                            '<span>Juntar esta espiral com...</span>' +
+                        '</div>' :
+                        '';
+                    overlayHTML += '</div>';
+                    var targetHTML = $compile(overlayHTML)(scope);
+                    var target = angular.element('#' + vizID + "-contents");
+                    target.append(targetHTML);
+                }
+            };
+
+            scope.cleanOverlays = function() {
+                var currentNode = nodes.getCurrentNode();
+                var vizs = currentNode.model.vizs;
+                for (var i = 0; i < vizs.length; i++) {
+                    angular.element('#overlay-' + vizs[i].id).remove();
+                }
+            };
+
+            scope.makeJoinSpiral = function(vizID) {
+                // TODO
+                scope.cleanOverlays();
+
+                scope.makeDefaultActions();
             };
 
             scope.makeDefaultActions = function() {
@@ -1049,6 +1097,14 @@ moduleLayout.directive("directivePanes",
             };
 
             scope.joinSpiral = function(button) {
+                var elementProperties = extractPropertiesFromElement(button);
+
+                // Update node properties
+                var node = nodes.getRootNode().first(function (node1) {
+                    return node1.model.id === elementProperties.nodeID;
+                });
+                node.model.currentVizID = elementProperties.vizID;
+
                 scope.APIActionPanel.chooseSpiralToJoin();
             };
 
@@ -1330,12 +1386,12 @@ moduleLayout.directive("directivePanes",
                     'id="' + vizID + '" ' +
                     'data-node-id="' + id + '" ' +
                     'class="viz-spiral">' +
-                    '<div style="display: block">' + 
-                        buttonsHTML +
-                    // FIXME: remove
-                    vizID +
-                    '</div>' +
-                    '<div id="' + vizID + '-contents">' +
+                    '<div class="viz-contents" id="' + vizID + '-contents">' +
+                        '<div style="display: block">' + 
+                            buttonsHTML +
+                        // FIXME: remove
+                        vizID +
+                        '</div>' +
                         '<div id="' + vizID + '-details">' +
                             '<div id="' + vizID + '-attribute-text" />' +
                             makeCurrentBinningHTML(vizID) +
@@ -1375,6 +1431,7 @@ moduleLayout.directive("directivePanes",
                 nodes.updateViz({
                     nodeID: id,
                     vizID: vizID,
+                    currentVizID: vizID,
                     isChecked: isChecked,
                     vizObject: spiralObject
                 });
@@ -1510,15 +1567,15 @@ moduleLayout.directive("directivePanes",
                             // FIXME: remove
                             vizID +
                         '</div>' +
-                        '<div>' + 
-                            '<div id="' + vizID + '-switcher">' +
-                                matrixSwitcherHTML +
-                            '</div>' +
-                            '<div id="' + vizID + '-sorting">' +
-                                sortHTML +
-                            '</div>' +
-                        '</div>' +
                         '<div id="' + vizID + '-contents">' +
+                            '<div style="display: block">' + 
+                                '<div id="' + vizID + '-switcher">' +
+                                    matrixSwitcherHTML +
+                                '</div>' +
+                                '<div id="' + vizID + '-sorting">' +
+                                    sortHTML +
+                                '</div>' +
+                            '</div>' +
                             '<div id="' + vizID + '-main">' +
                             '</div>' +
                             '<div id="' + vizID + '-details">' +
