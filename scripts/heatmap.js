@@ -1,11 +1,10 @@
 var moduleVisualizations = angular.module('moduleVisualizations');
 
-moduleVisualizations.directive('directiveHeatMapTooltip',
-        function() {
+moduleVisualizations.directive('directiveHeatMapTooltip', function() {
     return {
         link: function (scope, element, attrs) {
             scope.setTooltipText = function(button) {
-                var text =
+                scope.tooltipText = 
                     "<div style=\"text-align: left\" class=\"p\">" +
                         "Encontre relações entre atributos " +
                         "partilhados por múltiplos pacientes." +
@@ -18,7 +17,6 @@ moduleVisualizations.directive('directiveHeatMapTooltip',
                             "markPatientAttribute markPresent markSquare\" />" +
                         ")." +
                     "</div>";
-                scope.tooltipText = text;
             };
         }
     };
@@ -35,6 +33,33 @@ moduleVisualizations.factory('HeatMapVisualization',
         };
 
         this.html = null;
+
+        // TODO: Update when no atributes are selected
+        this.hasData = true;
+
+        this.availableSortings = [
+            {
+                key: 'ALPHABETIC',
+                label: 'Alfabética (Ascendente<img ' +
+                    'src="images/controls/black/ascending.svg"' +
+                    'class="custom-btn-svg">)'
+            },
+            {
+                key: 'FREQUENCY_HIGHER',
+                label: 'Frequência (Ascendente<img ' +
+                    'src="images/controls/black/ascending.svg"' +
+                    'class="custom-btn-svg">)'
+            },
+            {
+                key: 'FREQUENCY_LOWER',
+                label: 'Frequência (Descendente<img ' +
+                    'src="images/controls/black/descending.svg"' +
+                    'class="custom-btn-svg">)'
+            }
+        ];
+        this.currentSorting = this.availableSortings.filter(function(sorting) {
+           return sorting.key === 'ALPHABETIC';
+        })[0];
 
         this.renderer = renderer.SIM; 
         this.currentAttributeType = attributeType.DISEASES;
@@ -115,10 +140,8 @@ moduleVisualizations.factory('HeatMapVisualization',
     };
 
     HeatMapVisualization.prototype.make = function(elementID, heatMapID) {
-        var self = this;
-
-        self.makeSVG(elementID, heatMapID);
-        self.populate(elementID, heatMapID);
+        this.makeSVG(elementID, heatMapID);
+        this.populate(elementID, heatMapID);
     };
 
     HeatMapVisualization.prototype.populate = function(elementID, heatMapID) {
@@ -207,13 +230,13 @@ moduleVisualizations.factory('HeatMapVisualization',
             // We now remove attributes from the lists that don't have
             // matches in filtered data (i.e. no cells for that attribute
             // have values)
-            var names = [
+            var allNames = [
                 { array: allDiseaseNames, type: "disease" },
                 { array: allMedicationNames, type: "medication" }
             ];
             var similarityNames = [];
             var longestSimilarityNameLength = 0;
-            names.forEach(function(namesObject) {
+            allNames.forEach(function(namesObject) {
                 similarityNames = similarityNames.concat( 
                     (function(list, filteredMatrix) {
                         return list.filter(function(name) {
@@ -244,6 +267,73 @@ moduleVisualizations.factory('HeatMapVisualization',
                         });
                     })(namesObject.array, filteredSimilarityData)
                 );
+            });
+
+            // Sort according to user selected sorting option
+            var names = [
+                { array: diseaseNames, id: 'diseaseNames' },
+                { array: medicationNames, id: 'medicationNames' },
+                { array: similarityNames, id: 'similarityNames' }
+            ];
+            var sortAscending = function(a, b) {
+                return (a.count < b.count) ? -1 : 
+                    (a.count > b.count) ? 1 : 0;
+            };
+            var sortDescending = function(a, b) {
+                return (a.count > b.count) ? -1 : 
+                    (a.count < b.count) ? 1 : 0;
+            };
+            var frequencySorting = function(nameObject, sortingFunction) {
+                var namesWithCountIncidences = nameObject.array
+                    .map(function(name) {
+                        return {
+                            name: name,
+                            count: 0
+                        };
+                    });
+                    namesWithCountIncidences.forEach(function(element) {
+                        var includedSimilarityData = filteredSimilarityData
+                            .filter(function(dataElement) {
+                                return (dataElement.first.name ===
+                                        element.name) ||
+                                    (dataElement.second.name ===
+                                        element.name);
+                            });
+                        var includedSum = includedSimilarityData
+                            .reduce(function(previous, current, i) {
+                                return previous + current.incidences;
+                            }, 0);
+                        element.count = includedSum;
+                    });
+                    namesWithCountIncidences.sort(sortingFunction);
+                return namesWithCountIncidences.slice()
+                    .map(function(element) {
+                        return element.name;
+                    });
+            };
+            names.forEach(function(nameObject) {
+                var sortedObject;
+                if (self.currentSorting.key === 'ALPHABETIC') {
+                    sortedObject = nameObject.array.sort(function(a, b) {
+                        var textA = a.toUpperCase();
+                        var textB = b.toUpperCase();
+                        return (textA < textB) ? -1 : 
+                            (textA > textB) ? 1 : 0;
+                    });
+                } else if (self.currentSorting.key === 'FREQUENCY_HIGHER') {
+                    sortedObject =
+                        frequencySorting(nameObject, sortAscending);
+                } else if (self.currentSorting.key === 'FREQUENCY_LOWER') {
+                    sortedObject =
+                        frequencySorting(nameObject, sortDescending);
+                }
+
+                if (nameObject.id === 'diseaseNames')
+                    diseaseNames = sortedObject.slice();
+                else if (nameObject.id === 'medicationNames')
+                    medicationNames = sortedObject.slice();
+                else if (nameObject.id === 'similarityNames')
+                    similarityNames = sortedObject.slice();
             });
 
             self.visualizationRenderer = {
@@ -760,6 +850,9 @@ moduleVisualizations.factory('HeatMapVisualization',
     HeatMapVisualization.prototype.render = function() {
         var self = this;
 
+        d3.select("#" + self.targetElement + "-sort")
+            .html(self.currentSorting.label);
+
         // Height for the similarity matrix is computed here
         // since it depends on filtered data
         if (self.renderer === renderer.SIM) {
@@ -826,11 +919,53 @@ moduleVisualizations.factory('HeatMapVisualization',
         self.remake(nodeID, vizID);
     };
 
+    HeatMapVisualization.prototype.renderVisibleDetails = function() {
+        d3.select("#" + this.targetElement + "-switcher")
+            .style("visibility", "initial")
+            .style("width", "initial")
+            .style("height", "initial");
+        d3.select("#" + this.targetElement + "-sorting")
+            .style("visibility", "initial")
+            .style("width", "initial")
+            .style("height", "initial");
+    };
+
+    HeatMapVisualization.prototype.renderNoVisibleDetails = function() {
+        d3.select("#" + this.targetElement + "-switcher")
+            .style("visibility", "hidden")
+            .style("width", 0)
+            .style("height", 0);
+        d3.select("#" + this.targetElement + "-sorting")
+            .style("visibility", "hidden")
+            .style("width", 0)
+            .style("height", 0);
+    };
+
+    HeatMapVisualization.prototype.modifyDetailsVisibility =
+            function(isMaximized) {
+        // When we don't have data, we simply show all the attribute text
+        if (isMaximized || !(this.hasData)) {
+            this.renderVisibleDetails();
+        } else {
+            this.renderNoVisibleDetails();
+        }
+    };
+
     HeatMapVisualization.prototype.update = function(nodeID, vizID, state) {
         var self = this;
 
-        self.patientLists.diseases = state.diseases.slice();
-        self.patientLists.medications = state.medications.slice();
+        if (state.sorting) {
+            self.currentSorting = self.availableSortings
+                .filter(function(sorting) {
+                    return sorting.key === state.sorting;
+                })[0];
+        }
+        if (state.diseases) {
+            self.patientLists.diseases = state.diseases.slice();
+        }
+        if (state.medications) {
+            self.patientLists.medications = state.medications.slice();
+        }
         self.populate(nodeID, vizID);
     };
 

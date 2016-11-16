@@ -377,7 +377,7 @@ moduleLayout.directive("directiveActionPanel",
                 var cancelButton = '';
                 if (nodes.getRootNode() !== undefined) {
                     cancelButton = utils.makeImgButton({
-                        clazz:  "btn-secondary custom-btn-secondary",
+                        clazz:  "btn-secondary custom-btn-secondary custom-right",
                         placement: "left",
                         method: "cancelSplit()",
                         title:  "Cancelar",
@@ -672,7 +672,7 @@ moduleLayout.directive("directiveActionPanel",
                 var cancelButton = '';
                 if (nodes.getRootNode() !== undefined) {
                     cancelButton = utils.makeImgButton({
-                        clazz:  "btn-secondary custom-btn-secondary",
+                        clazz:  "btn-secondary custom-btn-secondary custom-right",
                         placement: "left",
                         method: "cancelSplit()",
                         title:  "Cancelar",
@@ -684,7 +684,7 @@ moduleLayout.directive("directiveActionPanel",
                         // Attribute lists
                         '<h4>Escolha um atributo:</h4>' +
                         '<div class="dropdown">' +
-                            '<button type="button" href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Medicações <span class="caret"></span></button>' +
+                            '<button type="button" href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Medicações <span class="caret custom-caret-margin"></span></button>' +
                             '<ul class="dropdown-menu">' +
                                 '<li><a href="#">TODO</a></li>' +
                             '</ul>' +
@@ -725,7 +725,7 @@ moduleLayout.directive("directiveActionPanel",
 
             scope.chooseSpiralToJoin = function() {
                 var cancelButton = utils.makeImgButton({
-                    clazz:  "btn-secondary custom-btn-secondary",
+                    clazz:  "btn-secondary custom-btn-secondary custom-right",
                     placement: "left",
                     method: "cancelAction()",
                     title:  "Cancelar",
@@ -835,8 +835,15 @@ moduleLayout.directive("directiveActionPanel",
                                     return obj.name;
                                 });
 
+                        var spiralActions = utils.makeImgButton({
+                            clazz:  "btn-secondary custom-btn-secondary custom-center",
+                            id:     nodes.getCurrentNode().model.id,
+                            method: "chooseAddSpiral($event)",
+                            text:   "Adicionar espiral",
+                            img:    "images/controls/black/add.svg"
+                        });
                         html = '<div>' +
-                                '<h4>Spiral actions</h4>' +
+                                spiralActions +
                             '</div>';
                     } else {
                         html = "<span>TODO</span>";
@@ -848,6 +855,10 @@ moduleLayout.directive("directiveActionPanel",
                 }
             
                 updateActionPanel(html);
+            };
+
+            scope.chooseAddSpiral = function(button) {
+                scope.chooseSpiralAttribute('addSpiral', button);
             };
 
             scope.addSpiral = function(button) {
@@ -922,15 +933,6 @@ moduleLayout.directive("directivePanes",
                             .makeDescription(node.model.id);
                     }
                     visualization += descriptionHTML; 
-                    if (node.model.vizType === scope.vizType.SPIRAL) {
-                        visualization += utils.makeImgButton({
-                            style:  'display: block',
-                            id:     id,
-                            method: "chooseAddSpiral($event)",
-                            text:   "Adicionar espiral",
-                            img:    "images/controls/add.svg"
-                        });
-                    }
                     visualization += '</div>'; 
                 }
 
@@ -1197,7 +1199,7 @@ moduleLayout.directive("directivePanes",
                     '<div class="dropdown">' +
                         '<button type="button" href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">' +
                             '<span id="' + vizID+ '-binning"></span>' +
-                            '<span class="caret"></span>' +
+                            '<span class="caret custom-caret-margin"></span>' +
                         '</button>' +
                         '<ul class="dropdown-menu" ' +
                             'id="' + vizID + '-binning-options" ' +
@@ -1378,6 +1380,20 @@ moduleLayout.directive("directivePanes",
                 });
             };
 
+            scope.setSort = function(button, sorting) {
+                var elementProperties = extractPropertiesFromElement(button);
+
+                // Update node properties
+                var node = nodes.getRootNode().first(function (node1) {
+                    return node1.model.id === elementProperties.nodeID;
+                });
+                node.model.currentVizID = elementProperties.vizID;
+
+                scope.updateFromSelections({
+                    sorting: sorting
+                });
+            };
+
             var setMatrixType = function(nodeID, vizID, type) {
                 var node = nodes.getRootNode().first(function (node1) {
                     return node1.model.id === nodeID;
@@ -1458,20 +1474,15 @@ moduleLayout.directive("directivePanes",
                         '</div>' +
                     '</div>';
 
-                var availableSortings = [
-                    { value: 'ALPHABETIC', label: 'Alfabética'},
-                    { value: 'FREQUENCY_HIGHER', label: 'Frequência (>)'},
-                    { value: 'FREQUENCY_LOWER', label: 'Frequência (<)'}
-                ];
                 var sortOptionsHTML = '';
-                for (i = 0; i < availableSortings.length; i++) {
+                for (i = 0; i < vizObject.availableSortings.length; i++) {
                     sortOptionsHTML += '<li>' +
                         '<a href="#" ' +
                             'data-id="' + vizID + '" ' +
                             'data-node-id="' + id + '" ' +
                             'ng-click="setSort($event, \'' +
-                                availableSortings[i].value + '\')">' +
-                            availableSortings[i].label +
+                                vizObject.availableSortings[i].key + '\')">' +
+                            vizObject.availableSortings[i].label +
                         '</a>' +
                     '</li>';
                 }
@@ -1483,7 +1494,7 @@ moduleLayout.directive("directivePanes",
                     '<div class="dropdown">' +
                         '<button type="button" href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">' +
                             '<span id="' + vizID+ '-sort"></span>' +
-                            '<span class="caret"></span>' +
+                            '<span class="caret custom-caret-margin"></span>' +
                         '</button>' +
                         '<ul class="dropdown-menu" ' +
                             'id="' + vizID + '-sort-options">' +
@@ -1538,9 +1549,9 @@ moduleLayout.directive("directivePanes",
                     vizObject.remake(id, vizID);
                 }
 
-                // Label for current sorting
-                angular.element('#' + vizID + "-sort")
-                    .html('TODO');
+                // All elements created, now set their visibility
+                var isMaximized = nodes.isMaximized(id);
+                vizObject.modifyDetailsVisibility(isMaximized);
 
                 // Save visualization for d3 updates
                 nodes.updateViz({

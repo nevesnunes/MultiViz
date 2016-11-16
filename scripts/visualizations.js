@@ -127,7 +127,12 @@ moduleVisualizations.factory('visualizations',
             dates.push(startMoment.toDate());
             startMoment.add(1, interval);
         }
-        dates.push(startMoment.toDate());
+
+        // Don't include penultime date if it's too close to end date,
+        // otherwise it's tick will overlap the end date tick
+        if ((dates.length === 0) || (endMoment.diff(startMoment, "months") > 6))
+            dates.push(startMoment.toDate());
+
         dates.push(endMoment.toDate());
         
         return dates;

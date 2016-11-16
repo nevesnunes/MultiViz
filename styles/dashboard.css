@@ -153,6 +153,10 @@ body {
     width: 100%;
 }
 
+.custom-caret-margin {
+    margin-left: 0.25em !important;
+}
+
 
 /* Action Panel */
 
@@ -251,6 +255,7 @@ body {
     padding: 0.25em;
 }
 
+.dropdown-toggle:hover,
 .btn-group .btn-default:hover,
 .patient-table-entry:hover,
 .patient-table-entry-selected,
