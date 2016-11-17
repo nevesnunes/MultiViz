@@ -97,12 +97,17 @@ moduleVisualizations.factory('SpiralVisualization',
         self.makeBins();
     };
 
-    SpiralVisualization.prototype.makeBins = function() {
+    SpiralVisualization.prototype.makeBins = function(attributeData) {
         // Extract patient data
-        var patient = patientData.getAttribute(patientData.KEY_PATIENT);
-        var patientMedicationIndex = utils.arrayObjectIndexOf(
-                patient.medications, this.currentMedication, "name");
-        var patientMedications = patient.medications[patientMedicationIndex];
+        var patientMedications;
+        if (attributeData) {
+            patientMedications = attributeData;
+        } else {
+            var patient = patientData.getAttribute(patientData.KEY_PATIENT);
+            var patientMedicationIndex = utils.arrayObjectIndexOf(
+                    patient.medications, this.currentMedication, "name");
+            patientMedications = patient.medications[patientMedicationIndex];
+        }
         var expectedFrequency = patientMedications.expectedFrequency;
         var recordedFrequency = patientMedications.recordedFrequency;
         this.expectedFrequency = expectedFrequency;
@@ -166,17 +171,6 @@ moduleVisualizations.factory('SpiralVisualization',
             }
             this.binning = binInterval;
         }
-
-        // The difference for the bin interval may be zero, but the time span
-        // should always be greater then zero
-        binTimeSpan = Math.max(binTimeSpan, 1);
-
-        // Set default period for the given interval
-        var period = 7;
-        if (binInterval === 'days')
-            period = 30;
-        else if (binInterval === 'months')
-            period = 12;
 
         // Populate data by checking if values are present
         // for each possible moment
@@ -293,7 +287,18 @@ moduleVisualizations.factory('SpiralVisualization',
             currentMoment.add(1, interval);	
         }
 
+        // The difference for the bin interval may be zero, but the time span
+        // should always be greater then zero
+        binTimeSpan = Math.max(binTimeSpan, 1);
+
         var countPoints = binTimeSpan;
+
+        // Set default period for the given interval
+        var period = 7;
+        if (binInterval === 'days')
+            period = 30;
+        else if (binInterval === 'months')
+            period = 12;
 
         // Compute sector spacing according to number of data points:
         // - Small number of points leads to larger sectors

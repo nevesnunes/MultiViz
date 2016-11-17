@@ -154,7 +154,6 @@ body {
     top: 0;
     left: 0;
     z-index: 100;
-    cursor: pointer;
 }
 
 .viz-overlay-source {
@@ -164,6 +163,7 @@ body {
 .viz-overlay-target {
     background-color: rgba(51, 122, 183, 0.1);
     border: 1em solid rgba(51, 122, 183, 0.2);
+    cursor: pointer;
 }
 
 .viz-overlay-target:hover {

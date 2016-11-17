@@ -787,10 +787,64 @@ moduleLayout.directive("directiveActionPanel",
             };
 
             scope.makeJoinSpiral = function(vizID) {
-                // TODO
-                scope.cleanOverlays();
+                var currentNode = nodes.getCurrentNode();
+                var previousVizID = currentNode.model.currentVizID;
+                if (previousVizID !== vizID) {
+                    var sourceViz = nodes.getVizByIDs(
+                            currentNode.model.id,
+                            currentNode.model.currentVizID)
+                        .vizObject;
+                    var targetViz = nodes.getVizByIDs(
+                            currentNode.model.id,
+                            vizID)
+                        .vizObject;
 
-                scope.makeDefaultActions();
+                    // Compute common expected frequency
+                    var diffIntervals = visualizations.diffInterval(
+                        visualizations.translateFrequency(
+                            sourceViz.expectedFrequency),
+                        visualizations.translateFrequency(
+                            targetViz.expectedFrequency));
+                    var newFrequency = (diffIntervals > 0) ?
+                        sourceViz.expectedFrequency :
+                        targetViz.expectedFrequency;
+
+                    // Compute common range;
+                    // For simplicity, if the two ranges don't overlap,
+                    // we just introduce that hole into the new range.
+                    var computeJoinMoment = function(property, comparator) {
+                        var sourceStartMoment = moment(
+                            sourceViz.visualizationRenderer.option[property],
+                            'YYYY/MM/DD');
+                        var targetStartMoment = moment(
+                            targetViz.visualizationRenderer.option[property],
+                            'YYYY/MM/DD');
+                        return comparator(sourceStartMoment
+                                .diff(targetStartMoment, 'days'), 0) ?
+                            targetStartMoment : 
+                            sourceStartMoment;
+                    };
+                    var newStartDate = computeJoinMoment(
+                        'recordedStartDate', function(a, b) { return a > b; }
+                    ).format('YYYY/MM/DD');
+                    var newEndDate = computeJoinMoment(
+                        'recordedEndDate', function(a, b) { return a < b; }
+                    ).format('YYYY/MM/DD');
+
+                    // TODO
+                    // Compute common recorded frequency
+                    var newRecordedFrequency = [];
+                        
+                    // TODO
+                    // attributeData for makeBins()
+
+                    scope.cleanOverlays();
+
+                    scope.makeDefaultActions();
+                } else {
+                    // NOTHING: The user must cancel or choose
+                    // another spiral
+                }
             };
 
             scope.makeDefaultActions = function() {
