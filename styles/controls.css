@@ -27,7 +27,7 @@
 }
 
 .custom-btn-margin {
-    margin: 0.1em;
+    margin: 0.1em !important;
 }
 
 /* Button icon */

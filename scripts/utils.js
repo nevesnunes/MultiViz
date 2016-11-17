@@ -41,9 +41,9 @@ moduleUtils.factory('utils', function() {
             'data-checkable="' + options.checkable + '" ' +
             'ng-click="' + options.method + '" ' +
             'title="' + options.title + '">' +
-            img +
-            imgChecked +
-            options.text +
+                img +
+                imgChecked +
+                options.text +
             '</button>';
     };
 

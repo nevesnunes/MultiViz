@@ -39,9 +39,15 @@ moduleVisualizations.factory('HeatMapVisualization',
 
         this.availableSortings = [
             {
-                key: 'ALPHABETIC',
+                key: 'ALPHABETIC_HIGHER',
                 label: 'Alfabética (Ascendente<img ' +
                     'src="images/controls/black/ascending.svg"' +
+                    'class="custom-btn-svg">)'
+            },
+            {
+                key: 'ALPHABETIC_LOWER',
+                label: 'Alfabética (Descendente<img ' +
+                    'src="images/controls/black/descending.svg"' +
                     'class="custom-btn-svg">)'
             },
             {
@@ -58,7 +64,7 @@ moduleVisualizations.factory('HeatMapVisualization',
             }
         ];
         this.currentSorting = this.availableSortings.filter(function(sorting) {
-           return sorting.key === 'ALPHABETIC';
+           return sorting.key === 'FREQUENCY_LOWER';
         })[0];
 
         this.renderer = renderer.SIM; 
@@ -311,12 +317,19 @@ moduleVisualizations.factory('HeatMapVisualization',
             };
             names.forEach(function(nameObject) {
                 var sortedObject;
-                if (self.currentSorting.key === 'ALPHABETIC') {
+                if (self.currentSorting.key === 'ALPHABETIC_HIGHER') {
                     sortedObject = nameObject.array.sort(function(a, b) {
                         var textA = a.toUpperCase();
                         var textB = b.toUpperCase();
                         return (textA < textB) ? -1 : 
                             (textA > textB) ? 1 : 0;
+                    });
+                } else if (self.currentSorting.key === 'ALPHABETIC_LOWER') {
+                    sortedObject = nameObject.array.sort(function(a, b) {
+                        var textA = a.toUpperCase();
+                        var textB = b.toUpperCase();
+                        return (textA > textB) ? -1 : 
+                            (textA < textB) ? 1 : 0;
                     });
                 } else if (self.currentSorting.key === 'FREQUENCY_HIGHER') {
                     sortedObject =
