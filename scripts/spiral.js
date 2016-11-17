@@ -28,7 +28,6 @@ moduleVisualizations.factory('SpiralVisualization',
         this.medications = options.medications;
         this.currentMedication = options.currentMedication;
         this.currentAttributeType = attributeType.DISEASES;
-        this.hasData = true;
 
         // Specific state is maintained in a separate object,
         // which we will use in our facade
@@ -36,6 +35,7 @@ moduleVisualizations.factory('SpiralVisualization',
 
         this.binning = null;
         this.expectedFrequency = null;
+        this.hasData = true;
     };
 
     var COUNT_MAX_THRESHOLD = 150;

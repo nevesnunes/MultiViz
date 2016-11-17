@@ -188,7 +188,7 @@ moduleIndex.controller('controllerAddData',
         // directive-option-list API
         //
         $scope.optionListCondition = function(button) {
-            var input = angular.element('#input-patient');
+            var input = angular.element('#input-option-list');
             var inputModel = input.scope().optionListModel;
 
             var emptyText = (inputModel === undefined) ||
@@ -203,7 +203,7 @@ moduleIndex.controller('controllerAddData',
         };
 
         $scope.setTooltipText = function(button) {
-            var input = angular.element('#input-patient');
+            var input = angular.element('#input-option-list');
             var inputModel = input.scope().optionListModel;
 
             var emptyText = (inputModel === undefined) ||
@@ -234,7 +234,7 @@ moduleIndex.controller('controllerAddData',
     };
 
     $scope.selectEntry = function(button, patient) {
-        var input = angular.element('#input-patient').scope();
+        var input = angular.element('#input-option-list').scope();
         input.optionListModel = $scope.clonePatient(patient);
 
         patientData.setData(patientData.KEY_PATIENT, input.optionListModel);
@@ -366,7 +366,7 @@ moduleIndex.directive('directiveOptionList', ['$compile', '$timeout', 'patientDa
                                 // clear the input when no entry is available
                                 } else {
                                     // FIXME: Refactor to be generic
-                                    var input = angular.element('#input-patient');
+                                    var input = angular.element('#input-option-list');
                                     var newModel = scope.clonePatient(
                                         elems[scope.getSelectedOption()]
                                     );

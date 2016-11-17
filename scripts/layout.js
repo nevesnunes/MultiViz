@@ -342,6 +342,11 @@ moduleLayout.directive("directiveActionPanel",
 
                 currentHTML = $compile(html)(currentScope);
                 element.html(currentHTML);
+
+                // Force autofocus, since compilation doesn't trigger it
+                var input = angular.element('#input-option-list');
+                if (input)
+                    input.focus();
             };
 
             scope.chooseSpiral = function() {
@@ -697,7 +702,7 @@ moduleLayout.directive("directiveActionPanel",
                             '<div class="right-inner-addon">' +
                                 '<i class="glyphicon glyphicon-search"></i>' +
                                 '<input type="text" ' +
-                                    'id="input-patient" ' +
+                                    'id="input-option-list" ' +
                                     'class="form-control" ' +
                                     'placeholder="Procurar..." ' +
                                     'ng-model="optionListModel" ' +
@@ -842,7 +847,7 @@ moduleLayout.directive("directiveActionPanel",
                             '<div class="right-inner-addon">' +
                                 '<i class="glyphicon glyphicon-search"></i>' +
                                 '<input type="text" ' +
-                                    'id="input-patient" ' +
+                                    'id="input-option-list" ' +
                                     'class="form-control" ' +
                                     'placeholder="Procurar..." ' +
                                     'ng-model="optionListModel" ' +
@@ -1398,7 +1403,7 @@ moduleLayout.directive("directivePanes",
                             '<div id="' + vizID + '-svg-line-text" />' +
                             '<div id="' + vizID + '-svg-line" />' +
                         '</div>' +
-                        '<div id="' + vizID + '-main">' +
+                        '<div class="viz-main" id="' + vizID + '-main">' +
                             '<div id="' + vizID + '-title" />' +
                             '<div id="' + vizID + '-svg-spiral" />' +
                         '</div>' +
@@ -1576,7 +1581,7 @@ moduleLayout.directive("directivePanes",
                                     sortHTML +
                                 '</div>' +
                             '</div>' +
-                            '<div id="' + vizID + '-main">' +
+                            '<div class="viz-main" id="' + vizID + '-main">' +
                             '</div>' +
                             '<div id="' + vizID + '-details">' +
                             '</div>' +
