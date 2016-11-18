@@ -32,7 +32,7 @@ moduleVisualizations.factory('HeatMapVisualization',
             medications: options.medications.slice()
         };
 
-        this.html = null;
+        this.html = [];
 
         // TODO: Update when no atributes are selected
         this.hasData = true;
@@ -104,17 +104,17 @@ moduleVisualizations.factory('HeatMapVisualization',
         this.margin = (this.renderer === renderer.SIM) ? {
             top: 40,
             right: 0,
-            bottom: 150,
+            bottom: 40,
             left: 0
         } : {
             top: 80,
             right: 0,
-            bottom: 150,
+            bottom: 40,
             left: 200
         };
         this.width = 800 - this.margin.left - this.margin.right;
         this.height = 420 - this.margin.top - this.margin.bottom;
-        this.gridHeight = Math.floor(this.height / 8);
+        this.gridHeight = Math.floor(this.height / 12);
         this.gridWidth = this.gridHeight * 
             ((this.renderer === renderer.SIM) ? 1 : 2);
 
@@ -125,27 +125,44 @@ moduleVisualizations.factory('HeatMapVisualization',
         
         var self = this;
 
-        var svg = d3.select("#" + heatMapID + "-main")
-            .append("svg")
-                .attr("width", self.width + self.margin.left + self.margin.right)
-                .attr("height", self.height + self.margin.top + self.margin.bottom)
-            .append("g")
-                .attr("transform", "translate(" +
-                    self.margin.left + "," + self.margin.top + ")");
-        d3.select("#" + heatMapID + "-main")
-            .style('float', 'left');
-        d3.select('#' + heatMapID + "-sorting")
-            .style('display', 'inline-block');
-        d3.select('#' + heatMapID + "-switcher")
-            .style('display', 'inline-block');
+        var matrixNumbers = [1];
+        if (this.renderer === renderer.DIM) {
+            // TODO: Add the second matrix
+            // - render2Dim needs to receive/switch attribute lists...
+            // - create pinHTML
+        }
 
-        self.targetElement = heatMapID;
-        self.html = svg;
+        matrixNumbers.forEach(function(matrixNumber) {
+            var svg = d3.select("#" + heatMapID + "-main-" + matrixNumber)
+                .append("svg")
+                    .attr("width", 
+						self.width + self.margin.left + self.margin.right)
+                    .attr("height", 
+						self.height + self.margin.top + self.margin.bottom)
+                .append("g")
+                    .attr("transform", "translate(" +
+                        self.margin.left + "," + self.margin.top + ")");
+            d3.select("#" + heatMapID + "-main-" + matrixNumber)
+                .style('float', 'left');
+            d3.select('#' + heatMapID + "-sorting")
+                .style('display', 'inline-block');
+            d3.select('#' + heatMapID + "-switcher")
+                .style('display', 'inline-block');
+
+            self.targetElement = heatMapID;
+
+            self.html.push({
+                id: matrixNumber,
+                svg: svg
+            });
+        });
     };
 
     HeatMapVisualization.prototype.make = function(elementID, heatMapID) {
-        this.makeSVG(elementID, heatMapID);
-        this.populate(elementID, heatMapID);
+        var self = this;
+
+        self.makeSVG(elementID, heatMapID);
+        self.populate(elementID, heatMapID);
     };
 
     HeatMapVisualization.prototype.populate = function(elementID, heatMapID) {
@@ -364,10 +381,10 @@ moduleVisualizations.factory('HeatMapVisualization',
         });
     };
 
-    HeatMapVisualization.prototype.render2DimensionalMatrix = function() {
+    HeatMapVisualization.prototype.render2DimensionalMatrix = function(matrixHTML) {
         var self = this;
 
-        var svg = self.html;
+        var svg = matrixHTML;
         var data = self.visualizationRenderer.dataIncidences; 
         var filteredData = self.visualizationRenderer.filteredData;
         var diseaseNames = self.visualizationRenderer.diseaseNames;
@@ -645,10 +662,10 @@ moduleVisualizations.factory('HeatMapVisualization',
                 (diseaseNames.length + 1.5) * self.gridHeight);
     };
 
-    HeatMapVisualization.prototype.renderSimilarityMatrix = function() {
+    HeatMapVisualization.prototype.renderSimilarityMatrix = function(matrixHTML) {
         var self = this;
 
-        var svg = self.html;
+        var svg = matrixHTML;
         var filteredSimilarityData = 
             self.visualizationRenderer.filteredSimilarityData;
         var similarityNames = self.visualizationRenderer.similarityNames;
@@ -873,13 +890,15 @@ moduleVisualizations.factory('HeatMapVisualization',
                     self.gridHeight) +
                     self.margin.top + self.margin.bottom);
         }
-        self.renderer();
+        self.html.forEach(function(element) {
+            self.renderer(element.svg);
+        });
     };
 
-    HeatMapVisualization.prototype.remove = function(nodeID, vizID) {
+    HeatMapVisualization.prototype.remove = function(nodeID, vizID, matrixHTML) {
         var self = this;
 
-        var svg = self.html;
+        var svg = matrixHTML;
         var cells = svg.selectAll(".attribute-cell");
         cells
             .on("mouseover", null)
@@ -893,7 +912,9 @@ moduleVisualizations.factory('HeatMapVisualization',
 
         // Remove previous nodes/handlers, since they are invalidated by the
         // new DOM layout
-        self.remove(nodeID, vizID);
+        self.html.forEach(function(element) {
+            self.remove(nodeID, vizID, element.svg);
+        });
 
         // Add attributes and svgs to the new DOM targets. Note that the target
         // element ID is still the same.

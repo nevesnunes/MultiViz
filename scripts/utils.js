@@ -1,6 +1,6 @@
 var moduleUtils = angular.module('moduleUtils', []);
 
-moduleUtils.factory('utils', function() {
+moduleUtils.factory('utils', ['$q', function($q) {
     var makeImgButton = function(options) {
         options.clazz = options.clazz || "btn-primary";
         options.directive = options.directive || "";
@@ -74,10 +74,23 @@ moduleUtils.factory('utils', function() {
             parameters.pair.second[parameters.propertyOfValue];
     };
 
+    // Resolve an array of events sequencially
+    var resolveEvents = function(events, arg1, arg2, arg3) {
+        var deferred = $q.defer();
+        var promise = deferred.promise;
+
+        deferred.resolve();
+
+        return events.reduce(function(promise, single_event){
+            return promise.then(single_event(arg1, arg2, arg3));
+        }, promise);
+    };
+
     return {
         arrayObjectIndexOf: arrayObjectIndexOf,
         arrayObjectPairIndexOf: arrayObjectPairIndexOf,
         extractValueFromPair: extractValueFromPair,
-        makeImgButton: makeImgButton
+        makeImgButton: makeImgButton,
+        resolveEvents: resolveEvents
     };
-});
+}]);
