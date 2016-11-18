@@ -6,8 +6,8 @@ function Spiral(parameters) {
         svgHeight: parameters.svgHeight || 0,
         svgWidth: parameters.svgWidth || 0,
         lineRange: {
-            x: parameters.svgWidth * 2,
-            y: parameters.svgHeight / 10
+            x: parameters.lineRangeX || parameters.svgWidth * 2,
+            y: parameters.lineRangeY || parameters.svgHeight / 10
         },
         margin: parameters.margin || {
             top: 10,
@@ -15,7 +15,7 @@ function Spiral(parameters) {
             bottom: 10,
             left: 30
         },
-        marginLine: 60,
+        marginLine: parameters.marginLine || 60,
         padding: parameters.padding || 10,
         spacing: parameters.spacing || 1,
         lineWidth: parameters.lineWidth || 50,

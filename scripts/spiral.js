@@ -71,10 +71,16 @@ moduleVisualizations.factory('SpiralVisualization',
             return;
         }
 
+        // Compute size based on available view width
+        var vizWidth = angular.element('#' + elementID)[0]
+            .offsetWidth;
         var size = 300;
+        var marginLine = 60;
+        var padding = 10;
         this.visualizationRenderer = new Spiral({
             svgWidth: size,
             svgHeight: size + 50,
+            lineRangeX: (vizWidth - size) - (marginLine * 2) - (padding * 2),
             margin: {
                 top: -30,
                 right: 0,
