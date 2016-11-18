@@ -201,7 +201,9 @@ moduleLayout.factory("nodes",
         });
     };
 
-    // Remove invalid handlers that are still callable
+    // Remove invalid handlers that are still callable.
+    // Note that $destroy only prevents angular handlers from being called,
+    // not the ones we added manually, therefore we need to clean them.
     var scopeDestroyHandlers = function(scopeObject) {
         if (scopeObject.handlers.length === 0)
             console.log(

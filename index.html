@@ -13,6 +13,7 @@
     <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
+    <link href="styles/bootstrap-overrides.css" rel="stylesheet">
     <link href="styles/dashboard.css" rel="stylesheet">
     <link href="styles/controls.css" rel="stylesheet">
 </head>
@@ -33,8 +34,8 @@
                                 </div>
                                 <p></p>
                                 <div class="table table-condensed table-bordered patient-table">
-                                    <div ng-repeat="patient in filteredAttributes = (patientList | filter: optionListModel.name:optionListModel.id)" ng-click="selectEntry($event, patient)">
-                                        <div ng-focus="focusedEntry($event, patient)" class="patient-table-entry" ng-class="isEntrySelected($index)"><b>Nome: </b>{{::patient.name}} <b>ID: </b>{{::patient.id}}</div>
+                                    <div ng-cloak ng-repeat="patient in filteredAttributes = (patientList | filter: optionListModel.name:optionListModel.id)" ng-click="selectEntry($event, patient)">
+                                        <div ng-focus="focusedEntry($event, patient)" class="patient-table-entry" ng-class="isEntrySelected($index)"><b>Nome: </b><span ng-bind="patient.name"></span><br/><b>ID: </b><span ng-bind="patient.id"></span></div>
                                     </div>
                                 </div>
 
