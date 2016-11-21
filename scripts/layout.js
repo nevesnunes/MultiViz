@@ -838,7 +838,8 @@ moduleLayout.directive("directiveActionPanel",
                     var newRecordedFrequency = [];
                         
                     // TODO
-                    // attributeData for makeBins()
+                    // attributeData for makeBins():
+                    // - attributeNames
 
                     scope.cleanOverlays();
 

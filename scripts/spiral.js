@@ -151,8 +151,8 @@ moduleVisualizations.factory('SpiralVisualization',
         // Remember this check for visualization updates
         if (recordedFrequency.length === 0) {
             this.hasData = false;
-
             this.visualizationRenderer.renderNoData();
+
             return;
         } else {
             this.hasData = true;
@@ -261,6 +261,11 @@ moduleVisualizations.factory('SpiralVisualization',
                     dateString = endDateString;
                 }
 
+                // Extract multiple attribute names, if this is a joined spiral
+                var attributeNames = (patientMedications.attributeNames) ?
+                    patientMedications.attributeNames[currentDateIndex] :
+                    null;
+
                 // If moment is contained in the brush interval, add date to
                 // brushed data
                 if ((currentMoment.diff(intervalStartMoment, interval) >= 0) &&
@@ -271,7 +276,8 @@ moduleVisualizations.factory('SpiralVisualization',
                         date: dateString,
                         startDate: startDateString,
                         endDate: endDateString,
-                        binFactor: binFactor
+                        binFactor: binFactor,
+                        attributeNames: attributeNames
                     });
                 }
                 data.push({
@@ -280,7 +286,8 @@ moduleVisualizations.factory('SpiralVisualization',
                     date: dateString,
                     startDate: startDateString,
                     endDate: endDateString,
-                    binFactor: binFactor
+                    binFactor: binFactor,
+                    attributeNames: attributeNames
                 });
 
                 accumulatorBinDays = 0;
