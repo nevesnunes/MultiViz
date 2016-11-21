@@ -23,8 +23,8 @@ moduleVisualizations.directive('directiveHeatMapTooltip', function() {
 });
 
 moduleVisualizations.factory('HeatMapVisualization',
-        ['visualizations', 'patientData', 'retrievePatientData', 'utils', 'nodes',
-        function(visualizations, patientData, retrievePatientData, utils, nodes) {
+        ['$timeout', 'visualizations', 'patientData', 'retrievePatientData', 'utils', 'nodes',
+        function($timeout, visualizations, patientData, retrievePatientData, utils, nodes) {
     var HeatMapVisualization = function(options) {
         // Patient attribute lists
         this.patientLists = {
@@ -151,10 +151,19 @@ moduleVisualizations.factory('HeatMapVisualization',
 
             self.targetElement = heatMapID;
 
-            self.html.push({
+            var matrixObject = {
+                elementID: elementID,
+                heatMapID: heatMapID,
                 id: matrixNumber,
                 svg: svg
-            });
+            };
+
+            var index = utils.arrayObjectIndexOf(self.html, matrixNumber, "id");
+            if (index > -1) {
+                self.html[index] = matrixObject;
+            } else {
+                self.html.push(matrixObject);
+            }
         });
     };
 
@@ -381,10 +390,10 @@ moduleVisualizations.factory('HeatMapVisualization',
         });
     };
 
-    HeatMapVisualization.prototype.render2DimensionalMatrix = function(matrixHTML) {
+    HeatMapVisualization.prototype.render2DimensionalMatrix = function(matrixElement) {
         var self = this;
 
-        var svg = matrixHTML;
+        var svg = matrixElement.svg;
         var data = self.visualizationRenderer.dataIncidences; 
         var filteredData = self.visualizationRenderer.filteredData;
         var diseaseNames = self.visualizationRenderer.diseaseNames;
@@ -662,10 +671,10 @@ moduleVisualizations.factory('HeatMapVisualization',
                 (diseaseNames.length + 1.5) * self.gridHeight);
     };
 
-    HeatMapVisualization.prototype.renderSimilarityMatrix = function(matrixHTML) {
+    HeatMapVisualization.prototype.renderSimilarityMatrix = function(matrixElement) {
         var self = this;
 
-        var svg = matrixHTML;
+        var svg = matrixElement.svg;
         var filteredSimilarityData = 
             self.visualizationRenderer.filteredSimilarityData;
         var similarityNames = self.visualizationRenderer.similarityNames;
@@ -722,42 +731,54 @@ moduleVisualizations.factory('HeatMapVisualization',
                 });
         attributeLabels.exit().remove();
 
+        var aksflakj = svg;
         // We need text elements to be drawn before knowing how wide they
         // will be. Therefore, we select them again and store their bounding box
         // for later use.
-        textData = [];
-        var attributeLabelsTexts = svg.selectAll(".text-attribute-label");
-        attributeLabelsTexts.each(function(d, i) {            
-            var text = d3.select(this);
-            textData.push({
-                name: text.datum(),
-                width: text.node().getBBox().width 
-            });
-        });
-
-        attributeLabels = svg.selectAll(".patient-attribute-mark")
-            .data(similarityNames);
-        attributeLabelsGroup = attributeLabels.enter();
-        attributeLabelsGroup.append("rect")
-            .attr("class", "patient-attribute-mark markPresent")
-            .attr("y", cellSizeOffset * 2)
-            .attr("width", self.gridHeight - cellSizeOffset * 4)
-            .attr("height", self.gridHeight - cellSizeOffset * 4)
-            .merge(attributeLabels)
-                .attr("x", function(d, i) {
-                    var width = textData[i].width;
-                    return (width + 20) +
-                        (i + 1) * self.gridWidth - cellSizeOffset / 2;
-                })
-                .attr("y", function(d, i) {
-                    return ((i - 1) * self.gridHeight - cellSizeOffset / 2) +
-                        (self.gridHeight / 4);
-                })
-                .style("fill-opacity", function(d, i) {
-                    return (patientSimilarityNames
-                            .indexOf(textData[i].name) !== -1) ? 1 : 0;
+        var waitForDOMRendered = function selfFunction() {
+            try {
+                textData = [];
+                var attributeLabelsTexts = svg.selectAll(".text-attribute-label");
+                attributeLabelsTexts.each(function(d, i) {            
+                    var text = d3.select(this);
+                    textData.push({
+                        name: text.datum(),
+                        // FIXME: Invalid elements are being called,
+                        // causing firefox to throw exceptions here
+                        width: text.node().getBBox().width 
+                    });
                 });
-        attributeLabels.exit().remove();
+
+                console.log("done");
+                attributeLabels = svg.selectAll(".patient-attribute-mark")
+                    .data(similarityNames);
+                attributeLabelsGroup = attributeLabels.enter();
+                attributeLabelsGroup.append("rect")
+                    .attr("class", "patient-attribute-mark markPresent")
+                    .attr("y", cellSizeOffset * 2)
+                    .attr("width", self.gridHeight - cellSizeOffset * 4)
+                    .attr("height", self.gridHeight - cellSizeOffset * 4)
+                    .merge(attributeLabels)
+                        .attr("x", function(d, i) {
+                            var width = textData[i].width;
+                            return (width + 20) +
+                                (i + 1) * self.gridWidth - cellSizeOffset / 2;
+                        })
+                        .attr("y", function(d, i) {
+                            return ((i - 1) * self.gridHeight - cellSizeOffset / 2) +
+                                (self.gridHeight / 4);
+                        })
+                        .style("fill-opacity", function(d, i) {
+                            return (patientSimilarityNames
+                                    .indexOf(textData[i].name) !== -1) ? 1 : 0;
+                        });
+                attributeLabels.exit().remove();
+            } catch(e) {
+                 console.log("wait");
+                 window.requestAnimationFrame(selfFunction);
+            }
+        };
+        waitForDOMRendered();
 
         var colorScale = d3.scaleQuantile()
             .domain([0, visualizations.buckets - 1,
@@ -891,14 +912,18 @@ moduleVisualizations.factory('HeatMapVisualization',
                     self.margin.top + self.margin.bottom);
         }
         self.html.forEach(function(element) {
-            self.renderer(element.svg);
+            self.renderer(element);
         });
     };
 
-    HeatMapVisualization.prototype.remove = function(nodeID, vizID, matrixHTML) {
+    HeatMapVisualization.prototype.remove = function(nodeID, vizID, matrixElement) {
         var self = this;
 
-        var svg = matrixHTML;
+        var svg = matrixElement.svg;
+        svg.selectAll(".text-attribute-label")
+            .remove();
+        svg.selectAll(".rect-attribute-label")
+            .remove();
         var cells = svg.selectAll(".attribute-cell");
         cells
             .on("mouseover", null)
@@ -913,7 +938,7 @@ moduleVisualizations.factory('HeatMapVisualization',
         // Remove previous nodes/handlers, since they are invalidated by the
         // new DOM layout
         self.html.forEach(function(element) {
-            self.remove(nodeID, vizID, element.svg);
+            self.remove(nodeID, vizID, element);
         });
 
         // Add attributes and svgs to the new DOM targets. Note that the target

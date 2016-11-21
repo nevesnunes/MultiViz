@@ -851,11 +851,10 @@ moduleLayout.directive("directiveActionPanel",
 
             scope.makeDefaultActions = function() {
                 var html = "";
-                var rootHasNoChildren = 
-                    (nodes.getRootNode() !== undefined) &&
+                var rootHasNoChildren = (nodes.getRootNode()) &&
                     (!nodes.getRootNode().hasChildren());
-                var viewNotRoot = !(nodes.isMaximized(
-                    nodes.getRootNode().model.id));
+                var viewNotRoot = (nodes.getRootNode()) &&
+                    (!nodes.isMaximized(nodes.getRootNode().model.id));
                 if (rootHasNoChildren || viewNotRoot) {
                     var currentNode = nodes.getCurrentNode();
                     if (currentNode.model.vizType ===
@@ -1730,6 +1729,11 @@ moduleLayout.directive("directivePanes",
             };
 
             scope.newLayout = function() {
+                // Clean all nodes
+                nodes.getRootNode().walk(function(node) {
+                    nodes.detachNode(node);
+                });
+
                 // Nuke our tracked nodes, since a
                 // new layout will be created in the next update
                 nodes.setRootNode(undefined);
