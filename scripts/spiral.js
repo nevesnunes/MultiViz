@@ -87,6 +87,9 @@ moduleVisualizations.factory('SpiralVisualization',
                 bottom: 0,
                 left: 0
             },
+			marginLine: marginLine,
+			padding: padding,
+            parentElement: elementID,
             targetElement: spiralID,
             colors: visualizations.colors,
             functions: {

@@ -3,8 +3,8 @@ function Spiral(parameters) {
         graphType: parameters.graphType || "custom-path",
         numberOfPoints: parameters.numberOfPoints || null,
         period: parameters.period || 12,
-        svgHeight: parameters.svgHeight || 0,
-        svgWidth: parameters.svgWidth || 0,
+        svgHeight: parameters.svgHeight || 300,
+        svgWidth: parameters.svgWidth || 300,
         lineRange: {
             x: parameters.lineRangeX || parameters.svgWidth * 2,
             y: parameters.lineRangeY || parameters.svgHeight / 10
@@ -19,7 +19,8 @@ function Spiral(parameters) {
         padding: parameters.padding || 10,
         spacing: parameters.spacing || 1,
         lineWidth: parameters.lineWidth || 50,
-        targetElement: parameters.targetElement || '#chart',
+        parentElement: parameters.parentElement,
+        targetElement: parameters.targetElement,
         data: parameters.data || [],
         tickMarkNumber: parameters.tickMarkNumber || [],
         tickMarkLabels: parameters.tickMarkLabels || [],
@@ -209,15 +210,16 @@ Spiral.prototype.render = function(reusePaths) {
     // Set svg size,
     // since it may have been modified previously
     var svg = option.html
-        .select('#' + this.option.targetElement + "-svg-spiral")
+        .select('#' + option.targetElement + "-svg-spiral")
         .selectAll("svg")
         .attr("width", option.svgWidth)
         .attr("height", option.svgHeight);
+
     var svgLine = option.html
-        .select('#' + this.option.targetElement + "-svg-line")
+        .select('#' + option.targetElement + "-svg-line")
         .selectAll("svg")
-        .attr("width", this.option.lineRange.x + this.option.marginLine * 2)
-        .attr("height", this.option.lineRange.y + this.option.padding * 4);
+        .attr("width", option.lineRange.x + option.marginLine * 2)
+        .attr("height", option.lineRange.y + option.padding * 4);
 
     // Set attribute text style,
     // since it may have been modified from a empty data render
