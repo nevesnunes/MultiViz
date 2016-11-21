@@ -691,8 +691,8 @@ moduleVisualizations.factory('HeatMapVisualization',
             patientDiseaseNames.concat(patientMedicationNames);
 
         // Label width must be wide enough to span all text
-        var labelWidth = self.visualizationRenderer.longestSimilarityNameLength *
-            8;
+        var labelWidth = self.visualizationRenderer
+            .longestSimilarityNameLength * 8 + self.gridWidth;
         var cellSizeOffset = 4;
         var attributeLabels = svg.selectAll(".rect-attribute-label")
             .data(similarityNames);
@@ -749,7 +749,6 @@ moduleVisualizations.factory('HeatMapVisualization',
                     });
                 });
 
-                console.log("done");
                 attributeLabels = svg.selectAll(".patient-attribute-mark")
                     .data(similarityNames);
                 attributeLabelsGroup = attributeLabels.enter();
@@ -774,7 +773,6 @@ moduleVisualizations.factory('HeatMapVisualization',
                         });
                 attributeLabels.exit().remove();
             } catch(e) {
-                 console.log("wait");
                  window.requestAnimationFrame(selfFunction);
             }
         };
@@ -829,10 +827,10 @@ moduleVisualizations.factory('HeatMapVisualization',
                 })
                 .style("fill", function(d) {
                     var isPatientAttribute =
-                        ((patientMedicationNames.indexOf(d.first.name) !== -1) &&
-                        (patientDiseaseNames.indexOf(d.second.name) !== -1)) ||
-                        ((patientMedicationNames.indexOf(d.second.name) !== -1) &&
-                        (patientDiseaseNames.indexOf(d.first.name) !== -1));
+                        ((patientMedicationNames.indexOf(d.first.name) !== -1) ||
+                        (patientDiseaseNames.indexOf(d.first.name) !== -1)) &&
+                        ((patientMedicationNames.indexOf(d.second.name) !== -1) ||
+                        (patientDiseaseNames.indexOf(d.second.name) !== -1));
                     return (isPatientAttribute) ?
                         colorScaleMarks(d.incidences) :
                         colorScale(d.incidences);
