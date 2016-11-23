@@ -118,8 +118,9 @@ moduleVisualizations.factory('SpiralVisualization',
             patientMedications = patient.medications[patientMedicationIndex];
         }
         var expectedFrequency = patientMedications.expectedFrequency;
-        var recordedFrequency = patientMedications.recordedFrequency;
         this.expectedFrequency = expectedFrequency;
+        var recordedFrequency = patientMedications.recordedFrequency;
+        this.recordedFrequency = recordedFrequency;
 
         // Check if interval was defined in temporal line brush;
         // Otherwise, use expected start and end dates

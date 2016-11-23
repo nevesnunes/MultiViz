@@ -833,12 +833,75 @@ moduleLayout.directive("directiveActionPanel",
                         'recordedEndDate', function(a, b) { return a < b; }
                     ).format('YYYY/MM/DD');
 
-                    // TODO
-                    // Compute common recorded frequency
+                    // Compute common recorded frequency:
+                    // Iterate through all the recorded frequencies and
+                    // collect the dates, alongside correspoding
+                    // attribute names
+                    var attributeNames = [];
                     var newRecordedFrequency = [];
+                    var sourceRecordedFrequency = sourceViz.recordedFrequency;
+                    var sourceLength = sourceRecordedFrequency.length;
+                    var targetRecordedFrequency = targetViz.recordedFrequency;
+                    var targetLength = targetRecordedFrequency.length;
+                    for (var sourceIndex = 0, targetIndex = 0;
+                        (sourceIndex < sourceLength) ||
+                            (targetIndex < targetLength);) {
+                        var currentAttributeNames = [];
+                        var sourceMoment = moment(
+                            sourceRecordedFrequency[sourceIndex]);
+                        var targetMoment = moment(
+                            targetRecordedFrequency[targetIndex]);
+
+                        var test = moment("2014-08-23");
+                        if (sourceMoment.diff(test) > 0) {
+                            console.log("test source");
+                        }
+                        if (targetMoment.diff(test) > 0) {
+                            console.log("test target");
+                        }
+
+                        // Add and advance the earliest recorded moment
+                        var diff = sourceMoment.diff(targetMoment, 'days');
+                        if ((diff > 0) && (targetIndex < targetLength)) {
+                            currentAttributeNames.push(
+                                targetViz.currentMedication);
+                            newRecordedFrequency.push(
+                                targetRecordedFrequency[targetIndex]);
+                            targetIndex++;
+                        } else if ((diff < 0) && (sourceIndex < sourceLength)) {
+                            currentAttributeNames.push(
+                                sourceViz.currentMedication);
+                            newRecordedFrequency.push(
+                                sourceRecordedFrequency[sourceIndex]);
+                            sourceIndex++;
+                        // Both recorded frequencies have the same date
+                        } else {
+                            if (targetIndex < targetLength) {
+                                currentAttributeNames.push(
+                                    targetViz.currentMedication);
+                            }
+                            if (sourceIndex < sourceLength) {
+                                currentAttributeNames.push(
+                                    sourceViz.currentMedication);
+                            }
+                            // Either one works here
+                            // NOTE: We are ignoring hours, otherwise we would
+                            // add both in an array
+                            newRecordedFrequency.push(
+                                targetRecordedFrequency[targetIndex]);
+                            targetIndex++;
+                            sourceIndex++;
+                        }
+
+                        attributeNames.push(currentAttributeNames.slice());
+                    }
+
+                    console.log(attributeNames);
+                    console.log(newRecordedFrequency);
                         
                     // TODO
                     // attributeData for makeBins():
+                    // - recordedFrequency
                     // - attributeNames
 
                     scope.cleanOverlays();
