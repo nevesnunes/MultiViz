@@ -900,9 +900,13 @@ moduleLayout.directive("directiveActionPanel",
                     console.log(newRecordedFrequency);
                         
                     // TODO
-                    // attributeData for makeBins():
-                    // - recordedFrequency
-                    // - attributeNames
+                    // removeSpiral and addSpiral calls (save spirals in future)
+                    // add to renderer
+                    // pass to makeBins()
+                    var attributeData = {
+                        attributeNames: attributeNames,
+                        recordedFrequency: newRecordedFrequency
+                    };
 
                     scope.cleanOverlays();
 
@@ -1035,6 +1039,10 @@ moduleLayout.directive("directiveActionPanel",
 
             scope.addSpiral = function(button) {
                 scope.APIPanes.addSpiral(button);
+            };
+
+            scope.addSpiralRoutine = function(button) {
+                scope.APIPanes.addSpiralRoutine(button);
             };
 
             // Populate API
@@ -1236,22 +1244,24 @@ moduleLayout.directive("directivePanes",
                 scope.APIActionPanel.chooseSpiralAttribute('addSpiral', button);
             };
 
-            scope.addSpiral = function(button) {
-                var id = angular.element(button.target).data('id');
+            scope.addSpiralRoutine = function(id) {
                 nodes.updateViz({
                     nodeID: id,
                     vizID: SpiralVisualization.prototype.makeID(),
                     currentMedication: scope.currentMedication.name,
                     skipCreation: false
                 });
+            };
+
+            scope.addSpiral = function(button) {
+                var id = angular.element(button.target).data('id');
+                scope.addSpiralRoutine(id);
 
                 // Maximize view in order for added visualizations to be seen
                 scope.paneMaximize(button);
             };
 
-            scope.removeSpiral = function(button) {
-                var elementProperties = extractPropertiesFromElement(button);
-
+            scope.removeSpiralRoutine = function(elementProperties) {
                 // Remove d3 nodes/handlers
                 var viz = nodes.getVizByIDs(
                     elementProperties.nodeID,
@@ -1274,6 +1284,11 @@ moduleLayout.directive("directivePanes",
                 });
 
                 scope.APIActionPanel.makeDefaultActions();
+            };
+
+            scope.removeSpiral = function(button) {
+                var elementProperties = extractPropertiesFromElement(button);
+                scope.removeSpiralRoutine(elementProperties);
             };
 
             scope.togglePinned = function(button) {
@@ -1971,6 +1986,7 @@ moduleLayout.directive("directivePanes",
             scope.APIPanes.updateFromSelections = scope.updateFromSelections;
             scope.APIPanes.updateBinningElements = scope.updateBinningElements;
             scope.APIPanes.addSpiral = scope.addSpiral;
+            scope.APIPanes.addSpiralRoutine = scope.addSpiralRoutine;
 
             // Initialize
             scope.updateLayout();

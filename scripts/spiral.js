@@ -106,11 +106,11 @@ moduleVisualizations.factory('SpiralVisualization',
         self.makeBins();
     };
 
-    SpiralVisualization.prototype.makeBins = function(attributeData) {
+    SpiralVisualization.prototype.makeBins = function() {
         // Extract patient data
         var patientMedications;
-        if (attributeData) {
-            patientMedications = attributeData;
+        if (this.visualizationRenderer.attributeData) {
+            patientMedications = this.visualizationRenderer.attributeData;
         } else {
             var patient = patientData.getAttribute(patientData.KEY_PATIENT);
             var patientMedicationIndex = utils.arrayObjectIndexOf(
