@@ -106,11 +106,11 @@ moduleVisualizations.factory('SpiralVisualization',
         self.makeBins();
     };
 
-    SpiralVisualization.prototype.makeBins = function() {
+    SpiralVisualization.prototype.makeBins = function(attributeData) {
         // Extract patient data
         var patientMedications;
-        if (this.visualizationRenderer.attributeData) {
-            patientMedications = this.visualizationRenderer.attributeData;
+        if (attributeData) {
+            patientMedications = attributeData;
         } else {
             var patient = patientData.getAttribute(patientData.KEY_PATIENT);
             var patientMedicationIndex = utils.arrayObjectIndexOf(
@@ -374,6 +374,7 @@ moduleVisualizations.factory('SpiralVisualization',
     };
 
     SpiralVisualization.prototype.update = function(nodeID, vizID, state) {
+        // FIXME: Review makeBins not called more than once
         var spiral = nodes.getVizByIDs(nodeID, vizID);
         if (state.binning) {
             this.binning = state.binning;
@@ -396,6 +397,9 @@ moduleVisualizations.factory('SpiralVisualization',
             }
 
             this.makeBins();
+        }
+        if (state.attributeData) {
+            this.makeBins(state.attributeData);
         }
     };
 

@@ -896,19 +896,27 @@ moduleLayout.directive("directiveActionPanel",
                         attributeNames.push(currentAttributeNames.slice());
                     }
 
-                    console.log(attributeNames);
-                    console.log(newRecordedFrequency);
+                    //console.log(attributeNames);
+                    //console.log(newRecordedFrequency);
                         
-                    // TODO
-                    // removeSpiral and addSpiral calls (save spirals in future)
-                    // add to renderer
-                    // pass to makeBins()
                     var attributeData = {
                         attributeNames: attributeNames,
+                        expectedFrequency: "TODO",
                         recordedFrequency: newRecordedFrequency
                     };
 
                     scope.cleanOverlays();
+
+                    // remove one of the spirals (TODO: save spirals in future)
+                    scope.removeSpiralRoutine({
+                        nodeID: currentNode.model.id,
+                        vizID: vizID
+                    });
+
+                    // update the other spiral
+                    updateFromSelections({
+                        attributeData: attributeData
+                    });
 
                     scope.makeDefaultActions();
                 } else {
@@ -1043,6 +1051,10 @@ moduleLayout.directive("directiveActionPanel",
 
             scope.addSpiralRoutine = function(button) {
                 scope.APIPanes.addSpiralRoutine(button);
+            };
+
+            scope.removeSpiralRoutine = function(button) {
+                scope.APIPanes.removeSpiralRoutine(button);
             };
 
             // Populate API
@@ -1987,6 +1999,7 @@ moduleLayout.directive("directivePanes",
             scope.APIPanes.updateBinningElements = scope.updateBinningElements;
             scope.APIPanes.addSpiral = scope.addSpiral;
             scope.APIPanes.addSpiralRoutine = scope.addSpiralRoutine;
+            scope.APIPanes.removeSpiralRoutine = scope.removeSpiralRoutine;
 
             // Initialize
             scope.updateLayout();
@@ -1995,3 +2008,55 @@ moduleLayout.directive("directivePanes",
 }]);
 
 angular.module("moduleCombined", ["moduleIndex", "moduleLayout", "moduleSplits"]);
+
+var test1 = function() {
+    // FIXME: Wait for elements instead of using delays
+    var injector = angular.injector(['ng', 'moduleCombined']);
+    injector.invoke(function($rootScope, $compile, $timeout, utils) {
+        var delay = 200;
+        $timeout(function() {
+            var target = angular.element('#action-panel');
+            var child = target.children()[2];
+            var elChild = angular.element(child);
+            var scope = elChild.scope();
+            scope.chooseSpiralAttribute('chooseSpiral');
+        }).then(
+            function() { return $timeout(function() {
+                    target = angular.element('.patient-table');
+                    child = target.children()[0];
+                    elChild = angular.element(child);
+                    scope = elChild.scope();
+                    scope.callWithSavedAttribute(
+                        'chooseSpiral',
+                        scope.callBackArguments,
+                        scope.attribute
+                    );
+                }, delay);
+            }
+        ).then(
+            function() { return $timeout(function() {
+                    target = angular.element('#action-panel').find('button');
+                    scope = target.scope();
+                    // HACK: Workaround Angular's check:
+                    // "Referencing DOM nodes 
+                    // in Angular expressions is disallowed!"
+                    scope.chooseAddSpiral({target: target});
+                }, delay);
+            }
+        ).then(
+            function() { return $timeout(function() {
+                    target = angular.element('.patient-table');
+                    child = target.children()[1];
+                    elChild = angular.element(child);
+                    scope = elChild.scope();
+                    scope.callWithSavedAttribute(
+                        'addSpiral',
+                        scope.callBackArguments,
+                        scope.attribute
+                    );
+                }, delay);
+            }
+        );
+    });
+};
+test1();
