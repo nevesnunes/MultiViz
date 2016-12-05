@@ -81,9 +81,10 @@ moduleUtils.factory('utils', ['$q', function($q) {
 
         deferred.resolve();
 
-        return events.reduce(function(promise, single_event){
-            // FIXME: Use fn.apply(this, args);
-            return promise.then(single_event(arg1, arg2, arg3));
+        return events.reduce(function(promise, single_event) {
+            return promise.then(function() { 
+                return single_event(arg1, arg2, arg3);
+            });
         }, promise);
     };
 

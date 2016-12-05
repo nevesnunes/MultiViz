@@ -901,7 +901,7 @@ moduleLayout.directive("directiveActionPanel",
                         
                     var attributeData = {
                         attributeNames: attributeNames,
-                        expectedFrequency: "TODO",
+                        expectedFrequency: newFrequency,
                         recordedFrequency: newRecordedFrequency
                     };
 
@@ -2014,41 +2014,45 @@ var test1 = function() {
     var injector = angular.injector(['ng', 'moduleCombined']);
     injector.invoke(function($rootScope, $compile, $timeout, utils) {
         var delay = 200;
-        $timeout(function() {
-            var target = angular.element('#action-panel');
-            var child = target.children()[2];
-            var elChild = angular.element(child);
-            var scope = elChild.scope();
-            scope.chooseSpiralAttribute('chooseSpiral');
-        }).then(
-            function() { return $timeout(function() {
-                    target = angular.element('.patient-table');
-                    child = target.children()[0];
-                    elChild = angular.element(child);
-                    scope = elChild.scope();
+        utils.resolveEvents([ 
+            function() {
+                return $timeout(function() {
+                    var target = angular.element('#action-panel');
+                    var child = target.children()[2];
+                    var elChild = angular.element(child);
+                    var scope = elChild.scope();
+                    scope.chooseSpiralAttribute('chooseSpiral');
+                });
+            },
+            function() {
+                return $timeout(function() {
+                    var target = angular.element('.patient-table');
+                    var child = target.children()[0];
+                    var elChild = angular.element(child);
+                    var scope = elChild.scope();
                     scope.callWithSavedAttribute(
                         'chooseSpiral',
                         scope.callBackArguments,
                         scope.attribute
                     );
                 }, delay);
-            }
-        ).then(
-            function() { return $timeout(function() {
-                    target = angular.element('#action-panel').find('button');
-                    scope = target.scope();
+            },
+            function() {
+                return $timeout(function() {
+                    var target = angular.element('#action-panel').find('button');
+                    var scope = target.scope();
                     // HACK: Workaround Angular's check:
                     // "Referencing DOM nodes 
                     // in Angular expressions is disallowed!"
                     scope.chooseAddSpiral({target: target});
                 }, delay);
-            }
-        ).then(
-            function() { return $timeout(function() {
-                    target = angular.element('.patient-table');
-                    child = target.children()[1];
-                    elChild = angular.element(child);
-                    scope = elChild.scope();
+            },
+            function() {
+                return $timeout(function() {
+                    var target = angular.element('.patient-table');
+                    var child = target.children()[1];
+                    var elChild = angular.element(child);
+                    var scope = elChild.scope();
                     scope.callWithSavedAttribute(
                         'addSpiral',
                         scope.callBackArguments,
@@ -2056,7 +2060,7 @@ var test1 = function() {
                     );
                 }, delay);
             }
-        );
+        ]);
     });
 };
 test1();
