@@ -817,10 +817,12 @@ moduleLayout.directive("directiveActionPanel",
                     var computeJoinMoment = function(property, comparator) {
                         var sourceStartMoment = moment(
                             sourceViz.visualizationRenderer.option[property],
-                            'YYYY/MM/DD');
+                            'YYYY/MM/DD'
+                        );
                         var targetStartMoment = moment(
                             targetViz.visualizationRenderer.option[property],
-                            'YYYY/MM/DD');
+                            'YYYY/MM/DD'
+                        );
                         return comparator(sourceStartMoment
                                 .diff(targetStartMoment, 'days'), 0) ?
                             targetStartMoment : 
@@ -828,10 +830,10 @@ moduleLayout.directive("directiveActionPanel",
                     };
                     var newStartDate = computeJoinMoment(
                         'recordedStartDate', function(a, b) { return a > b; }
-                    ).format('YYYY/MM/DD');
+                    ).toISOString();
                     var newEndDate = computeJoinMoment(
                         'recordedEndDate', function(a, b) { return a < b; }
-                    ).format('YYYY/MM/DD');
+                    ).toISOString();
 
                     // Compute common recorded frequency:
                     // Iterate through all the recorded frequencies and
@@ -851,14 +853,6 @@ moduleLayout.directive("directiveActionPanel",
                             sourceRecordedFrequency[sourceIndex]);
                         var targetMoment = moment(
                             targetRecordedFrequency[targetIndex]);
-
-                        var test = moment("2014-08-23");
-                        if (sourceMoment.diff(test) > 0) {
-                            console.log("test source");
-                        }
-                        if (targetMoment.diff(test) > 0) {
-                            console.log("test target");
-                        }
 
                         // Add and advance the earliest recorded moment
                         var diff = sourceMoment.diff(targetMoment, 'days');
@@ -898,13 +892,8 @@ moduleLayout.directive("directiveActionPanel",
 
                     //console.log(attributeNames);
                     //console.log(newRecordedFrequency);
-                        
-                    var attributeData = {
-                        attributeNames: attributeNames,
-                        expectedFrequency: newFrequency,
-                        recordedFrequency: newRecordedFrequency
-                    };
 
+                    // target was selected
                     scope.cleanOverlays();
 
                     // remove one of the spirals (TODO: save spirals in future)
@@ -914,7 +903,17 @@ moduleLayout.directive("directiveActionPanel",
                     });
 
                     // update the other spiral
+                    var attributeData = {
+                        attributeNames: attributeNames,
+                        startDate: newStartDate,
+                        endDate: newEndDate,
+                        expectedFrequency: newFrequency,
+                        recordedFrequency: newRecordedFrequency
+                    };
                     updateFromSelections({
+                        currentMedication: 
+                            sourceViz.currentMedication + ' + ' +
+                            targetViz.currentMedication,
                         attributeData: attributeData
                     });
 
@@ -2010,7 +2009,10 @@ moduleLayout.directive("directivePanes",
 angular.module("moduleCombined", ["moduleIndex", "moduleLayout", "moduleSplits"]);
 
 var test1 = function() {
-    // FIXME: Wait for elements instead of using delays
+    // FIXME: Wait for elements instead of using delays:
+    // angular.element(document).ready(function() {
+    //     ...
+    // });
     var injector = angular.injector(['ng', 'moduleCombined']);
     injector.invoke(function($rootScope, $compile, $timeout, utils) {
         var delay = 200;

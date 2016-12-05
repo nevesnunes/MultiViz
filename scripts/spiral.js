@@ -33,6 +33,7 @@ moduleVisualizations.factory('SpiralVisualization',
         // which we will use in our facade
         this.visualizationRenderer = null;
 
+        this.attributeData = null;
         this.binning = null;
         this.expectedFrequency = null;
         this.hasData = true;
@@ -106,11 +107,11 @@ moduleVisualizations.factory('SpiralVisualization',
         self.makeBins();
     };
 
-    SpiralVisualization.prototype.makeBins = function(attributeData) {
+    SpiralVisualization.prototype.makeBins = function() {
         // Extract patient data
         var patientMedications;
-        if (attributeData) {
-            patientMedications = attributeData;
+        if (this.attributeData) {
+            patientMedications = this.attributeData;
         } else {
             var patient = patientData.getAttribute(patientData.KEY_PATIENT);
             var patientMedicationIndex = utils.arrayObjectIndexOf(
@@ -376,14 +377,18 @@ moduleVisualizations.factory('SpiralVisualization',
     SpiralVisualization.prototype.update = function(nodeID, vizID, state) {
         // FIXME: Review makeBins not called more than once
         var spiral = nodes.getVizByIDs(nodeID, vizID);
+        var areBinsBeingCreated = false;
         if (state.binning) {
             this.binning = state.binning;
             this.visualizationRenderer.set('binning', this.binning);
 
-            this.makeBins();
+            areBinsBeingCreated = true;
         }
         if (state.medications) {
+            // Remove all previous data,
+            // including attribute data from joined spirals
             this.medications = state.medications;
+            this.attributeData = null;
         }
         if (state.currentMedication) {
             if (this.currentMedication !== state.currentMedication) {
@@ -396,10 +401,25 @@ moduleVisualizations.factory('SpiralVisualization',
                     .set('intervalPos', []);
             }
 
-            this.makeBins();
+            areBinsBeingCreated = true;
         }
         if (state.attributeData) {
-            this.makeBins(state.attributeData);
+            this.attributeData = state.attributeData;
+
+            // Invalidate previous binning: Data has changed, therefore
+            // we need to compute the appropriate binning
+            this.binning = null;
+
+            this.visualizationRenderer
+                .set('binning', this.binning)
+                // Invalidate previous brushing
+                .set('intervalDates', [])
+                .set('intervalPos', []);
+            areBinsBeingCreated = true;
+        }
+
+        if (areBinsBeingCreated) {
+            this.makeBins();
         }
     };
 
