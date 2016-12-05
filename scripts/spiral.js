@@ -265,7 +265,8 @@ moduleVisualizations.factory('SpiralVisualization',
                 }
 
                 // Extract multiple attribute names, if this is a joined spiral
-                var attributeProperties = (patientMedications.attributeProperties) ?
+                var attributeProperties = 
+                        (patientMedications.attributeProperties) ?
                     // HACK: sub1
                     patientMedications.attributeProperties[currentDateIndex-1] :
                     null;

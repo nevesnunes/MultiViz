@@ -770,7 +770,9 @@ moduleLayout.directive("directiveActionPanel",
                             'ng-click="makeJoinSpiral(\'' + vizID + '\')">';
                     overlayHTML += (vizID === sourceID) ?
                         '<div class="viz-overlay-target-text">' +
-                            '<span>Juntar esta espiral com...</span>' +
+                            '<span>Juntar ' + 
+                                vizs[i].vizObject.currentMedication + 
+                                ' com...</span>' +
                         '</div>' :
                         '';
                     overlayHTML += '</div>';
@@ -853,7 +855,9 @@ moduleLayout.directive("directiveActionPanel",
                     };
                     for (var sourceIndex = 0, targetIndex = 0;
                         (sourceIndex < sourceLength) ||
-                            (targetIndex < targetLength);) {
+                            (targetIndex < targetLength);
+                        // NOTHING
+                        ) {
                         var currentAttributeProperties = [];
                         var sourceMoment = moment(
                             sourceRecordedFrequency[sourceIndex]);
@@ -2029,6 +2033,16 @@ var test1 = function() {
     // angular.element(document).ready(function() {
     //     ...
     // });
+    //
+    // Compiling scope before invoking element handlers:
+    // https://docs.angularjs.org/api/ng/function/angular.injector
+    //
+    // $compile($document)($rootScope);
+    // $rootScope.$digest();
+    // element.triggerHandler('click');
+    //
+    // Running a test separate from this module:
+    // http://stackoverflow.com/questions/28854303/using-compile-on-external-template-templateurl-in-angular-directive
     var injector = angular.injector(['ng', 'moduleCombined']);
     injector.invoke(function($rootScope, $compile, $timeout, utils) {
         var delay = 200;
