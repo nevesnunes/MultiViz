@@ -122,6 +122,7 @@ moduleVisualizations.factory('SpiralVisualization',
         this.expectedFrequency = expectedFrequency;
         var recordedFrequency = patientMedications.recordedFrequency;
         this.recordedFrequency = recordedFrequency;
+        this.dosage = patientMedications.dosage;
 
         // Check if interval was defined in temporal line brush;
         // Otherwise, use expected start and end dates
@@ -264,9 +265,17 @@ moduleVisualizations.factory('SpiralVisualization',
                 }
 
                 // Extract multiple attribute names, if this is a joined spiral
-                var attributeNames = (patientMedications.attributeNames) ?
-                    patientMedications.attributeNames[currentDateIndex] :
+                var attributeProperties = (patientMedications.attributeProperties) ?
+                    // HACK: sub1
+                    patientMedications.attributeProperties[currentDateIndex-1] :
                     null;
+
+                var dosage = (attributeProperties) ?
+                    attributeProperties.reduce(function(old, property) {
+                        return old + property.dosage +
+                            ' (' + property.name + ') ';
+                    }, '') :
+                    patientMedications.dosage;
 
                 // If moment is contained in the brush interval, add date to
                 // brushed data
@@ -274,22 +283,22 @@ moduleVisualizations.factory('SpiralVisualization',
                         (currentMoment.diff(intervalEndMoment, interval) <= 0)) {
                     brushedData.push({
                         value: accumulatorBinDays,
-                        dosage: patientMedications.dosage,
+                        dosage: dosage,
                         date: dateString,
                         startDate: startDateString,
                         endDate: endDateString,
                         binFactor: binFactor,
-                        attributeNames: attributeNames
+                        attributeProperties: attributeProperties
                     });
                 }
                 data.push({
                     value: accumulatorBinDays,
-                    dosage: patientMedications.dosage,
+                    dosage: dosage,
                     date: dateString,
                     startDate: startDateString,
                     endDate: endDateString,
                     binFactor: binFactor,
-                    attributeNames: attributeNames
+                    attributeProperties: attributeProperties
                 });
 
                 accumulatorBinDays = 0;

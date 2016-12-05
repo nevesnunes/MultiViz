@@ -839,16 +839,22 @@ moduleLayout.directive("directiveActionPanel",
                     // Iterate through all the recorded frequencies and
                     // collect the dates, alongside correspoding
                     // attribute names
-                    var attributeNames = [];
+                    var attributeProperties = [];
                     var newRecordedFrequency = [];
                     var sourceRecordedFrequency = sourceViz.recordedFrequency;
                     var sourceLength = sourceRecordedFrequency.length;
                     var targetRecordedFrequency = targetViz.recordedFrequency;
                     var targetLength = targetRecordedFrequency.length;
+                    var makeAttributeObject = function(obj) {
+                        return {
+                            name: obj.name,
+                            dosage: obj.dosage
+                        };
+                    };
                     for (var sourceIndex = 0, targetIndex = 0;
                         (sourceIndex < sourceLength) ||
                             (targetIndex < targetLength);) {
-                        var currentAttributeNames = [];
+                        var currentAttributeProperties = [];
                         var sourceMoment = moment(
                             sourceRecordedFrequency[sourceIndex]);
                         var targetMoment = moment(
@@ -857,26 +863,34 @@ moduleLayout.directive("directiveActionPanel",
                         // Add and advance the earliest recorded moment
                         var diff = sourceMoment.diff(targetMoment, 'days');
                         if ((diff > 0) && (targetIndex < targetLength)) {
-                            currentAttributeNames.push(
-                                targetViz.currentMedication);
+                            currentAttributeProperties.push({
+                                name: targetViz.currentMedication,
+                                dosage: targetViz.dosage
+                            });
                             newRecordedFrequency.push(
                                 targetRecordedFrequency[targetIndex]);
                             targetIndex++;
                         } else if ((diff < 0) && (sourceIndex < sourceLength)) {
-                            currentAttributeNames.push(
-                                sourceViz.currentMedication);
+                            currentAttributeProperties.push({
+                                name: sourceViz.currentMedication,
+                                dosage: sourceViz.dosage
+                            });
                             newRecordedFrequency.push(
                                 sourceRecordedFrequency[sourceIndex]);
                             sourceIndex++;
                         // Both recorded frequencies have the same date
                         } else {
                             if (targetIndex < targetLength) {
-                                currentAttributeNames.push(
-                                    targetViz.currentMedication);
+                                currentAttributeProperties.push({
+                                    name: targetViz.currentMedication,
+                                    dosage: targetViz.dosage
+                                });
                             }
                             if (sourceIndex < sourceLength) {
-                                currentAttributeNames.push(
-                                    sourceViz.currentMedication);
+                                currentAttributeProperties.push({
+                                    name: sourceViz.currentMedication,
+                                    dosage: sourceViz.dosage
+                                });
                             }
                             // Either one works here
                             // NOTE: We are ignoring hours, otherwise we would
@@ -887,10 +901,12 @@ moduleLayout.directive("directiveActionPanel",
                             sourceIndex++;
                         }
 
-                        attributeNames.push(currentAttributeNames.slice());
+                        attributeProperties.push(
+                            currentAttributeProperties.map(makeAttributeObject)
+                        );
                     }
 
-                    //console.log(attributeNames);
+                    console.log(attributeProperties);
                     //console.log(newRecordedFrequency);
 
                     // target was selected
@@ -904,7 +920,7 @@ moduleLayout.directive("directiveActionPanel",
 
                     // update the other spiral
                     var attributeData = {
-                        attributeNames: attributeNames,
+                        attributeProperties: attributeProperties,
                         startDate: newStartDate,
                         endDate: newEndDate,
                         expectedFrequency: newFrequency,
