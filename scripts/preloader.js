@@ -4,6 +4,8 @@
 // integrated approach should be studied:
 //
 // https://github.com/RevillWeb/angular-preload-image/blob/master/angular-preload-image.js
+//
+// FIXME: At least get all files programatically...
 (function() {
     var images = [
         "images/controls/add.svg",
@@ -15,6 +17,7 @@
         "images/controls/black/split-vertical.svg",
         "images/controls/colapse.svg",
         "images/controls/drag.svg",
+        "images/controls/join.svg",
         "images/controls/info.svg",
         "images/controls/maximize.svg",
         "images/controls/pin-checked.svg",

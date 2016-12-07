@@ -854,10 +854,10 @@ moduleLayout.directive("directiveActionPanel",
                         };
                     };
                     for (var sourceIndex = 0, targetIndex = 0;
-                        (sourceIndex < sourceLength) ||
-                            (targetIndex < targetLength);
-                        // NOTHING
-                        ) {
+                            (sourceIndex < sourceLength) ||
+                                (targetIndex < targetLength);
+                            // NOTHING
+                            ) {
                         var currentAttributeProperties = [];
                         var sourceMoment = moment(
                             sourceRecordedFrequency[sourceIndex]);
@@ -869,7 +869,7 @@ moduleLayout.directive("directiveActionPanel",
                         if ((diff > 0) && (targetIndex < targetLength)) {
                             currentAttributeProperties.push({
                                 name: targetViz.currentMedication,
-                                dosage: targetViz.dosage
+                                dosage: targetViz.dosage[targetIndex]
                             });
                             newRecordedFrequency.push(
                                 targetRecordedFrequency[targetIndex]);
@@ -877,7 +877,7 @@ moduleLayout.directive("directiveActionPanel",
                         } else if ((diff < 0) && (sourceIndex < sourceLength)) {
                             currentAttributeProperties.push({
                                 name: sourceViz.currentMedication,
-                                dosage: sourceViz.dosage
+                                dosage: sourceViz.dosage[sourceIndex]
                             });
                             newRecordedFrequency.push(
                                 sourceRecordedFrequency[sourceIndex]);
@@ -887,17 +887,17 @@ moduleLayout.directive("directiveActionPanel",
                             if (targetIndex < targetLength) {
                                 currentAttributeProperties.push({
                                     name: targetViz.currentMedication,
-                                    dosage: targetViz.dosage
+                                    dosage: targetViz.dosage[targetIndex]
                                 });
                             }
                             if (sourceIndex < sourceLength) {
                                 currentAttributeProperties.push({
                                     name: sourceViz.currentMedication,
-                                    dosage: sourceViz.dosage
+                                    dosage: sourceViz.dosage[sourceIndex]
                                 });
                             }
                             // Either one works here
-                            // NOTE: We are ignoring hours, otherwise we would
+                            // HACK: We are ignoring hours, otherwise we would
                             // add both in an array
                             newRecordedFrequency.push(
                                 targetRecordedFrequency[targetIndex]);
@@ -1512,7 +1512,7 @@ moduleLayout.directive("directivePanes",
                 
                 var isMaximized = nodes.isMaximized(id);
 
-                // NOTE: Due to the maximized view check, we assume all
+                // HACK: Due to the maximized view check, we assume all
                 // defined handlers for each button will only work for
                 // the current view's node
                 var buttonsHTML = "";
@@ -1529,7 +1529,7 @@ moduleLayout.directive("directivePanes",
                         nodeID: id,
                         method: "joinSpiral($event)",
                         title:  "Juntar Espirais",
-                        img:    "images/controls/drag.svg"
+                        img:    "images/controls/join.svg"
                     }) +
                     utils.makeImgButton({
                         id:           vizID,

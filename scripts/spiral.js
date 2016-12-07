@@ -117,11 +117,19 @@ moduleVisualizations.factory('SpiralVisualization',
             var patientMedicationIndex = utils.arrayObjectIndexOf(
                     patient.medications, this.currentMedication, "name");
             patientMedications = patient.medications[patientMedicationIndex];
+        
+            // FIXME: Should be done in patients.json
+            var dosages = patientMedications.recordedFrequency
+                .map(function() {
+                    return patientMedications.dosage;
+                });
+            patientMedications.dosage = dosages.slice();
         }
         var expectedFrequency = patientMedications.expectedFrequency;
         this.expectedFrequency = expectedFrequency;
         var recordedFrequency = patientMedications.recordedFrequency;
         this.recordedFrequency = recordedFrequency;
+
         this.dosage = patientMedications.dosage;
 
         // Check if interval was defined in temporal line brush;
@@ -276,7 +284,7 @@ moduleVisualizations.factory('SpiralVisualization',
                         return old + property.dosage +
                             ' (' + property.name + ') ';
                     }, '') :
-                    patientMedications.dosage;
+                    patientMedications.dosage[currentDateIndex-1];
 
                 // If moment is contained in the brush interval, add date to
                 // brushed data
