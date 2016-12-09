@@ -1,4 +1,5 @@
 .rect-label {
+  fill: transparent;
   fill-opacity: 0.0;
 }
 
@@ -7,12 +8,12 @@
   fill-opacity: 1.0;
 }
 
-rect.bordered {
+.bordered {
   stroke: white;
   stroke-width: 2px;   
 }
 
-rect.bordered:hover {
+.bordered:hover {
   fill: #31708f !important;
   stroke: #c4e3f3;
   stroke-width: 4px;   

@@ -107,10 +107,10 @@ moduleVisualizations.factory('HeatMapVisualization',
             bottom: 40,
             left: 0
         } : {
-            top: 80,
+            top: 0,
             right: 0,
             bottom: 40,
-            left: 200
+            left: 40
         };
         this.width = 800 - this.margin.left - this.margin.right;
         this.height = 420 - this.margin.top - this.margin.bottom;
@@ -373,12 +373,17 @@ moduleVisualizations.factory('HeatMapVisualization',
                     similarityNames = sortedObject.slice();
             });
 
+            var longestDimensionLength = (
+                    diseaseNames.length > medicationNames.length) ?
+                diseaseNames.length :
+                medicationNames.length;
             self.visualizationRenderer = {
                 dataIncidences: data,
                 filteredData: filteredData,
                 filteredSimilarityData: filteredSimilarityData,
                 diseaseNames: diseaseNames,
                 medicationNames: medicationNames,
+                longestDimensionLength: longestDimensionLength,
                 longestNameLength: longestNameLength,
                 similarityNames: similarityNames,
                 longestSimilarityNameLength: longestSimilarityNameLength
@@ -410,17 +415,39 @@ moduleVisualizations.factory('HeatMapVisualization',
 
         // Label width must be wide enough to span all text
         var labelWidth = self.visualizationRenderer.longestNameLength * 8;
+
+        // Offset for centering diamond and labels in svg
+        var diamondInitialX = diseaseNames.length / 2;
+        var diamondInitialY = medicationNames.length / 2;
+
+        // Offset for positioning each cell of the diamond
+        var cellSizeOffset = 4;
+        var diamondSize = self.gridHeight / 2;
+
         var diseaseLabels = svg.selectAll(".rect-disease-label")
             .data(diseaseNames);
         var diseaseLabelsGroup = diseaseLabels.enter();
         diseaseLabelsGroup.append("rect")
             .attr("class", "rect-disease-label rect-label")
-            .attr("x", -labelWidth)
             .attr("width", labelWidth)
-            .attr("height", self.gridHeight)
+            .attr("height", self.gridHeight - cellSizeOffset*2)
             .merge(diseaseLabels)
+                .attr("x", function(d, i) {
+                    return 2 * (1 + diamondInitialX) * self.gridHeight -
+                        cellSizeOffset * 2 -
+                        (1 + diseaseNames.indexOf(d.disease)) * 
+                        (diamondSize + cellSizeOffset) -
+                        (1 + i) * 
+                        (diamondSize + cellSizeOffset);
+                })
                 .attr("y", function(d, i) {
-                    return (1 + i) * self.gridHeight;
+                    return 0 -
+                        cellSizeOffset / 4 +
+                        (2 + diamondInitialY) * self.gridHeight +
+                        (1 + medicationNames.indexOf(d.medication)) * 
+                        (diamondSize + cellSizeOffset) +
+                        (1 + i) * 
+                        (diamondSize + cellSizeOffset);
                 });
         diseaseLabels.exit().remove();
 
@@ -429,12 +456,22 @@ moduleVisualizations.factory('HeatMapVisualization',
         diseaseLabelsGroup = diseaseLabels.enter();
         diseaseLabelsGroup.append("text")
             .attr("class", "text-disease-label text-label")
-            .style("text-anchor", "end")
-            .attr("x", 0)
-            .attr("transform", "translate(-5," + self.gridHeight / 1.5 + ")")
             .merge(diseaseLabels)
+                .attr("x", function(d, i) {
+                    return 2 * (1 + diamondInitialX) * self.gridHeight -
+                        cellSizeOffset -
+                        (1 + diseaseNames.indexOf(d.disease)) * 
+                        (diamondSize + cellSizeOffset) -
+                        (1 + i) * 
+                        (diamondSize + cellSizeOffset);
+                })
                 .attr("y", function(d, i) {
-                    return (1 + i) * self.gridHeight;
+                    return self.gridHeight / 2 +
+                        (2 + diamondInitialY) * self.gridHeight +
+                        (1 + medicationNames.indexOf(d.medication)) * 
+                        (diamondSize + cellSizeOffset) +
+                        (1 + i) * 
+                        (diamondSize + cellSizeOffset);
                 })
                 .text(function(d) {
                     return d;
@@ -446,13 +483,23 @@ moduleVisualizations.factory('HeatMapVisualization',
         var medicationLabelsGroup = medicationLabels.enter();
         medicationLabelsGroup.append("rect")
             .attr("class", "rect-medication-label rect-label")
-            .attr("x", -labelWidth)
             .attr("width", labelWidth)
-            .attr("height", self.gridHeight)
+            .attr("height", self.gridHeight - cellSizeOffset*2)
             .merge(medicationLabels)
-                .attr("transform", function(d, i) {
-                    return "translate(" + ((1.75 + i) * self.gridWidth) + ", " + 
-                            (-(1 * self.gridHeight)) + ")rotate(20)";
+                .attr("x", function(d, i) {
+                    return (0.5 + diamondInitialX) * self.gridHeight -
+                        cellSizeOffset -
+                        (1 + diseaseNames.indexOf(d.disease)) * 
+                        (diamondSize + cellSizeOffset) +
+                        (1 + i) * 
+                        (diamondSize + cellSizeOffset);
+                })
+                .attr("y", function(d, i) {
+                    return 0 -
+                        (1 + medicationNames.indexOf(d.medication)) * 
+                        (diamondSize + cellSizeOffset) +
+                        (1 + i) * 
+                        (diamondSize + cellSizeOffset);
                 });
         medicationLabels.exit().remove();
 
@@ -461,13 +508,18 @@ moduleVisualizations.factory('HeatMapVisualization',
         medicationLabelsGroup = medicationLabels.enter();
         medicationLabelsGroup.append("text")
             .attr("class", "text-medication-label text-label")
-            .style("text-anchor", "end")
-            .attr("y", self.gridHeight / 2)
-            .attr("transform", "translate(-5," + self.gridHeight * 0.25 + ")")
             .merge(medicationLabels)
-                .attr("transform", function(d, i) {
-                    return "translate(" + ((1.75 + i) * self.gridWidth) + ", " + 
-                            (-(1 * self.gridHeight)) + ")rotate(20)";
+                .attr("x", function(d, i) {
+                    return (0.5 + diamondInitialX) * self.gridHeight +
+                        (1 + i) * 
+                        (diamondSize + cellSizeOffset);
+                })
+                .attr("y", function(d, i) {
+                    return self.gridHeight / 2 +
+                        (1 + medicationNames.indexOf(d.medication)) * 
+                        (diamondSize + cellSizeOffset) +
+                        (1 + i) * 
+                        (diamondSize + cellSizeOffset);
                 })
                 .text(function(d) {
                     return d;
@@ -507,24 +559,40 @@ moduleVisualizations.factory('HeatMapVisualization',
         });
         var cellsTip = d3.tip()
             .attr('class', 'tooltip tooltip-element tooltip-d3')
-            .offset([-10, 0])
-            .direction('n')
+            .offset([0, -10])
+            .direction('w')
             .html(function(d) {
-                return "<b>Número de pacientes:</b> " + d.incidences;
+                return "<div style=\"text-align: left\">" +
+                    "<span><b>Atributos:</b> " + d.medication + " / " + 
+                        d.disease + "</span><br/>" +
+                    "<span><b>Número de pacientes:</b> " +
+                        d.incidences + "</span>" +
+                "</div>";
             });
         svg.call(cellsTip);
         var cells = svg.selectAll(".attribute-cell")
             .data(cellsData);
-        cells.enter().append("rect")
+        var diamondPath = "M " + 0 + "," + diamondSize + ", " +
+            "L " + diamondSize + "," + diamondSize*2 + ", " +
+            "L " + diamondSize*2 + "," + diamondSize + ", " +
+            "L " + diamondSize + "," + 0 + " Z";
+        cells.enter().append("path")
             .attr("class", "attribute-cell bordered")
-            .attr("width", self.gridWidth)
-            .attr("height", self.gridHeight)
+            .attr("d", diamondPath)
             .merge(cells)
-                .attr("x", function(d) {
-                    return (1 + medicationNames.indexOf(d.medication)) * self.gridWidth;
-                })
-                .attr("y", function(d) {
-                    return (1 + diseaseNames.indexOf(d.disease)) * self.gridHeight;
+                .attr("transform", function(d) {
+                    var x = diamondInitialX * self.gridHeight -
+                        (1 + diseaseNames.indexOf(d.disease)) * 
+                        (diamondSize + cellSizeOffset) +
+                        (1 + medicationNames.indexOf(d.medication)) * 
+                        (diamondSize + cellSizeOffset);
+                    var y = 0 +
+                        (1 + medicationNames.indexOf(d.medication)) * 
+                        (diamondSize + cellSizeOffset)+
+                        (1 + diseaseNames.indexOf(d.disease)) * 
+                        (diamondSize + cellSizeOffset);
+
+                    return "translate(" + x + "," + y + ")";
                 })
                 .style("fill", function(d) {
                     var isPatientAttribute =
@@ -564,15 +632,6 @@ moduleVisualizations.factory('HeatMapVisualization',
                                 "rect-disease-label rect-label-selected" :
                                 "rect-disease-label rect-label";
                         });
-
-                    // Sort paths for correct hover styling
-                    svg.selectAll(".attribute-cell")
-                        .sort(function (a, b) {
-                            // a is not the hovered element, send "a" to the back
-                            if (a != d) return -1;
-                            // a is the hovered element, bring "a" to the front
-                            else return 1;                             
-                        });
                 })
                 .on("mouseout", function(d) {
                     cellsTip.hide(d);
@@ -610,65 +669,73 @@ moduleVisualizations.factory('HeatMapVisualization',
         });
 
         // Mark properties
-        var cellSizeOffset = 2;
-        var markSize = self.gridHeight - cellSizeOffset * 4;
+        cellSizeOffset = 2;
+        var markSize = self.gridHeight - cellSizeOffset * 8;
 
         // Identify which data belongs to patient attributes
-        var filteredPatientMedicationsData = labelData
+        var filteredPatientMedicationsData = patientMedicationNames
             .filter(function(d) {
-                return (patientMedicationNames.indexOf(d.medication) !== -1) &&
-                    (medicationNames.indexOf(d.medication) !== -1);
+                return (medicationNames.indexOf(d) !== -1);
             });
         var patientMedicationsCells = svg.selectAll(".attribute-mark-column")
             .data(filteredPatientMedicationsData, function(d) {
-                return medicationNames.indexOf(d.medication);
+                return medicationNames.indexOf(d);
             });
         patientMedicationsCells.enter().append("rect")
             .attr("class", "attribute-mark-column markPresent")
             .attr("width", markSize)
             .attr("height",markSize)
             .merge(patientMedicationsCells)
-                .attr("x", function(d) {
-                    return (1 + medicationNames.indexOf(d.medication)) *
-                        self.gridWidth +
-                        ((self.gridWidth - markSize) / 2);
+                .attr("x", function(d, i) {
+                    return 2 * (1 + diamondInitialX) * self.gridHeight -
+                        cellSizeOffset * 2 +
+                        (diamondSize + cellSizeOffset);
                 })
-                .attr("y", function(d) {
-                    return (self.gridHeight - markSize) / 2;
+                .attr("y", function(d, i) {
+                    return self.gridHeight / 2 +
+                        (medicationNames.indexOf(d)) * 
+                        (diamondSize) +
+                        (0.5 + i) * 
+                        (diamondSize);
                 });
         patientMedicationsCells.exit().remove();
 
-        var filteredPatientDiseasesData = labelData
+        var filteredPatientDiseasesData = patientDiseaseNames
             .filter(function(d) {
-                return (patientDiseaseNames.indexOf(d.disease) !== -1) &&
-                    (diseaseNames.indexOf(d.disease) !== -1);
+                return (diseaseNames.indexOf(d) !== -1);
             });
         var patientDiseasesCells = svg.selectAll(".attribute-mark-line")
             .data(filteredPatientDiseasesData, function(d) {
-                return diseaseNames.indexOf(d.disease);
+                return diseaseNames.indexOf(d);
             });
         patientDiseasesCells.enter().append("rect")
             .attr("class", "attribute-mark-line markPresent")
             .attr("width", markSize)
             .attr("height", markSize)
             .merge(patientDiseasesCells)
-                .attr("x", function(d) {
-                    return ((self.gridWidth - markSize) / 2);
+                .attr("x", function(d, i) {
+                    return 2 * (1 + diamondInitialX) * self.gridHeight -
+                        cellSizeOffset * 2 +
+                        (diamondSize + cellSizeOffset);
                 })
-                .attr("y", function(d) {
-                    return (1 + diseaseNames.indexOf(d.disease)) *
-                        self.gridHeight +
-                        ((self.gridHeight - markSize) / 2);
+                .attr("y", function(d, i) {
+                    return self.gridHeight / 2 +
+                        (2 + diamondInitialY) * self.gridHeight +
+                        (diseaseNames.indexOf(d)) * 
+                        (diamondSize) +
+                        (0.5 + i) * 
+                        (diamondSize);
                 });
         patientDiseasesCells.exit().remove();
 
         visualizations.makeLegend(
-                svg, 
-                colorScale, 
-                self.gridWidth, 
-                self.gridHeight,
+                svg,
+                colorScale,
                 self.gridWidth,
-                (diseaseNames.length + 1.5) * self.gridHeight);
+                self.gridHeight,
+                -diamondSize,
+                (self.visualizationRenderer.longestDimensionLength + 4) *
+                    self.gridHeight);
     };
 
     HeatMapVisualization.prototype.renderSimilarityMatrix = function(matrixElement) {
@@ -731,7 +798,6 @@ moduleVisualizations.factory('HeatMapVisualization',
                 });
         attributeLabels.exit().remove();
 
-        var aksflakj = svg;
         // We need text elements to be drawn before knowing how wide they
         // will be. Therefore, we select them again and store their bounding box
         // for later use.
@@ -853,15 +919,6 @@ moduleVisualizations.factory('HeatMapVisualization',
                                 "rect-attribute-label rect-label-selected" :
                                 "rect-attribute-label rect-label";
                         });
-
-                    // Sort paths for correct hover styling
-                    svg.selectAll(".attribute-cell")
-                        .sort(function (a, b) {
-                            // a is not the hovered element, send "a" to the back
-                            if (a != d) return -1;
-                            // a is the hovered element, bring "a" to the front
-                            else return 1;                             
-                        });
                 })
                 .on("mouseout", function(d) {
                     cellsTip.hide(d);
@@ -906,6 +963,12 @@ moduleVisualizations.factory('HeatMapVisualization',
             d3.select("#" + self.targetElement).selectAll("svg")
                 .attr("height",
                     (self.visualizationRenderer.similarityNames.length *
+                    self.gridHeight) +
+                    self.margin.top + self.margin.bottom);
+        } else {
+            d3.select("#" + self.targetElement).selectAll("svg")
+                .attr("height",
+                    (self.visualizationRenderer.longestDimensionLength * 1.5 *
                     self.gridHeight) +
                     self.margin.top + self.margin.bottom);
         }
