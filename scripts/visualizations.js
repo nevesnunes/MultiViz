@@ -202,6 +202,21 @@ moduleVisualizations.factory('visualizations',
         legendText.exit().remove();
     };
 
+    var extractBBoxes = function(selection) {
+        var textData = [];
+        selection.each(function(d, i) {            
+            var text = d3.select(this);
+            textData.push({
+                name: text.datum(),
+                // FIXME: If invalid elements are present,
+                // getBBox() causes firefox to throw exceptions
+                width: text.node().getBBox().width 
+            });
+        });
+
+        return textData;
+    };
+
     return {
         validateInterface: validateInterface,
         colors: colors,
@@ -212,6 +227,7 @@ moduleVisualizations.factory('visualizations',
         translateInterval: translateInterval,
         translateFrequency: translateFrequency,
         extractDatesWithInterval: extractDatesWithInterval, 
-        makeLegend: makeLegend
+        makeLegend: makeLegend,
+        extractBBoxes: extractBBoxes
     };
 }]);

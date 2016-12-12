@@ -25,6 +25,14 @@ moduleVisualizations.directive('directiveHeatMapTooltip', function() {
 moduleVisualizations.factory('HeatMapVisualization',
         ['$timeout', 'visualizations', 'patientData', 'retrievePatientData', 'utils', 'nodes',
         function($timeout, visualizations, patientData, retrievePatientData, utils, nodes) {
+    // d3 extensions
+    // Forces selected elements to always be on top of other elements
+    d3.selection.prototype.moveToFront = function() {
+        return this.each(function() {
+            this.parentNode.appendChild(this);
+        });
+    };
+
     var HeatMapVisualization = function(options) {
         // Patient attribute lists
         this.patientLists = {
@@ -115,8 +123,7 @@ moduleVisualizations.factory('HeatMapVisualization',
         this.width = 800 - this.margin.left - this.margin.right;
         this.height = 420 - this.margin.top - this.margin.bottom;
         this.gridHeight = Math.floor(this.height / 12);
-        this.gridWidth = this.gridHeight * 
-            ((this.renderer === renderer.SIM) ? 1 : 2);
+        this.gridWidth = this.gridHeight;
 
         if (elementID === undefined) {
             console.log("[WARN] @make: undefined id.");
@@ -413,9 +420,6 @@ moduleVisualizations.factory('HeatMapVisualization',
             return obj.name;
         });
 
-        // Label width must be wide enough to span all text
-        var labelWidth = self.visualizationRenderer.longestNameLength * 8;
-
         // Offset for centering diamond and labels in svg
         var diamondInitialX = diseaseNames.length / 2;
         var diamondInitialY = medicationNames.length / 2;
@@ -424,13 +428,18 @@ moduleVisualizations.factory('HeatMapVisualization',
         var cellSizeOffset = 4;
         var diamondSize = self.gridHeight / 2;
 
+        // Label width must be wide enough to span all text
+        var labelWidth = self.visualizationRenderer
+            .longestNameLength * 8 + self.gridWidth;
+        var labelHeight = self.gridHeight - cellSizeOffset * 2;
+
         var diseaseLabels = svg.selectAll(".rect-disease-label")
             .data(diseaseNames);
         var diseaseLabelsGroup = diseaseLabels.enter();
         diseaseLabelsGroup.append("rect")
             .attr("class", "rect-disease-label rect-label")
             .attr("width", labelWidth)
-            .attr("height", self.gridHeight - cellSizeOffset*2)
+            .attr("height", labelHeight)
             .merge(diseaseLabels)
                 .attr("x", function(d, i) {
                     return (
@@ -507,7 +516,7 @@ moduleVisualizations.factory('HeatMapVisualization',
         medicationLabelsGroup.append("rect")
             .attr("class", "rect-medication-label rect-label")
             .attr("width", labelWidth)
-            .attr("height", self.gridHeight - cellSizeOffset*2)
+            .attr("height", labelHeight)
             .merge(medicationLabels)
                 .attr("x", function(d, i) {
                     return (
@@ -567,6 +576,135 @@ moduleVisualizations.factory('HeatMapVisualization',
                     return d;
                 });
         medicationLabels.exit().remove();
+
+        var labelData = data.map(function(d) {
+            return {
+                incidences: d.incidences,
+                disease: utils.extractValueFromPair({
+                    pair: d,
+                    propertyOfType: "type",
+                    typeTerm: "disease",
+                    propertyOfValue: "name"
+                }),
+                medication: utils.extractValueFromPair({
+                    pair: d,
+                    propertyOfType: "type",
+                    typeTerm: "medication",
+                    propertyOfValue: "name"
+                })
+            };
+        });
+
+        // Mark properties
+        var markSize = diamondSize - cellSizeOffset;
+
+        // We need text elements to be drawn before knowing how wide they
+        // will be. Therefore, we select them again and store their bounding box
+        // for later use.
+        var textData = [];
+        var waitForDOMRendered = function selfFunction() {
+            try {
+                textData = visualizations.extractBBoxes(
+                    svg.selectAll(".text-medication-label")
+                );
+
+                // Identify which data belongs to patient attributes
+                var filteredPatientMedicationsData = patientMedicationNames
+                    .filter(function(d) {
+                        return (medicationNames.indexOf(d) !== -1);
+                    });
+                var patientMedicationsCells = svg.selectAll(".attribute-mark-column")
+                    .data(filteredPatientMedicationsData, function(d) {
+                        return medicationNames.indexOf(d);
+                    });
+                patientMedicationsCells.enter().append("rect")
+                    .attr("class", "attribute-mark-column markPresent")
+                    .attr("width", markSize)
+                    .attr("height", markSize)
+                    .merge(patientMedicationsCells)
+                        .attr("x", function(d, i) {
+                            var width = textData[medicationNames.indexOf(d)]
+                                .width;
+                            return (width + 20) + (
+                                    // initial position
+                                    diamondInitialX *
+                                    self.gridHeight 
+                                ) +
+                                // relative position
+                                (2 + medicationNames.indexOf(d)) * 
+                                (diamondSize + cellSizeOffset) -
+                                // offset to be closer to cells
+                                cellSizeOffset * 2;
+                        })
+                        .attr("y", function(d, i) {
+                            return (
+                                    // start position
+                                    1 *
+                                    self.gridHeight / 2
+                                ) +
+                                // relative position
+                                (1 + medicationNames.indexOf(d)) * 
+                                (diamondSize + cellSizeOffset) -
+                                // center mark
+                                (self.gridHeight - markSize) / 2;
+                        });
+                patientMedicationsCells.exit().remove();
+
+                textData = visualizations.extractBBoxes(
+                    svg.selectAll(".text-disease-label")
+                );
+
+                var filteredPatientDiseasesData = patientDiseaseNames
+                    .filter(function(d) {
+                        return (diseaseNames.indexOf(d) !== -1);
+                    });
+                var patientDiseasesCells = svg.selectAll(".attribute-mark-line")
+                    .data(filteredPatientDiseasesData, function(d) {
+                        return diseaseNames.indexOf(d);
+                    });
+                patientDiseasesCells.enter().append("rect")
+                    .attr("class", "attribute-mark-line markPresent")
+                    .attr("width", markSize)
+                    .attr("height", markSize)
+                    .merge(patientDiseasesCells)
+                        .attr("x", function(d, i) {
+                            var width = textData[diseaseNames.indexOf(d)]
+                                .width;
+                            return (width + 20) + (
+                                    // largest possible position
+                                    (2 + diamondInitialX) *
+                                    self.gridHeight + 
+                                    (2 * diamondInitialY) *
+                                    (diamondSize + cellSizeOffset)
+                                ) -
+                                // relative position
+                                (2 + diseaseNames.indexOf(d)) * 
+                                (diamondSize + cellSizeOffset) -
+                                // offset to be closer to cells
+                                cellSizeOffset * 3;
+                        })
+                        .attr("y", function(d, i) {
+                            return (
+                                    // start position
+                                    1 *
+                                    self.gridHeight / 2 +
+                                    (2 * diamondInitialY) *
+                                    (diamondSize + cellSizeOffset)
+                                ) +
+                                // relative position
+                                (2 + diseaseNames.indexOf(d)) * 
+                                (diamondSize + cellSizeOffset) +
+                                // offset to be closer to cells
+                                cellSizeOffset * 2 -
+                                // center mark
+                                (self.gridHeight - markSize) / 2;
+                        });
+                patientDiseasesCells.exit().remove();
+            } catch(e) {
+                window.requestAnimationFrame(selfFunction);
+            }
+        };
+        waitForDOMRendered();
 
         var colorScale = d3.scaleQuantile()
             .domain([0, visualizations.buckets - 1,
@@ -655,6 +793,7 @@ moduleVisualizations.factory('HeatMapVisualization',
                                 "text-medication-label text-label";
                         });
                     svg.selectAll(".rect-medication-label")
+                        .style("fill-opacity", 1.0)
                         .attr("class", function(a) {
                             return (a == d.medication) ? 
                                 "rect-medication-label rect-label-selected" :
@@ -669,11 +808,15 @@ moduleVisualizations.factory('HeatMapVisualization',
                                 "text-disease-label text-label ";
                         });
                     svg.selectAll(".rect-disease-label")
+                        .style("fill-opacity", 1.0)
                         .attr("class", function(a) {
                             return (a == d.disease) ? 
                                 "rect-disease-label rect-label-selected" :
                                 "rect-disease-label rect-label";
                         });
+
+                    // Marks should be on top of labels
+                    svg.selectAll(".markPresent").moveToFront();
                 })
                 .on("mouseout", function(d) {
                     cellsTip.hide(d);
@@ -682,98 +825,20 @@ moduleVisualizations.factory('HeatMapVisualization',
                     svg.selectAll(".text-medication-label")
                         .attr("class", "text-medication-label text-label ");
                     svg.selectAll(".rect-medication-label")
-                        .attr("class", "rect-medication-label rect-label");
+                        .style("fill-opacity", 0.0);
 
                     // Style line labels
                     svg.selectAll(".text-disease-label")
                         .attr("class", "text-disease-label text-label");
                     svg.selectAll(".rect-disease-label")
-                        .attr("class", "rect-disease-label rect-label");
+                        .style("fill-opacity", 0.0);
                 });
         cells.exit().remove();
-
-        var labelData = data.map(function(d) {
-            return {
-                incidences: d.incidences,
-                disease: utils.extractValueFromPair({
-                    pair: d,
-                    propertyOfType: "type",
-                    typeTerm: "disease",
-                    propertyOfValue: "name"
-                }),
-                medication: utils.extractValueFromPair({
-                    pair: d,
-                    propertyOfType: "type",
-                    typeTerm: "medication",
-                    propertyOfValue: "name"
-                })
-            };
-        });
-
-        // Mark properties
-        cellSizeOffset = 2;
-        var markSize = self.gridHeight - cellSizeOffset * 8;
-
-        // Identify which data belongs to patient attributes
-        var filteredPatientMedicationsData = patientMedicationNames
-            .filter(function(d) {
-                return (medicationNames.indexOf(d) !== -1);
-            });
-        var patientMedicationsCells = svg.selectAll(".attribute-mark-column")
-            .data(filteredPatientMedicationsData, function(d) {
-                return medicationNames.indexOf(d);
-            });
-        patientMedicationsCells.enter().append("rect")
-            .attr("class", "attribute-mark-column markPresent")
-            .attr("width", markSize)
-            .attr("height",markSize)
-            .merge(patientMedicationsCells)
-                .attr("x", function(d, i) {
-                    return 2 * (1 + diamondInitialX) * self.gridHeight -
-                        cellSizeOffset * 2 +
-                        (diamondSize + cellSizeOffset);
-                })
-                .attr("y", function(d, i) {
-                    return self.gridHeight / 2 +
-                        (medicationNames.indexOf(d)) * 
-                        (diamondSize) +
-                        (0.5 + i) * 
-                        (diamondSize);
-                });
-        patientMedicationsCells.exit().remove();
-
-        var filteredPatientDiseasesData = patientDiseaseNames
-            .filter(function(d) {
-                return (diseaseNames.indexOf(d) !== -1);
-            });
-        var patientDiseasesCells = svg.selectAll(".attribute-mark-line")
-            .data(filteredPatientDiseasesData, function(d) {
-                return diseaseNames.indexOf(d);
-            });
-        patientDiseasesCells.enter().append("rect")
-            .attr("class", "attribute-mark-line markPresent")
-            .attr("width", markSize)
-            .attr("height", markSize)
-            .merge(patientDiseasesCells)
-                .attr("x", function(d, i) {
-                    return 2 * (1 + diamondInitialX) * self.gridHeight -
-                        cellSizeOffset * 2 +
-                        (diamondSize + cellSizeOffset);
-                })
-                .attr("y", function(d, i) {
-                    return self.gridHeight / 2 +
-                        (2 + diamondInitialY) * self.gridHeight +
-                        (diseaseNames.indexOf(d)) * 
-                        (diamondSize) +
-                        (0.5 + i) * 
-                        (diamondSize);
-                });
-        patientDiseasesCells.exit().remove();
 
         visualizations.makeLegend(
                 svg,
                 colorScale,
-                self.gridWidth,
+                self.gridHeight * 2, 
                 self.gridHeight,
                 -diamondSize,
                 (self.visualizationRenderer.longestDimensionLength + 4) *
@@ -843,26 +908,18 @@ moduleVisualizations.factory('HeatMapVisualization',
         // We need text elements to be drawn before knowing how wide they
         // will be. Therefore, we select them again and store their bounding box
         // for later use.
+        var textData = [];
         var waitForDOMRendered = function selfFunction() {
             try {
-                textData = [];
-                var attributeLabelsTexts = svg.selectAll(".text-attribute-label");
-                attributeLabelsTexts.each(function(d, i) {            
-                    var text = d3.select(this);
-                    textData.push({
-                        name: text.datum(),
-                        // FIXME: Invalid elements are being called,
-                        // causing firefox to throw exceptions here
-                        width: text.node().getBBox().width 
-                    });
-                });
+                textData = visualizations.extractBBoxes(
+                    svg.selectAll(".text-attribute-label")
+                );
 
                 attributeLabels = svg.selectAll(".patient-attribute-mark")
                     .data(similarityNames);
                 attributeLabelsGroup = attributeLabels.enter();
                 attributeLabelsGroup.append("rect")
                     .attr("class", "patient-attribute-mark markPresent")
-                    .attr("y", cellSizeOffset * 2)
                     .attr("width", self.gridHeight - cellSizeOffset * 4)
                     .attr("height", self.gridHeight - cellSizeOffset * 4)
                     .merge(attributeLabels)
@@ -881,7 +938,7 @@ moduleVisualizations.factory('HeatMapVisualization',
                         });
                 attributeLabels.exit().remove();
             } catch(e) {
-                 window.requestAnimationFrame(selfFunction);
+                window.requestAnimationFrame(selfFunction);
             }
         };
         waitForDOMRendered();
@@ -955,12 +1012,16 @@ moduleVisualizations.factory('HeatMapVisualization',
                                 "text-attribute-label text-label";
                         });
                     svg.selectAll(".rect-attribute-label")
+                        .style("fill-opacity", 1.0)
                         .attr("class", function(a) {
                             return ((a === d.first.name) ||
                                     (a === d.second.name)) ?
                                 "rect-attribute-label rect-label-selected" :
                                 "rect-attribute-label rect-label";
                         });
+
+                    // Marks should be on top of labels
+                    svg.selectAll(".markPresent").moveToFront();
                 })
                 .on("mouseout", function(d) {
                     cellsTip.hide(d);
@@ -969,7 +1030,7 @@ moduleVisualizations.factory('HeatMapVisualization',
                     svg.selectAll(".text-attribute-label")
                         .attr("class", "text-attribute-label text-label ");
                     svg.selectAll(".rect-attribute-label")
-                        .attr("class", "rect-attribute-label rect-label");
+                        .style("fill-opacity", 0.0);
                 });
         cells.exit().remove();
 

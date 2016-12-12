@@ -6,6 +6,13 @@
 .rect-label-selected {
   fill: #c4e3f3;
   fill-opacity: 1.0;
+  /*
+  -webkit-transition: fill-opacity 0.1s ease-in-out;
+  -moz-transition: fill-opacity 0.1s ease-in-out;
+  -ms-transition: fill-opacity 0.1s ease-in-out;
+  -o-transition: fill-opacity 0.1s ease-in-out;
+  transition: fill-opacity 0.1s ease-in-out;
+  */
 }
 
 .bordered {
