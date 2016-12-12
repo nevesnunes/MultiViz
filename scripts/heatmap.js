@@ -433,21 +433,32 @@ moduleVisualizations.factory('HeatMapVisualization',
             .attr("height", self.gridHeight - cellSizeOffset*2)
             .merge(diseaseLabels)
                 .attr("x", function(d, i) {
-                    return 2 * (1 + diamondInitialX) * self.gridHeight -
-                        cellSizeOffset * 2 -
-                        (1 + diseaseNames.indexOf(d.disease)) * 
+                    return (
+                            // largest possible position
+                            (2 + diamondInitialX) *
+                            self.gridHeight + 
+                            (2 * diamondInitialY) *
+                            (diamondSize + cellSizeOffset)
+                        ) -
+                        // relative position
+                        (2 + i) * 
                         (diamondSize + cellSizeOffset) -
-                        (1 + i) * 
-                        (diamondSize + cellSizeOffset);
+                        // +1 offset relative to text
+                        cellSizeOffset * 4;
                 })
                 .attr("y", function(d, i) {
-                    return 0 -
-                        cellSizeOffset / 4 +
-                        (2 + diamondInitialY) * self.gridHeight +
-                        (1 + medicationNames.indexOf(d.medication)) * 
-                        (diamondSize + cellSizeOffset) +
+                    return (
+                            // start position
+                            1 *
+                            self.gridHeight / 2 +
+                            (2 * diamondInitialY) *
+                            (diamondSize + cellSizeOffset)
+                        ) +
+                        // relative position
                         (1 + i) * 
-                        (diamondSize + cellSizeOffset);
+                        (diamondSize + cellSizeOffset) +
+                        // +1 offset relative to text
+                        cellSizeOffset * 3;
                 });
         diseaseLabels.exit().remove();
 
@@ -458,20 +469,32 @@ moduleVisualizations.factory('HeatMapVisualization',
             .attr("class", "text-disease-label text-label")
             .merge(diseaseLabels)
                 .attr("x", function(d, i) {
-                    return 2 * (1 + diamondInitialX) * self.gridHeight -
-                        cellSizeOffset -
-                        (1 + diseaseNames.indexOf(d.disease)) * 
+                    return (
+                            // largest possible position
+                            (2 + diamondInitialX) *
+                            self.gridHeight + 
+                            (2 * diamondInitialY) *
+                            (diamondSize + cellSizeOffset)
+                        ) -
+                        // relative position
+                        (2 + i) * 
                         (diamondSize + cellSizeOffset) -
-                        (1 + i) * 
-                        (diamondSize + cellSizeOffset);
+                        // offset to be closer to cells
+                        cellSizeOffset * 3;
                 })
                 .attr("y", function(d, i) {
-                    return self.gridHeight / 2 +
-                        (2 + diamondInitialY) * self.gridHeight +
-                        (1 + medicationNames.indexOf(d.medication)) * 
+                    return (
+                            // start position
+                            1 *
+                            self.gridHeight / 2 +
+                            (2 * diamondInitialY) *
+                            (diamondSize + cellSizeOffset)
+                        ) +
+                        // relative position
+                        (2 + i) * 
                         (diamondSize + cellSizeOffset) +
-                        (1 + i) * 
-                        (diamondSize + cellSizeOffset);
+                        // offset to be closer to cells
+                        cellSizeOffset * 2;
                 })
                 .text(function(d) {
                     return d;
@@ -487,19 +510,28 @@ moduleVisualizations.factory('HeatMapVisualization',
             .attr("height", self.gridHeight - cellSizeOffset*2)
             .merge(medicationLabels)
                 .attr("x", function(d, i) {
-                    return (0.5 + diamondInitialX) * self.gridHeight -
-                        cellSizeOffset -
-                        (1 + diseaseNames.indexOf(d.disease)) * 
-                        (diamondSize + cellSizeOffset) +
-                        (1 + i) * 
-                        (diamondSize + cellSizeOffset);
+                    return (
+                            // initial position
+                            diamondInitialX *
+                            self.gridHeight 
+                        ) +
+                        // relative position
+                        (2 + i) * 
+                        (diamondSize + cellSizeOffset) -
+                        // +1 offset relative to text
+                        cellSizeOffset * 3;
                 })
                 .attr("y", function(d, i) {
-                    return 0 -
-                        (1 + medicationNames.indexOf(d.medication)) * 
+                    return (
+                            // start position
+                            1 *
+                            self.gridHeight / 2
+                        ) +
+                        // relative position
+                        (i) * 
                         (diamondSize + cellSizeOffset) +
-                        (1 + i) * 
-                        (diamondSize + cellSizeOffset);
+                        // +1 offset relative to text
+                        cellSizeOffset;
                 });
         medicationLabels.exit().remove();
 
@@ -510,14 +542,24 @@ moduleVisualizations.factory('HeatMapVisualization',
             .attr("class", "text-medication-label text-label")
             .merge(medicationLabels)
                 .attr("x", function(d, i) {
-                    return (0.5 + diamondInitialX) * self.gridHeight +
-                        (1 + i) * 
-                        (diamondSize + cellSizeOffset);
+                    return (
+                            // initial position
+                            diamondInitialX *
+                            self.gridHeight 
+                        ) +
+                        // relative position
+                        (2 + i) * 
+                        (diamondSize + cellSizeOffset) -
+                        // offset to be closer to cells
+                        cellSizeOffset * 2;
                 })
                 .attr("y", function(d, i) {
-                    return self.gridHeight / 2 +
-                        (1 + medicationNames.indexOf(d.medication)) * 
-                        (diamondSize + cellSizeOffset) +
+                    return (
+                            // start position
+                            1 *
+                            self.gridHeight / 2
+                        ) +
+                        // relative position
                         (1 + i) * 
                         (diamondSize + cellSizeOffset);
                 })
