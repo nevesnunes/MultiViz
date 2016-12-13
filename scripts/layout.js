@@ -910,19 +910,13 @@ moduleLayout.directive("directiveActionPanel",
                         );
                     }
 
-                    console.log(attributeProperties);
+                    //console.log(attributeProperties);
                     //console.log(newRecordedFrequency);
 
                     // target was selected
                     scope.cleanOverlays();
 
-                    // remove one of the spirals (TODO: save spirals in future)
-                    scope.removeSpiralRoutine({
-                        nodeID: currentNode.model.id,
-                        vizID: vizID
-                    });
-
-                    // update the other spiral
+                    // update source spiral
                     var attributeData = {
                         attributeProperties: attributeProperties,
                         startDate: newStartDate,
@@ -934,7 +928,16 @@ moduleLayout.directive("directiveActionPanel",
                         currentMedication: 
                             sourceViz.currentMedication + ' + ' +
                             targetViz.currentMedication,
-                        attributeData: attributeData
+                        joinData: {
+                            attributeData: attributeData,
+                            targetRenderer: targetViz.visualizationRenderer
+                        }
+                    });
+
+                    // remove target spiral
+                    scope.removeSpiralRoutine({
+                        nodeID: currentNode.model.id,
+                        vizID: vizID
                     });
 
                     scope.makeDefaultActions();
@@ -2099,4 +2102,4 @@ var test1 = function() {
         ]);
     });
 };
-//test1();
+test1();

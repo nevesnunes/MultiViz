@@ -33,6 +33,10 @@ moduleVisualizations.factory('SpiralVisualization',
         // which we will use in our facade
         this.visualizationRenderer = null;
 
+        // When we create a joined spiral, we store the state of the
+        // original objects
+        this.visualizationAncestors = [];
+
         this.attributeData = null;
         this.binning = null;
         this.expectedFrequency = null;
@@ -104,6 +108,13 @@ moduleVisualizations.factory('SpiralVisualization',
             },
             currentMedication: self.currentMedication
         });
+
+        // Store new spiral for later joins
+        if (self.visualizationAncestors.length === 0)
+            self.visualizationAncestors.push(
+                utils.extend(self.visualizationRenderer)
+            );
+
         self.makeBins();
     };
 
@@ -118,19 +129,21 @@ moduleVisualizations.factory('SpiralVisualization',
                     patient.medications, this.currentMedication, "name");
             patientMedications = patient.medications[patientMedicationIndex];
         
-            // FIXME: Should be done in patients.json
-            var dosages = patientMedications.recordedFrequency
-                .map(function() {
-                    return patientMedications.dosage;
-                });
-            patientMedications.dosage = dosages.slice();
         }
         var expectedFrequency = patientMedications.expectedFrequency;
         this.expectedFrequency = expectedFrequency;
         var recordedFrequency = patientMedications.recordedFrequency;
         this.recordedFrequency = recordedFrequency;
 
-        this.dosage = patientMedications.dosage;
+        // FIXME: Should be done in patients.json
+        if (!this.dosage) {
+            var dosages = patientMedications.recordedFrequency
+                .map(function() {
+                    return patientMedications.dosage;
+                });
+            patientMedications.dosage = dosages.slice();
+            this.dosage = patientMedications.dosage;
+        }
 
         // Check if interval was defined in temporal line brush;
         // Otherwise, use expected start and end dates
@@ -421,8 +434,14 @@ moduleVisualizations.factory('SpiralVisualization',
 
             areBinsBeingCreated = true;
         }
-        if (state.attributeData) {
-            this.attributeData = state.attributeData;
+        if (state.joinData) {
+            this.attributeData = state.joinData.attributeData;
+
+            this.visualizationAncestors.push(
+                state.joinData.targetRenderer
+            );
+
+            console.log(this.visualizationAncestors);
 
             // Invalidate previous binning: Data has changed, therefore
             // we need to compute the appropriate binning

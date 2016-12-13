@@ -397,7 +397,7 @@ rect.handle.handle--w:active {
 }
 
 .tooltip-wrapper.disabled {
-    /* OPTIONAL pointer-events setting above blocks cursor setting, so set it here */
+    /* pointer-events setting above blocks cursor setting, so set it here */
     cursor: not-allowed;
 }
 
