@@ -22,7 +22,10 @@ Complex methods or objects are documented with JSDoc style comments.
 ### Style Guides
 https://github.com/mgechev/angularjs-style-guide
 
-### Other
+### Development Stack
 - ECMAScript version 6
 - Angular 1
 - NPM
+
+### WebDev Tips
+To force modified files to refresh, disable your browser's cache (for example, in Chrome, it is possible to disable cache while DevTools is open).

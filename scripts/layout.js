@@ -2031,25 +2031,27 @@ moduleLayout.directive("directivePanes",
 
 angular.module("moduleCombined", ["moduleIndex", "moduleLayout", "moduleSplits"]);
 
-// Tests to automate certain user behaviour.
+// Tests to automate some user behaviour.
+//
 // TODO: These should be made properly with the following tools:
 // - Independent browser launches (e.g. Karma)
 // - Unit tests (e.g. Mocha)
+//
+// FIXME: Wait for elements instead of using delays:
+// angular.element(document).ready(function() {
+//     ...
+// });
+//
+// Compiling scope before invoking element handlers:
+// https://docs.angularjs.org/api/ng/function/angular.injector
+//
+// $compile($document)($rootScope);
+// $rootScope.$digest();
+// element.triggerHandler('click');
+//
+// Running a test with template separate from this module:
+// http://stackoverflow.com/questions/28854303/using-compile-on-external-template-templateurl-in-angular-directive
 var test1 = function() {
-    // FIXME: Wait for elements instead of using delays:
-    // angular.element(document).ready(function() {
-    //     ...
-    // });
-    //
-    // Compiling scope before invoking element handlers:
-    // https://docs.angularjs.org/api/ng/function/angular.injector
-    //
-    // $compile($document)($rootScope);
-    // $rootScope.$digest();
-    // element.triggerHandler('click');
-    //
-    // Running a test with template separate from this module:
-    // http://stackoverflow.com/questions/28854303/using-compile-on-external-template-templateurl-in-angular-directive
     var injector = angular.injector(['ng', 'moduleCombined']);
     injector.invoke(function($rootScope, $compile, $timeout, utils) {
         var delay = 200;
@@ -2102,4 +2104,22 @@ var test1 = function() {
         ]);
     });
 };
-test1();
+var test2 = function() {
+    var injector = angular.injector(['ng', 'moduleCombined']);
+    injector.invoke(function($rootScope, $compile, $timeout, utils) {
+        var delay = 200;
+        utils.resolveEvents([ 
+            function() {
+                return $timeout(function() {
+                    var target = angular.element('#action-panel');
+                    var child = target.children()[1];
+                    var elChild = angular.element(child);
+                    var scope = elChild.scope();
+                    scope.chooseHeatmap();
+                });
+            }
+        ]);
+    });
+};
+//test1();
+test2();
