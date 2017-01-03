@@ -526,7 +526,7 @@ moduleVisualizations.factory('HeatMapVisualization',
             .merge(medicationLabels)
                 .attr("x", function(d, i) {
                     return (
-                            // initial position
+                            // start position
                             diamondInitialX *
                             self.gridHeight 
                         ) +
@@ -558,7 +558,7 @@ moduleVisualizations.factory('HeatMapVisualization',
             .merge(medicationLabels)
                 .attr("x", function(d, i) {
                     return (
-                            // initial position
+                            // start position
                             diamondInitialX *
                             self.gridHeight 
                         ) +
@@ -632,7 +632,7 @@ moduleVisualizations.factory('HeatMapVisualization',
                             var width = textData[medicationNames.indexOf(d)]
                                 .width;
                             return (width + 20) + (
-                                    // initial position
+                                    // start position
                                     diamondInitialX *
                                     self.gridHeight 
                                 ) +
@@ -758,6 +758,15 @@ moduleVisualizations.factory('HeatMapVisualization',
         svg.call(cellsTip);
         var cells = svg.selectAll(".attribute-cell")
             .data(cellsData);
+
+        // Draw diamond path
+        //
+        // Origin | Order 
+        // -------+-------
+        //  0     |    4 (closed by `Z`)
+        // 0+---> | 1 /\
+        //  |     |   \/ 3
+        //  V     |   2
         var diamondPath = "M " + 0 + "," + diamondSize + ", " +
             "L " + diamondSize + "," + diamondSize*2 + ", " +
             "L " + diamondSize*2 + "," + diamondSize + ", " +
@@ -821,7 +830,72 @@ moduleVisualizations.factory('HeatMapVisualization',
                                 "rect-disease-label rect-label";
                         });
 
-                    // Marks should be on top of labels
+                // Disease guide
+                var guideLength = medicationNames.length + 1;
+                var guideSize = diamondSize + cellSizeOffset;
+                var diamondPath = "M " + (0 - cellSizeOffset) + "," +
+                        (guideSize - cellSizeOffset) + ", " +
+                    "L " + (guideSize * (guideLength-1) - cellSizeOffset) + "," +
+                        (guideSize * (guideLength) - cellSizeOffset) + ", " +
+                    "L " + (guideSize * (guideLength) - cellSizeOffset) + "," +
+                        (guideSize * (guideLength-1) - cellSizeOffset) + ", " +
+                    "L " + (guideSize - cellSizeOffset) + "," +
+                        (0 - cellSizeOffset) + " Z";
+                svg.append("path")
+                    .attr("class", "guide")
+                    .attr("d", diamondPath)
+                    .attr("transform", function() {
+                        var x = diamondInitialX * self.gridHeight -
+                            (1 + diseaseNames.indexOf(d.disease)) * 
+                            (diamondSize + cellSizeOffset) +
+                            (1) * 
+                            (diamondSize + cellSizeOffset);
+                        var y = 0 +
+                            (1) * 
+                            (diamondSize + cellSizeOffset)+
+                            (1 + diseaseNames.indexOf(d.disease)) * 
+                            (diamondSize + cellSizeOffset);
+
+                        return "translate(" + x + "," + y + ")";
+                    });
+
+                // Medication guide
+                guideLength = diseaseNames.length + 1;
+                guideSize = diamondSize + cellSizeOffset;
+                diamondPath = "M " + (0 - cellSizeOffset) + "," +
+                        (guideSize * (guideLength-1) - cellSizeOffset) + ", " +
+                    "L " + (guideSize - cellSizeOffset) + "," +
+                        (guideSize * (guideLength) - cellSizeOffset) + ", " +
+                    "L " + (guideSize * (guideLength) - cellSizeOffset) + "," +
+                        (guideSize - cellSizeOffset) + ", " +
+                    "L " + (guideSize * (guideLength-1) - cellSizeOffset) + "," +
+                        (0 - cellSizeOffset) + " Z";
+                svg.append("path")
+                    .attr("class", "guide")
+                    .attr("d", diamondPath)
+                    .attr("transform", function() {
+                        // FIXME: Slight offset misalignment
+                        var x = self.gridHeight  - 
+                            (guideLength+2) * cellSizeOffset -
+                            (1) * 
+                            (diamondSize + cellSizeOffset) +
+                            (1 + medicationNames.indexOf(d.medication)) * 
+                            (diamondSize + cellSizeOffset);
+                        var y = 0 +
+                            (1 + medicationNames.indexOf(d.medication)) * 
+                            (diamondSize + cellSizeOffset)+
+                            (1) * 
+                            (diamondSize + cellSizeOffset);
+
+                        return "translate(" + x + "," + y + ")";
+                    });
+
+                    // Guides should be on back of cells,
+                    // to allow mouseover on cells
+                    svg.selectAll(".guide").moveToBack();
+
+                    // Marks should be on top of labels,
+                    // to avoid occlusion
                     svg.selectAll(".markPresent").moveToFront();
                 })
                 .on("mouseout", function(d) {
@@ -838,6 +912,10 @@ moduleVisualizations.factory('HeatMapVisualization',
                         .attr("class", "text-disease-label text-label");
                     svg.selectAll(".rect-disease-label")
                         .style("fill-opacity", 0.0);
+
+                    // Remove selection guides
+                    svg.selectAll(".guide")
+                        .remove();
                 });
         cells.exit().remove();
 
