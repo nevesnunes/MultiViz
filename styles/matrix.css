@@ -41,3 +41,9 @@
 text.axis {
   fill: #000;
 }
+
+.guide {
+  fill: transparent;
+  stroke: #c4e3f3;
+  stroke-width: 2px;   
+}

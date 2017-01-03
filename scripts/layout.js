@@ -2117,6 +2117,12 @@ var test2 = function() {
                     var scope = elChild.scope();
                     scope.chooseHeatmap();
                 });
+            },
+            function() {
+                return $timeout(function() {
+                    angular.element('#heatmap-1-type-pairs')
+                        .triggerHandler('click');
+                }, delay);
             }
         ]);
     });

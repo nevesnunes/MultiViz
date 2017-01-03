@@ -25,11 +25,21 @@ moduleVisualizations.directive('directiveHeatMapTooltip', function() {
 moduleVisualizations.factory('HeatMapVisualization',
         ['$timeout', 'visualizations', 'patientData', 'retrievePatientData', 'utils', 'nodes',
         function($timeout, visualizations, patientData, retrievePatientData, utils, nodes) {
-    // d3 extensions
-    // Forces selected elements to always be on top of other elements
+    // d3 Extensions
+    //
+    // https://github.com/wbkd/d3-extended
+    // Forces selected elements to always be on top/back of other elements
     d3.selection.prototype.moveToFront = function() {
         return this.each(function() {
             this.parentNode.appendChild(this);
+        });
+    };
+    d3.selection.prototype.moveToBack = function() {  
+        return this.each(function() { 
+            var firstChild = this.parentNode.firstChild; 
+            if (firstChild) { 
+                this.parentNode.insertBefore(this, firstChild); 
+            } 
         });
     };
 
@@ -132,13 +142,9 @@ moduleVisualizations.factory('HeatMapVisualization',
         
         var self = this;
 
+        // Multiple matrixes can be defined, each with their own
+        // html elements appended dynamically.
         var matrixNumbers = [1];
-        if (this.renderer === renderer.DIM) {
-            // TODO: Add the second matrix
-            // - render2Dim needs to receive/switch attribute lists...
-            // - create pinHTML
-        }
-
         matrixNumbers.forEach(function(matrixNumber) {
             var svg = d3.select("#" + heatMapID + "-main-" + matrixNumber)
                 .append("svg")
@@ -1020,7 +1026,73 @@ moduleVisualizations.factory('HeatMapVisualization',
                                 "rect-attribute-label rect-label";
                         });
 
-                    // Marks should be on top of labels
+                    // Horizontal guide
+                    svg.append("rect")
+                        .attr("class", "guide")
+                        .attr("height", self.gridHeight)
+                        .merge(attributeLabels)
+                            .attr("width", function() {
+                                var targetIndex = Math.max(
+                                    similarityNames.indexOf(d.first.name),
+                                    similarityNames.indexOf(d.second.name)
+                                );
+                                return (targetIndex + 0.1) * self.gridWidth -
+                                    cellSizeOffset / 2;
+                            })
+                            .attr("x",
+                                self.gridWidth -
+                                cellSizeOffset / 2)
+                            .attr("y", function() {
+                                var targetIndex = Math.max(
+                                    similarityNames.indexOf(d.first.name),
+                                    similarityNames.indexOf(d.second.name)
+                                );
+                                return (targetIndex - 1) * self.gridHeight -
+                                    cellSizeOffset / 2;
+                            });
+
+                    // Vertical guide
+                    var yLength = self.visualizationRenderer
+                        .similarityNames.length;
+                    svg.append("rect")
+                        .attr("class", "guide")
+                        .attr("width", self.gridWidth)
+                        .merge(attributeLabels)
+                            .attr("height", function() {
+                                var targetIndex = Math.min(
+                                    similarityNames.indexOf(d.first.name),
+                                    similarityNames.indexOf(d.second.name)
+                                );
+                                return (yLength - targetIndex - 1 + 0.2) *
+                                    self.gridWidth -
+                                    cellSizeOffset / 2;
+                            })
+                            .attr("y", function() {
+                                var targetIndex = Math.min(
+                                    similarityNames.indexOf(d.first.name),
+                                    similarityNames.indexOf(d.second.name)
+                                );
+                                return (targetIndex - 0.1) *
+                                    self.gridWidth -
+                                    cellSizeOffset / 2;
+                            })
+                            .attr("x", function() {
+                                var targetIndex = Math.min(
+                                    similarityNames.indexOf(d.first.name),
+                                    similarityNames.indexOf(d.second.name)
+                                );
+                                return (targetIndex + 1) *
+                                    self.gridHeight -
+                                    cellSizeOffset / 2;
+                            });
+                    attributeLabels.exit().remove();
+
+                    // Guides should be on back of cells,
+                    // to allow mouseover on cells
+                    svg.selectAll(".guide").moveToBack();
+
+                    // Marks should be on top of labels,
+                    // to avoid occlusion
                     svg.selectAll(".markPresent").moveToFront();
                 })
                 .on("mouseout", function(d) {
@@ -1031,6 +1103,10 @@ moduleVisualizations.factory('HeatMapVisualization',
                         .attr("class", "text-attribute-label text-label ");
                     svg.selectAll(".rect-attribute-label")
                         .style("fill-opacity", 0.0);
+
+                    // Remove selection guides
+                    svg.selectAll(".guide")
+                        .remove();
                 });
         cells.exit().remove();
 
