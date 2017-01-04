@@ -424,11 +424,10 @@ rect.handle.handle--w:active {
     pointer-events: none;
 }
 
-
 /* Westward tooltips */
 
 .tooltip-d3.w:after {
-    content: "\25B6";
+    /*content: "\25B6";*/
     margin: -6px 0 0 -1px;
     top: 50%;
     left: 100%;
@@ -439,7 +438,7 @@ rect.handle.handle--w:active {
 /* Eastward tooltips */
 
 .tooltip-d3.e:after {
-    content: "\25C0";
+    /*content: "\25C0";*/
     margin: -6px 0 0 0;
     top: 50%;
     left: -8px;
@@ -450,7 +449,7 @@ rect.handle.handle--w:active {
 /* Northward tooltips */
 
 .tooltip-d3.n:after {
-    content: "\25BC";
+    /*content: "\25BC";*/
     margin: -4px 0 0 0;
     top: 100%;
     left: 0;
@@ -462,7 +461,7 @@ rect.handle.handle--w:active {
 /* Southward tooltips */
 
 .tooltip-d3.s:after {
-    content: "\25B2";
+    /*content: "\25B2";*/
     margin: 0 0 1px 0;
     top: -8px;
     left: 0;

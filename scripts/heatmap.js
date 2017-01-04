@@ -750,7 +750,7 @@ moduleVisualizations.factory('HeatMapVisualization',
         });
         var cellsTip = d3.tip()
             .attr('class', 'tooltip tooltip-element tooltip-d3')
-            .offset([0, -10])
+            .offset([0, -50])
             .direction('w')
             .html(function(d) {
                 return "<div style=\"text-align: left\">" +
@@ -1038,7 +1038,7 @@ moduleVisualizations.factory('HeatMapVisualization',
 
         var cellsTip = d3.tip()
             .attr('class', 'tooltip tooltip-element tooltip-d3')
-            .offset([0, -10])
+            .offset([60, -10])
             .direction('w')
             .html(function(d) {
                 return "<div style=\"text-align: left\">" +
