@@ -951,10 +951,10 @@ moduleVisualizations.factory('HeatMapVisualization',
             .merge(attributeLabels)
                 .attr("width", labelWidth)
                 .attr("x", function(d, i) {
-                    return (i + 1) * self.gridWidth;
+                    return (i + 1) * self.gridWidth - 1;
                 })
                 .attr("y", function(d, i) {
-                    return (i - 1) * self.gridHeight - cellSizeOffset;
+                    return (i - 1) * self.gridHeight - cellSizeOffset + 1;
                 });
         attributeLabels.exit().remove();
 
@@ -983,6 +983,7 @@ moduleVisualizations.factory('HeatMapVisualization',
         // will be. Therefore, we select them again and store their bounding box
         // for later use.
         var textData = [];
+        var markSize = self.gridHeight / 2;
         var waitForDOMRendered = function selfFunction() {
             try {
                 textData = visualizations.extractBBoxes(
@@ -994,8 +995,8 @@ moduleVisualizations.factory('HeatMapVisualization',
                 attributeLabelsGroup = attributeLabels.enter();
                 attributeLabelsGroup.append("rect")
                     .attr("class", "patient-attribute-mark markPresent")
-                    .attr("width", self.gridHeight / 2)
-                    .attr("height", self.gridHeight / 2)
+                    .attr("width", markSize)
+                    .attr("height", markSize)
                     .merge(attributeLabels)
                         .attr("x", function(d, i) {
                             var width = textData[i].width;
@@ -1003,8 +1004,8 @@ moduleVisualizations.factory('HeatMapVisualization',
                                 (i + 1) * self.gridWidth;
                         })
                         .attr("y", function(d, i) {
-                            return ((i - 1) * self.gridHeight - cellSizeOffset / 2) +
-                                (self.gridHeight / 4);
+                            return ((i - 1) * self.gridHeight - cellSizeOffset) +
+                                (markSize / 2);
                         })
                         .style("fill-opacity", function(d, i) {
                             return (patientSimilarityNames
