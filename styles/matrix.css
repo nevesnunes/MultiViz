@@ -23,7 +23,7 @@
 .bordered:hover {
   fill: #31708f !important;
   stroke: #c4e3f3;
-  stroke-width: 4px;   
+  stroke-width: 2px;   
 }
 
 .text-label {
@@ -44,6 +44,6 @@ text.axis {
 
 .guide {
   fill: transparent;
-  stroke: #c4e3f3;
+  stroke: #31708f;
   stroke-width: 2px;   
 }

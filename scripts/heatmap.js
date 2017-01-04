@@ -439,9 +439,14 @@ moduleVisualizations.factory('HeatMapVisualization',
             .longestNameLength * 8 + self.gridWidth;
         var labelHeight = self.gridHeight - cellSizeOffset * 2;
 
+        // FIXME: Slight y offset when removing diseases
         var diseaseLabels = svg.selectAll(".rect-disease-label")
             .data(diseaseNames);
         var diseaseLabelsGroup = diseaseLabels.enter();
+        var targetInitial = Math.max(
+            diamondInitialX,
+            diamondInitialY
+        );
         diseaseLabelsGroup.append("rect")
             .attr("class", "rect-disease-label rect-label")
             .attr("width", labelWidth)
@@ -451,12 +456,13 @@ moduleVisualizations.factory('HeatMapVisualization',
                     return (
                             // largest possible position
                             (2 + diamondInitialX) *
-                            self.gridHeight + 
+                            self.gridHeight +
+                            targetInitial * cellSizeOffset +
                             (2 * diamondInitialY) *
                             (diamondSize + cellSizeOffset)
                         ) -
                         // relative position
-                        (2 + i) * 
+                        (3 + i) * 
                         (diamondSize + cellSizeOffset) -
                         // +1 offset relative to text
                         cellSizeOffset * 4;
@@ -487,12 +493,13 @@ moduleVisualizations.factory('HeatMapVisualization',
                     return (
                             // largest possible position
                             (2 + diamondInitialX) *
-                            self.gridHeight + 
+                            self.gridHeight +
+                            targetInitial * cellSizeOffset +
                             (2 * diamondInitialY) *
                             (diamondSize + cellSizeOffset)
                         ) -
                         // relative position
-                        (2 + i) * 
+                        (3 + i) * 
                         (diamondSize + cellSizeOffset) -
                         // offset to be closer to cells
                         cellSizeOffset * 3;
@@ -500,7 +507,6 @@ moduleVisualizations.factory('HeatMapVisualization',
                 .attr("y", function(d, i) {
                     return (
                             // start position
-                            1 *
                             self.gridHeight / 2 +
                             (2 * diamondInitialY) *
                             (diamondSize + cellSizeOffset)
@@ -539,7 +545,6 @@ moduleVisualizations.factory('HeatMapVisualization',
                 .attr("y", function(d, i) {
                     return (
                             // start position
-                            1 *
                             self.gridHeight / 2
                         ) +
                         // relative position
@@ -783,7 +788,7 @@ moduleVisualizations.factory('HeatMapVisualization',
                         (diamondSize + cellSizeOffset);
                     var y = 0 +
                         (1 + medicationNames.indexOf(d.medication)) * 
-                        (diamondSize + cellSizeOffset)+
+                        (diamondSize + cellSizeOffset) +
                         (1 + diseaseNames.indexOf(d.disease)) * 
                         (diamondSize + cellSizeOffset);
 
@@ -830,7 +835,7 @@ moduleVisualizations.factory('HeatMapVisualization',
                                 "rect-disease-label rect-label";
                         });
 
-                // Disease guide
+                // Disease guide (direction = \)
                 var guideLength = medicationNames.length + 1;
                 var guideSize = diamondSize + cellSizeOffset;
                 var diamondPath = "M " + (0 - cellSizeOffset) + "," +
@@ -846,20 +851,16 @@ moduleVisualizations.factory('HeatMapVisualization',
                     .attr("d", diamondPath)
                     .attr("transform", function() {
                         var x = diamondInitialX * self.gridHeight -
-                            (1 + diseaseNames.indexOf(d.disease)) * 
-                            (diamondSize + cellSizeOffset) +
-                            (1) * 
+                            (diseaseNames.indexOf(d.disease)) * 
                             (diamondSize + cellSizeOffset);
                         var y = 0 +
-                            (1) * 
-                            (diamondSize + cellSizeOffset)+
-                            (1 + diseaseNames.indexOf(d.disease)) * 
+                            (2 + diseaseNames.indexOf(d.disease)) * 
                             (diamondSize + cellSizeOffset);
 
                         return "translate(" + x + "," + y + ")";
                     });
 
-                // Medication guide
+                // Medication guide (direction = /)
                 guideLength = diseaseNames.length + 1;
                 guideSize = diamondSize + cellSizeOffset;
                 diamondPath = "M " + (0 - cellSizeOffset) + "," +
@@ -874,17 +875,12 @@ moduleVisualizations.factory('HeatMapVisualization',
                     .attr("class", "guide")
                     .attr("d", diamondPath)
                     .attr("transform", function() {
-                        // FIXME: Slight offset misalignment
-                        var x = self.gridHeight  - 
-                            (guideLength+2) * cellSizeOffset -
-                            (1) * 
-                            (diamondSize + cellSizeOffset) +
-                            (1 + medicationNames.indexOf(d.medication)) * 
+                        var x = (self.gridHeight) / 2 - 
+                            (guideLength - 2) * (cellSizeOffset) +
+                            (medicationNames.indexOf(d.medication)) * 
                             (diamondSize + cellSizeOffset);
                         var y = 0 +
-                            (1 + medicationNames.indexOf(d.medication)) * 
-                            (diamondSize + cellSizeOffset)+
-                            (1) * 
+                            (2 + medicationNames.indexOf(d.medication)) * 
                             (diamondSize + cellSizeOffset);
 
                         return "translate(" + x + "," + y + ")";
@@ -961,10 +957,10 @@ moduleVisualizations.factory('HeatMapVisualization',
             .merge(attributeLabels)
                 .attr("width", labelWidth)
                 .attr("x", function(d, i) {
-                    return (i + 1) * self.gridWidth - cellSizeOffset / 2;
+                    return (i + 1) * self.gridWidth;
                 })
                 .attr("y", function(d, i) {
-                    return (i - 1) * self.gridHeight - cellSizeOffset / 2;
+                    return (i - 1) * self.gridHeight - cellSizeOffset;
                 });
         attributeLabels.exit().remove();
 
@@ -979,10 +975,10 @@ moduleVisualizations.factory('HeatMapVisualization',
                 self.gridHeight / 1.5 + ")")
             .merge(attributeLabels)
                 .attr("x", function(d, i) {
-                    return (i + 1) * self.gridWidth - cellSizeOffset / 2;
+                    return (i + 1) * self.gridWidth;
                 })
                 .attr("y", function(d, i) {
-                    return (i - 1) * self.gridHeight - cellSizeOffset / 2;
+                    return (i - 1) * self.gridHeight - cellSizeOffset;
                 })
                 .text(function(d) {
                     return d;
@@ -1004,13 +1000,13 @@ moduleVisualizations.factory('HeatMapVisualization',
                 attributeLabelsGroup = attributeLabels.enter();
                 attributeLabelsGroup.append("rect")
                     .attr("class", "patient-attribute-mark markPresent")
-                    .attr("width", self.gridHeight - cellSizeOffset * 4)
-                    .attr("height", self.gridHeight - cellSizeOffset * 4)
+                    .attr("width", self.gridHeight / 2)
+                    .attr("height", self.gridHeight / 2)
                     .merge(attributeLabels)
                         .attr("x", function(d, i) {
                             var width = textData[i].width;
                             return (width + 20) +
-                                (i + 1) * self.gridWidth - cellSizeOffset / 2;
+                                (i + 1) * self.gridWidth;
                         })
                         .attr("y", function(d, i) {
                             return ((i - 1) * self.gridHeight - cellSizeOffset / 2) +
@@ -1114,8 +1110,7 @@ moduleVisualizations.factory('HeatMapVisualization',
                                     similarityNames.indexOf(d.first.name),
                                     similarityNames.indexOf(d.second.name)
                                 );
-                                return (targetIndex + 0.1) * self.gridWidth -
-                                    cellSizeOffset / 2;
+                                return (targetIndex) * self.gridWidth;
                             })
                             .attr("x",
                                 self.gridWidth -
@@ -1141,16 +1136,15 @@ moduleVisualizations.factory('HeatMapVisualization',
                                     similarityNames.indexOf(d.first.name),
                                     similarityNames.indexOf(d.second.name)
                                 );
-                                return (yLength - targetIndex - 1 + 0.2) *
-                                    self.gridWidth -
-                                    cellSizeOffset / 2;
+                                return (yLength - targetIndex - 1) *
+                                    self.gridWidth;
                             })
                             .attr("y", function() {
                                 var targetIndex = Math.min(
                                     similarityNames.indexOf(d.first.name),
                                     similarityNames.indexOf(d.second.name)
                                 );
-                                return (targetIndex - 0.1) *
+                                return (targetIndex) *
                                     self.gridWidth -
                                     cellSizeOffset / 2;
                             })
