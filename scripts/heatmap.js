@@ -439,14 +439,10 @@ moduleVisualizations.factory('HeatMapVisualization',
             .longestNameLength * 8 + self.gridWidth;
         var labelHeight = self.gridHeight - cellSizeOffset * 2;
 
-        // FIXME: Slight y offset when removing diseases
+        // FIXME: Slight x offset (test with bigger gridHeight)
         var diseaseLabels = svg.selectAll(".rect-disease-label")
             .data(diseaseNames);
         var diseaseLabelsGroup = diseaseLabels.enter();
-        var targetInitial = Math.max(
-            diamondInitialX,
-            diamondInitialY
-        );
         diseaseLabelsGroup.append("rect")
             .attr("class", "rect-disease-label rect-label")
             .attr("width", labelWidth)
@@ -457,12 +453,11 @@ moduleVisualizations.factory('HeatMapVisualization',
                             // largest possible position
                             (2 + diamondInitialX) *
                             self.gridHeight +
-                            targetInitial * cellSizeOffset +
                             (2 * diamondInitialY) *
                             (diamondSize + cellSizeOffset)
                         ) -
                         // relative position
-                        (3 + i) * 
+                        (2 + i) * 
                         (diamondSize + cellSizeOffset) -
                         // +1 offset relative to text
                         cellSizeOffset * 4;
@@ -494,12 +489,11 @@ moduleVisualizations.factory('HeatMapVisualization',
                             // largest possible position
                             (2 + diamondInitialX) *
                             self.gridHeight +
-                            targetInitial * cellSizeOffset +
                             (2 * diamondInitialY) *
                             (diamondSize + cellSizeOffset)
                         ) -
                         // relative position
-                        (3 + i) * 
+                        (2 + i) * 
                         (diamondSize + cellSizeOffset) -
                         // offset to be closer to cells
                         cellSizeOffset * 3;
