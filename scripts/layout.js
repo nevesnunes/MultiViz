@@ -853,12 +853,18 @@ moduleLayout.directive("directiveActionPanel",
                             dosage: obj.dosage
                         };
                     };
+                    var currentAttributeProperties = [];
+					var deepPush = function (obj) {
+						currentAttributeProperties.push(
+							makeAttributeObject(obj)
+						);
+					};
                     for (var sourceIndex = 0, targetIndex = 0;
                             (sourceIndex < sourceLength) ||
                                 (targetIndex < targetLength);
                             // NOTHING
                             ) {
-                        var currentAttributeProperties = [];
+                        currentAttributeProperties = [];
                         var sourceMoment = moment(
                             sourceRecordedFrequency[sourceIndex]);
                         var targetMoment = moment(
@@ -867,34 +873,26 @@ moduleLayout.directive("directiveActionPanel",
                         // Add and advance the earliest recorded moment
                         var diff = sourceMoment.diff(targetMoment, 'days');
                         if ((diff > 0) && (targetIndex < targetLength)) {
-                            currentAttributeProperties.push({
-                                name: targetViz.currentMedication,
-                                dosage: targetViz.dosage[targetIndex]
-                            });
+                            (targetViz.recordedDosage[targetIndex] || [])
+                                .forEach(deepPush);
                             newRecordedFrequency.push(
                                 targetRecordedFrequency[targetIndex]);
                             targetIndex++;
                         } else if ((diff < 0) && (sourceIndex < sourceLength)) {
-                            currentAttributeProperties.push({
-                                name: sourceViz.currentMedication,
-                                dosage: sourceViz.dosage[sourceIndex]
-                            });
+                            (sourceViz.recordedDosage[sourceIndex] || [])
+                                .forEach(deepPush);
                             newRecordedFrequency.push(
                                 sourceRecordedFrequency[sourceIndex]);
                             sourceIndex++;
                         // Both recorded frequencies have the same date
                         } else {
                             if (targetIndex < targetLength) {
-                                currentAttributeProperties.push({
-                                    name: targetViz.currentMedication,
-                                    dosage: targetViz.dosage[targetIndex]
-                                });
+                                (targetViz.recordedDosage[targetIndex] || [])
+                                    .forEach(deepPush);
                             }
                             if (sourceIndex < sourceLength) {
-                                currentAttributeProperties.push({
-                                    name: sourceViz.currentMedication,
-                                    dosage: sourceViz.dosage[sourceIndex]
-                                });
+                                (sourceViz.recordedDosage[sourceIndex] || [])
+                                    .forEach(deepPush);
                             }
                             // Either one works here
                             // HACK: We are ignoring hours, otherwise we would
@@ -906,7 +904,7 @@ moduleLayout.directive("directiveActionPanel",
                         }
 
                         attributeProperties.push(
-                            currentAttributeProperties.map(makeAttributeObject)
+                            currentAttributeProperties.slice()
                         );
                     }
 
@@ -918,7 +916,7 @@ moduleLayout.directive("directiveActionPanel",
 
                     // update source spiral
                     var attributeData = {
-                        attributeProperties: attributeProperties,
+                        dosage: attributeProperties,
                         startDate: newStartDate,
                         endDate: newEndDate,
                         expectedFrequency: newFrequency,
@@ -940,6 +938,7 @@ moduleLayout.directive("directiveActionPanel",
                         vizID: vizID
                     });
 
+                    // reset action panel
                     scope.makeDefaultActions();
                 } else {
                     // NOTHING: The user must cancel or choose

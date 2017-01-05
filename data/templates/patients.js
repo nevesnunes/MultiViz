@@ -139,7 +139,14 @@ var generator = (function() {
         var expectedFrequency = pickRandomElement(genericFrequencies);
         var recordedFrequency = makeRandomRecordedFrequency(
                 expectedFrequency, startDate, endDate);
-        var dosage = Math.floor(Math.random() * (4 - 1)) + 1;
+        var dosageCount = Math.floor(Math.random() * (4 - 1)) + 1;
+        var dosage = recordedFrequency.map(function() {
+            return [{
+                name: element,
+                dosage: dosageCount
+            }];
+        });
+
         return {
             name: element,
             startDate: startDate,

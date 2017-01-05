@@ -2,67 +2,11 @@
     {
         "incidences": 1,
         "patientIDs": [
-            "ccccf6a0-ab40-11e6-9356-cd3743a9084e"
+            "665a2740-d344-11e6-a521-11e0c7182021"
         ],
         "first": {
             "type": "disease",
-            "name": "Glaucoma"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Doença Venérea"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "ccccf6a0-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Glaucoma"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Febre Reumática"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "cccccf90-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Candidiase Oral"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-ácidos"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "cccc8171-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Doença Venérea"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Análgésicos"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "cccc8170-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Candidiase Oral"
+            "name": "Doença Cardíaca Congénita"
         },
         "second": {
             "type": "medication",
@@ -72,11 +16,39 @@
     {
         "incidences": 1,
         "patientIDs": [
-            "cccc8170-ab40-11e6-9356-cd3743a9084e"
+            "665a2740-d344-11e6-a521-11e0c7182021"
         ],
         "first": {
             "type": "disease",
-            "name": "Gânglios aumentados de volume"
+            "name": "Doença Cardíaca Congénita"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-hipertensor"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "665a2740-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Esteróides"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-diabéticos"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "665a2740-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Anti-hipertensor"
         },
         "second": {
             "type": "medication",
@@ -86,11 +58,68 @@
     {
         "incidences": 1,
         "patientIDs": [
-            "cccc5a63-ab40-11e6-9356-cd3743a9084e"
+            "665a0035-d344-11e6-a521-11e0c7182021"
         ],
         "first": {
             "type": "disease",
-            "name": "Febre Reumática"
+            "name": "Doença Venérea"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-hipertensor"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "665a0034-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Enfarte Miocárdio"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Doença Cardíaca Congénita"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "665a0030-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Doença Venérea"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-depressor"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "665a0030-d344-11e6-a521-11e0c7182021",
+            "665a2741-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Doença Venérea"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Glaucoma"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "6659d924-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Doença da Tiroide"
         },
         "second": {
             "type": "medication",
@@ -100,100 +129,11 @@
     {
         "incidences": 1,
         "patientIDs": [
-            "cccc5a61-ab40-11e6-9356-cd3743a9084e"
+            "6659d924-d344-11e6-a521-11e0c7182021"
         ],
         "first": {
             "type": "disease",
             "name": "Doença Venérea"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-ácidos"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "cccc0c44-ab40-11e6-9356-cd3743a9084e",
-            "cccc8171-ab40-11e6-9356-cd3743a9084e",
-            "cccc8174-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Doença Venérea"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-hipertensor"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "cccc0c44-ab40-11e6-9356-cd3743a9084e",
-            "cccc8171-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Artrite"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Doença Venérea"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "cccbe535-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Doença Cardíaca Congénita"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Artrite"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "cccbe534-ab40-11e6-9356-cd3743a9084e",
-            "cccc0c42-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Glaucoma"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-diabéticos"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "cccbe534-ab40-11e6-9356-cd3743a9084e",
-            "cccbe535-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Doença Cardíaca Congénita"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-diabéticos"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "cccbe533-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Doença da Tiroide"
         },
         "second": {
             "type": "medication",
@@ -201,28 +141,27 @@
         }
     },
     {
-        "incidences": 2,
+        "incidences": 1,
         "patientIDs": [
-            "cccbe533-ab40-11e6-9356-cd3743a9084e",
-            "cccbe535-ab40-11e6-9356-cd3743a9084e"
+            "6659d924-d344-11e6-a521-11e0c7182021"
         ],
         "first": {
             "type": "disease",
-            "name": "Candidiase Oral"
+            "name": "Doença Venérea"
         },
         "second": {
             "type": "disease",
-            "name": "Doença Cardíaca Congénita"
+            "name": "Doença da Tiroide"
         }
     },
     {
         "incidences": 1,
         "patientIDs": [
-            "cccbe532-ab40-11e6-9356-cd3743a9084e"
+            "6659d923-d344-11e6-a521-11e0c7182021"
         ],
         "first": {
             "type": "disease",
-            "name": "Osteoporose"
+            "name": "Enfarte Miocárdio"
         },
         "second": {
             "type": "medication",
@@ -232,164 +171,11 @@
     {
         "incidences": 1,
         "patientIDs": [
-            "cccbe532-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Broncodilatador"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-ácidos"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "cccbe530-ab40-11e6-9356-cd3743a9084e"
+            "6659d922-d344-11e6-a521-11e0c7182021"
         ],
         "first": {
             "type": "disease",
-            "name": "Gânglios aumentados de volume"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Doença da Tiroide"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "cccbe530-ab40-11e6-9356-cd3743a9084e",
-            "cccbe533-ab40-11e6-9356-cd3743a9084e",
-            "cccc5a61-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Doença Venérea"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Doença da Tiroide"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "cccbbe21-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Anti-depressor"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Broncodilatador"
-        }
-    },
-    {
-        "incidences": 4,
-        "patientIDs": [
-            "cccbbe20-ab40-11e6-9356-cd3743a9084e",
-            "cccbe533-ab40-11e6-9356-cd3743a9084e",
-            "cccccf90-ab40-11e6-9356-cd3743a9084e",
-            "ccccf6a0-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Febre Reumática"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Candidiase Oral"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "cccbbe20-ab40-11e6-9356-cd3743a9084e",
-            "ccccf6a1-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Febre Reumática"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Gânglios aumentados de volume"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "cccbbe20-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Osteoporose"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Febre Reumática"
-        }
-    },
-    {
-        "incidences": 4,
-        "patientIDs": [
-            "cccbbe20-ab40-11e6-9356-cd3743a9084e",
-            "cccbe533-ab40-11e6-9356-cd3743a9084e",
-            "cccc0c44-ab40-11e6-9356-cd3743a9084e",
-            "ccccf6a0-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Doença Venérea"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Candidiase Oral"
-        }
-    },
-    {
-        "incidences": 4,
-        "patientIDs": [
-            "cccbbe20-ab40-11e6-9356-cd3743a9084e",
-            "cccbe533-ab40-11e6-9356-cd3743a9084e",
-            "cccc8171-ab40-11e6-9356-cd3743a9084e",
-            "ccccf6a0-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Doença Venérea"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Febre Reumática"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "cccbbe20-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Doença Venérea"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Osteoporose"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "cccb9713-ab40-11e6-9356-cd3743a9084e",
-            "cccca882-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Doença Venérea"
+            "name": "Doença Cardíaca Congénita"
         },
         "second": {
             "type": "medication",
@@ -399,31 +185,55 @@
     {
         "incidences": 1,
         "patientIDs": [
-            "cccb9713-ab40-11e6-9356-cd3743a9084e"
+            "6659d921-d344-11e6-a521-11e0c7182021"
         ],
         "first": {
             "type": "disease",
-            "name": "Doença Venérea"
+            "name": "Doença Cardíaca Congénita"
         },
         "second": {
             "type": "medication",
-            "name": "Anti-diabéticos"
+            "name": "Análgésicos"
         }
     },
     {
-        "incidences": 7,
+        "incidences": 1,
         "patientIDs": [
-            "cccb9712-ab40-11e6-9356-cd3743a9084e",
-            "cccbbe20-ab40-11e6-9356-cd3743a9084e",
-            "cccbe532-ab40-11e6-9356-cd3743a9084e",
-            "cccbe535-ab40-11e6-9356-cd3743a9084e",
-            "cccc0c40-ab40-11e6-9356-cd3743a9084e",
-            "cccc0c43-ab40-11e6-9356-cd3743a9084e",
-            "cccc8173-ab40-11e6-9356-cd3743a9084e"
+            "6659b214-d344-11e6-a521-11e0c7182021"
         ],
         "first": {
             "type": "disease",
-            "name": "Osteoporose"
+            "name": "Doença Cardíaca Congénita"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Gânglios aumentados de volume"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "6659b214-d344-11e6-a521-11e0c7182021",
+            "665a0034-d344-11e6-a521-11e0c7182021",
+            "665a2741-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Doença Cardíaca Congénita"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Doença Venérea"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "6659b213-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Gânglios aumentados de volume"
         },
         "second": {
             "type": "medication",
@@ -431,59 +241,23 @@
         }
     },
     {
-        "incidences": 4,
+        "incidences": 1,
         "patientIDs": [
-            "cccb9712-ab40-11e6-9356-cd3743a9084e",
-            "cccbbe20-ab40-11e6-9356-cd3743a9084e",
-            "cccbe535-ab40-11e6-9356-cd3743a9084e",
-            "cccc8170-ab40-11e6-9356-cd3743a9084e"
+            "6659b211-d344-11e6-a521-11e0c7182021"
         ],
         "first": {
             "type": "disease",
-            "name": "Candidiase Oral"
+            "name": "Glaucoma"
         },
         "second": {
             "type": "disease",
-            "name": "Gânglios aumentados de volume"
+            "name": "Febre Reumática"
         }
     },
     {
-        "incidences": 3,
+        "incidences": 1,
         "patientIDs": [
-            "cccb9712-ab40-11e6-9356-cd3743a9084e",
-            "cccbbe20-ab40-11e6-9356-cd3743a9084e",
-            "cccbe535-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Osteoporose"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Gânglios aumentados de volume"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "cccb9712-ab40-11e6-9356-cd3743a9084e",
-            "cccbbe20-ab40-11e6-9356-cd3743a9084e",
-            "cccbe535-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Osteoporose"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Candidiase Oral"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "cccb48f0-ab40-11e6-9356-cd3743a9084e",
-            "cccccf90-ab40-11e6-9356-cd3743a9084e"
+            "6659b210-d344-11e6-a521-11e0c7182021"
         ],
         "first": {
             "type": "disease",
@@ -497,103 +271,11 @@
     {
         "incidences": 1,
         "patientIDs": [
-            "cccb48f0-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Aspirina"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-ácidos"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "cccb48f0-ab40-11e6-9356-cd3743a9084e",
-            "cccb9712-ab40-11e6-9356-cd3743a9084e",
-            "cccbe535-ab40-11e6-9356-cd3743a9084e"
+            "66598b04-d344-11e6-a521-11e0c7182021"
         ],
         "first": {
             "type": "disease",
             "name": "Osteoporose"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Artrite"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "cccb21e5-ab40-11e6-9356-cd3743a9084e",
-            "cccc8173-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Glaucoma"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Osteoporose"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "cccb21e4-ab40-11e6-9356-cd3743a9084e",
-            "cccbe533-ab40-11e6-9356-cd3743a9084e",
-            "cccc5a63-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Febre Reumática"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Doença Cardíaca Congénita"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "cccb21e3-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Artrite"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Estatinas"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "cccb21e2-ab40-11e6-9356-cd3743a9084e",
-            "cccc8173-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Glaucoma"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Broncodilatador"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "cccb21e2-ab40-11e6-9356-cd3743a9084e",
-            "cccc0c41-ab40-11e6-9356-cd3743a9084e",
-            "cccc0c42-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Glaucoma"
         },
         "second": {
             "type": "medication",
@@ -603,151 +285,232 @@
     {
         "incidences": 1,
         "patientIDs": [
-            "cccb21e2-ab40-11e6-9356-cd3743a9084e"
+            "66598b04-d344-11e6-a521-11e0c7182021"
         ],
         "first": {
             "type": "disease",
-            "name": "Glaucoma"
+            "name": "Osteoporose"
         },
         "second": {
             "type": "medication",
             "name": "Análgésicos"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "66598b04-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Anti-ácidos"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-hipertensor"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "66598b02-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Osteoporose"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Doença da Tiroide"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "66598b01-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Gânglios aumentados de volume"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Estatinas"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "66598b01-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Gânglios aumentados de volume"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Análgésicos"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "665963f6-d344-11e6-a521-11e0c7182021",
+            "665a0034-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Enfarte Miocárdio"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Doença Venérea"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "665963f4-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Artrite"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-ácidos"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "665963f1-d344-11e6-a521-11e0c7182021",
+            "6659b214-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Doença Venérea"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-diabéticos"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "66593ce5-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Candidiase Oral"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Aspirina"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "66593ce5-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Enfarte Miocárdio"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-depressor"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "66593ce5-d344-11e6-a521-11e0c7182021",
+            "66598b01-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Gânglios aumentados de volume"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Aspirina"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "66593ce5-d344-11e6-a521-11e0c7182021",
+            "6659d923-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Enfarte Miocárdio"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Candidiase Oral"
         }
     },
     {
         "incidences": 5,
         "patientIDs": [
-            "cccb21e2-ab40-11e6-9356-cd3743a9084e",
-            "cccb9712-ab40-11e6-9356-cd3743a9084e",
-            "cccbbe20-ab40-11e6-9356-cd3743a9084e",
-            "cccbe533-ab40-11e6-9356-cd3743a9084e",
-            "cccbe535-ab40-11e6-9356-cd3743a9084e"
+            "66593ce3-d344-11e6-a521-11e0c7182021",
+            "665963f4-d344-11e6-a521-11e0c7182021",
+            "66598b01-d344-11e6-a521-11e0c7182021",
+            "66598b04-d344-11e6-a521-11e0c7182021",
+            "6659d921-d344-11e6-a521-11e0c7182021"
         ],
         "first": {
-            "type": "disease",
-            "name": "Candidiase Oral"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Broncodilatador"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "cccb21e2-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Candidiase Oral"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Estatinas"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "cccb21e2-ab40-11e6-9356-cd3743a9084e",
-            "cccc0c44-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Candidiase Oral"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-hipertensor"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "cccb21e2-ab40-11e6-9356-cd3743a9084e",
-            "cccc0c40-ab40-11e6-9356-cd3743a9084e",
-            "cccc3351-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Estatinas"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Broncodilatador"
-        }
-    },
-    {
-        "incidences": 4,
-        "patientIDs": [
-            "cccb21e2-ab40-11e6-9356-cd3743a9084e",
-            "cccbbe23-ab40-11e6-9356-cd3743a9084e",
-            "cccbe532-ab40-11e6-9356-cd3743a9084e",
-            "cccc8171-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Anti-hipertensor"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Broncodilatador"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "cccb21e2-ab40-11e6-9356-cd3743a9084e",
-            "cccca880-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Anti-hipertensor"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Estatinas"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "cccb21e2-ab40-11e6-9356-cd3743a9084e",
-            "ccccf6a0-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Candidiase Oral"
-        },
-        "second": {
             "type": "disease",
             "name": "Glaucoma"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "cccb21e1-ab40-11e6-9356-cd3743a9084e",
-            "cccb48f0-ab40-11e6-9356-cd3743a9084e",
-            "cccbe532-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Osteoporose"
         },
         "second": {
             "type": "medication",
-            "name": "Anti-ácidos"
+            "name": "Análgésicos"
         }
     },
     {
-        "incidences": 1,
+        "incidences": 2,
         "patientIDs": [
-            "cccb21e1-ab40-11e6-9356-cd3743a9084e"
+            "66593ce3-d344-11e6-a521-11e0c7182021",
+            "665963f4-d344-11e6-a521-11e0c7182021"
         ],
         "first": {
             "type": "disease",
-            "name": "Osteoporose"
+            "name": "Artrite"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Análgésicos"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "66593ce0-d344-11e6-a521-11e0c7182021",
+            "665a0036-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Doença da Tiroide"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-hipertensor"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "665915d4-d344-11e6-a521-11e0c7182021",
+            "6659d922-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Doença Cardíaca Congénita"
         },
         "second": {
             "type": "medication",
@@ -757,9 +520,367 @@
     {
         "incidences": 3,
         "patientIDs": [
-            "cccb21e0-ab40-11e6-9356-cd3743a9084e",
-            "cccc0c44-ab40-11e6-9356-cd3743a9084e",
-            "cccc8171-ab40-11e6-9356-cd3743a9084e"
+            "665915d4-d344-11e6-a521-11e0c7182021",
+            "6659b214-d344-11e6-a521-11e0c7182021",
+            "665a2740-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Doença Cardíaca Congénita"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-diabéticos"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "665915d3-d344-11e6-a521-11e0c7182021",
+            "665a4e50-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Artrite"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Doença da Tiroide"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "665915d1-d344-11e6-a521-11e0c7182021",
+            "6659d923-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Candidiase Oral"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-hipertensor"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "665915d1-d344-11e6-a521-11e0c7182021",
+            "66593ce0-d344-11e6-a521-11e0c7182021",
+            "6659d923-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Gânglios aumentados de volume"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-hipertensor"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "665915d1-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Febre Reumática"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Gânglios aumentados de volume"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "66585281-d344-11e6-a521-11e0c7182021",
+            "66598b01-d344-11e6-a521-11e0c7182021",
+            "6659d922-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Glaucoma"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Estatinas"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "66585281-d344-11e6-a521-11e0c7182021",
+            "66593ce0-d344-11e6-a521-11e0c7182021",
+            "66598b04-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Glaucoma"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-hipertensor"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "66585281-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Anti-hipertensor"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Broncodilatador"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "66582b70-d344-11e6-a521-11e0c7182021",
+            "66593ce5-d344-11e6-a521-11e0c7182021",
+            "6659d923-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Enfarte Miocárdio"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Gânglios aumentados de volume"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "66580464-d344-11e6-a521-11e0c7182021",
+            "665a0030-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Artrite"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Aspirina"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "66580464-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Artrite"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Esteróides"
+        }
+    },
+    {
+        "incidences": 4,
+        "patientIDs": [
+            "66580464-d344-11e6-a521-11e0c7182021",
+            "66585281-d344-11e6-a521-11e0c7182021",
+            "66598b01-d344-11e6-a521-11e0c7182021",
+            "665a0030-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Glaucoma"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Aspirina"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "66580464-d344-11e6-a521-11e0c7182021",
+            "66593ce5-d344-11e6-a521-11e0c7182021",
+            "665a0032-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Enfarte Miocárdio"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Aspirina"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "66580464-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Enfarte Miocárdio"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Esteróides"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "66580464-d344-11e6-a521-11e0c7182021",
+            "6659d924-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Esteróides"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Aspirina"
+        }
+    },
+    {
+        "incidences": 4,
+        "patientIDs": [
+            "66580464-d344-11e6-a521-11e0c7182021",
+            "66593ce3-d344-11e6-a521-11e0c7182021",
+            "665963f4-d344-11e6-a521-11e0c7182021",
+            "665a0030-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Glaucoma"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Artrite"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "66580464-d344-11e6-a521-11e0c7182021",
+            "66598b04-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Glaucoma"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Osteoporose"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "66580464-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Enfarte Miocárdio"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Artrite"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "66580464-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Enfarte Miocárdio"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Osteoporose"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "66580464-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Enfarte Miocárdio"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Glaucoma"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "66580463-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Febre Reumática"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Broncodilatador"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "66580463-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Artrite"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Broncodilatador"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "66580463-d344-11e6-a521-11e0c7182021",
+            "665a0030-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Artrite"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-depressor"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "66580463-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Artrite"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Febre Reumática"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "66580461-d344-11e6-a521-11e0c7182021"
         ],
         "first": {
             "type": "disease",
@@ -771,14 +892,28 @@
         }
     },
     {
-        "incidences": 2,
+        "incidences": 1,
         "patientIDs": [
-            "cccb21e0-ab40-11e6-9356-cd3743a9084e",
-            "cccb48f0-ab40-11e6-9356-cd3743a9084e"
+            "66580461-d344-11e6-a521-11e0c7182021"
         ],
         "first": {
             "type": "disease",
             "name": "Artrite"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-diabéticos"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "66580460-d344-11e6-a521-11e0c7182021",
+            "6659d924-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Doença da Tiroide"
         },
         "second": {
             "type": "medication",
@@ -786,13 +921,184 @@
         }
     },
     {
-        "incidences": 1,
+        "incidences": 4,
         "patientIDs": [
-            "cccb21e0-ab40-11e6-9356-cd3743a9084e"
+            "66580460-d344-11e6-a521-11e0c7182021",
+            "665915d2-d344-11e6-a521-11e0c7182021",
+            "665963f4-d344-11e6-a521-11e0c7182021",
+            "66598b04-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Anti-ácidos"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Análgésicos"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "6657dd51-d344-11e6-a521-11e0c7182021",
+            "66593ce0-d344-11e6-a521-11e0c7182021",
+            "66598b02-d344-11e6-a521-11e0c7182021"
         ],
         "first": {
             "type": "disease",
+            "name": "Gânglios aumentados de volume"
+        },
+        "second": {
+            "type": "disease",
             "name": "Doença da Tiroide"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "6657dd50-d344-11e6-a521-11e0c7182021",
+            "6659d924-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Doença Venérea"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-ácidos"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "6657dd50-d344-11e6-a521-11e0c7182021",
+            "66598b04-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Osteoporose"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-ácidos"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "6657dd50-d344-11e6-a521-11e0c7182021",
+            "66580464-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Osteoporose"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Aspirina"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "6657dd50-d344-11e6-a521-11e0c7182021",
+            "66582b71-d344-11e6-a521-11e0c7182021",
+            "6659d924-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Aspirina"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-ácidos"
+        }
+    },
+    {
+        "incidences": 4,
+        "patientIDs": [
+            "6657b642-d344-11e6-a521-11e0c7182021",
+            "6657dd50-d344-11e6-a521-11e0c7182021",
+            "6659d924-d344-11e6-a521-11e0c7182021",
+            "665a0030-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Doença Venérea"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Aspirina"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "6657b640-d344-11e6-a521-11e0c7182021",
+            "66580464-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Artrite"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Osteoporose"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "6657b640-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Candidiase Oral"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Osteoporose"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "6657b640-d344-11e6-a521-11e0c7182021",
+            "665915d3-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Candidiase Oral"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Artrite"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "6657b640-d344-11e6-a521-11e0c7182021",
+            "6657dd50-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Doença Venérea"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Osteoporose"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "6657b640-d344-11e6-a521-11e0c7182021",
+            "665a0030-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Doença Venérea"
         },
         "second": {
             "type": "disease",
@@ -802,11 +1108,212 @@
     {
         "incidences": 1,
         "patientIDs": [
-            "cccad3c2-ab40-11e6-9356-cd3743a9084e"
+            "6657b640-d344-11e6-a521-11e0c7182021"
         ],
         "first": {
             "type": "disease",
-            "name": "Osteoporose"
+            "name": "Doença Venérea"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Candidiase Oral"
+        }
+    },
+    {
+        "incidences": 4,
+        "patientIDs": [
+            "66576820-d344-11e6-a521-11e0c7182021",
+            "6659d921-d344-11e6-a521-11e0c7182021",
+            "6659d922-d344-11e6-a521-11e0c7182021",
+            "665a2741-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Doença Cardíaca Congénita"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Glaucoma"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "66576820-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Candidiase Oral"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Doença Cardíaca Congénita"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "66576820-d344-11e6-a521-11e0c7182021",
+            "66593ce0-d344-11e6-a521-11e0c7182021",
+            "66598b03-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Doença da Tiroide"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Glaucoma"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "66576820-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Doença da Tiroide"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Doença Cardíaca Congénita"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "66576820-d344-11e6-a521-11e0c7182021",
+            "665915d3-d344-11e6-a521-11e0c7182021",
+            "665963f5-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Doença da Tiroide"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Candidiase Oral"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "66574110-d344-11e6-a521-11e0c7182021",
+            "66576821-d344-11e6-a521-11e0c7182021",
+            "66585281-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Glaucoma"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Broncodilatador"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "66574110-d344-11e6-a521-11e0c7182021",
+            "66580464-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Glaucoma"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Esteróides"
+        }
+    },
+    {
+        "incidences": 4,
+        "patientIDs": [
+            "66574110-d344-11e6-a521-11e0c7182021",
+            "66576821-d344-11e6-a521-11e0c7182021",
+            "665963f4-d344-11e6-a521-11e0c7182021",
+            "66598b04-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Glaucoma"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-ácidos"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "66574110-d344-11e6-a521-11e0c7182021",
+            "6659d924-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Esteróides"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Broncodilatador"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "66574110-d344-11e6-a521-11e0c7182021",
+            "66576821-d344-11e6-a521-11e0c7182021",
+            "6659d924-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Anti-ácidos"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Broncodilatador"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "66574110-d344-11e6-a521-11e0c7182021",
+            "6659d924-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Anti-ácidos"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Esteróides"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "66574110-d344-11e6-a521-11e0c7182021",
+            "6659b212-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Anti-depressor"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-ácidos"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "6656a4d0-d344-11e6-a521-11e0c7182021",
+            "665963f5-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Candidiase Oral"
         },
         "second": {
             "type": "medication",
@@ -816,228 +1323,226 @@
     {
         "incidences": 1,
         "patientIDs": [
-            "cccad3c2-ab40-11e6-9356-cd3743a9084e"
+            "6656a4d0-d344-11e6-a521-11e0c7182021"
         ],
         "first": {
             "type": "disease",
-            "name": "Enfarte Miocárdio"
+            "name": "Candidiase Oral"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Estatinas"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "6656a4d0-d344-11e6-a521-11e0c7182021",
+            "665915d1-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Febre Reumática"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Candidiase Oral"
+        }
+    },
+    {
+        "incidences": 4,
+        "patientIDs": [
+            "66562fa0-d344-11e6-a521-11e0c7182021",
+            "66580460-d344-11e6-a521-11e0c7182021",
+            "665963f5-d344-11e6-a521-11e0c7182021",
+            "665a0036-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Doença da Tiroide"
         },
         "second": {
             "type": "medication",
             "name": "Análgésicos"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "66562fa0-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Doença da Tiroide"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-diabéticos"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "66562fa0-d344-11e6-a521-11e0c7182021",
+            "66593ce0-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Doença da Tiroide"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-depressor"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "66562fa0-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Doença da Tiroide"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Estatinas"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "66562fa0-d344-11e6-a521-11e0c7182021",
+            "6659d924-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Doença da Tiroide"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Broncodilatador"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "66562fa0-d344-11e6-a521-11e0c7182021",
+            "66582b72-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Broncodilatador"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Análgésicos"
+        }
+    },
+    {
+        "incidences": 4,
+        "patientIDs": [
+            "66562fa0-d344-11e6-a521-11e0c7182021",
+            "66578f30-d344-11e6-a521-11e0c7182021",
+            "6658c7b0-d344-11e6-a521-11e0c7182021",
+            "6659b213-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Broncodilatador"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-diabéticos"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "66562fa0-d344-11e6-a521-11e0c7182021",
+            "66585281-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Broncodilatador"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Estatinas"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "66560892-d344-11e6-a521-11e0c7182021",
+            "665915d1-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Candidiase Oral"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-diabéticos"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "66560892-d344-11e6-a521-11e0c7182021",
+            "6656a4d0-d344-11e6-a521-11e0c7182021",
+            "66593ce5-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Candidiase Oral"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-depressor"
+        }
+    },
+    {
+        "incidences": 5,
+        "patientIDs": [
+            "66560892-d344-11e6-a521-11e0c7182021",
+            "665915d1-d344-11e6-a521-11e0c7182021",
+            "665963f1-d344-11e6-a521-11e0c7182021",
+            "6659b213-d344-11e6-a521-11e0c7182021",
+            "6659b214-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Gânglios aumentados de volume"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-diabéticos"
+        }
+    },
+    {
+        "incidences": 1,
+        "patientIDs": [
+            "66560892-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Glaucoma"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-diabéticos"
         }
     },
     {
         "incidences": 6,
         "patientIDs": [
-            "cccad3c2-ab40-11e6-9356-cd3743a9084e",
-            "cccb21e5-ab40-11e6-9356-cd3743a9084e",
-            "cccb48f0-ab40-11e6-9356-cd3743a9084e",
-            "cccc0c40-ab40-11e6-9356-cd3743a9084e",
-            "cccc0c43-ab40-11e6-9356-cd3743a9084e",
-            "cccca883-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Enfarte Miocárdio"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Osteoporose"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "cccad3c1-ab40-11e6-9356-cd3743a9084e",
-            "cccc5a61-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Doença Cardíaca Congénita"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-ácidos"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "cccaacb2-ab40-11e6-9356-cd3743a9084e",
-            "cccc0c44-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Enfarte Miocárdio"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Doença Venérea"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "cccaacb2-ab40-11e6-9356-cd3743a9084e",
-            "cccc0c40-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Doença Cardíaca Congénita"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Enfarte Miocárdio"
-        }
-    },
-    {
-        "incidences": 4,
-        "patientIDs": [
-            "cccaacb1-ab40-11e6-9356-cd3743a9084e",
-            "cccaacb2-ab40-11e6-9356-cd3743a9084e",
-            "cccc0c40-ab40-11e6-9356-cd3743a9084e",
-            "cccc0c43-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Enfarte Miocárdio"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Broncodilatador"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "cccaacb1-ab40-11e6-9356-cd3743a9084e",
-            "cccb9712-ab40-11e6-9356-cd3743a9084e",
-            "cccbe535-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Artrite"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-diabéticos"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "cccaacb1-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Febre Reumática"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-diabéticos"
-        }
-    },
-    {
-        "incidences": 5,
-        "patientIDs": [
-            "cccaacb1-ab40-11e6-9356-cd3743a9084e",
-            "cccb21e4-ab40-11e6-9356-cd3743a9084e",
-            "cccbbe20-ab40-11e6-9356-cd3743a9084e",
-            "cccbe533-ab40-11e6-9356-cd3743a9084e",
-            "cccc8171-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Febre Reumática"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Broncodilatador"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "cccaacb1-ab40-11e6-9356-cd3743a9084e",
-            "cccbbe23-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Broncodilatador"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Esteróides"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "cccaacb1-ab40-11e6-9356-cd3743a9084e",
-            "cccb48f0-ab40-11e6-9356-cd3743a9084e",
-            "cccc0c44-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Artrite"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Enfarte Miocárdio"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "cccaacb1-ab40-11e6-9356-cd3743a9084e",
-            "cccb21e0-ab40-11e6-9356-cd3743a9084e",
-            "cccc8171-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Febre Reumática"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Artrite"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "cccaacb0-ab40-11e6-9356-cd3743a9084e",
-            "cccca882-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Doença Venérea"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Aspirina"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "cccaacb0-ab40-11e6-9356-cd3743a9084e",
-            "cccbe535-ab40-11e6-9356-cd3743a9084e",
-            "cccc8173-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Aspirina"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Broncodilatador"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "ccca85a1-ab40-11e6-9356-cd3743a9084e"
+            "66560892-d344-11e6-a521-11e0c7182021",
+            "66574110-d344-11e6-a521-11e0c7182021",
+            "66585281-d344-11e6-a521-11e0c7182021",
+            "66593ce0-d344-11e6-a521-11e0c7182021",
+            "6659d922-d344-11e6-a521-11e0c7182021",
+            "665a0030-d344-11e6-a521-11e0c7182021"
         ],
         "first": {
             "type": "disease",
@@ -1045,203 +1550,63 @@
         },
         "second": {
             "type": "medication",
-            "name": "Esteróides"
+            "name": "Anti-depressor"
         }
     },
     {
-        "incidences": 1,
+        "incidences": 5,
         "patientIDs": [
-            "ccca85a1-ab40-11e6-9356-cd3743a9084e"
+            "66560892-d344-11e6-a521-11e0c7182021",
+            "665915d1-d344-11e6-a521-11e0c7182021",
+            "66593ce4-d344-11e6-a521-11e0c7182021",
+            "66593ce5-d344-11e6-a521-11e0c7182021",
+            "6659d923-d344-11e6-a521-11e0c7182021"
         ],
         "first": {
             "type": "disease",
-            "name": "Doença Cardíaca Congénita"
+            "name": "Gânglios aumentados de volume"
         },
         "second": {
-            "type": "medication",
-            "name": "Esteróides"
+            "type": "disease",
+            "name": "Candidiase Oral"
         }
     },
     {
-        "incidences": 3,
+        "incidences": 2,
         "patientIDs": [
-            "ccca85a1-ab40-11e6-9356-cd3743a9084e",
-            "cccbe534-ab40-11e6-9356-cd3743a9084e",
-            "cccc8173-ab40-11e6-9356-cd3743a9084e"
+            "66560892-d344-11e6-a521-11e0c7182021",
+            "66576820-d344-11e6-a521-11e0c7182021"
         ],
         "first": {
-            "type": "disease",
-            "name": "Doença Cardíaca Congénita"
-        },
-        "second": {
             "type": "disease",
             "name": "Glaucoma"
+        },
+        "second": {
+            "type": "disease",
+            "name": "Candidiase Oral"
         }
     },
     {
         "incidences": 3,
         "patientIDs": [
-            "ccca5e93-ab40-11e6-9356-cd3743a9084e",
-            "cccb21e0-ab40-11e6-9356-cd3743a9084e",
-            "cccbe531-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Anti-ácidos"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Esteróides"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "ccca5e93-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Anti-ácidos"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-diabéticos"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "ccca5e93-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Análgésicos"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-diabéticos"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "ccca5e92-ab40-11e6-9356-cd3743a9084e",
-            "cccaacb1-ab40-11e6-9356-cd3743a9084e",
-            "cccb21e0-ab40-11e6-9356-cd3743a9084e"
+            "66560892-d344-11e6-a521-11e0c7182021",
+            "66593ce0-d344-11e6-a521-11e0c7182021",
+            "66598b01-d344-11e6-a521-11e0c7182021"
         ],
         "first": {
             "type": "disease",
-            "name": "Artrite"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Esteróides"
-        }
-    },
-    {
-        "incidences": 5,
-        "patientIDs": [
-            "ccca5e91-ab40-11e6-9356-cd3743a9084e",
-            "cccbe534-ab40-11e6-9356-cd3743a9084e",
-            "cccbe535-ab40-11e6-9356-cd3743a9084e",
-            "cccc5a63-ab40-11e6-9356-cd3743a9084e",
-            "cccc8173-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Doença Cardíaca Congénita"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Aspirina"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "ccca5e91-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Doença da Tiroide"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Aspirina"
-        }
-    },
-    {
-        "incidences": 4,
-        "patientIDs": [
-            "ccca5e91-ab40-11e6-9356-cd3743a9084e",
-            "cccbe530-ab40-11e6-9356-cd3743a9084e",
-            "cccbe533-ab40-11e6-9356-cd3743a9084e",
-            "cccc5a61-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Doença da Tiroide"
+            "name": "Glaucoma"
         },
         "second": {
             "type": "disease",
-            "name": "Doença Cardíaca Congénita"
-        }
-    },
-    {
-        "incidences": 4,
-        "patientIDs": [
-            "ccca5e91-ab40-11e6-9356-cd3743a9084e",
-            "cccbe535-ab40-11e6-9356-cd3743a9084e",
-            "cccc0c40-ab40-11e6-9356-cd3743a9084e",
-            "cccc8173-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Osteoporose"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Doença Cardíaca Congénita"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "ccca5e91-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Osteoporose"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Doença da Tiroide"
-        }
-    },
-    {
-        "incidences": 6,
-        "patientIDs": [
-            "ccca5e90-ab40-11e6-9356-cd3743a9084e",
-            "ccca5e91-ab40-11e6-9356-cd3743a9084e",
-            "cccad3c2-ab40-11e6-9356-cd3743a9084e",
-            "cccb48f0-ab40-11e6-9356-cd3743a9084e",
-            "cccbe535-ab40-11e6-9356-cd3743a9084e",
-            "cccc8173-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Osteoporose"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Aspirina"
+            "name": "Gânglios aumentados de volume"
         }
     },
     {
         "incidences": 2,
         "patientIDs": [
-            "ccca5e90-ab40-11e6-9356-cd3743a9084e",
-            "cccc0c40-ab40-11e6-9356-cd3743a9084e"
+            "66560891-d344-11e6-a521-11e0c7182021",
+            "66580464-d344-11e6-a521-11e0c7182021"
         ],
         "first": {
             "type": "disease",
@@ -1249,162 +1614,17 @@
         },
         "second": {
             "type": "medication",
-            "name": "Estatinas"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "ccca5e90-ab40-11e6-9356-cd3743a9084e",
-            "cccb9712-ab40-11e6-9356-cd3743a9084e",
-            "cccbe535-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Osteoporose"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-diabéticos"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "ccca5e90-ab40-11e6-9356-cd3743a9084e",
-            "cccb9713-ab40-11e6-9356-cd3743a9084e",
-            "cccbe534-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Anti-diabéticos"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Estatinas"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "ccca3781-ab40-11e6-9356-cd3743a9084e",
-            "cccbe535-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Candidiase Oral"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Aspirina"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "ccca3780-ab40-11e6-9356-cd3743a9084e",
-            "cccb21e0-ab40-11e6-9356-cd3743a9084e",
-            "cccbe531-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Doença da Tiroide"
-        },
-        "second": {
-            "type": "medication",
             "name": "Esteróides"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "ccca3780-ab40-11e6-9356-cd3743a9084e",
-            "cccaacb1-ab40-11e6-9356-cd3743a9084e",
-            "cccca880-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Enfarte Miocárdio"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Esteróides"
-        }
-    },
-    {
-        "incidences": 4,
-        "patientIDs": [
-            "ccca3780-ab40-11e6-9356-cd3743a9084e",
-            "cccc0c41-ab40-11e6-9356-cd3743a9084e",
-            "cccc0c44-ab40-11e6-9356-cd3743a9084e",
-            "cccca880-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Enfarte Miocárdio"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-hipertensor"
-        }
-    },
-    {
-        "incidences": 4,
-        "patientIDs": [
-            "ccca1070-ab40-11e6-9356-cd3743a9084e",
-            "cccaacb1-ab40-11e6-9356-cd3743a9084e",
-            "cccb21e0-ab40-11e6-9356-cd3743a9084e",
-            "ccccf6a2-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Febre Reumática"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Esteróides"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "ccc9e960-ab40-11e6-9356-cd3743a9084e",
-            "cccb9712-ab40-11e6-9356-cd3743a9084e",
-            "cccbe535-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Candidiase Oral"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-diabéticos"
         }
     },
     {
         "incidences": 1,
         "patientIDs": [
-            "ccc9e960-ab40-11e6-9356-cd3743a9084e"
+            "66560891-d344-11e6-a521-11e0c7182021"
         ],
         "first": {
             "type": "disease",
-            "name": "Doença da Tiroide"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-diabéticos"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "ccc9e960-ab40-11e6-9356-cd3743a9084e",
-            "cccbe534-ab40-11e6-9356-cd3743a9084e",
-            "cccc0c42-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Anti-diabéticos"
+            "name": "Osteoporose"
         },
         "second": {
             "type": "medication",
@@ -1412,71 +1632,12 @@
         }
     },
     {
-        "incidences": 3,
+        "incidences": 4,
         "patientIDs": [
-            "ccc9e960-ab40-11e6-9356-cd3743a9084e",
-            "cccbe533-ab40-11e6-9356-cd3743a9084e",
-            "cccc5a60-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Doença da Tiroide"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Candidiase Oral"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "ccc9e960-ab40-11e6-9356-cd3743a9084e",
-            "cccc0c44-ab40-11e6-9356-cd3743a9084e",
-            "cccccf90-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Enfarte Miocárdio"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Candidiase Oral"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "ccc9e960-ab40-11e6-9356-cd3743a9084e",
-            "ccca3780-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Enfarte Miocárdio"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Doença da Tiroide"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "ccc9c250-ab40-11e6-9356-cd3743a9084e",
-            "cccb21e0-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Esteróides"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-depressor"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "ccc99b40-ab40-11e6-9356-cd3743a9084e"
+            "66560891-d344-11e6-a521-11e0c7182021",
+            "66560892-d344-11e6-a521-11e0c7182021",
+            "66593ce0-d344-11e6-a521-11e0c7182021",
+            "66593ce5-d344-11e6-a521-11e0c7182021"
         ],
         "first": {
             "type": "disease",
@@ -1484,83 +1645,18 @@
         },
         "second": {
             "type": "medication",
-            "name": "Anti-ácidos"
-        }
-    },
-    {
-        "incidences": 4,
-        "patientIDs": [
-            "ccc97430-ab40-11e6-9356-cd3743a9084e",
-            "ccca85a1-ab40-11e6-9356-cd3743a9084e",
-            "cccbe534-ab40-11e6-9356-cd3743a9084e",
-            "cccc0c40-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Doença Cardíaca Congénita"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Estatinas"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "ccc94d20-ab40-11e6-9356-cd3743a9084e",
-            "cccbe534-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Doença Cardíaca Congénita"
-        },
-        "second": {
-            "type": "medication",
             "name": "Anti-depressor"
         }
     },
     {
-        "incidences": 4,
-        "patientIDs": [
-            "ccc92611-ab40-11e6-9356-cd3743a9084e",
-            "ccca1070-ab40-11e6-9356-cd3743a9084e",
-            "ccca5e93-ab40-11e6-9356-cd3743a9084e",
-            "ccccf6a2-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Esteróides"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Análgésicos"
-        }
-    },
-    {
         "incidences": 2,
         "patientIDs": [
-            "ccc92611-ab40-11e6-9356-cd3743a9084e",
-            "cccb21e2-ab40-11e6-9356-cd3743a9084e"
+            "66560891-d344-11e6-a521-11e0c7182021",
+            "66574110-d344-11e6-a521-11e0c7182021"
         ],
         "first": {
             "type": "medication",
-            "name": "Estatinas"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Análgésicos"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "ccc92611-ab40-11e6-9356-cd3743a9084e",
-            "ccca85a1-ab40-11e6-9356-cd3743a9084e",
-            "cccca880-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Estatinas"
+            "name": "Anti-depressor"
         },
         "second": {
             "type": "medication",
@@ -1570,186 +1666,23 @@
     {
         "incidences": 2,
         "patientIDs": [
-            "ccc92610-ab40-11e6-9356-cd3743a9084e",
-            "cccc0c42-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Anti-hipertensor"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Aspirina"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "ccc92610-ab40-11e6-9356-cd3743a9084e",
-            "ccc9c250-ab40-11e6-9356-cd3743a9084e",
-            "ccca5e92-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Esteróides"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Aspirina"
-        }
-    },
-    {
-        "incidences": 7,
-        "patientIDs": [
-            "ccc92610-ab40-11e6-9356-cd3743a9084e",
-            "ccca1070-ab40-11e6-9356-cd3743a9084e",
-            "ccca3780-ab40-11e6-9356-cd3743a9084e",
-            "cccb21e0-ab40-11e6-9356-cd3743a9084e",
-            "cccbbe23-ab40-11e6-9356-cd3743a9084e",
-            "cccca880-ab40-11e6-9356-cd3743a9084e",
-            "ccccf6a2-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Esteróides"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-hipertensor"
-        }
-    },
-    {
-        "incidences": 6,
-        "patientIDs": [
-            "ccc92610-ab40-11e6-9356-cd3743a9084e",
-            "ccca5e90-ab40-11e6-9356-cd3743a9084e",
-            "cccb48f1-ab40-11e6-9356-cd3743a9084e",
-            "cccbe534-ab40-11e6-9356-cd3743a9084e",
-            "cccbe535-ab40-11e6-9356-cd3743a9084e",
-            "cccc0c42-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Anti-diabéticos"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Aspirina"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "ccc92610-ab40-11e6-9356-cd3743a9084e",
-            "cccbbe23-ab40-11e6-9356-cd3743a9084e",
-            "cccc0c42-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Anti-diabéticos"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-hipertensor"
-        }
-    },
-    {
-        "incidences": 4,
-        "patientIDs": [
-            "ccc92610-ab40-11e6-9356-cd3743a9084e",
-            "ccca5e93-ab40-11e6-9356-cd3743a9084e",
-            "cccaacb1-ab40-11e6-9356-cd3743a9084e",
-            "cccbbe23-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Anti-diabéticos"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Esteróides"
-        }
-    },
-    {
-        "incidences": 5,
-        "patientIDs": [
-            "ccc8ff00-ab40-11e6-9356-cd3743a9084e",
-            "cccaacb1-ab40-11e6-9356-cd3743a9084e",
-            "cccb9712-ab40-11e6-9356-cd3743a9084e",
-            "cccbbe23-ab40-11e6-9356-cd3743a9084e",
-            "cccbe535-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Anti-diabéticos"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Broncodilatador"
-        }
-    },
-    {
-        "incidences": 4,
-        "patientIDs": [
-            "ccc8d7f0-ab40-11e6-9356-cd3743a9084e",
-            "cccb9712-ab40-11e6-9356-cd3743a9084e",
-            "cccb9713-ab40-11e6-9356-cd3743a9084e",
-            "cccbe535-ab40-11e6-9356-cd3743a9084e"
+            "66560891-d344-11e6-a521-11e0c7182021",
+            "66598b02-d344-11e6-a521-11e0c7182021"
         ],
         "first": {
             "type": "disease",
             "name": "Gânglios aumentados de volume"
         },
         "second": {
-            "type": "medication",
-            "name": "Anti-diabéticos"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "ccc8d7f0-ab40-11e6-9356-cd3743a9084e",
-            "ccc9e960-ab40-11e6-9356-cd3743a9084e",
-            "cccaacb1-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
             "type": "disease",
-            "name": "Enfarte Miocárdio"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-diabéticos"
+            "name": "Osteoporose"
         }
     },
     {
-        "incidences": 7,
+        "incidences": 2,
         "patientIDs": [
-            "ccc8b0e0-ab40-11e6-9356-cd3743a9084e",
-            "cccaacb2-ab40-11e6-9356-cd3743a9084e",
-            "cccb21e4-ab40-11e6-9356-cd3743a9084e",
-            "cccbe533-ab40-11e6-9356-cd3743a9084e",
-            "cccbe535-ab40-11e6-9356-cd3743a9084e",
-            "cccc0c40-ab40-11e6-9356-cd3743a9084e",
-            "cccc8173-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Doença Cardíaca Congénita"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Broncodilatador"
-        }
-    },
-    {
-        "incidences": 6,
-        "patientIDs": [
-            "ccc8b0e0-ab40-11e6-9356-cd3743a9084e",
-            "cccaacb0-ab40-11e6-9356-cd3743a9084e",
-            "cccaacb2-ab40-11e6-9356-cd3743a9084e",
-            "cccbbe20-ab40-11e6-9356-cd3743a9084e",
-            "cccbe533-ab40-11e6-9356-cd3743a9084e",
-            "cccc8171-ab40-11e6-9356-cd3743a9084e"
+            "66560890-d344-11e6-a521-11e0c7182021",
+            "6659d924-d344-11e6-a521-11e0c7182021"
         ],
         "first": {
             "type": "disease",
@@ -1757,16 +1690,15 @@
         },
         "second": {
             "type": "medication",
-            "name": "Broncodilatador"
+            "name": "Esteróides"
         }
     },
     {
-        "incidences": 4,
+        "incidences": 3,
         "patientIDs": [
-            "ccc8b0e0-ab40-11e6-9356-cd3743a9084e",
-            "cccb9712-ab40-11e6-9356-cd3743a9084e",
-            "cccbbe20-ab40-11e6-9356-cd3743a9084e",
-            "cccbe535-ab40-11e6-9356-cd3743a9084e"
+            "66560890-d344-11e6-a521-11e0c7182021",
+            "66560891-d344-11e6-a521-11e0c7182021",
+            "6657dd51-d344-11e6-a521-11e0c7182021"
         ],
         "first": {
             "type": "disease",
@@ -1774,52 +1706,15 @@
         },
         "second": {
             "type": "medication",
-            "name": "Broncodilatador"
+            "name": "Esteróides"
         }
     },
     {
-        "incidences": 6,
+        "incidences": 3,
         "patientIDs": [
-            "ccc8b0e0-ab40-11e6-9356-cd3743a9084e",
-            "cccaacb2-ab40-11e6-9356-cd3743a9084e",
-            "cccbe530-ab40-11e6-9356-cd3743a9084e",
-            "cccbe533-ab40-11e6-9356-cd3743a9084e",
-            "cccc5a61-ab40-11e6-9356-cd3743a9084e",
-            "cccca881-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Doença Venérea"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Doença Cardíaca Congénita"
-        }
-    },
-    {
-        "incidences": 4,
-        "patientIDs": [
-            "ccc8b0e0-ab40-11e6-9356-cd3743a9084e",
-            "ccc8d7f1-ab40-11e6-9356-cd3743a9084e",
-            "cccbe530-ab40-11e6-9356-cd3743a9084e",
-            "cccbe535-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Gânglios aumentados de volume"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Doença Cardíaca Congénita"
-        }
-    },
-    {
-        "incidences": 4,
-        "patientIDs": [
-            "ccc8b0e0-ab40-11e6-9356-cd3743a9084e",
-            "cccb9713-ab40-11e6-9356-cd3743a9084e",
-            "cccbbe20-ab40-11e6-9356-cd3743a9084e",
-            "cccbe530-ab40-11e6-9356-cd3743a9084e"
+            "66560890-d344-11e6-a521-11e0c7182021",
+            "665963f1-d344-11e6-a521-11e0c7182021",
+            "6659b214-d344-11e6-a521-11e0c7182021"
         ],
         "first": {
             "type": "disease",
@@ -1833,27 +1728,10 @@
     {
         "incidences": 4,
         "patientIDs": [
-            "ccc889d0-ab40-11e6-9356-cd3743a9084e",
-            "cccaacb1-ab40-11e6-9356-cd3743a9084e",
-            "cccccf90-ab40-11e6-9356-cd3743a9084e",
-            "ccccf6a1-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Febre Reumática"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Enfarte Miocárdio"
-        }
-    },
-    {
-        "incidences": 4,
-        "patientIDs": [
-            "ccc862c1-ab40-11e6-9356-cd3743a9084e",
-            "cccb21e0-ab40-11e6-9356-cd3743a9084e",
-            "cccbe531-ab40-11e6-9356-cd3743a9084e",
-            "cccc5a61-ab40-11e6-9356-cd3743a9084e"
+            "6655e180-d344-11e6-a521-11e0c7182021",
+            "6657dd51-d344-11e6-a521-11e0c7182021",
+            "66598b00-d344-11e6-a521-11e0c7182021",
+            "6659d924-d344-11e6-a521-11e0c7182021"
         ],
         "first": {
             "type": "disease",
@@ -1861,230 +1739,21 @@
         },
         "second": {
             "type": "medication",
-            "name": "Anti-ácidos"
-        }
-    },
-    {
-        "incidences": 1,
-        "patientIDs": [
-            "ccc862c1-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Doença da Tiroide"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Análgésicos"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "ccc862c1-ab40-11e6-9356-cd3743a9084e",
-            "ccc9e960-ab40-11e6-9356-cd3743a9084e",
-            "cccb21e0-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Doença da Tiroide"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-depressor"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "ccc862c1-ab40-11e6-9356-cd3743a9084e",
-            "ccca3780-ab40-11e6-9356-cd3743a9084e",
-            "cccb21e0-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Doença da Tiroide"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-hipertensor"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "ccc862c1-ab40-11e6-9356-cd3743a9084e",
-            "cccb21e0-ab40-11e6-9356-cd3743a9084e",
-            "cccccf90-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Febre Reumática"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-ácidos"
-        }
-    },
-    {
-        "incidences": 4,
-        "patientIDs": [
-            "ccc862c1-ab40-11e6-9356-cd3743a9084e",
-            "ccca1070-ab40-11e6-9356-cd3743a9084e",
-            "cccc8171-ab40-11e6-9356-cd3743a9084e",
-            "ccccf6a2-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Febre Reumática"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Análgésicos"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "ccc862c1-ab40-11e6-9356-cd3743a9084e",
-            "cccb21e0-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Febre Reumática"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-depressor"
+            "name": "Esteróides"
         }
     },
     {
         "incidences": 5,
         "patientIDs": [
-            "ccc862c1-ab40-11e6-9356-cd3743a9084e",
-            "ccca1070-ab40-11e6-9356-cd3743a9084e",
-            "cccb21e0-ab40-11e6-9356-cd3743a9084e",
-            "cccc8171-ab40-11e6-9356-cd3743a9084e",
-            "ccccf6a2-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Febre Reumática"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-hipertensor"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "ccc862c1-ab40-11e6-9356-cd3743a9084e",
-            "ccca5e93-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Análgésicos"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-ácidos"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "ccc862c1-ab40-11e6-9356-cd3743a9084e",
-            "cccb21e0-ab40-11e6-9356-cd3743a9084e",
-            "cccb21e1-ab40-11e6-9356-cd3743a9084e"
+            "6655ba70-d344-11e6-a521-11e0c7182021",
+            "66562fa0-d344-11e6-a521-11e0c7182021",
+            "66574110-d344-11e6-a521-11e0c7182021",
+            "66580463-d344-11e6-a521-11e0c7182021",
+            "66585281-d344-11e6-a521-11e0c7182021"
         ],
         "first": {
             "type": "medication",
             "name": "Anti-depressor"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-ácidos"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "ccc862c1-ab40-11e6-9356-cd3743a9084e",
-            "cccb21e0-ab40-11e6-9356-cd3743a9084e",
-            "cccbe532-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Anti-hipertensor"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-ácidos"
-        }
-    },
-    {
-        "incidences": 5,
-        "patientIDs": [
-            "ccc862c1-ab40-11e6-9356-cd3743a9084e",
-            "ccca1070-ab40-11e6-9356-cd3743a9084e",
-            "cccb21e2-ab40-11e6-9356-cd3743a9084e",
-            "cccc8171-ab40-11e6-9356-cd3743a9084e",
-            "ccccf6a2-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Anti-hipertensor"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Análgésicos"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "ccc862c1-ab40-11e6-9356-cd3743a9084e",
-            "cccb21e0-ab40-11e6-9356-cd3743a9084e",
-            "cccc0c42-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Anti-hipertensor"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-depressor"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "ccc862c1-ab40-11e6-9356-cd3743a9084e",
-            "cccb21e0-ab40-11e6-9356-cd3743a9084e",
-            "cccbe533-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Febre Reumática"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Doença da Tiroide"
-        }
-    },
-    {
-        "incidences": 5,
-        "patientIDs": [
-            "ccc83bb1-ab40-11e6-9356-cd3743a9084e",
-            "cccaacb1-ab40-11e6-9356-cd3743a9084e",
-            "cccb9712-ab40-11e6-9356-cd3743a9084e",
-            "cccbe535-ab40-11e6-9356-cd3743a9084e",
-            "cccc8171-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Artrite"
         },
         "second": {
             "type": "medication",
@@ -2092,15 +1761,16 @@
         }
     },
     {
-        "incidences": 3,
+        "incidences": 4,
         "patientIDs": [
-            "ccc83bb1-ab40-11e6-9356-cd3743a9084e",
-            "cccb21e2-ab40-11e6-9356-cd3743a9084e",
-            "cccc8171-ab40-11e6-9356-cd3743a9084e"
+            "6655ba70-d344-11e6-a521-11e0c7182021",
+            "66582b72-d344-11e6-a521-11e0c7182021",
+            "66585281-d344-11e6-a521-11e0c7182021",
+            "6659d924-d344-11e6-a521-11e0c7182021"
         ],
         "first": {
             "type": "medication",
-            "name": "Análgésicos"
+            "name": "Aspirina"
         },
         "second": {
             "type": "medication",
@@ -2108,15 +1778,59 @@
         }
     },
     {
+        "incidences": 1,
+        "patientIDs": [
+            "6653e5b0-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Febre Reumática"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Aspirina"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "6653e5b0-d344-11e6-a521-11e0c7182021",
+            "665915d1-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Febre Reumática"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-hipertensor"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "6653e5b0-d344-11e6-a521-11e0c7182021",
+            "6656a4d0-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Febre Reumática"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Estatinas"
+        }
+    },
+    {
         "incidences": 3,
         "patientIDs": [
-            "ccc83bb0-ab40-11e6-9356-cd3743a9084e",
-            "ccc9e960-ab40-11e6-9356-cd3743a9084e",
-            "ccca3781-ab40-11e6-9356-cd3743a9084e"
+            "6653e5b0-d344-11e6-a521-11e0c7182021",
+            "6656a4d0-d344-11e6-a521-11e0c7182021",
+            "66580463-d344-11e6-a521-11e0c7182021"
         ],
         "first": {
             "type": "disease",
-            "name": "Candidiase Oral"
+            "name": "Febre Reumática"
         },
         "second": {
             "type": "medication",
@@ -2126,12 +1840,27 @@
     {
         "incidences": 2,
         "patientIDs": [
-            "ccc83bb0-ab40-11e6-9356-cd3743a9084e",
-            "cccb21e2-ab40-11e6-9356-cd3743a9084e"
+            "6653e5b0-d344-11e6-a521-11e0c7182021",
+            "665915d1-d344-11e6-a521-11e0c7182021"
         ],
         "first": {
             "type": "disease",
-            "name": "Candidiase Oral"
+            "name": "Febre Reumática"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-diabéticos"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "6653e5b0-d344-11e6-a521-11e0c7182021",
+            "6656a4d0-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "disease",
+            "name": "Febre Reumática"
         },
         "second": {
             "type": "medication",
@@ -2141,92 +1870,174 @@
     {
         "incidences": 2,
         "patientIDs": [
-            "ccc83bb0-ab40-11e6-9356-cd3743a9084e",
-            "cccb21e0-ab40-11e6-9356-cd3743a9084e"
+            "6653e5b0-d344-11e6-a521-11e0c7182021",
+            "66585281-d344-11e6-a521-11e0c7182021"
         ],
         "first": {
-            "type": "disease",
-            "name": "Artrite"
+            "type": "medication",
+            "name": "Anti-hipertensor"
         },
         "second": {
             "type": "medication",
-            "name": "Anti-depressor"
+            "name": "Aspirina"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "6653e5b0-d344-11e6-a521-11e0c7182021",
+            "66585281-d344-11e6-a521-11e0c7182021",
+            "66598b01-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Estatinas"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Aspirina"
         }
     },
     {
         "incidences": 2,
         "patientIDs": [
-            "ccc83bb0-ab40-11e6-9356-cd3743a9084e",
-            "ccc862c1-ab40-11e6-9356-cd3743a9084e"
+            "6653e5b0-d344-11e6-a521-11e0c7182021",
+            "66585281-d344-11e6-a521-11e0c7182021"
         ],
         "first": {
             "type": "medication",
-            "name": "Análgésicos"
+            "name": "Estatinas"
         },
         "second": {
             "type": "medication",
-            "name": "Anti-depressor"
+            "name": "Anti-hipertensor"
         }
     },
     {
-        "incidences": 4,
+        "incidences": 5,
         "patientIDs": [
-            "ccc83bb0-ab40-11e6-9356-cd3743a9084e",
-            "cccb9712-ab40-11e6-9356-cd3743a9084e",
-            "cccbe535-ab40-11e6-9356-cd3743a9084e",
-            "cccc0c44-ab40-11e6-9356-cd3743a9084e"
+            "6653e5b0-d344-11e6-a521-11e0c7182021",
+            "6655ba70-d344-11e6-a521-11e0c7182021",
+            "66585281-d344-11e6-a521-11e0c7182021",
+            "66593ce5-d344-11e6-a521-11e0c7182021",
+            "665a0030-d344-11e6-a521-11e0c7182021"
         ],
         "first": {
-            "type": "disease",
-            "name": "Artrite"
+            "type": "medication",
+            "name": "Anti-depressor"
         },
         "second": {
-            "type": "disease",
-            "name": "Candidiase Oral"
+            "type": "medication",
+            "name": "Aspirina"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "6653e5b0-d344-11e6-a521-11e0c7182021",
+            "66585281-d344-11e6-a521-11e0c7182021",
+            "66593ce0-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Anti-depressor"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-hipertensor"
+        }
+    },
+    {
+        "incidences": 5,
+        "patientIDs": [
+            "6653e5b0-d344-11e6-a521-11e0c7182021",
+            "66562fa0-d344-11e6-a521-11e0c7182021",
+            "6656a4d0-d344-11e6-a521-11e0c7182021",
+            "66585281-d344-11e6-a521-11e0c7182021",
+            "6659d922-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Anti-depressor"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Estatinas"
         }
     },
     {
         "incidences": 1,
         "patientIDs": [
-            "ccc79f70-ab40-11e6-9356-cd3743a9084e"
+            "6653e5b0-d344-11e6-a521-11e0c7182021"
         ],
         "first": {
-            "type": "disease",
-            "name": "Gânglios aumentados de volume"
+            "type": "medication",
+            "name": "Anti-diabéticos"
         },
         "second": {
             "type": "medication",
-            "name": "Análgésicos"
+            "name": "Aspirina"
         }
     },
     {
         "incidences": 4,
         "patientIDs": [
-            "ccc79f70-ab40-11e6-9356-cd3743a9084e",
-            "ccc83bb0-ab40-11e6-9356-cd3743a9084e",
-            "ccc83bb1-ab40-11e6-9356-cd3743a9084e",
-            "cccc8171-ab40-11e6-9356-cd3743a9084e"
+            "6653e5b0-d344-11e6-a521-11e0c7182021",
+            "66580461-d344-11e6-a521-11e0c7182021",
+            "665915d1-d344-11e6-a521-11e0c7182021",
+            "665a2740-d344-11e6-a521-11e0c7182021"
         ],
         "first": {
-            "type": "disease",
-            "name": "Artrite"
+            "type": "medication",
+            "name": "Anti-diabéticos"
         },
         "second": {
             "type": "medication",
-            "name": "Análgésicos"
+            "name": "Anti-hipertensor"
+        }
+    },
+    {
+        "incidences": 2,
+        "patientIDs": [
+            "6653e5b0-d344-11e6-a521-11e0c7182021",
+            "66562fa0-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Anti-diabéticos"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Estatinas"
         }
     },
     {
         "incidences": 4,
         "patientIDs": [
-            "ccc79f70-ab40-11e6-9356-cd3743a9084e",
-            "ccca5e92-ab40-11e6-9356-cd3743a9084e",
-            "cccb48f0-ab40-11e6-9356-cd3743a9084e",
-            "cccbe535-ab40-11e6-9356-cd3743a9084e"
+            "6653e5b0-d344-11e6-a521-11e0c7182021",
+            "66560892-d344-11e6-a521-11e0c7182021",
+            "66562fa0-d344-11e6-a521-11e0c7182021",
+            "665915d4-d344-11e6-a521-11e0c7182021"
         ],
         "first": {
-            "type": "disease",
-            "name": "Artrite"
+            "type": "medication",
+            "name": "Anti-diabéticos"
+        },
+        "second": {
+            "type": "medication",
+            "name": "Anti-depressor"
+        }
+    },
+    {
+        "incidences": 3,
+        "patientIDs": [
+            "6653e5b0-d344-11e6-a521-11e0c7182021",
+            "66582b72-d344-11e6-a521-11e0c7182021",
+            "66598b01-d344-11e6-a521-11e0c7182021"
+        ],
+        "first": {
+            "type": "medication",
+            "name": "Análgésicos"
         },
         "second": {
             "type": "medication",
@@ -2234,49 +2045,32 @@
         }
     },
     {
-        "incidences": 2,
+        "incidences": 3,
         "patientIDs": [
-            "ccc79f70-ab40-11e6-9356-cd3743a9084e",
-            "cccad3c2-ab40-11e6-9356-cd3743a9084e"
+            "6653e5b0-d344-11e6-a521-11e0c7182021",
+            "66598b04-d344-11e6-a521-11e0c7182021",
+            "665a0036-d344-11e6-a521-11e0c7182021"
         ],
         "first": {
             "type": "medication",
-            "name": "Aspirina"
+            "name": "Análgésicos"
         },
         "second": {
             "type": "medication",
-            "name": "Análgésicos"
+            "name": "Anti-hipertensor"
         }
     },
     {
         "incidences": 4,
         "patientIDs": [
-            "ccc79f70-ab40-11e6-9356-cd3743a9084e",
-            "cccb9712-ab40-11e6-9356-cd3743a9084e",
-            "cccbe535-ab40-11e6-9356-cd3743a9084e",
-            "cccc3350-ab40-11e6-9356-cd3743a9084e"
+            "6653e5b0-d344-11e6-a521-11e0c7182021",
+            "66562fa0-d344-11e6-a521-11e0c7182021",
+            "6656a4d0-d344-11e6-a521-11e0c7182021",
+            "66598b01-d344-11e6-a521-11e0c7182021"
         ],
         "first": {
-            "type": "disease",
-            "name": "Artrite"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Gânglios aumentados de volume"
-        }
-    },
-    {
-        "incidences": 5,
-        "patientIDs": [
-            "ccc68e00-ab40-11e6-9356-cd3743a9084e",
-            "ccca85a1-ab40-11e6-9356-cd3743a9084e",
-            "cccad3c0-ab40-11e6-9356-cd3743a9084e",
-            "cccb21e2-ab40-11e6-9356-cd3743a9084e",
-            "cccbe534-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Glaucoma"
+            "type": "medication",
+            "name": "Análgésicos"
         },
         "second": {
             "type": "medication",
@@ -2284,66 +2078,15 @@
         }
     },
     {
-        "incidences": 6,
+        "incidences": 3,
         "patientIDs": [
-            "ccc68e00-ab40-11e6-9356-cd3743a9084e",
-            "ccc862c0-ab40-11e6-9356-cd3743a9084e",
-            "cccad3c0-ab40-11e6-9356-cd3743a9084e",
-            "cccb9711-ab40-11e6-9356-cd3743a9084e",
-            "cccbe534-ab40-11e6-9356-cd3743a9084e",
-            "cccc0c42-ab40-11e6-9356-cd3743a9084e"
+            "6653e5b0-d344-11e6-a521-11e0c7182021",
+            "66562fa0-d344-11e6-a521-11e0c7182021",
+            "6656a4d0-d344-11e6-a521-11e0c7182021"
         ],
         "first": {
-            "type": "disease",
-            "name": "Glaucoma"
-        },
-        "second": {
             "type": "medication",
-            "name": "Anti-depressor"
-        }
-    },
-    {
-        "incidences": 5,
-        "patientIDs": [
-            "ccc68e00-ab40-11e6-9356-cd3743a9084e",
-            "cccad3c0-ab40-11e6-9356-cd3743a9084e",
-            "cccbe534-ab40-11e6-9356-cd3743a9084e",
-            "cccc0c42-ab40-11e6-9356-cd3743a9084e",
-            "cccc8173-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Glaucoma"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Aspirina"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "ccc68e00-ab40-11e6-9356-cd3743a9084e",
-            "cccb9713-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Gânglios aumentados de volume"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Estatinas"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "ccc68e00-ab40-11e6-9356-cd3743a9084e",
-            "cccb9711-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Gânglios aumentados de volume"
+            "name": "Análgésicos"
         },
         "second": {
             "type": "medication",
@@ -2353,164 +2096,17 @@
     {
         "incidences": 3,
         "patientIDs": [
-            "ccc68e00-ab40-11e6-9356-cd3743a9084e",
-            "ccc79f70-ab40-11e6-9356-cd3743a9084e",
-            "cccbe535-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Gânglios aumentados de volume"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Aspirina"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "ccc68e00-ab40-11e6-9356-cd3743a9084e",
-            "cccc0c40-ab40-11e6-9356-cd3743a9084e",
-            "cccca880-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Enfarte Miocárdio"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Estatinas"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "ccc68e00-ab40-11e6-9356-cd3743a9084e",
-            "ccc9e960-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Enfarte Miocárdio"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-depressor"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "ccc68e00-ab40-11e6-9356-cd3743a9084e",
-            "cccad3c2-ab40-11e6-9356-cd3743a9084e",
-            "cccb48f0-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Enfarte Miocárdio"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Aspirina"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "ccc68e00-ab40-11e6-9356-cd3743a9084e",
-            "cccad3c0-ab40-11e6-9356-cd3743a9084e",
-            "cccbe534-ab40-11e6-9356-cd3743a9084e"
+            "6653e5b0-d344-11e6-a521-11e0c7182021",
+            "66562fa0-d344-11e6-a521-11e0c7182021",
+            "6657dd53-d344-11e6-a521-11e0c7182021"
         ],
         "first": {
             "type": "medication",
-            "name": "Anti-depressor"
+            "name": "Análgésicos"
         },
         "second": {
             "type": "medication",
-            "name": "Estatinas"
-        }
-    },
-    {
-        "incidences": 5,
-        "patientIDs": [
-            "ccc68e00-ab40-11e6-9356-cd3743a9084e",
-            "ccca5e90-ab40-11e6-9356-cd3743a9084e",
-            "cccad3c0-ab40-11e6-9356-cd3743a9084e",
-            "cccbe534-ab40-11e6-9356-cd3743a9084e",
-            "cccca882-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Aspirina"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Estatinas"
-        }
-    },
-    {
-        "incidences": 6,
-        "patientIDs": [
-            "ccc68e00-ab40-11e6-9356-cd3743a9084e",
-            "ccc9c250-ab40-11e6-9356-cd3743a9084e",
-            "ccca3781-ab40-11e6-9356-cd3743a9084e",
-            "cccad3c0-ab40-11e6-9356-cd3743a9084e",
-            "cccbe534-ab40-11e6-9356-cd3743a9084e",
-            "cccc0c42-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "medication",
-            "name": "Aspirina"
-        },
-        "second": {
-            "type": "medication",
-            "name": "Anti-depressor"
-        }
-    },
-    {
-        "incidences": 2,
-        "patientIDs": [
-            "ccc68e00-ab40-11e6-9356-cd3743a9084e",
-            "cccb9711-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Gânglios aumentados de volume"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Glaucoma"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "ccc68e00-ab40-11e6-9356-cd3743a9084e",
-            "cccb21e5-ab40-11e6-9356-cd3743a9084e",
-            "cccc0c41-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Enfarte Miocárdio"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Glaucoma"
-        }
-    },
-    {
-        "incidences": 3,
-        "patientIDs": [
-            "ccc68e00-ab40-11e6-9356-cd3743a9084e",
-            "ccc8d7f0-ab40-11e6-9356-cd3743a9084e",
-            "ccccf6a1-ab40-11e6-9356-cd3743a9084e"
-        ],
-        "first": {
-            "type": "disease",
-            "name": "Enfarte Miocárdio"
-        },
-        "second": {
-            "type": "disease",
-            "name": "Gânglios aumentados de volume"
+            "name": "Anti-diabéticos"
         }
     }
 ]

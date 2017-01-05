@@ -128,22 +128,13 @@ moduleVisualizations.factory('SpiralVisualization',
             var patientMedicationIndex = utils.arrayObjectIndexOf(
                     patient.medications, this.currentMedication, "name");
             patientMedications = patient.medications[patientMedicationIndex];
-        
         }
+        var recordedDosage = patientMedications.dosage;
+        this.recordedDosage = recordedDosage;
         var expectedFrequency = patientMedications.expectedFrequency;
         this.expectedFrequency = expectedFrequency;
         var recordedFrequency = patientMedications.recordedFrequency;
         this.recordedFrequency = recordedFrequency;
-
-        // FIXME: Should be done in patients.json
-        if (!this.dosage) {
-            var dosages = patientMedications.recordedFrequency
-                .map(function() {
-                    return patientMedications.dosage;
-                });
-            patientMedications.dosage = dosages.slice();
-            this.dosage = patientMedications.dosage;
-        }
 
         // Check if interval was defined in temporal line brush;
         // Otherwise, use expected start and end dates
@@ -285,19 +276,13 @@ moduleVisualizations.factory('SpiralVisualization',
                     dateString = endDateString;
                 }
 
-                // Extract multiple attribute names, if this is a joined spiral
-                var attributeProperties = 
-                        (patientMedications.attributeProperties) ?
-                    // HACK: sub1
-                    patientMedications.attributeProperties[currentDateIndex-1] :
-                    null;
-
-                var dosage = (attributeProperties) ?
-                    attributeProperties.reduce(function(old, property) {
-                        return old + property.dosage +
+                // Extract all dosages for each medication in the current date
+                var dosage = recordedDosage[currentDateIndex - 1]
+                    .reduce(function(old, property, index) {
+                        var delimiter = (index > 0) ? " + " : "";
+                        return old + delimiter + property.dosage +
                             ' (' + property.name + ') ';
-                    }, '') :
-                    patientMedications.dosage[currentDateIndex-1];
+                    }, '');
 
                 // If moment is contained in the brush interval, add date to
                 // brushed data
@@ -309,8 +294,7 @@ moduleVisualizations.factory('SpiralVisualization',
                         date: dateString,
                         startDate: startDateString,
                         endDate: endDateString,
-                        binFactor: binFactor,
-                        attributeProperties: attributeProperties
+                        binFactor: binFactor
                     });
                 }
                 data.push({
@@ -319,8 +303,7 @@ moduleVisualizations.factory('SpiralVisualization',
                     date: dateString,
                     startDate: startDateString,
                     endDate: endDateString,
-                    binFactor: binFactor,
-                    attributeProperties: attributeProperties
+                    binFactor: binFactor
                 });
 
                 accumulatorBinDays = 0;
