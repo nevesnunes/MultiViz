@@ -2127,5 +2127,5 @@ var test2 = function() {
         ]);
     });
 };
-//test1();
-test2();
+test1();
+//test2();

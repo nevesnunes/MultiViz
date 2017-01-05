@@ -157,25 +157,24 @@ body {
 }
 
 .viz-overlay-source {
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(255, 255, 255, 0.4);
 }
 
 .viz-overlay-target {
-    background-color: rgba(51, 122, 183, 0.1);
-    border: 1em solid rgba(51, 122, 183, 0.2);
+    border: 1em solid rgba(51, 122, 183, 0.4);
+    border-style: dashed;
     cursor: pointer;
 }
 
 .viz-overlay-target:hover {
-    background-color: rgba(51, 122, 183, 0.4);
+    background-color: rgba(51, 122, 183, 0.2);
     border: 1em solid rgba(51, 122, 183, 0.8);
 }
 
 .viz-overlay-target-text {
     margin: 2.5em 8em;
     padding: 0.5em;
-    background-color: black;
-    background-color: rgba(0, 0, 0, 0.75);
+    background-color: rgba(0, 0, 0, 0.9);
     border: 0;
     border-radius: 0.5em;
 
