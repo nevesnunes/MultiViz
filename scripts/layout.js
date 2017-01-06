@@ -841,7 +841,7 @@ moduleLayout.directive("directiveActionPanel",
                     // Iterate through all the recorded frequencies and
                     // collect the dates, alongside correspoding
                     // attribute names
-                    var attributeProperties = [];
+                    var newDosage = [];
                     var newRecordedFrequency = [];
                     var sourceRecordedFrequency = sourceViz.recordedFrequency;
                     var sourceLength = sourceRecordedFrequency.length;
@@ -903,12 +903,12 @@ moduleLayout.directive("directiveActionPanel",
                             sourceIndex++;
                         }
 
-                        attributeProperties.push(
+                        newDosage.push(
                             currentAttributeProperties.slice()
                         );
                     }
 
-                    //console.log(attributeProperties);
+                    //console.log(newDosage);
                     //console.log(newRecordedFrequency);
 
                     // target was selected
@@ -916,16 +916,14 @@ moduleLayout.directive("directiveActionPanel",
 
                     // update source spiral
                     var attributeData = {
-                        dosage: attributeProperties,
+                        dosage: newDosage,
                         startDate: newStartDate,
                         endDate: newEndDate,
                         expectedFrequency: newFrequency,
                         recordedFrequency: newRecordedFrequency
                     };
                     updateFromSelections({
-                        currentMedication: 
-                            sourceViz.currentMedication + ' + ' +
-                            targetViz.currentMedication,
+                        currentMedication: targetViz.currentMedication,
                         joinData: {
                             attributeData: attributeData,
                             targetRenderer: targetViz.visualizationRenderer

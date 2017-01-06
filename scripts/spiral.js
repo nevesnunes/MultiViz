@@ -26,7 +26,7 @@ moduleVisualizations.factory('SpiralVisualization',
     var SpiralVisualization = function(options) {
         // Patient attribute lists
         this.medications = options.medications;
-        this.currentMedication = options.currentMedication;
+        this.currentMedication = [options.currentMedication];
         this.currentAttributeType = attributeType.DISEASES;
 
         // Specific state is maintained in a separate object,
@@ -50,6 +50,13 @@ moduleVisualizations.factory('SpiralVisualization',
     SpiralVisualization.prototype.makeID = function() {
         spiralID++;
         return "spiral-" + spiralID;
+    };
+
+    var toLabel = function(names) {
+        return names.reduce(function(old, property, index) {
+            var delimiter = (index > 0) ? " + " : "";
+            return old + delimiter + property;
+        }, '');
     };
 
     SpiralVisualization.prototype.makeDescription = function(elementID) {
@@ -106,7 +113,7 @@ moduleVisualizations.factory('SpiralVisualization',
                 extractDatesWithInterval: visualizations.extractDatesWithInterval,
                 translateInterval: visualizations.translateInterval
             },
-            currentMedication: self.currentMedication
+            currentMedication: toLabel(self.currentMedication)
         });
 
         // Store new spiral for later joins
@@ -124,9 +131,10 @@ moduleVisualizations.factory('SpiralVisualization',
         if (this.attributeData) {
             patientMedications = this.attributeData;
         } else {
+            // FIXME: Hardcoded first index
             var patient = patientData.getAttribute(patientData.KEY_PATIENT);
             var patientMedicationIndex = utils.arrayObjectIndexOf(
-                    patient.medications, this.currentMedication, "name");
+                    patient.medications, this.currentMedication[0], "name");
             patientMedications = patient.medications[patientMedicationIndex];
         }
         var recordedDosage = patientMedications.dosage;
@@ -349,7 +357,7 @@ moduleVisualizations.factory('SpiralVisualization',
             .set('spacing', spacing)
             .set('lineWidth', spacing * 6)
             .set('binning', this.binning)
-            .set('currentMedication', this.currentMedication)
+            .set('currentMedication', toLabel(this.currentMedication))
             .set('recordedStartDate', recordedStartMoment.format('YYYY/MM/DD'))
             .set('recordedEndDate', recordedEndMoment.format('YYYY/MM/DD'))
             .set('startDate', startMoment.format('YYYY/MM/DD'))
@@ -405,11 +413,11 @@ moduleVisualizations.factory('SpiralVisualization',
             this.attributeData = null;
         }
         if (state.currentMedication) {
-            if (this.currentMedication !== state.currentMedication) {
+            if (this.currentMedication.indexOf(state.currentMedication) === -1) {
                 this.binning = null;
-                this.currentMedication = state.currentMedication;
+                this.currentMedication.push(state.currentMedication);
                 this.visualizationRenderer
-                    .set('currentMedication', this.currentMedication)
+                    .set('currentMedication', toLabel(this.currentMedication))
                     // Invalidate previous brushing
                     .set('intervalDates', [])
                     .set('intervalPos', []);
