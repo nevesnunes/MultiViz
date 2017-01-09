@@ -28,7 +28,7 @@
 
 .bordered-empty {
   stroke: grey;
-  stroke-width: 0.5px !important;
+  stroke-width: 1px !important;
 }
 
 .bordered-empty:hover {

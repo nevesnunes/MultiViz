@@ -303,7 +303,26 @@ body {
     text-align: left;
     vertical-align: top;
     border-bottom: 1px solid #ddd;
-    padding: 0.25em;
+    padding-top: 0.25em;
+}
+
+.patient-table-entry-bar {
+    min-height: 0.25em;
+    background-color: lightgrey;
+}
+
+.patient-table-entry-bar-fill {
+    min-height: 0.25em;
+    width: 0; /* dynamically set by countsData */
+    background-color: grey;
+}
+
+.patient-table-entry:hover .patient-table-entry-bar {
+    background-color: rgba(51, 122, 183, 0.2);
+}
+
+.patient-table-entry:hover .patient-table-entry-bar-fill {
+    background-color: rgba(51, 122, 183, 1.0);
 }
 
 .dropdown-toggle:hover,

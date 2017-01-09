@@ -314,6 +314,51 @@ moduleLayout.controller('controllerLayout',
     $scope.APIActionPanel = {};
 }]);
 
+moduleLayout.factory('countsData',
+        ['patientData', 'retrievePatientData',
+        function(patientData, retrievePatientData) {
+    return {
+        retrieveCountsData: retrievePatientData.retrieveData('counts.json')
+            .then(function(result) {
+                var counts = {};
+                counts.data = result;
+
+                var patients = patientData.getAttribute(
+                    patientData.KEY_PATIENTS);
+                counts.countPatients = patients.length;
+
+                counts.maxIncidences = 0;
+                var length = result.length;
+                while (length--) {
+                    if (result[length].incidences > counts.maxIncidences) {
+                        counts.maxIncidences = result[length].incidences;
+                    }
+                }
+
+                return counts;
+            })
+    };
+}]);
+
+moduleLayout.directive("directiveEntryBarFill", 
+        ['utils', 'countsData',
+        function(utils, countsData) {
+    return {
+        scope: true,
+        link: function(scope, elem, attrs) {
+            countsData.retrieveCountsData.then(function(result) {
+                var index = utils.arrayObjectIndexOf(
+                    result.data, scope.attribute, "name");
+                if (index !== -1) {
+                    var proportion = result.data[index].incidences /
+                        result.countPatients * 100;
+                    elem.css({'width': proportion + '%'});
+                }
+            });
+        }
+    };
+}]);
+
 moduleLayout.directive("directiveActionPanel",
         ['$compile', 'visualizations', 'patientData', 'utils', 'nodes',
         function($compile, visualizations, patientData, utils, nodes) {
@@ -1025,6 +1070,10 @@ moduleLayout.directive("directiveActionPanel",
                                             'type="checkbox" ' +
                                             'ng-checked="isSelected(attribute)"> ' +
                                             '{{::attribute}}' +
+                                    '</div>' +
+                                    '<div class="patient-table-entry-bar"> ' +
+                                        '<div class="patient-table-entry-bar-fill" attribute="attribute" directive-entry-bar-fill> ' +
+                                        '</div>' +
                                     '</div>' +
                                 '</div>' +
                             '</div>' +
