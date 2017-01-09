@@ -55,13 +55,47 @@ moduleUtils.factory('utils', ['$q', function($q) {
         return -1;
     };
 
+    // Match one of the elements of a pair
     var arrayObjectPairIndexOf = function(parameters) {
         for (var i = 0, len = parameters.array.length; i < len; i++) {
             var pairElement = parameters.array[i][parameters.propertyOfPair];
-            if ((pairElement[parameters.propertyOfType] ===
+            if (
+                    (pairElement[parameters.propertyOfType] ===
                     parameters.typeTerm) &&
                     (pairElement[parameters.propertyOfValue] ===
                     parameters.valueTerm))
+                return i;
+        }
+        return -1;
+    };
+
+    // Match all elements of a pair
+    var arrayObjectFullPairIndexOf = function(array, parameters1, parameters2) {
+        for (var i = 0, len = array.length; i < len; i++) {
+            var pairElement1 = array[i][parameters1.propertyOfPair];
+            var pairElement2 = array[i][parameters2.propertyOfPair];
+            if (
+                    (pairElement1[parameters1.propertyOfType] ===
+                    parameters1.typeTerm) &&
+                    (pairElement1[parameters1.propertyOfValue] ===
+                    parameters1.valueTerm) &&
+                    (pairElement2[parameters2.propertyOfType] ===
+                    parameters2.typeTerm) &&
+                    (pairElement2[parameters2.propertyOfValue] ===
+                    parameters2.valueTerm))
+                return i;
+            // Exchange parameters
+            pairElement1 = array[i][parameters2.propertyOfPair];
+            pairElement2 = array[i][parameters1.propertyOfPair];
+            if (
+                    (pairElement1[parameters1.propertyOfType] ===
+                    parameters1.typeTerm) &&
+                    (pairElement1[parameters1.propertyOfValue] ===
+                    parameters1.valueTerm) &&
+                    (pairElement2[parameters2.propertyOfType] ===
+                    parameters2.typeTerm) &&
+                    (pairElement2[parameters2.propertyOfValue] ===
+                    parameters2.valueTerm))
                 return i;
         }
         return -1;
@@ -117,6 +151,7 @@ moduleUtils.factory('utils', ['$q', function($q) {
     return {
         arrayObjectIndexOf: arrayObjectIndexOf,
         arrayObjectPairIndexOf: arrayObjectPairIndexOf,
+        arrayObjectFullPairIndexOf: arrayObjectFullPairIndexOf,
         extractValueFromPair: extractValueFromPair,
         makeImgButton: makeImgButton,
         resolveEvents: resolveEvents,

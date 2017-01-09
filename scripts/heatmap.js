@@ -312,6 +312,70 @@ moduleVisualizations.factory('HeatMapVisualization',
                 );
             });
 
+            // TODO
+            // Add empty cells to data, in order to visualize them
+            // when rendering
+            var filteredNames = [
+                { array: allDiseaseNames, type: "disease" },
+                { array: allMedicationNames, type: "medication" }
+            ];
+            similarityNames.forEach(function(name1) {
+                similarityNames.forEach(function(name2) {
+                    if (name1 === name2)
+                        return;
+                    if ((name1 === "Anti-diabéticos") &&
+                        (name2 === "Anti-ácidos")) {
+                            console.log("found asp");
+                    }
+                    if ((name2 === "Anti-diabéticos") &&
+                        (name1 === "Anti-ácidos")) {
+                            console.log("found asp 2"); //68
+                    }
+
+                    var type1, type2;
+                    filteredNames.forEach(function(filteredName) {
+                        if (filteredName.array.indexOf(name1) !== -1)
+                            type1 = filteredName.type;
+                        if (filteredName.array.indexOf(name2) !== -1)
+                            type2 = filteredName.type;
+                    });
+                        
+                    var index = utils.arrayObjectFullPairIndexOf(
+                        filteredSimilarityData,
+                        {
+                            propertyOfPair: "first",
+                            propertyOfType: "type",
+                            typeTerm: type1,
+                            propertyOfValue: "name",
+                            valueTerm: name1
+                        },
+                        {
+                            propertyOfPair: "second",
+                            propertyOfType: "type",
+                            typeTerm: type2,
+                            propertyOfValue: "name",
+                            valueTerm: name2
+                        }
+                    );
+                    if (index === -1) {
+                    //if (false) {
+                        filteredSimilarityData.push({
+                            first: {
+                                name: name1,
+                                type: type1
+                            },
+                            second: {
+                                name: name2,
+                                type: type2
+                            },
+                            incidences: 0,
+                            patientIDs: []
+                        });
+                        console.log(name1 + " " + name2);
+                    }
+                });
+            });
+
             // Sort according to user selected sorting option
             var names = [
                 { array: diseaseNames, id: 'diseaseNames' },
@@ -1047,10 +1111,14 @@ moduleVisualizations.factory('HeatMapVisualization',
         var cells = svg.selectAll(".attribute-cell")
             .data(filteredSimilarityData);
         cells.enter().append("rect")
-            .attr("class", "attribute-cell bordered")
             .attr("width", self.gridWidth - cellSizeOffset)
             .attr("height", self.gridHeight - cellSizeOffset)
             .merge(cells)
+                .attr("class", function(d) {
+                    return (d.incidences > 0) ?
+                        "attribute-cell bordered" :
+                        "attribute-cell bordered bordered-empty";
+                })
                 .attr("x", function(d) {
                     var targetIndex = Math.min(
                         similarityNames.indexOf(d.first.name),
@@ -1071,11 +1139,16 @@ moduleVisualizations.factory('HeatMapVisualization',
                         (patientDiseaseNames.indexOf(d.first.name) !== -1)) &&
                         ((patientMedicationNames.indexOf(d.second.name) !== -1) ||
                         (patientDiseaseNames.indexOf(d.second.name) !== -1));
-                    return (isPatientAttribute) ?
-                        colorScaleMarks(d.incidences) :
-                        colorScale(d.incidences);
+                    return (d.incidences === 0) ? 
+                        "transparent" :
+                        (isPatientAttribute) ?
+                            colorScaleMarks(d.incidences) :
+                            colorScale(d.incidences);
                 })
                 .on("mouseover", function(d) {
+                    if (d.incidences === 0)
+                        return;
+
                     cellsTip.show(d);
 
                     // Style labels

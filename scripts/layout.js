@@ -2117,12 +2117,14 @@ var test2 = function() {
             },
             function() {
                 return $timeout(function() {
+                        /*
                     angular.element('#heatmap-1-type-pairs')
                         .triggerHandler('click');
+                        */
                 }, delay);
             }
         ]);
     });
 };
-test1();
-//test2();
+//test1();
+test2();

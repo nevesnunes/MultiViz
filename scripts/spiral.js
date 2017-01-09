@@ -131,7 +131,8 @@ moduleVisualizations.factory('SpiralVisualization',
         if (this.attributeData) {
             patientMedications = this.attributeData;
         } else {
-            // FIXME: Hardcoded first index
+            // FIXME: Hardcoded first index, we expect this condition
+            // to only happen on spiral creation
             var patient = patientData.getAttribute(patientData.KEY_PATIENT);
             var patientMedicationIndex = utils.arrayObjectIndexOf(
                     patient.medications, this.currentMedication[0], "name");

@@ -26,6 +26,17 @@
   stroke-width: 2px;   
 }
 
+.bordered-empty {
+  stroke: grey;
+  stroke-width: 1px;   
+  stroke-dasharray: 0.2em;
+}
+
+.bordered-empty:hover {
+  fill: transparent !important;
+  stroke: grey !important;
+}
+
 .text-label {
   font-size: 0.9em;
   font-family: sans-serif;
