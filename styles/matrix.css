@@ -28,8 +28,7 @@
 
 .bordered-empty {
   stroke: grey;
-  stroke-width: 1px;   
-  stroke-dasharray: 0.2em;
+  stroke-width: 0.5px !important;
 }
 
 .bordered-empty:hover {

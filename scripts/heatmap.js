@@ -252,6 +252,49 @@ moduleVisualizations.factory('HeatMapVisualization',
                 });
             })(allMedicationNames, filteredData);
 
+            // Add empty cells to data, in order to visualize them
+            // when rendering
+            diseaseNames.forEach(function(name1) {
+                medicationNames.forEach(function(name2) {
+                    if (name1 === name2)
+                        return;
+
+                    var type1 = "disease";
+                    var type2 = "medication";
+                    var index = utils.arrayObjectFullPairIndexOf(
+                        filteredData,
+                        {
+                            propertyOfPair: "first",
+                            propertyOfType: "type",
+                            typeTerm: type1,
+                            propertyOfValue: "name",
+                            valueTerm: name1
+                        },
+                        {
+                            propertyOfPair: "second",
+                            propertyOfType: "type",
+                            typeTerm: type2,
+                            propertyOfValue: "name",
+                            valueTerm: name2
+                        }
+                    );
+                    if (index === -1) {
+                        filteredData.push({
+                            first: {
+                                name: name1,
+                                type: type1
+                            },
+                            second: {
+                                name: name2,
+                                type: type2
+                            },
+                            incidences: 0,
+                            patientIDs: []
+                        });
+                    }
+                });
+            });
+
             // Retrieve all matches of any combination of attributes;
             // JSON data contains all attributes, which need to be filtered
             // first by user selected attributes
@@ -312,28 +355,15 @@ moduleVisualizations.factory('HeatMapVisualization',
                 );
             });
 
-            // TODO
             // Add empty cells to data, in order to visualize them
             // when rendering
-            var filteredNames = [
-                { array: allDiseaseNames, type: "disease" },
-                { array: allMedicationNames, type: "medication" }
-            ];
             similarityNames.forEach(function(name1) {
                 similarityNames.forEach(function(name2) {
                     if (name1 === name2)
                         return;
-                    if ((name1 === "Anti-diabéticos") &&
-                        (name2 === "Anti-ácidos")) {
-                            console.log("found asp");
-                    }
-                    if ((name2 === "Anti-diabéticos") &&
-                        (name1 === "Anti-ácidos")) {
-                            console.log("found asp 2"); //68
-                    }
 
                     var type1, type2;
-                    filteredNames.forEach(function(filteredName) {
+                    allNames.forEach(function(filteredName) {
                         if (filteredName.array.indexOf(name1) !== -1)
                             type1 = filteredName.type;
                         if (filteredName.array.indexOf(name2) !== -1)
@@ -358,7 +388,6 @@ moduleVisualizations.factory('HeatMapVisualization',
                         }
                     );
                     if (index === -1) {
-                    //if (false) {
                         filteredSimilarityData.push({
                             first: {
                                 name: name1,
@@ -371,7 +400,6 @@ moduleVisualizations.factory('HeatMapVisualization',
                             incidences: 0,
                             patientIDs: []
                         });
-                        console.log(name1 + " " + name2);
                     }
                 });
             });
@@ -835,9 +863,13 @@ moduleVisualizations.factory('HeatMapVisualization',
             "L " + diamondSize*2 + "," + diamondSize + ", " +
             "L " + diamondSize + "," + 0 + " Z";
         cells.enter().append("path")
-            .attr("class", "attribute-cell bordered")
             .attr("d", diamondPath)
             .merge(cells)
+                .attr("class", function(d) {
+                    return (d.incidences > 0) ?
+                        "attribute-cell bordered" :
+                        "attribute-cell bordered bordered-empty";
+                })
                 .attr("transform", function(d) {
                     var x = diamondInitialX * self.gridHeight -
                         (1 + diseaseNames.indexOf(d.disease)) * 
@@ -856,12 +888,15 @@ moduleVisualizations.factory('HeatMapVisualization',
                     var isPatientAttribute =
                         (patientMedicationNames.indexOf(d.medication) !== -1) &&
                         (patientDiseaseNames.indexOf(d.disease) !== -1);
-                    return (isPatientAttribute) ?
-                        colorScaleMarks(d.incidences) :
-                        colorScale(d.incidences);
+                    return (d.incidences === 0) ? 
+                        "transparent" :
+                        (isPatientAttribute) ?
+                            colorScaleMarks(d.incidences) :
+                            colorScale(d.incidences);
                 })
                 .on("mouseover", function(d) {
-                    cellsTip.show(d);
+                    if (d.incidences > 0)
+                        cellsTip.show(d);
 
                     // Style column labels
                     svg.selectAll(".text-medication-label")
@@ -1146,10 +1181,8 @@ moduleVisualizations.factory('HeatMapVisualization',
                             colorScale(d.incidences);
                 })
                 .on("mouseover", function(d) {
-                    if (d.incidences === 0)
-                        return;
-
-                    cellsTip.show(d);
+                    if (d.incidences > 0)
+                        cellsTip.show(d);
 
                     // Style labels
                     svg.selectAll(".text-attribute-label")
