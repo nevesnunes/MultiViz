@@ -556,6 +556,11 @@ moduleLayout.directive("directiveActionPanel",
                 scope.selectedMedications =
                     vizObject.patientLists.medications;
 
+                // Remove any remaining highlights of the previous state
+                // HACK: Unused object
+                if (vizObject.rendererRemoveStyle)
+                    vizObject.rendererRemoveStyle({});
+
                 updateFromSelections({
                     diseases: scope.selectedDiseases,
                     medications: scope.selectedMedications
@@ -1013,6 +1018,46 @@ moduleLayout.directive("directiveActionPanel",
                 }
             };
 
+            scope.vizStyleFromMouseEnter = function(attribute) {
+                var node = nodes.getCurrentNode();
+                var viz = nodes.getVizByIDs(
+                    node.model.id, node.model.currentVizID);
+                var vizObject = viz.vizObject;
+                var attributeTypes = vizObject.getAttributeTypes();
+                var currentAttributeType = vizObject.currentAttributeType;
+                var dataObject = null;
+                // FIXME: Hardcoded positions
+                if (currentAttributeType ===
+                        attributeTypes.DISEASES) {
+                    dataObject = {
+                        disease: attribute,
+                        first: { name: attribute },
+                        second: { name: "" }
+                    };
+                } else if (currentAttributeType ===
+                        attributeTypes.MEDICATIONS) {
+                    dataObject = {
+                        medication: attribute,
+                        first: { name: "" },
+                        second: { name: attribute }
+                    };
+                }
+
+                if (vizObject.rendererAddStyle)
+                    vizObject.rendererAddStyle(dataObject);
+            };
+
+            scope.vizStyleFromMouseLeave = function(attribute) {
+                var node = nodes.getCurrentNode();
+                var viz = nodes.getVizByIDs(
+                    node.model.id, node.model.currentVizID);
+                var vizObject = viz.vizObject;
+
+                // HACK: Unused object
+                if (vizObject.rendererRemoveStyle)
+                    vizObject.rendererRemoveStyle({});
+            };
+
             scope.makeDefaultActions = function() {
                 var html = "";
                 var rootHasNoChildren = (nodes.getRootNode()) &&
@@ -1092,6 +1137,8 @@ moduleLayout.directive("directiveActionPanel",
                                 '<div class="checkboxInTable patient-table-entry" ' +
                                     'ng-repeat="attribute in filteredAttributes = (' + list + ' | filter:optionListModel)"' +
                                     'ng-click="check(attribute)" ' +
+                                    'ng-mouseenter="vizStyleFromMouseEnter(attribute)" ' +
+                                    'ng-mouseleave="vizStyleFromMouseLeave(attribute)" ' +
                                     'ng-class="isEntrySelected($index)">' +
                                     '<div style="display: inline-block">' +
                                         '<div style="display: inline-block" ' +
