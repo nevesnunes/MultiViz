@@ -553,14 +553,15 @@ moduleVisualizations.factory('HeatMapVisualization',
             if (diseaseNames.indexOf(d.disease) !== -1) {
                 guideLength = medicationNames.length + 1;
                 guideSize = diamondSize + cellSizeOffset;
-                diamondPath = "M " + (0 - cellSizeOffset) + "," +
-                        (guideSize - cellSizeOffset) + ", " +
-                    "L " + (guideSize * (guideLength-1) - cellSizeOffset) + "," +
-                        (guideSize * (guideLength) - cellSizeOffset) + ", " +
-                    "L " + (guideSize * (guideLength) - cellSizeOffset) + "," +
-                        (guideSize * (guideLength-1) - cellSizeOffset) + ", " +
-                    "L " + (guideSize - cellSizeOffset) + "," +
-                        (0 - cellSizeOffset) + " Z";
+                diamondPath = "M " + (0 - cellSizeOffset) + " " +
+                        (guideSize - cellSizeOffset) + " " +
+                    "L " + (guideSize * (guideLength-1) - cellSizeOffset) + " " +
+                        (guideSize * (guideLength) - cellSizeOffset) + " " +
+                    "L " + (guideSize * (guideLength) - cellSizeOffset) + " " +
+                        (guideSize * (guideLength-1) - cellSizeOffset) + " " +
+                    "L " + (guideSize - cellSizeOffset) + " " +
+                        (0 - cellSizeOffset) + " " +
+                    "Z";
                 svg.append("path")
                     .attr("class", "guide")
                     .attr("d", diamondPath)
@@ -580,13 +581,13 @@ moduleVisualizations.factory('HeatMapVisualization',
             if (medicationNames.indexOf(d.medication) !== -1) {
                 guideLength = diseaseNames.length + 1;
                 guideSize = diamondSize + cellSizeOffset;
-                diamondPath = "M " + (0 - cellSizeOffset) + "," +
-                        (guideSize * (guideLength-1) - cellSizeOffset) + ", " +
-                    "L " + (guideSize - cellSizeOffset) + "," +
-                        (guideSize * (guideLength) - cellSizeOffset) + ", " +
-                    "L " + (guideSize * (guideLength) - cellSizeOffset) + "," +
-                        (guideSize - cellSizeOffset) + ", " +
-                    "L " + (guideSize * (guideLength-1) - cellSizeOffset) + "," +
+                diamondPath = "M " + (0 - cellSizeOffset) + " " +
+                        (guideSize * (guideLength-1) - cellSizeOffset) + " " +
+                    "L " + (guideSize - cellSizeOffset) + " " +
+                        (guideSize * (guideLength) - cellSizeOffset) + " " +
+                    "L " + (guideSize * (guideLength) - cellSizeOffset) + " " +
+                        (guideSize - cellSizeOffset) + " " +
+                    "L " + (guideSize * (guideLength-1) - cellSizeOffset) + " " +
                         (0 - cellSizeOffset) + " Z";
                 svg.append("path")
                     .attr("class", "guide")
@@ -1050,10 +1051,11 @@ moduleVisualizations.factory('HeatMapVisualization',
         // 0+---> | 1 /\
         //  |     |   \/ 3
         //  V     |   2
-        var diamondPath = "M " + 0 + "," + diamondSize + ", " +
-            "L " + diamondSize + "," + diamondSize*2 + ", " +
-            "L " + diamondSize*2 + "," + diamondSize + ", " +
-            "L " + diamondSize + "," + 0 + " Z";
+        var diamondPath = "M " + 0 + " " + diamondSize + " " +
+            "L " + diamondSize + " " + diamondSize*2 + " " +
+            "L " + diamondSize*2 + " " + diamondSize + " " +
+            "L " + diamondSize + " " + 0 + " " +
+            "Z";
         cells.enter().append("path")
             .attr("d", diamondPath)
             .merge(cells)

@@ -305,6 +305,11 @@ body {
     border-bottom: 1px solid #ddd;
     padding-top: 0.25em;
 }
+    
+.patient-table-entry-text {
+    display: inline-block;
+    padding-bottom: 0.25em;
+}
 
 .patient-table-entry-bar {
     min-height: 0.25em;

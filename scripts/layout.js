@@ -792,7 +792,7 @@ moduleLayout.directive("directiveActionPanel",
                                     'ng-repeat="attribute in filteredAttributes = (defaultActionsList | filter:optionListModel)"' +
                                     'ng-click="callWithSavedAttribute(\'' + callbackName + '\', callBackArguments, attribute)" ' +
                                     'ng-class="isEntrySelected($index)">' +
-                                    '<div style="display: inline-block">' +
+                                    '<div class="patient-table-entry-text">' +
                                         '<div style="display: inline-block" ' +
                                             'ng-class="isEntryCurrentPatientAttribute(attribute)">' +
                                         '</div>' +
@@ -1139,7 +1139,7 @@ moduleLayout.directive("directiveActionPanel",
                                     'ng-mouseenter="vizStyleFromMouseEnter(attribute)" ' +
                                     'ng-mouseleave="vizStyleFromMouseLeave(attribute)" ' +
                                     'ng-class="isEntrySelected($index)">' +
-                                    '<div style="display: inline-block">' +
+                                    '<div class="patient-table-entry-text">' +
                                         '<div style="display: inline-block" ' +
                                             'ng-class="isEntryCurrentPatientAttribute(attribute)">' +
                                         '</div>' +
