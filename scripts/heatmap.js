@@ -86,6 +86,8 @@ moduleVisualizations.factory('HeatMapVisualization',
         })[0];
 
         this.renderer = renderer.SIM; 
+        this.rendererAddStyle = rendererAddStyle.SIM; 
+        this.rendererRemoveStyle = rendererRemoveStyle.SIM; 
         this.currentAttributeType = attributeType.DISEASES;
 
         // Specific state is maintained in a separate object,
@@ -500,6 +502,64 @@ moduleVisualizations.factory('HeatMapVisualization',
         });
     };
 
+    HeatMapVisualization.prototype.addDiamondStyleSelections = function(d) {
+        var self = this;
+
+        self.html.forEach(function(element) {
+            var svg = element.svg;
+
+            // Style column labels
+            svg.selectAll(".text-medication-label")
+                .attr("class", function(a) {
+                    return (a == d.medication) ? 
+                        "text-medication-label text-label-selected" :
+                        "text-medication-label text-label";
+                });
+            svg.selectAll(".rect-medication-label")
+                .style("fill-opacity", 1.0)
+                .attr("class", function(a) {
+                    return (a == d.medication) ? 
+                        "rect-medication-label rect-label-selected" :
+                        "rect-medication-label rect-label";
+                });
+
+            // Style line labels
+            svg.selectAll(".text-disease-label")
+                .attr("class", function(a) {
+                    return (a == d.disease) ? 
+                        "text-disease-label text-label-selected" :
+                        "text-disease-label text-label ";
+                });
+            svg.selectAll(".rect-disease-label")
+                .style("fill-opacity", 1.0)
+                .attr("class", function(a) {
+                    return (a == d.disease) ? 
+                        "rect-disease-label rect-label-selected" :
+                        "rect-disease-label rect-label";
+                });
+        });
+    };
+
+    HeatMapVisualization.prototype.removeDiamondStyleSelections = function(d) {
+        var self = this;
+
+        self.html.forEach(function(element) {
+            var svg = element.svg;
+
+            // Style column labels
+            svg.selectAll(".text-medication-label")
+                .attr("class", "text-medication-label text-label ");
+            svg.selectAll(".rect-medication-label")
+                .style("fill-opacity", 0.0);
+
+            // Style line labels
+            svg.selectAll(".text-disease-label")
+                .attr("class", "text-disease-label text-label");
+            svg.selectAll(".rect-disease-label")
+                .style("fill-opacity", 0.0);
+        });
+    };
+
     HeatMapVisualization.prototype.render2DimensionalMatrix = function(matrixElement) {
         var self = this;
 
@@ -524,7 +584,9 @@ moduleVisualizations.factory('HeatMapVisualization',
 
         // Offset for positioning each cell of the diamond
         var cellSizeOffset = 4;
+        self.visualizationRenderer.cellSizeOffset = cellSizeOffset;
         var diamondSize = self.gridHeight / 2;
+        self.visualizationRenderer.diamondSize = diamondSize;
 
         // Label width must be wide enough to span all text
         var labelWidth = self.visualizationRenderer
@@ -898,86 +960,58 @@ moduleVisualizations.factory('HeatMapVisualization',
                     if (d.incidences > 0)
                         cellsTip.show(d);
 
-                    // Style column labels
-                    svg.selectAll(".text-medication-label")
-                        .attr("class", function(a) {
-                            return (a == d.medication) ? 
-                                "text-medication-label text-label-selected" :
-                                "text-medication-label text-label";
-                        });
-                    svg.selectAll(".rect-medication-label")
-                        .style("fill-opacity", 1.0)
-                        .attr("class", function(a) {
-                            return (a == d.medication) ? 
-                                "rect-medication-label rect-label-selected" :
-                                "rect-medication-label rect-label";
-                        });
+                    self.rendererAddStyle(d);
 
-                    // Style line labels
-                    svg.selectAll(".text-disease-label")
-                        .attr("class", function(a) {
-                            return (a == d.disease) ? 
-                                "text-disease-label text-label-selected" :
-                                "text-disease-label text-label ";
-                        });
-                    svg.selectAll(".rect-disease-label")
-                        .style("fill-opacity", 1.0)
-                        .attr("class", function(a) {
-                            return (a == d.disease) ? 
-                                "rect-disease-label rect-label-selected" :
-                                "rect-disease-label rect-label";
+                    // Disease guide (direction = \)
+                    var guideLength = medicationNames.length + 1;
+                    var guideSize = diamondSize + cellSizeOffset;
+                    var diamondPath = "M " + (0 - cellSizeOffset) + "," +
+                            (guideSize - cellSizeOffset) + ", " +
+                        "L " + (guideSize * (guideLength-1) - cellSizeOffset) + "," +
+                            (guideSize * (guideLength) - cellSizeOffset) + ", " +
+                        "L " + (guideSize * (guideLength) - cellSizeOffset) + "," +
+                            (guideSize * (guideLength-1) - cellSizeOffset) + ", " +
+                        "L " + (guideSize - cellSizeOffset) + "," +
+                            (0 - cellSizeOffset) + " Z";
+                    svg.append("path")
+                        .attr("class", "guide")
+                        .attr("d", diamondPath)
+                        .attr("transform", function() {
+                            var x = diamondInitialX * self.gridHeight -
+                                (diseaseNames.indexOf(d.disease)) * 
+                                (diamondSize + cellSizeOffset);
+                            var y = 0 +
+                                (2 + diseaseNames.indexOf(d.disease)) * 
+                                (diamondSize + cellSizeOffset);
+
+                            return "translate(" + x + "," + y + ")";
                         });
 
-                // Disease guide (direction = \)
-                var guideLength = medicationNames.length + 1;
-                var guideSize = diamondSize + cellSizeOffset;
-                var diamondPath = "M " + (0 - cellSizeOffset) + "," +
-                        (guideSize - cellSizeOffset) + ", " +
-                    "L " + (guideSize * (guideLength-1) - cellSizeOffset) + "," +
-                        (guideSize * (guideLength) - cellSizeOffset) + ", " +
-                    "L " + (guideSize * (guideLength) - cellSizeOffset) + "," +
-                        (guideSize * (guideLength-1) - cellSizeOffset) + ", " +
-                    "L " + (guideSize - cellSizeOffset) + "," +
-                        (0 - cellSizeOffset) + " Z";
-                svg.append("path")
-                    .attr("class", "guide")
-                    .attr("d", diamondPath)
-                    .attr("transform", function() {
-                        var x = diamondInitialX * self.gridHeight -
-                            (diseaseNames.indexOf(d.disease)) * 
-                            (diamondSize + cellSizeOffset);
-                        var y = 0 +
-                            (2 + diseaseNames.indexOf(d.disease)) * 
-                            (diamondSize + cellSizeOffset);
+                    // Medication guide (direction = /)
+                    guideLength = diseaseNames.length + 1;
+                    guideSize = diamondSize + cellSizeOffset;
+                    diamondPath = "M " + (0 - cellSizeOffset) + "," +
+                            (guideSize * (guideLength-1) - cellSizeOffset) + ", " +
+                        "L " + (guideSize - cellSizeOffset) + "," +
+                            (guideSize * (guideLength) - cellSizeOffset) + ", " +
+                        "L " + (guideSize * (guideLength) - cellSizeOffset) + "," +
+                            (guideSize - cellSizeOffset) + ", " +
+                        "L " + (guideSize * (guideLength-1) - cellSizeOffset) + "," +
+                            (0 - cellSizeOffset) + " Z";
+                    svg.append("path")
+                        .attr("class", "guide")
+                        .attr("d", diamondPath)
+                        .attr("transform", function() {
+                            var x = (self.gridHeight) / 2 - 
+                                (guideLength - 2) * (cellSizeOffset) +
+                                (medicationNames.indexOf(d.medication)) * 
+                                (diamondSize + cellSizeOffset);
+                            var y = 0 +
+                                (2 + medicationNames.indexOf(d.medication)) * 
+                                (diamondSize + cellSizeOffset);
 
-                        return "translate(" + x + "," + y + ")";
-                    });
-
-                // Medication guide (direction = /)
-                guideLength = diseaseNames.length + 1;
-                guideSize = diamondSize + cellSizeOffset;
-                diamondPath = "M " + (0 - cellSizeOffset) + "," +
-                        (guideSize * (guideLength-1) - cellSizeOffset) + ", " +
-                    "L " + (guideSize - cellSizeOffset) + "," +
-                        (guideSize * (guideLength) - cellSizeOffset) + ", " +
-                    "L " + (guideSize * (guideLength) - cellSizeOffset) + "," +
-                        (guideSize - cellSizeOffset) + ", " +
-                    "L " + (guideSize * (guideLength-1) - cellSizeOffset) + "," +
-                        (0 - cellSizeOffset) + " Z";
-                svg.append("path")
-                    .attr("class", "guide")
-                    .attr("d", diamondPath)
-                    .attr("transform", function() {
-                        var x = (self.gridHeight) / 2 - 
-                            (guideLength - 2) * (cellSizeOffset) +
-                            (medicationNames.indexOf(d.medication)) * 
-                            (diamondSize + cellSizeOffset);
-                        var y = 0 +
-                            (2 + medicationNames.indexOf(d.medication)) * 
-                            (diamondSize + cellSizeOffset);
-
-                        return "translate(" + x + "," + y + ")";
-                    });
+                            return "translate(" + x + "," + y + ")";
+                        });
 
                     // Guides should be on back of cells,
                     // to allow mouseover on cells
@@ -990,17 +1024,7 @@ moduleVisualizations.factory('HeatMapVisualization',
                 .on("mouseout", function(d) {
                     cellsTip.hide(d);
                     
-                    // Style column labels
-                    svg.selectAll(".text-medication-label")
-                        .attr("class", "text-medication-label text-label ");
-                    svg.selectAll(".rect-medication-label")
-                        .style("fill-opacity", 0.0);
-
-                    // Style line labels
-                    svg.selectAll(".text-disease-label")
-                        .attr("class", "text-disease-label text-label");
-                    svg.selectAll(".rect-disease-label")
-                        .style("fill-opacity", 0.0);
+                    self.rendererRemoveStyle(d);
 
                     // Remove selection guides
                     svg.selectAll(".guide")
@@ -1016,6 +1040,45 @@ moduleVisualizations.factory('HeatMapVisualization',
                 -diamondSize,
                 (self.visualizationRenderer.longestDimensionLength + 4) *
                     self.gridHeight);
+    };
+
+    HeatMapVisualization.prototype.addSimilarityStyleSelections = function(d) {
+        var self = this;
+
+        self.html.forEach(function(element) {
+            var svg = element.svg;
+
+            // Style labels
+            svg.selectAll(".text-attribute-label")
+                .attr("class", function(a) {
+                    return ((a === d.first.name) ||
+                            (a === d.second.name)) ?
+                        "text-attribute-label text-label-selected" :
+                        "text-attribute-label text-label";
+                });
+            svg.selectAll(".rect-attribute-label")
+                .style("fill-opacity", 1.0)
+                .attr("class", function(a) {
+                    return ((a === d.first.name) ||
+                            (a === d.second.name)) ?
+                        "rect-attribute-label rect-label-selected" :
+                        "rect-attribute-label rect-label";
+                });
+        });
+    };
+
+    HeatMapVisualization.prototype.removeSimilarityStyleSelections = function(d) {
+        var self = this;
+
+        self.html.forEach(function(element) {
+            var svg = element.svg;
+
+            // Style labels
+            svg.selectAll(".text-attribute-label")
+                .attr("class", "text-attribute-label text-label ");
+            svg.selectAll(".rect-attribute-label")
+                .style("fill-opacity", 0.0);
+        });
     };
 
     HeatMapVisualization.prototype.renderSimilarityMatrix = function(matrixElement) {
@@ -1184,22 +1247,7 @@ moduleVisualizations.factory('HeatMapVisualization',
                     if (d.incidences > 0)
                         cellsTip.show(d);
 
-                    // Style labels
-                    svg.selectAll(".text-attribute-label")
-                        .attr("class", function(a) {
-                            return ((a === d.first.name) ||
-                                    (a === d.second.name)) ?
-                                "text-attribute-label text-label-selected" :
-                                "text-attribute-label text-label";
-                        });
-                    svg.selectAll(".rect-attribute-label")
-                        .style("fill-opacity", 1.0)
-                        .attr("class", function(a) {
-                            return ((a === d.first.name) ||
-                                    (a === d.second.name)) ?
-                                "rect-attribute-label rect-label-selected" :
-                                "rect-attribute-label rect-label";
-                        });
+                    self.rendererAddStyle(d);
 
                     // Horizontal guide
                     svg.append("rect")
@@ -1271,11 +1319,7 @@ moduleVisualizations.factory('HeatMapVisualization',
                 .on("mouseout", function(d) {
                     cellsTip.hide(d);
                     
-                    // Style labels
-                    svg.selectAll(".text-attribute-label")
-                        .attr("class", "text-attribute-label text-label ");
-                    svg.selectAll(".rect-attribute-label")
-                        .style("fill-opacity", 0.0);
+                    self.rendererRemoveStyle(d);
 
                     // Remove selection guides
                     svg.selectAll(".guide")
@@ -1298,9 +1342,21 @@ moduleVisualizations.factory('HeatMapVisualization',
         MEDICATIONS: "medications"
     });
 
+    // NOTE: We want the called methods to have their `this` as the created
+    // `HeatMapVisualization` object. Since using bind() here would be too
+    // tricky, we simple have a property on the `HeatMapVisualization` object
+    // for each dynamic function
     var renderer = Object.freeze({
         DIM: HeatMapVisualization.prototype.render2DimensionalMatrix,
         SIM: HeatMapVisualization.prototype.renderSimilarityMatrix
+    });
+    var rendererAddStyle = Object.freeze({
+        DIM: HeatMapVisualization.prototype.addDiamondStyleSelections,
+        SIM: HeatMapVisualization.prototype.addSimilarityStyleSelections
+    });
+    var rendererRemoveStyle = Object.freeze({
+        DIM: HeatMapVisualization.prototype.removeDiamondStyleSelections,
+        SIM: HeatMapVisualization.prototype.removeSimilarityStyleSelections
     });
 
     HeatMapVisualization.prototype.render = function() {
@@ -1382,6 +1438,8 @@ moduleVisualizations.factory('HeatMapVisualization',
         var self = this;
 
         self.renderer = renderer[type];
+        self.rendererAddStyle = rendererAddStyle[type];
+        self.rendererRemoveStyle = rendererRemoveStyle[type];
 
         // Remove previous svg, since the new visualization will be appended
         d3.select("#" + vizID).select("svg").remove();
