@@ -629,6 +629,15 @@ moduleVisualizations.factory('HeatMapVisualization',
                         (diamondSize + cellSizeOffset) +
                         // +1 offset relative to text
                         cellSizeOffset * 3;
+                })
+                .on("mouseover", function(d) {
+                    self.rendererAddStyle({
+                        disease: d,
+                        medication: d
+                    });
+                })
+                .on("mouseout", function(d) {
+                    self.rendererRemoveStyle(d);
                 });
         diseaseLabels.exit().remove();
 
@@ -665,6 +674,15 @@ moduleVisualizations.factory('HeatMapVisualization',
                         // offset to be closer to cells
                         cellSizeOffset * 2;
                 })
+                .on("mouseover", function(d) {
+                    self.rendererAddStyle({
+                        disease: d,
+                        medication: d
+                    });
+                })
+                .on("mouseout", function(d) {
+                    self.rendererRemoveStyle(d);
+                })
                 .text(function(d) {
                     return d;
                 });
@@ -700,6 +718,15 @@ moduleVisualizations.factory('HeatMapVisualization',
                         (diamondSize + cellSizeOffset) +
                         // +1 offset relative to text
                         cellSizeOffset;
+                })
+                .on("mouseover", function(d) {
+                    self.rendererAddStyle({
+                        disease: d,
+                        medication: d
+                    });
+                })
+                .on("mouseout", function(d) {
+                    self.rendererRemoveStyle(d);
                 });
         medicationLabels.exit().remove();
 
@@ -730,6 +757,15 @@ moduleVisualizations.factory('HeatMapVisualization',
                         // relative position
                         (1 + i) * 
                         (diamondSize + cellSizeOffset);
+                })
+                .on("mouseover", function(d) {
+                    self.rendererAddStyle({
+                        disease: d,
+                        medication: d
+                    });
+                })
+                .on("mouseout", function(d) {
+                    self.rendererRemoveStyle(d);
                 })
                 .text(function(d) {
                     return d;
@@ -806,6 +842,15 @@ moduleVisualizations.factory('HeatMapVisualization',
                                 (diamondSize + cellSizeOffset) -
                                 // center mark
                                 (self.gridHeight - markSize) / 2;
+                        })
+                        .on("mouseover", function(d) {
+                            self.rendererAddStyle({
+                                disease: d,
+                                medication: d
+                            });
+                        })
+                        .on("mouseout", function(d) {
+                            self.rendererRemoveStyle(d);
                         });
                 patientMedicationsCells.exit().remove();
 
@@ -857,6 +902,15 @@ moduleVisualizations.factory('HeatMapVisualization',
                                 cellSizeOffset * 2 -
                                 // center mark
                                 (self.gridHeight - markSize) / 2;
+                        })
+                        .on("mouseover", function(d) {
+                            self.rendererAddStyle({
+                                disease: d,
+                                medication: d
+                            });
+                        })
+                        .on("mouseout", function(d) {
+                            self.rendererRemoveStyle(d);
                         });
                 patientDiseasesCells.exit().remove();
             } catch(e) {
@@ -1103,7 +1157,11 @@ moduleVisualizations.factory('HeatMapVisualization',
         // Label width must be wide enough to span all text
         var labelWidth = self.visualizationRenderer
             .longestSimilarityNameLength * 8 + self.gridWidth;
+
+        // Offset for positioning each cell of the grid
         var cellSizeOffset = 4;
+        self.visualizationRenderer.cellSizeOffset = cellSizeOffset;
+
         var attributeLabels = svg.selectAll(".rect-attribute-label")
             .data(similarityNames);
         var attributeLabelsGroup = attributeLabels.enter();
@@ -1117,6 +1175,15 @@ moduleVisualizations.factory('HeatMapVisualization',
                 })
                 .attr("y", function(d, i) {
                     return (i - 1) * self.gridHeight - cellSizeOffset + 1;
+                })
+                .on("mouseover", function(d) {
+                    self.rendererAddStyle({
+                        first: { name: d },
+                        second: { name: d }
+                    });
+                })
+                .on("mouseout", function(d) {
+                    self.rendererRemoveStyle(d);
                 });
         attributeLabels.exit().remove();
 
@@ -1135,6 +1202,15 @@ moduleVisualizations.factory('HeatMapVisualization',
                 })
                 .attr("y", function(d, i) {
                     return (i - 1) * self.gridHeight - cellSizeOffset;
+                })
+                .on("mouseover", function(d) {
+                    self.rendererAddStyle({
+                        first: { name: d },
+                        second: { name: d }
+                    });
+                })
+                .on("mouseout", function(d) {
+                    self.rendererRemoveStyle(d);
                 })
                 .text(function(d) {
                     return d;
@@ -1168,6 +1244,15 @@ moduleVisualizations.factory('HeatMapVisualization',
                         .attr("y", function(d, i) {
                             return ((i - 1) * self.gridHeight - cellSizeOffset) +
                                 (markSize / 2);
+                        })
+                        .on("mouseover", function(d) {
+                            self.rendererAddStyle({
+                                first: { name: d },
+                                second: { name: d }
+                            });
+                        })
+                        .on("mouseout", function(d) {
+                            self.rendererRemoveStyle(d);
                         })
                         .style("fill-opacity", function(d, i) {
                             return (patientSimilarityNames
