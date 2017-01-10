@@ -1146,61 +1146,53 @@ moduleVisualizations.factory('HeatMapVisualization',
             var attributeLabelsGroup = attributeLabels.enter();
 
             // Horizontal guide
-            svg.append("rect")
-                .attr("class", "guide")
-                .attr("height", self.gridHeight)
-                .merge(attributeLabels)
-                    .attr("width", function() {
-                        var targetIndex = Math.max(
-                            similarityNames.indexOf(d.first.name),
-                            similarityNames.indexOf(d.second.name)
-                        );
-                        return (targetIndex) * self.gridWidth;
-                    })
-                    .attr("x",
-                        self.gridWidth -
-                        cellSizeOffset / 2)
-                    .attr("y", function() {
-                        var targetIndex = Math.max(
-                            similarityNames.indexOf(d.first.name),
-                            similarityNames.indexOf(d.second.name)
-                        );
-                        return (targetIndex - 1) * self.gridHeight -
-                            cellSizeOffset / 2;
-                    });
+            var targetIndex = Math.max(
+                similarityNames.indexOf(d.first.name),
+                similarityNames.indexOf(d.second.name)
+            );
+            if (targetIndex !== -1) {
+                svg.append("rect")
+                    .attr("class", "guide")
+                    .attr("height", self.gridHeight)
+                    .merge(attributeLabels)
+                        .attr("width", function() {
+                            return (targetIndex) * self.gridWidth;
+                        })
+                        .attr("x",
+                            self.gridWidth -
+                            cellSizeOffset / 2)
+                        .attr("y", function() {
+                            return (targetIndex - 1) * self.gridHeight -
+                                cellSizeOffset / 2;
+                        });
+            }
 
             // Vertical guide
-            var yLength = similarityNames.length;
-            svg.append("rect")
-                .attr("class", "guide")
-                .attr("width", self.gridWidth)
-                .merge(attributeLabels)
-                    .attr("height", function() {
-                        var targetIndex = Math.min(
-                            similarityNames.indexOf(d.first.name),
-                            similarityNames.indexOf(d.second.name)
-                        );
-                        return (yLength - targetIndex - 1) *
-                            self.gridWidth;
-                    })
-                    .attr("y", function() {
-                        var targetIndex = Math.min(
-                            similarityNames.indexOf(d.first.name),
-                            similarityNames.indexOf(d.second.name)
-                        );
-                        return (targetIndex) *
-                            self.gridWidth -
-                            cellSizeOffset / 2;
-                    })
-                    .attr("x", function() {
-                        var targetIndex = Math.min(
-                            similarityNames.indexOf(d.first.name),
-                            similarityNames.indexOf(d.second.name)
-                        );
-                        return (targetIndex + 1) *
-                            self.gridHeight -
-                            cellSizeOffset / 2;
-                    });
+            targetIndex = Math.min(
+                similarityNames.indexOf(d.first.name),
+                similarityNames.indexOf(d.second.name)
+            );
+            if (targetIndex !== -1) {
+                var yLength = similarityNames.length;
+                svg.append("rect")
+                    .attr("class", "guide")
+                    .attr("width", self.gridWidth)
+                    .merge(attributeLabels)
+                        .attr("height", function() {
+                            return (yLength - targetIndex - 1) *
+                                self.gridWidth;
+                        })
+                        .attr("y", function() {
+                            return (targetIndex) *
+                                self.gridWidth -
+                                cellSizeOffset / 2;
+                        })
+                        .attr("x", function() {
+                            return (targetIndex + 1) *
+                                self.gridHeight -
+                                cellSizeOffset / 2;
+                        });
+            }
 
             attributeLabels.exit().remove();
 

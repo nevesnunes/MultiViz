@@ -1,7 +1,8 @@
-var moduleIndex = angular.module('moduleIndex');
+var moduleProviders = angular.module('moduleProviders');
 var moduleUtils = angular.module('moduleUtils');
+var moduleWidgetBuilder = angular.module('moduleWidgetBuilder');
 var moduleVisualizations = angular.module('moduleVisualizations',
-        ['moduleIndex', 'moduleUtils']);
+        ['moduleProviders', 'moduleUtils', 'moduleWidgetBuilder']);
 
 moduleVisualizations.factory('visualizations',
         ['patientData', 'retrievePatientData', 'utils', 'nodes',

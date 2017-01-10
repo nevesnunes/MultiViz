@@ -1,10 +1,12 @@
 var moduleSplits = angular.module('moduleSplits',
         ['shagstrom.angular-split-pane']);
 
+var moduleProviders = angular.module('moduleProviders');
 var moduleUtils = angular.module('moduleUtils');
 var moduleVisualizations = angular.module('moduleVisualizations');
+var moduleWidgetBuilder = angular.module('moduleWidgetBuilder');
 var moduleLayout = angular.module('moduleLayout',
-        ['moduleIndex', 'moduleUtils', 'moduleVisualizations']);
+        ['moduleProviders', 'moduleUtils', 'moduleVisualizations', 'moduleWidgetBuilder']);
 
 moduleLayout.factory("nodes",
         ['utils', function(utils) {
@@ -384,8 +386,8 @@ moduleLayout.directive('directiveMenuTooltip', function() {
 });
 
 moduleLayout.directive("directiveActionPanel",
-        ['$compile', 'visualizations', 'patientData', 'utils', 'nodes',
-        function($compile, visualizations, patientData, utils, nodes) {
+        ['$compile', 'visualizations', 'patientData', 'utils', 'widgets', 'nodes',
+        function($compile, visualizations, patientData, utils, widgets, nodes) {
 	return { 
         scope: true,
         link: function(scope, element, attrs) {
@@ -464,7 +466,7 @@ moduleLayout.directive("directiveActionPanel",
             scope.makeViewChooser = function() {
                 var cancelButton = '';
                 if (nodes.getRootNode() !== undefined) {
-                    cancelButton = utils.makeImgButton({
+                    cancelButton = widgets.makeImgButton({
                         clazz:  "btn-secondary custom-btn-secondary custom-right",
                         placement: "left",
                         method: "cancelSplit()",
@@ -754,7 +756,7 @@ moduleLayout.directive("directiveActionPanel",
 
                 var cancelButton = '';
                 if (nodes.getRootNode() !== undefined) {
-                    cancelButton = utils.makeImgButton({
+                    cancelButton = widgets.makeImgButton({
                         clazz:  "btn-secondary custom-btn-secondary custom-right",
                         placement: "left",
                         method: "cancelSplit()",
@@ -807,7 +809,7 @@ moduleLayout.directive("directiveActionPanel",
             };
 
             scope.chooseSpiralToJoin = function() {
-                var cancelButton = utils.makeImgButton({
+                var cancelButton = widgets.makeImgButton({
                     clazz:  "btn-secondary custom-btn-secondary custom-right",
                     placement: "left",
                     method: "cancelAction(\'cleanOverlays\')",
@@ -1165,7 +1167,7 @@ moduleLayout.directive("directiveActionPanel",
                                     return obj.name;
                                 });
 
-                        var spiralActions = utils.makeImgButton({
+                        var spiralActions = widgets.makeImgButton({
                             clazz:  "btn-secondary custom-btn-secondary custom-center",
                             id:     nodes.getCurrentNode().model.id,
                             method: "chooseAddSpiral($event)",
@@ -1218,9 +1220,9 @@ moduleLayout.directive("directiveActionPanel",
 }]);
 
 moduleLayout.directive("directivePanes",
-        ['$compile', 'utils', 'nodes', 'patientData',
+        ['$compile', 'widgets', 'nodes', 'patientData',
             'visualizations', 'HeatMapVisualization', 'SpiralVisualization',
-        function($compile, utils, nodes, patientData,
+        function($compile, widgets, nodes, patientData,
             visualizations, HeatMapVisualization, SpiralVisualization) {
 	return { 
         scope: true,
@@ -1277,14 +1279,14 @@ moduleLayout.directive("directivePanes",
                 var viewportButton = '';
                 if (!node.isRoot()) {
                     if (nodes.getCurrentNode().model.id === id) {
-                        viewportButton = utils.makeImgButton({
+                        viewportButton = widgets.makeImgButton({
                             id:     id,
                             method: "paneColapse()",
                             title:  "Colapsar Vista",
                             img:    "images/controls/colapse.svg"
                         });
                     } else {
-                        viewportButton = utils.makeImgButton({
+                        viewportButton = widgets.makeImgButton({
                             id:     id,
                             method: "paneMaximize($event)",
                             title:  "Maximizar Vista",
@@ -1298,19 +1300,19 @@ moduleLayout.directive("directivePanes",
                     id + '</p>' +
                     '<div style="display: block">' + 
                     viewportButton +
-                    utils.makeImgButton({
+                    widgets.makeImgButton({
                         id:     id,
                         method: "paneSplitVertical($event)",
                         title:  "Separar na Vertical",
                         img:    "images/controls/split-vertical.svg"
                     }) +
-                    utils.makeImgButton({
+                    widgets.makeImgButton({
                         id:     id,
                         method: "paneSplitHorizontal($event)",
                         title:  "Separar na Horizontal",
                         img:    "images/controls/split-horizontal.svg"
                     }) +
-                    utils.makeImgButton({
+                    widgets.makeImgButton({
                         id:     id,
                         method: "paneRemove($event)",
                         title:  "Remover Vista",
@@ -1644,21 +1646,21 @@ moduleLayout.directive("directivePanes",
                 // the current view's node
                 var buttonsHTML = "";
                 if (isMaximized) {
-                    buttonsHTML += utils.makeImgButton({
+                    buttonsHTML += widgets.makeImgButton({
                         id:     vizID,
                         nodeID: id,
                         method: "updateFromSpiralAttribute($event)",
                         title:  "Substituir atributo",
                         img:    "images/controls/config.svg"
                     }) +
-                    utils.makeImgButton({
+                    widgets.makeImgButton({
                         id:     vizID,
                         nodeID: id,
                         method: "joinSpiral($event)",
                         title:  "Juntar Espirais",
                         img:    "images/controls/join.svg"
                     }) +
-                    utils.makeImgButton({
+                    widgets.makeImgButton({
                         id:           vizID,
                         nodeID:       id,
                         checkable:    true,
@@ -1670,7 +1672,7 @@ moduleLayout.directive("directivePanes",
                         titleChecked: "Desmarcar espiral como visualização principal",
                         imgChecked:   "images/controls/checked.svg"
                     }) +
-                    utils.makeImgButton({
+                    widgets.makeImgButton({
                         id:     vizID,
                         nodeID: id,
                         method: "removeSpiral($event)",
@@ -2153,7 +2155,7 @@ moduleLayout.directive("directivePanes",
     }; //return
 }]);
 
-angular.module("moduleCombined", ["moduleIndex", "moduleLayout", "moduleSplits"]);
+angular.module("moduleCombined", ["moduleProviders", "moduleLayout", "moduleSplits"]);
 
 // Tests to automate some user behaviour.
 //
