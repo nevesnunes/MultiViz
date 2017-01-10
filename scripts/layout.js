@@ -1026,19 +1026,18 @@ moduleLayout.directive("directiveActionPanel",
                 var attributeTypes = vizObject.getAttributeTypes();
                 var currentAttributeType = vizObject.currentAttributeType;
                 var dataObject = null;
-                // FIXME: Hardcoded positions
                 if (currentAttributeType ===
                         attributeTypes.DISEASES) {
                     dataObject = {
                         disease: attribute,
                         first: { name: attribute },
-                        second: { name: "" }
+                        second: { name: attribute }
                     };
                 } else if (currentAttributeType ===
                         attributeTypes.MEDICATIONS) {
                     dataObject = {
                         medication: attribute,
-                        first: { name: "" },
+                        first: { name: attribute },
                         second: { name: attribute }
                     };
                 }

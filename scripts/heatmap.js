@@ -537,6 +537,76 @@ moduleVisualizations.factory('HeatMapVisualization',
                         "rect-disease-label rect-label-selected" :
                         "rect-disease-label rect-label";
                 });
+
+            var cellSizeOffset = self.visualizationRenderer.cellSizeOffset;
+            var diamondInitialX = self.visualizationRenderer.diamondInitialX;
+            var diamondInitialY = self.visualizationRenderer.diamondInitialY;
+            var diamondSize = self.visualizationRenderer.diamondSize;
+            var diseaseNames = self.visualizationRenderer.diseaseNames;
+            var medicationNames = self.visualizationRenderer.medicationNames;
+
+            var guideLength;
+            var guideSize;
+            var diamondPath;
+
+            // Disease guide (direction = \)
+            if (diseaseNames.indexOf(d.disease) !== -1) {
+                guideLength = medicationNames.length + 1;
+                guideSize = diamondSize + cellSizeOffset;
+                diamondPath = "M " + (0 - cellSizeOffset) + "," +
+                        (guideSize - cellSizeOffset) + ", " +
+                    "L " + (guideSize * (guideLength-1) - cellSizeOffset) + "," +
+                        (guideSize * (guideLength) - cellSizeOffset) + ", " +
+                    "L " + (guideSize * (guideLength) - cellSizeOffset) + "," +
+                        (guideSize * (guideLength-1) - cellSizeOffset) + ", " +
+                    "L " + (guideSize - cellSizeOffset) + "," +
+                        (0 - cellSizeOffset) + " Z";
+                svg.append("path")
+                    .attr("class", "guide")
+                    .attr("d", diamondPath)
+                    .attr("transform", function() {
+                        var x = diamondInitialX * self.gridHeight -
+                            (diseaseNames.indexOf(d.disease)) * 
+                            (diamondSize + cellSizeOffset);
+                        var y = 0 +
+                            (2 + diseaseNames.indexOf(d.disease)) * 
+                            (diamondSize + cellSizeOffset);
+
+                        return "translate(" + x + "," + y + ")";
+                    });
+            }
+
+            // Medication guide (direction = /)
+            if (medicationNames.indexOf(d.medication) !== -1) {
+                guideLength = diseaseNames.length + 1;
+                guideSize = diamondSize + cellSizeOffset;
+                diamondPath = "M " + (0 - cellSizeOffset) + "," +
+                        (guideSize * (guideLength-1) - cellSizeOffset) + ", " +
+                    "L " + (guideSize - cellSizeOffset) + "," +
+                        (guideSize * (guideLength) - cellSizeOffset) + ", " +
+                    "L " + (guideSize * (guideLength) - cellSizeOffset) + "," +
+                        (guideSize - cellSizeOffset) + ", " +
+                    "L " + (guideSize * (guideLength-1) - cellSizeOffset) + "," +
+                        (0 - cellSizeOffset) + " Z";
+                svg.append("path")
+                    .attr("class", "guide")
+                    .attr("d", diamondPath)
+                    .attr("transform", function() {
+                        var x = (self.gridHeight) / 2 - 
+                            (guideLength - 2) * (cellSizeOffset) +
+                            (medicationNames.indexOf(d.medication)) * 
+                            (diamondSize + cellSizeOffset);
+                        var y = 0 +
+                            (2 + medicationNames.indexOf(d.medication)) * 
+                            (diamondSize + cellSizeOffset);
+
+                        return "translate(" + x + "," + y + ")";
+                    });
+            }
+
+            // Guides should be on back of cells,
+            // to allow mouseover on cells
+            svg.selectAll(".guide").moveToBack();
         });
     };
 
@@ -557,6 +627,10 @@ moduleVisualizations.factory('HeatMapVisualization',
                 .attr("class", "text-disease-label text-label");
             svg.selectAll(".rect-disease-label")
                 .style("fill-opacity", 0.0);
+
+            // Remove selection guides
+            svg.selectAll(".guide")
+                .remove();
         });
     };
 
@@ -580,7 +654,9 @@ moduleVisualizations.factory('HeatMapVisualization',
 
         // Offset for centering diamond and labels in svg
         var diamondInitialX = diseaseNames.length / 2;
+        self.visualizationRenderer.diamondInitialX = diamondInitialX;
         var diamondInitialY = medicationNames.length / 2;
+        self.visualizationRenderer.diamondInitialY = diamondInitialY;
 
         // Offset for positioning each cell of the diamond
         var cellSizeOffset = 4;
@@ -1016,61 +1092,6 @@ moduleVisualizations.factory('HeatMapVisualization',
 
                     self.rendererAddStyle(d);
 
-                    // Disease guide (direction = \)
-                    var guideLength = medicationNames.length + 1;
-                    var guideSize = diamondSize + cellSizeOffset;
-                    var diamondPath = "M " + (0 - cellSizeOffset) + "," +
-                            (guideSize - cellSizeOffset) + ", " +
-                        "L " + (guideSize * (guideLength-1) - cellSizeOffset) + "," +
-                            (guideSize * (guideLength) - cellSizeOffset) + ", " +
-                        "L " + (guideSize * (guideLength) - cellSizeOffset) + "," +
-                            (guideSize * (guideLength-1) - cellSizeOffset) + ", " +
-                        "L " + (guideSize - cellSizeOffset) + "," +
-                            (0 - cellSizeOffset) + " Z";
-                    svg.append("path")
-                        .attr("class", "guide")
-                        .attr("d", diamondPath)
-                        .attr("transform", function() {
-                            var x = diamondInitialX * self.gridHeight -
-                                (diseaseNames.indexOf(d.disease)) * 
-                                (diamondSize + cellSizeOffset);
-                            var y = 0 +
-                                (2 + diseaseNames.indexOf(d.disease)) * 
-                                (diamondSize + cellSizeOffset);
-
-                            return "translate(" + x + "," + y + ")";
-                        });
-
-                    // Medication guide (direction = /)
-                    guideLength = diseaseNames.length + 1;
-                    guideSize = diamondSize + cellSizeOffset;
-                    diamondPath = "M " + (0 - cellSizeOffset) + "," +
-                            (guideSize * (guideLength-1) - cellSizeOffset) + ", " +
-                        "L " + (guideSize - cellSizeOffset) + "," +
-                            (guideSize * (guideLength) - cellSizeOffset) + ", " +
-                        "L " + (guideSize * (guideLength) - cellSizeOffset) + "," +
-                            (guideSize - cellSizeOffset) + ", " +
-                        "L " + (guideSize * (guideLength-1) - cellSizeOffset) + "," +
-                            (0 - cellSizeOffset) + " Z";
-                    svg.append("path")
-                        .attr("class", "guide")
-                        .attr("d", diamondPath)
-                        .attr("transform", function() {
-                            var x = (self.gridHeight) / 2 - 
-                                (guideLength - 2) * (cellSizeOffset) +
-                                (medicationNames.indexOf(d.medication)) * 
-                                (diamondSize + cellSizeOffset);
-                            var y = 0 +
-                                (2 + medicationNames.indexOf(d.medication)) * 
-                                (diamondSize + cellSizeOffset);
-
-                            return "translate(" + x + "," + y + ")";
-                        });
-
-                    // Guides should be on back of cells,
-                    // to allow mouseover on cells
-                    svg.selectAll(".guide").moveToBack();
-
                     // Marks should be on top of labels,
                     // to avoid occlusion
                     svg.selectAll(".markPresent").moveToFront();
@@ -1079,10 +1100,6 @@ moduleVisualizations.factory('HeatMapVisualization',
                     cellsTip.hide(d);
                     
                     self.rendererRemoveStyle(d);
-
-                    // Remove selection guides
-                    svg.selectAll(".guide")
-                        .remove();
                 });
         cells.exit().remove();
 
@@ -1118,6 +1135,76 @@ moduleVisualizations.factory('HeatMapVisualization',
                         "rect-attribute-label rect-label-selected" :
                         "rect-attribute-label rect-label";
                 });
+
+            var cellSizeOffset = self.visualizationRenderer.cellSizeOffset;
+            var similarityNames = self.visualizationRenderer.similarityNames;
+
+            var attributeLabels = svg.selectAll(".rect-attribute-label")
+                .data(similarityNames);
+            var attributeLabelsGroup = attributeLabels.enter();
+
+            // Horizontal guide
+            svg.append("rect")
+                .attr("class", "guide")
+                .attr("height", self.gridHeight)
+                .merge(attributeLabels)
+                    .attr("width", function() {
+                        var targetIndex = Math.max(
+                            similarityNames.indexOf(d.first.name),
+                            similarityNames.indexOf(d.second.name)
+                        );
+                        return (targetIndex) * self.gridWidth;
+                    })
+                    .attr("x",
+                        self.gridWidth -
+                        cellSizeOffset / 2)
+                    .attr("y", function() {
+                        var targetIndex = Math.max(
+                            similarityNames.indexOf(d.first.name),
+                            similarityNames.indexOf(d.second.name)
+                        );
+                        return (targetIndex - 1) * self.gridHeight -
+                            cellSizeOffset / 2;
+                    });
+
+            // Vertical guide
+            var yLength = similarityNames.length;
+            svg.append("rect")
+                .attr("class", "guide")
+                .attr("width", self.gridWidth)
+                .merge(attributeLabels)
+                    .attr("height", function() {
+                        var targetIndex = Math.min(
+                            similarityNames.indexOf(d.first.name),
+                            similarityNames.indexOf(d.second.name)
+                        );
+                        return (yLength - targetIndex - 1) *
+                            self.gridWidth;
+                    })
+                    .attr("y", function() {
+                        var targetIndex = Math.min(
+                            similarityNames.indexOf(d.first.name),
+                            similarityNames.indexOf(d.second.name)
+                        );
+                        return (targetIndex) *
+                            self.gridWidth -
+                            cellSizeOffset / 2;
+                    })
+                    .attr("x", function() {
+                        var targetIndex = Math.min(
+                            similarityNames.indexOf(d.first.name),
+                            similarityNames.indexOf(d.second.name)
+                        );
+                        return (targetIndex + 1) *
+                            self.gridHeight -
+                            cellSizeOffset / 2;
+                    });
+
+            attributeLabels.exit().remove();
+
+            // Guides should be on back of cells,
+            // to allow mouseover on cells
+            svg.selectAll(".guide").moveToBack();
         });
     };
 
@@ -1132,6 +1219,10 @@ moduleVisualizations.factory('HeatMapVisualization',
                 .attr("class", "text-attribute-label text-label ");
             svg.selectAll(".rect-attribute-label")
                 .style("fill-opacity", 0.0);
+
+            // Remove selection guides
+            svg.selectAll(".guide")
+                .remove();
         });
     };
 
@@ -1334,69 +1425,6 @@ moduleVisualizations.factory('HeatMapVisualization',
 
                     self.rendererAddStyle(d);
 
-                    // Horizontal guide
-                    svg.append("rect")
-                        .attr("class", "guide")
-                        .attr("height", self.gridHeight)
-                        .merge(attributeLabels)
-                            .attr("width", function() {
-                                var targetIndex = Math.max(
-                                    similarityNames.indexOf(d.first.name),
-                                    similarityNames.indexOf(d.second.name)
-                                );
-                                return (targetIndex) * self.gridWidth;
-                            })
-                            .attr("x",
-                                self.gridWidth -
-                                cellSizeOffset / 2)
-                            .attr("y", function() {
-                                var targetIndex = Math.max(
-                                    similarityNames.indexOf(d.first.name),
-                                    similarityNames.indexOf(d.second.name)
-                                );
-                                return (targetIndex - 1) * self.gridHeight -
-                                    cellSizeOffset / 2;
-                            });
-
-                    // Vertical guide
-                    var yLength = self.visualizationRenderer
-                        .similarityNames.length;
-                    svg.append("rect")
-                        .attr("class", "guide")
-                        .attr("width", self.gridWidth)
-                        .merge(attributeLabels)
-                            .attr("height", function() {
-                                var targetIndex = Math.min(
-                                    similarityNames.indexOf(d.first.name),
-                                    similarityNames.indexOf(d.second.name)
-                                );
-                                return (yLength - targetIndex - 1) *
-                                    self.gridWidth;
-                            })
-                            .attr("y", function() {
-                                var targetIndex = Math.min(
-                                    similarityNames.indexOf(d.first.name),
-                                    similarityNames.indexOf(d.second.name)
-                                );
-                                return (targetIndex) *
-                                    self.gridWidth -
-                                    cellSizeOffset / 2;
-                            })
-                            .attr("x", function() {
-                                var targetIndex = Math.min(
-                                    similarityNames.indexOf(d.first.name),
-                                    similarityNames.indexOf(d.second.name)
-                                );
-                                return (targetIndex + 1) *
-                                    self.gridHeight -
-                                    cellSizeOffset / 2;
-                            });
-                    attributeLabels.exit().remove();
-
-                    // Guides should be on back of cells,
-                    // to allow mouseover on cells
-                    svg.selectAll(".guide").moveToBack();
-
                     // Marks should be on top of labels,
                     // to avoid occlusion
                     svg.selectAll(".markPresent").moveToFront();
@@ -1405,10 +1433,6 @@ moduleVisualizations.factory('HeatMapVisualization',
                     cellsTip.hide(d);
                     
                     self.rendererRemoveStyle(d);
-
-                    // Remove selection guides
-                    svg.selectAll(".guide")
-                        .remove();
                 });
         cells.exit().remove();
 
