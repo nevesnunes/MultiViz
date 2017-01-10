@@ -344,7 +344,9 @@ moduleLayout.directive("directiveEntryBarFill",
         ['utils', 'countsData',
         function(utils, countsData) {
     return {
-        scope: true,
+        scope: {
+            attribute: "=attribute"
+        },
         link: function(scope, elem, attrs) {
             countsData.retrieveCountsData.then(function(result) {
                 var index = utils.arrayObjectIndexOf(
@@ -358,6 +360,28 @@ moduleLayout.directive("directiveEntryBarFill",
         }
     };
 }]);
+
+moduleLayout.directive('directiveMenuTooltip', function() {
+    return {
+        link: function (scope, element, attrs) {
+            scope.setTooltipText = function(button) {
+                scope.tooltipText = 
+                    "<div style=\"text-align: left\" class=\"p\">" +
+                        "Cada entrada do menu contem uma barra com a <b>proporção de pacientes</b> que apresentam o atributo correspondente " +
+                    "</div>" +
+                    "<div style=\"text-align: left\" class=\"p\">" +
+                        "( " +
+                        "<div style=\"display: inline-block\" class=\"" +
+                                "patient-table-entry-bar\" > " +
+                            '<div class="patient-table-entry-bar-fill" style="width:35%"> ' +
+                            '</div>' +
+                        '</div>' +
+                        " )." +
+                    "</div>";
+            };
+        }
+    };
+});
 
 moduleLayout.directive("directiveActionPanel",
         ['$compile', 'visualizations', 'patientData', 'utils', 'nodes',
@@ -1055,6 +1079,14 @@ moduleLayout.directive("directiveActionPanel",
                                 '|' +
                                 '<button class="btn btn-link custom-btn-link" ' +
                                     'ng-click="checkNone()">Nenhum</button>' +
+                            // Help
+                            '<div style="display: block"> ' +
+                                '<img class="tooltip-wrapper help" ' +
+                                    'title="{{tooltipText}}" ' + 
+                                    'directive-tooltip directive-menu-tooltip ' +
+                                    'src="images/controls/info.svg">' +
+                            '</div>' +
+                            '<p/>' +
                             // List
                             '<div class="table table-condensed table-bordered patient-table">' +
                                 '<div class="checkboxInTable patient-table-entry" ' +

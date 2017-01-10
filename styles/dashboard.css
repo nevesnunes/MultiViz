@@ -308,6 +308,7 @@ body {
 
 .patient-table-entry-bar {
     min-height: 0.25em;
+    min-width: 50%; /* Leave space for tooltip parenthesis */
     background-color: lightgrey;
 }
 
@@ -424,7 +425,7 @@ rect.handle.handle--w:active {
 
 .tooltip-d3 {
     border: 1px solid #000 !important;
-    max-width: 20em;
+    max-width: 16em;
     pointer-events: none;
     -webkit-transition: opacity 0.1s ease-in-out;
     -moz-transition: opacity 0.1s ease-in-out;
