@@ -1060,26 +1060,45 @@ moduleLayout.directive("directiveActionPanel",
                         scope.selectedMedications =
                             vizObject.patientLists.medications;
 
-                        // Attribute lists
                         html = '<div>' +
-                            '<div class="btn-group" ' +
-                            'role="group" aria-label="...">' +
-                            '<button type="button" ' +
-                                'id="btnDiseases" ' +
-                                'class="btn btn-default" ' +
-                                'ng-class="isAttributeTypeActive(\'' + 
-                                    attributeTypes.DISEASES + '\')" ' +
-                                'ng-click="setAttributeType(\'' + 
-                                    attributeTypes.DISEASES + '\')">' +
-                                'Doenças</button>' +
-                            '<button type="button" ' +
-                                'id="btnMedications" ' +
-                                'class="btn btn-default" ' +
-                                'ng-class="isAttributeTypeActive(\'' + 
-                                    attributeTypes.MEDICATIONS + '\')" ' +
-                                'ng-click="setAttributeType(\'' + 
-                                    attributeTypes.MEDICATIONS + '\')">' +
-                                'Medicações</button>' +
+                            // Data/Filters tabs
+                            '<div class="btn-group btn-group-justified" ' +
+                                    'role="group" aria-label="...">' +
+                                '<div class="btn-group"> ' +
+                                    '<button type="button" ' +
+                                        'id="btnDisplayData" ' +
+                                        'class="btn btn-default" ' +
+                                        '>' +
+                                        'Data</button>' +
+                                '</div>' +
+                                '<div class="btn-group"> ' +
+                                    '<button type="button" ' +
+                                        'id="btnDisplayFilters" ' +
+                                        'class="btn btn-default" ' +
+                                        '>' +
+                                        'Filtros</button>' +
+                                '</div>' +
+                            '</div>' +
+                            '<p/>' +
+                            // Attribute lists
+                            '<div class="btn-group-vertical custom-container-width" ' +
+                                    'role="group" aria-label="...">' +
+                                '<button type="button" ' +
+                                    'id="btnDiseases" ' +
+                                    'class="btn btn-default" ' +
+                                    'ng-class="isAttributeTypeActive(\'' + 
+                                        attributeTypes.DISEASES + '\')" ' +
+                                    'ng-click="setAttributeType(\'' + 
+                                        attributeTypes.DISEASES + '\')">' +
+                                    'Doenças</button>' +
+                                '<button type="button" ' +
+                                    'id="btnMedications" ' +
+                                    'class="btn btn-default" ' +
+                                    'ng-class="isAttributeTypeActive(\'' + 
+                                        attributeTypes.MEDICATIONS + '\')" ' +
+                                    'ng-click="setAttributeType(\'' + 
+                                        attributeTypes.MEDICATIONS + '\')">' +
+                                    'Medicações</button>' +
                             '</div>' +
                             '<p/>' +
                             // Search
@@ -1149,8 +1168,29 @@ moduleLayout.directive("directiveActionPanel",
                             img:    "images/controls/black/add.svg"
                         });
                         html = '<div>' +
+                            // Data/Filters tabs
+                            '<div class="btn-group btn-group-justified" ' +
+                                    'role="group" aria-label="...">' +
+                                '<div class="btn-group"> ' +
+                                    '<button type="button" ' +
+                                        'id="btnDisplayData" ' +
+                                        'class="btn btn-default" ' +
+                                        '>' +
+                                        'Data</button>' +
+                                '</div>' +
+                                '<div class="btn-group"> ' +
+                                    '<button type="button" ' +
+                                        'id="btnDisplayFilters" ' +
+                                        'class="btn btn-default" ' +
+                                        '>' +
+                                        'Filtros</button>' +
+                                '</div>' +
+                            '</div>' +
+                            '<p/>' +
+                            '<div>' +
                                 spiralActions +
-                            '</div>';
+                            '</div>' +
+                        '</div>';
                     } else {
                         html = "<span>TODO</span>";
                     }

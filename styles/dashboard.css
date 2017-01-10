@@ -333,6 +333,7 @@ body {
 
 .dropdown-toggle:hover,
 .btn-group .btn-default:hover,
+.btn-group-vertical .btn-default:hover,
 .patient-table-entry:hover,
 .patient-table-entry-selected,
 .entrySelected {
