@@ -117,3 +117,31 @@ moduleProviders.factory('retrievePatientData', ['$http', function($http) {
         retrieveData: retrieveData
     };
 }]);
+
+moduleProviders.factory('retrieveCountsData',
+        ['patientData', 'retrievePatientData',
+        function(patientData, retrievePatientData) {
+    var retrieveCounts = retrievePatientData.retrieveData('counts.json')
+        .then(function(result) {
+            var counts = {};
+            counts.data = result;
+
+            var patients = patientData.getAttribute(
+                patientData.KEY_PATIENTS);
+            counts.countPatients = patients.length;
+
+            counts.maxIncidences = 0;
+            var length = result.length;
+            while (length--) {
+                if (result[length].incidences > counts.maxIncidences) {
+                    counts.maxIncidences = result[length].incidences;
+                }
+            }
+
+            return counts;
+        });
+
+    return {
+        retrieveCounts: retrieveCounts
+    };
+}]);

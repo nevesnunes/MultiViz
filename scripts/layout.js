@@ -316,47 +316,21 @@ moduleLayout.controller('controllerLayout',
     $scope.APIActionPanel = {};
 }]);
 
-moduleLayout.factory('countsData',
-        ['patientData', 'retrievePatientData',
-        function(patientData, retrievePatientData) {
-    return {
-        retrieveCountsData: retrievePatientData.retrieveData('counts.json')
-            .then(function(result) {
-                var counts = {};
-                counts.data = result;
-
-                var patients = patientData.getAttribute(
-                    patientData.KEY_PATIENTS);
-                counts.countPatients = patients.length;
-
-                counts.maxIncidences = 0;
-                var length = result.length;
-                while (length--) {
-                    if (result[length].incidences > counts.maxIncidences) {
-                        counts.maxIncidences = result[length].incidences;
-                    }
-                }
-
-                return counts;
-            })
-    };
-}]);
-
 moduleLayout.directive("directiveEntryBarFill", 
-        ['utils', 'countsData',
-        function(utils, countsData) {
+        ['utils', 'retrieveCountsData',
+        function(utils, retrieveCountsData) {
     return {
         scope: {
             attribute: "=attribute"
         },
-        link: function(scope, elem, attrs) {
-            countsData.retrieveCountsData.then(function(result) {
+        link: function(scope, element, attrs) {
+            retrieveCountsData.retrieveCounts.then(function(result) {
                 var index = utils.arrayObjectIndexOf(
                     result.data, scope.attribute, "name");
                 if (index !== -1) {
                     var proportion = result.data[index].incidences /
                         result.countPatients * 100;
-                    elem.css({'width': proportion + '%'});
+                    element.css({'width': proportion + '%'});
                 }
             });
         }
