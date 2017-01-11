@@ -384,8 +384,8 @@ moduleLayout.directive('directiveMenuTooltip', function() {
 });
 
 moduleLayout.directive("directiveActionPanel",
-        ['$compile', 'visualizations', 'patientData', 'utils', 'widgets', 'nodes',
-        function($compile, visualizations, patientData, utils, widgets, nodes) {
+        ['$compile', 'visualizations', 'patientData', 'utils', 'widgets', 'nodes', 'retrieveCountsData',
+        function($compile, visualizations, patientData, utils, widgets, nodes, retrieveCountsData) {
 	return { 
         scope: true,
         link: function(scope, element, attrs) {
@@ -425,6 +425,47 @@ moduleLayout.directive("directiveActionPanel",
                 var input = angular.element('#input-option-list');
                 if (input)
                     input.focus();
+
+                // Filters
+                var node = nodes.getCurrentNode();
+                if (node) {
+                    var filters = angular.element(
+                        '#filters-' + node.model.id);
+                    if (filters.length) {
+                        scope.updateFilters(node);
+                    }
+                }
+            };
+
+            scope.updateFilters = function(node) {
+                var dataAges = retrieveCountsData.retrieveAges();
+                d3.select('#filters-' + node.model.id)
+                    .html('<div id="filters-age">Idade</div>');
+
+                var vizWidth = angular.element(
+                    '#filters-' + node.model.id
+                )[0].offsetWidth;
+                var padding = 10;
+                var svgAges = d3.select('#filters-age')
+                    .append("svg")
+                    .attr("width", vizWidth)
+                    .attr("height", padding * 4);
+
+                //
+                // axis
+                //
+                var x2 = d3.scaleLinear().range([0, vizWidth - padding * 4]);
+                x2.domain([dataAges.minAge, dataAges.maxAge]);
+                var xAxis = d3.axisBottom(x2)
+                    .tickValues([dataAges.minAge, dataAges.maxAge]);
+                svgAges.selectAll(".line-axis").remove();
+                svgAges.append("g")
+                    .attr("class", "x axis line-axis")
+                    .attr("height", padding * 4)
+                    .attr("transform", "translate(" +
+                        (padding * 2) + "," +
+                        (padding * 2 + 1) + ")")
+                    .call(xAxis);
             };
 
             scope.chooseSpiral = function() {
@@ -1205,7 +1246,7 @@ moduleLayout.directive("directiveActionPanel",
                                     '</div>' +
                                 '</div>' +
                             '</div>' :
-                            '<div>' +
+                            '<div id="filters-' + currentNode.model.id + '">' +
                                 'TODO' +
                             '</div>';
                         html += '</div>';
@@ -1263,7 +1304,7 @@ moduleLayout.directive("directiveActionPanel",
                             '<div>' +
                                 spiralActions +
                             '</div>' :
-                            '<div>' +
+                            '<div id="filters-' + currentNode.model.id + '">' +
                                 'TODO' +
                             '</div>';
                         html += '</div>';

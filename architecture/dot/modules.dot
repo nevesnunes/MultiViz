@@ -4,6 +4,10 @@ digraph dependencies {
   
     "moduleVisualizations"[label="moduleVisualizations", color=1]
   
+    "moduleProviders"[label="moduleProviders", color=1]
+  
+    "moduleWidgetBuilder"[label="moduleWidgetBuilder", color=1]
+  
     "moduleIndex"[label="moduleIndex", color=1]
   
     "moduleSplits"[label="moduleSplits", color=1]
@@ -18,11 +22,23 @@ digraph dependencies {
   node[shape="ellipse",style="filled",color=2]
   
     
-      "moduleIndex" -> "moduleVisualizations"
+      "moduleProviders" -> "moduleVisualizations"
     
       "moduleUtils" -> "moduleVisualizations"
     
+      "moduleWidgetBuilder" -> "moduleVisualizations"
+    
   
+    
+  
+    
+      "moduleProviders" -> "moduleWidgetBuilder"
+    
+  
+    
+      "moduleProviders" -> "moduleIndex"
+    
+      "moduleWidgetBuilder" -> "moduleIndex"
     
   
     
@@ -32,15 +48,17 @@ digraph dependencies {
     
   
     
-      "moduleIndex" -> "moduleLayout"
+      "moduleProviders" -> "moduleLayout"
     
       "moduleUtils" -> "moduleLayout"
     
       "moduleVisualizations" -> "moduleLayout"
     
+      "moduleWidgetBuilder" -> "moduleLayout"
+    
   
     
-      "moduleIndex" -> "moduleCombined"
+      "moduleProviders" -> "moduleCombined"
     
       "moduleLayout" -> "moduleCombined"
     

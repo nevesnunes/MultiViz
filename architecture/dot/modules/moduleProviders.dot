@@ -1,0 +1,70 @@
+digraph dependencies {
+  node[shape="component",style="filled",colorscheme=paired12]
+
+
+    node[shape="component"]
+    "moduleProviders"[label="moduleProviders", color=1]
+
+    
+
+
+    node[shape="ellipse"]
+    
+
+
+    
+
+    
+
+    
+      "patientData"[label="patientData", color=6]
+      "moduleProviders" -> "patientData"
+    
+      "retrievePatientData"[label="retrievePatientData", color=6]
+      "moduleProviders" -> "retrievePatientData"
+    
+      "retrieveCountsData"[label="retrieveCountsData", color=6]
+      "moduleProviders" -> "retrieveCountsData"
+    
+
+    node[shape="cds"]
+    
+
+    
+
+
+
+
+
+
+
+
+
+    node[shape="ellipse",style="filled", color=9]
+    
+
+    
+
+
+    
+
+    
+
+    
+      
+    
+      
+    
+      
+        "patientData"[label="patientData"]
+        "patientData" -> "retrieveCountsData"
+      
+        "retrievePatientData"[label="retrievePatientData"]
+        "retrievePatientData" -> "retrieveCountsData"
+      
+    
+
+    
+
+
+}

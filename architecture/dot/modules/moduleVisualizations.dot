@@ -6,11 +6,14 @@ digraph dependencies {
     "moduleVisualizations"[label="moduleVisualizations", color=1]
 
     
-      "moduleIndex"[label="moduleIndex", color=1]
-      "moduleIndex" -> "moduleVisualizations"
+      "moduleProviders"[label="moduleProviders", color=1]
+      "moduleProviders" -> "moduleVisualizations"
     
       "moduleUtils"[label="moduleUtils", color=1]
       "moduleUtils" -> "moduleVisualizations"
+    
+      "moduleWidgetBuilder"[label="moduleWidgetBuilder", color=1]
+      "moduleWidgetBuilder" -> "moduleVisualizations"
     
 
 

@@ -1,0 +1,83 @@
+digraph dependencies {
+  node[shape="component",style="filled",colorscheme=paired12]
+
+
+    node[shape="component"]
+    "moduleWidgetBuilder"[label="moduleWidgetBuilder", color=1]
+
+    
+      "moduleProviders"[label="moduleProviders", color=1]
+      "moduleProviders" -> "moduleWidgetBuilder"
+    
+
+
+    node[shape="ellipse"]
+    
+
+
+    
+      "controllerOptionList"[label="controllerOptionList", color=4]
+      "moduleWidgetBuilder" -> "controllerOptionList"
+    
+
+    
+
+    
+      "widgets"[label="widgets", color=6]
+      "moduleWidgetBuilder" -> "widgets"
+    
+
+    node[shape="cds"]
+    
+
+    
+      "directiveStaticTooltip"[label="directiveStaticTooltip", color=3]
+      "moduleWidgetBuilder" -> "directiveStaticTooltip"
+    
+      "directiveTooltip"[label="directiveTooltip", color=3]
+      "moduleWidgetBuilder" -> "directiveTooltip"
+    
+      "directiveOptionList"[label="directiveOptionList", color=3]
+      "moduleWidgetBuilder" -> "directiveOptionList"
+    
+
+
+
+
+
+
+
+
+
+    node[shape="ellipse",style="filled", color=9]
+    
+
+    
+      
+    
+      
+    
+      
+        "patientData"[label="patientData"]
+        "patientData" -> "directiveOptionList"
+      
+    
+
+
+    
+      
+        "$scope"[label="$scope"]
+        "$scope" -> "controllerOptionList"
+      
+    
+
+    
+
+    
+      
+    
+
+    
+
+
+}

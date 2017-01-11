@@ -6,14 +6,17 @@ digraph dependencies {
     "moduleLayout"[label="moduleLayout", color=1]
 
     
-      "moduleIndex"[label="moduleIndex", color=1]
-      "moduleIndex" -> "moduleLayout"
+      "moduleProviders"[label="moduleProviders", color=1]
+      "moduleProviders" -> "moduleLayout"
     
       "moduleUtils"[label="moduleUtils", color=1]
       "moduleUtils" -> "moduleLayout"
     
       "moduleVisualizations"[label="moduleVisualizations", color=1]
       "moduleVisualizations" -> "moduleLayout"
+    
+      "moduleWidgetBuilder"[label="moduleWidgetBuilder", color=1]
+      "moduleWidgetBuilder" -> "moduleLayout"
     
 
 
@@ -43,6 +46,12 @@ digraph dependencies {
       "directiveMainPanel"[label="directiveMainPanel", color=3]
       "moduleLayout" -> "directiveMainPanel"
     
+      "directiveEntryBarFill"[label="directiveEntryBarFill", color=3]
+      "moduleLayout" -> "directiveEntryBarFill"
+    
+      "directiveMenuTooltip"[label="directiveMenuTooltip", color=3]
+      "moduleLayout" -> "directiveMenuTooltip"
+    
       "directiveActionPanel"[label="directiveActionPanel", color=3]
       "moduleLayout" -> "directiveActionPanel"
     
@@ -63,6 +72,19 @@ digraph dependencies {
 
     
       
+        "nodes"[label="nodes"]
+        "nodes" -> "directiveMainPanel"
+      
+    
+      
+        "utils"[label="utils"]
+        "utils" -> "directiveEntryBarFill"
+      
+        "retrieveCountsData"[label="retrieveCountsData"]
+        "retrieveCountsData" -> "directiveEntryBarFill"
+      
+    
+      
     
       
         "visualizations"[label="visualizations"]
@@ -74,13 +96,16 @@ digraph dependencies {
         "utils"[label="utils"]
         "utils" -> "directiveActionPanel"
       
+        "widgets"[label="widgets"]
+        "widgets" -> "directiveActionPanel"
+      
         "nodes"[label="nodes"]
         "nodes" -> "directiveActionPanel"
       
     
       
-        "utils"[label="utils"]
-        "utils" -> "directivePanes"
+        "widgets"[label="widgets"]
+        "widgets" -> "directivePanes"
       
         "nodes"[label="nodes"]
         "nodes" -> "directivePanes"

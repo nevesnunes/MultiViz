@@ -6,6 +6,12 @@ digraph dependencies {
     "moduleIndex"[label="moduleIndex", color=1]
 
     
+      "moduleProviders"[label="moduleProviders", color=1]
+      "moduleProviders" -> "moduleIndex"
+    
+      "moduleWidgetBuilder"[label="moduleWidgetBuilder", color=1]
+      "moduleWidgetBuilder" -> "moduleIndex"
+    
 
 
     node[shape="ellipse"]
@@ -19,32 +25,14 @@ digraph dependencies {
       "controllerMainPanel"[label="controllerMainPanel", color=4]
       "moduleIndex" -> "controllerMainPanel"
     
-      "controllerOptionList"[label="controllerOptionList", color=4]
-      "moduleIndex" -> "controllerOptionList"
-    
 
     
 
-    
-      "retrievePatientData"[label="retrievePatientData", color=6]
-      "moduleIndex" -> "retrievePatientData"
-    
-      "patientData"[label="patientData", color=6]
-      "moduleIndex" -> "patientData"
     
 
     node[shape="cds"]
     
 
-    
-      "directiveStaticTooltip"[label="directiveStaticTooltip", color=3]
-      "moduleIndex" -> "directiveStaticTooltip"
-    
-      "directiveTooltip"[label="directiveTooltip", color=3]
-      "moduleIndex" -> "directiveTooltip"
-    
-      "directiveOptionList"[label="directiveOptionList", color=3]
-      "moduleIndex" -> "directiveOptionList"
     
 
 
@@ -58,15 +46,6 @@ digraph dependencies {
     node[shape="ellipse",style="filled", color=9]
     
 
-    
-      
-    
-      
-    
-      
-        "patientData"[label="patientData"]
-        "patientData" -> "directiveOptionList"
-      
     
 
 
@@ -90,18 +69,9 @@ digraph dependencies {
         "patientData" -> "controllerMainPanel"
       
     
-      
-        "$scope"[label="$scope"]
-        "$scope" -> "controllerOptionList"
-      
-    
 
     
 
-    
-      
-    
-      
     
 
     

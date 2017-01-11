@@ -6,8 +6,8 @@ digraph dependencies {
     "moduleCombined"[label="moduleCombined", color=1]
 
     
-      "moduleIndex"[label="moduleIndex", color=1]
-      "moduleIndex" -> "moduleCombined"
+      "moduleProviders"[label="moduleProviders", color=1]
+      "moduleProviders" -> "moduleCombined"
     
       "moduleLayout"[label="moduleLayout", color=1]
       "moduleLayout" -> "moduleCombined"

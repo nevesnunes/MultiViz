@@ -5,6 +5,10 @@ digraph dependencies {
     
       "moduleVisualizations"[label="moduleVisualizations", color=1]
     
+      "moduleProviders"[label="moduleProviders", color=1]
+    
+      "moduleWidgetBuilder"[label="moduleWidgetBuilder", color=1]
+    
       "moduleIndex"[label="moduleIndex", color=1]
     
       "moduleSplits"[label="moduleSplits", color=1]
@@ -18,11 +22,23 @@ digraph dependencies {
 
     
       
-        "moduleVisualizations" -> "moduleIndex"
+        "moduleVisualizations" -> "moduleProviders"
       
         "moduleVisualizations" -> "moduleUtils"
       
+        "moduleVisualizations" -> "moduleWidgetBuilder"
+      
     
+      
+    
+      
+        "moduleWidgetBuilder" -> "moduleProviders"
+      
+    
+      
+        "moduleIndex" -> "moduleProviders"
+      
+        "moduleIndex" -> "moduleWidgetBuilder"
       
     
       
@@ -32,15 +48,17 @@ digraph dependencies {
       
     
       
-        "moduleLayout" -> "moduleIndex"
+        "moduleLayout" -> "moduleProviders"
       
         "moduleLayout" -> "moduleUtils"
       
         "moduleLayout" -> "moduleVisualizations"
       
+        "moduleLayout" -> "moduleWidgetBuilder"
+      
     
       
-        "moduleCombined" -> "moduleIndex"
+        "moduleCombined" -> "moduleProviders"
       
         "moduleCombined" -> "moduleLayout"
       
@@ -183,9 +201,85 @@ digraph dependencies {
       
 
       
-        "controllerAddData"[label="controllerAddData", color=4]
+
       
-        "controllerMainPanel"[label="controllerMainPanel", color=4]
+
+      
+        "patientData"[label="patientData", color=6]
+      
+        "retrievePatientData"[label="retrievePatientData", color=6]
+      
+        "retrieveCountsData"[label="retrieveCountsData", color=6]
+      
+
+
+      node[shape="cds"]
+
+      
+
+      
+
+
+
+
+
+      node[shape="ellipse"]
+      
+
+      
+
+      
+
+      
+
+      
+        "moduleProviders" -> "patientData"
+      
+        "moduleProviders" -> "retrievePatientData"
+      
+        "moduleProviders" -> "retrieveCountsData"
+      
+
+      
+
+
+
+
+
+
+
+
+
+
+
+      node[shape="ellipse",style="filled", color=8]
+      
+
+      
+
+      
+
+      
+
+      
+        
+      
+        
+      
+        
+          "patientData"[label="patientData"]
+          "patientData" -> "retrieveCountsData"
+        
+          "retrievePatientData"[label="retrievePatientData"]
+          "retrievePatientData" -> "retrieveCountsData"
+        
+      
+
+      
+
+    
+      
+
       
         "controllerOptionList"[label="controllerOptionList", color=4]
       
@@ -193,9 +287,7 @@ digraph dependencies {
       
 
       
-        "retrievePatientData"[label="retrievePatientData", color=6]
-      
-        "patientData"[label="patientData", color=6]
+        "widgets"[label="widgets", color=6]
       
 
 
@@ -219,27 +311,21 @@ digraph dependencies {
       
 
       
-        "moduleIndex" -> "directiveStaticTooltip"
+        "moduleWidgetBuilder" -> "directiveStaticTooltip"
       
-        "moduleIndex" -> "directiveTooltip"
+        "moduleWidgetBuilder" -> "directiveTooltip"
       
-        "moduleIndex" -> "directiveOptionList"
+        "moduleWidgetBuilder" -> "directiveOptionList"
       
 
       
-        "moduleIndex" -> "controllerAddData"
-      
-        "moduleIndex" -> "controllerMainPanel"
-      
-        "moduleIndex" -> "controllerOptionList"
+        "moduleWidgetBuilder" -> "controllerOptionList"
       
 
       
 
       
-        "moduleIndex" -> "retrievePatientData"
-      
-        "moduleIndex" -> "patientData"
+        "moduleWidgetBuilder" -> "widgets"
       
 
       
@@ -271,6 +357,77 @@ digraph dependencies {
       
         
           "$scope"[label="$scope"]
+          "$scope" -> "controllerOptionList"
+        
+      
+
+      
+
+      
+        
+      
+
+      
+
+    
+      
+
+      
+        "controllerAddData"[label="controllerAddData", color=4]
+      
+        "controllerMainPanel"[label="controllerMainPanel", color=4]
+      
+
+      
+
+      
+
+
+      node[shape="cds"]
+
+      
+
+      
+
+
+
+
+
+      node[shape="ellipse"]
+      
+
+      
+
+      
+        "moduleIndex" -> "controllerAddData"
+      
+        "moduleIndex" -> "controllerMainPanel"
+      
+
+      
+
+      
+
+      
+
+
+
+
+
+
+
+
+
+
+
+      node[shape="ellipse",style="filled", color=8]
+      
+
+      
+
+      
+        
+          "$scope"[label="$scope"]
           "$scope" -> "controllerAddData"
         
           "patientData"[label="patientData"]
@@ -288,18 +445,9 @@ digraph dependencies {
           "patientData" -> "controllerMainPanel"
         
       
-        
-          "$scope"[label="$scope"]
-          "$scope" -> "controllerOptionList"
-        
-      
 
       
 
-      
-        
-      
-        
       
 
       
@@ -445,6 +593,10 @@ digraph dependencies {
       
         "directiveMainPanel"[label="directiveMainPanel", color=3]
       
+        "directiveEntryBarFill"[label="directiveEntryBarFill", color=3]
+      
+        "directiveMenuTooltip"[label="directiveMenuTooltip", color=3]
+      
         "directiveActionPanel"[label="directiveActionPanel", color=3]
       
         "directivePanes"[label="directivePanes", color=3]
@@ -459,6 +611,10 @@ digraph dependencies {
 
       
         "moduleLayout" -> "directiveMainPanel"
+      
+        "moduleLayout" -> "directiveEntryBarFill"
+      
+        "moduleLayout" -> "directiveMenuTooltip"
       
         "moduleLayout" -> "directiveActionPanel"
       
@@ -494,6 +650,19 @@ digraph dependencies {
 
       
         
+          "nodes"[label="nodes"]
+          "nodes" -> "directiveMainPanel"
+        
+      
+        
+          "utils"[label="utils"]
+          "utils" -> "directiveEntryBarFill"
+        
+          "retrieveCountsData"[label="retrieveCountsData"]
+          "retrieveCountsData" -> "directiveEntryBarFill"
+        
+      
+        
       
         
           "visualizations"[label="visualizations"]
@@ -505,13 +674,16 @@ digraph dependencies {
           "utils"[label="utils"]
           "utils" -> "directiveActionPanel"
         
+          "widgets"[label="widgets"]
+          "widgets" -> "directiveActionPanel"
+        
           "nodes"[label="nodes"]
           "nodes" -> "directiveActionPanel"
         
       
         
-          "utils"[label="utils"]
-          "utils" -> "directivePanes"
+          "widgets"[label="widgets"]
+          "widgets" -> "directivePanes"
         
           "nodes"[label="nodes"]
           "nodes" -> "directivePanes"
