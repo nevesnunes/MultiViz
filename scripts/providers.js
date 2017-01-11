@@ -121,7 +121,7 @@ moduleProviders.factory('retrievePatientData', ['$http', function($http) {
 moduleProviders.factory('retrieveCountsData',
         ['patientData', 'retrievePatientData',
         function(patientData, retrievePatientData) {
-    var retrieveCounts = retrievePatientData.retrieveData('counts.json')
+    var retrieveIncidences = retrievePatientData.retrieveData('counts.json')
         .then(function(result) {
             var counts = {};
             counts.data = result;
@@ -142,6 +142,6 @@ moduleProviders.factory('retrieveCountsData',
         });
 
     return {
-        retrieveCounts: retrieveCounts
+        retrieveIncidences: retrieveIncidences
     };
 }]);

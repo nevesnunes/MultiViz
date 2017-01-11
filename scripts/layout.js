@@ -348,7 +348,7 @@ moduleLayout.directive("directiveEntryBarFill",
             attribute: "=attribute"
         },
         link: function(scope, element, attrs) {
-            retrieveCountsData.retrieveCounts.then(function(result) {
+            retrieveCountsData.retrieveIncidences.then(function(result) {
                 var index = utils.arrayObjectIndexOf(
                     result.data, scope.attribute, "name");
                 if (index !== -1) {
@@ -521,7 +521,7 @@ moduleLayout.directive("directiveActionPanel",
                 var viz = nodes.getVizByIDs(
                     node.model.id, node.model.currentVizID);
                 return (viz.vizObject.isAttributeTypeActive(type)) ?
-                    "buttonSelected" :
+                    "button-selected" :
                     "";
             };
 
@@ -539,7 +539,7 @@ moduleLayout.directive("directiveActionPanel",
                 var viz = nodes.getVizByIDs(
                     node.model.id, node.model.currentVizID);
                 return (viz.vizObject.isModificationTypeActive(type)) ?
-                    "active pillSelected" :
+                    "active" :
                     "";
             };
 
@@ -1113,7 +1113,7 @@ moduleLayout.directive("directiveActionPanel",
 
                         html = '<div>' +
                             // Data/Filters pills
-                            '<ul class="nav nav-pills">' +
+                            '<ul class="nav nav-pills nav-justified">' +
                                 '<li ' +
                                     'id="btnDisplayData" ' +
                                     'ng-class="isModificationTypeActive(\'' + 
@@ -1131,7 +1131,7 @@ moduleLayout.directive("directiveActionPanel",
                                     '<a href="#">Filtros</a>' +
                                 '</li>' +
                             '</ul>' +
-                            '<p/>' +
+                            '<div class="custom-separator" />' +
                             // Attribute lists
                             '<div class="btn-group-vertical custom-container-width" ' +
                                     'role="group" aria-label="...">' +
@@ -1205,6 +1205,17 @@ moduleLayout.directive("directiveActionPanel",
                         '</div>';
                     } else if (currentNode.model.vizType ===
                             scope.vizType.SPIRAL) {
+                        var vizObject = nodes.getVizByIDs(
+                                currentNode.model.id,
+                                currentNode.model.currentVizID)
+                            .vizObject;
+                        var currentAttributeType = vizObject
+                            .currentAttributeType;
+                        var attributeTypes = vizObject
+                            .getAttributeTypes();
+                        var modificationTypes = vizObject
+                            .getModificationTypes();
+
                         scope.patient = 
                                 patientData.getAttribute(patientData.KEY_PATIENT);
                         scope.defaultActionsList = 
@@ -1213,30 +1224,33 @@ moduleLayout.directive("directiveActionPanel",
                                 });
 
                         var spiralActions = widgets.makeImgButton({
-                            clazz:  "btn-secondary custom-btn-secondary custom-center",
-                            id:     nodes.getCurrentNode().model.id,
+                            clazz:  "btn-secondary custom-btn-secondary custom-container-width",
+                            id:     currentNode.model.id,
                             method: "chooseAddSpiral($event)",
                             text:   "Adicionar espiral",
                             img:    "images/controls/black/add.svg"
                         });
                         html = '<div>' +
-                            // Data/Filters tabs
-                            '<div class="btn-group btn-group-justified" ' +
-                                    'role="group" aria-label="...">' +
-                                '<div class="btn-group"> ' +
-                                    '<button type="button" ' +
-                                        'id="btnDisplayData" ' +
-                                        'class="btn btn-default">' +
-                                        'Dados</button>' +
-                                '</div>' +
-                                '<div class="btn-group"> ' +
-                                    '<button type="button" ' +
-                                        'id="btnDisplayFilters" ' +
-                                        'class="btn btn-default">' +
-                                        'Filtros</button>' +
-                                '</div>' +
-                            '</div>' +
-                            '<p/>' +
+                            // Data/Filters pills
+                            '<ul class="nav nav-pills nav-justified">' +
+                                '<li ' +
+                                    'id="btnDisplayData" ' +
+                                    'ng-class="isModificationTypeActive(\'' + 
+                                        modificationTypes.DATA + '\')" ' +
+                                    'ng-click="setModificationType(\'' + 
+                                        modificationTypes.DATA + '\')">' +
+                                    '<a href="#">Dados</a>' +
+                                '</li>' +
+                                '<li ' +
+                                    'id="btnDisplayFilters" ' +
+                                    'ng-class="isModificationTypeActive(\'' + 
+                                        modificationTypes.FILTERS + '\')" ' +
+                                    'ng-click="setModificationType(\'' + 
+                                        modificationTypes.FILTERS + '\')">' +
+                                    '<a href="#">Filtros</a>' +
+                                '</li>' +
+                            '</ul>' +
+                            '<div class="custom-separator" />' +
                             '<div>' +
                                 spiralActions +
                             '</div>' +
@@ -1831,7 +1845,7 @@ moduleLayout.directive("directivePanes",
                     });
                     var viz = nodes.getVizByIDs(nodeID, node.model.currentVizID);
                     return (viz.vizObject.isRendererActive(type)) ?
-                        "buttonSelected" :
+                        "button-selected" :
                         "";
                 } else {
                     return "";

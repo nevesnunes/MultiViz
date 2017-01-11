@@ -106,7 +106,7 @@ moduleWidgetBuilder.controller('controllerOptionList',
     };
 
     $scope.isEntrySelected = function(index) {
-        return (index === $scope.selectedOption) ? "entrySelected" : "";
+        return (index === $scope.selectedOption) ? "entry-selected" : "";
     };
 }]);
 

@@ -84,6 +84,20 @@
     margin: 0;
 }
 
+.custom-separator {
+    border-bottom: 0.1em solid #ccc;
+    margin: 1em 0;
+}
+
+.custom-nav-pills>li.active>a,
+.custom-nav-pills>li.active>a:focus,
+.custom-nav-pills>li.active>a:hover {
+    background-color: transparent;
+    color: #337ab7;
+    border-bottom: 0.5em solid;
+    border-radius: 0;
+}
+
 .checkboxInTable {
     position: relative;
     display: block;

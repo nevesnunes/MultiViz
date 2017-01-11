@@ -341,20 +341,14 @@ body {
 .btn-group-vertical .btn-default:hover,
 .patient-table-entry:hover,
 .patient-table-entry-selected,
-.entrySelected {
+.entry-selected {
     background-color: #c4e3f3;
     color: #000;
 }
 
-.buttonSelected {
+.button-selected {
     background-color: #337ab7;
     color: white;
-    font-weight: bold;
-}
-
-.pillSelected {
-    color: white;
-    font-weight: bold;
 }
 
 .inline-wrapper {
