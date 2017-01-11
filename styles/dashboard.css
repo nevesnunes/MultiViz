@@ -196,6 +196,10 @@ body {
     font-weight: bold;
 }
 
+.custom-container-align {
+    text-align: left;
+}
+
 .custom-container-padding {
     padding-left: 0;
 }
@@ -309,6 +313,7 @@ body {
 .patient-table-entry-text {
     display: inline-block;
     padding-bottom: 0.25em;
+    padding-left: 0.25em;
 }
 
 .patient-table-entry-bar {

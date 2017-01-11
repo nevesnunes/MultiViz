@@ -35,7 +35,15 @@
                                 <p></p>
                                 <div class="table table-condensed table-bordered patient-table">
                                     <div ng-cloak ng-repeat="patient in filteredAttributes = (patientList | filter: optionListModel.name:optionListModel.id)" ng-click="selectEntry($event, patient)">
-                                        <div ng-focus="focusedEntry($event, patient)" class="patient-table-entry" ng-class="isEntrySelected($index)"><b>Nome: </b><span ng-bind="patient.name"></span><br/><b>ID: </b><span ng-bind="patient.id"></span></div>
+                                        <div ng-focus="focusedEntry($event, patient)" class="patient-table-entry" ng-class="isEntrySelected($index)">
+                                            <div class="patient-table-entry-text">
+                                                <b>Nome: </b>
+                                                <span ng-bind="patient.name"></span>
+                                                <br/>
+                                                <b>ID: </b>
+                                                <span ng-bind="patient.id"></span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 

@@ -255,7 +255,9 @@ moduleLayout.controller('controllerMainPanel',
         " (" + $scope.patient.lastVisitPeriod + ")";
 }]);
 
-moduleLayout.directive("directiveMainPanel", function() {
+moduleLayout.directive("directiveMainPanel",
+        ['$compile', 'nodes',
+        function($compile, nodes) {
 	return { 
         scope: true,
         link: function(scope, element, attrs) {
@@ -265,17 +267,39 @@ moduleLayout.directive("directiveMainPanel", function() {
             scope.newLayout = function(button) {
                 scope.APIPanes.newLayout();
             };
+            scope.showViews = function() {
+                scope.views = [];
+                var rootNode = nodes.getRootNode();
+                if (rootNode) {
+                    nodes.getRootNode().walk(function(node) {
+                        if(!node.hasChildren())
+                            scope.views.push(node);
+                    });
+                }
+
+                var html = '<li>';
+                html += (scope.views.length === 0) ?
+                    '<a><span class="glyphicon glyphicon-alert" aria-hidden="true"></span> Nenhuma vista disponível.</a>' :
+                    '<a href="#" id="show-views-{{::view.model.id}}" ng-repeat="view in views">' +
+                        '{{::view.model.vizType}} ({{::view.model.id}})' +
+                    '</a>';
+                html += '</li>';
+                var showViewsTarget = angular.element(
+                    '#showViewsMenu');
+                showViewsTarget.html(
+                    $compile(html)(scope));
+            };
         }
     };
-});
+}]);
 
 moduleLayout.controller('controllerLayout',
         ['$scope', 'patientData',
         function($scope, patientData) {
     $scope.vizType = Object.freeze({
-        NONE: "none",
-        HEAT_MAP: "heat_map",
-        SPIRAL: "spiral"
+        NONE: "NONE",
+        HEAT_MAP: "Matrix",
+        SPIRAL: "Espiral"
     });
 
     // Attribute lists shared among multiple patients
@@ -1069,7 +1093,7 @@ moduleLayout.directive("directiveActionPanel",
                                         'id="btnDisplayData" ' +
                                         'class="btn btn-default" ' +
                                         '>' +
-                                        'Data</button>' +
+                                        'Dados</button>' +
                                 '</div>' +
                                 '<div class="btn-group"> ' +
                                     '<button type="button" ' +
@@ -1085,7 +1109,7 @@ moduleLayout.directive("directiveActionPanel",
                                     'role="group" aria-label="...">' +
                                 '<button type="button" ' +
                                     'id="btnDiseases" ' +
-                                    'class="btn btn-default" ' +
+                                    'class="btn btn-default custom-container-align" ' +
                                     'ng-class="isAttributeTypeActive(\'' + 
                                         attributeTypes.DISEASES + '\')" ' +
                                     'ng-click="setAttributeType(\'' + 
@@ -1093,7 +1117,7 @@ moduleLayout.directive("directiveActionPanel",
                                     'Doenças</button>' +
                                 '<button type="button" ' +
                                     'id="btnMedications" ' +
-                                    'class="btn btn-default" ' +
+                                    'class="btn btn-default custom-container-align" ' +
                                     'ng-class="isAttributeTypeActive(\'' + 
                                         attributeTypes.MEDICATIONS + '\')" ' +
                                     'ng-click="setAttributeType(\'' + 
@@ -1176,7 +1200,7 @@ moduleLayout.directive("directiveActionPanel",
                                         'id="btnDisplayData" ' +
                                         'class="btn btn-default" ' +
                                         '>' +
-                                        'Data</button>' +
+                                        'Dados</button>' +
                                 '</div>' +
                                 '<div class="btn-group"> ' +
                                     '<button type="button" ' +
