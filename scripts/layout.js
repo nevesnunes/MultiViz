@@ -408,7 +408,14 @@ moduleLayout.directive("directiveActionPanel",
                     }, { 
                         name: "setAttributeType",
                         handler: setAttributeType
+                    }, { 
+                        name: "isModificationTypeActive",
+                        handler: isModificationTypeActive
+                    }, { 
+                        name: "setModificationType",
+                        handler: setModificationType
                     }
+
                 ]);
 
                 currentHTML = $compile(html)(currentScope);
@@ -515,6 +522,24 @@ moduleLayout.directive("directiveActionPanel",
                     node.model.id, node.model.currentVizID);
                 return (viz.vizObject.isAttributeTypeActive(type)) ?
                     "buttonSelected" :
+                    "";
+            };
+
+            var setModificationType = function(type) {
+                var node = nodes.getCurrentNode();
+                var viz = nodes.getVizByIDs(
+                    node.model.id, node.model.currentVizID);
+                viz.vizObject.setCurrentModificationType(type);
+
+                scope.makeDefaultActions();
+            };
+
+            var isModificationTypeActive = function(type) {
+                var node = nodes.getCurrentNode();
+                var viz = nodes.getVizByIDs(
+                    node.model.id, node.model.currentVizID);
+                return (viz.vizObject.isModificationTypeActive(type)) ?
+                    "active pillSelected" :
                     "";
             };
 
@@ -1075,6 +1100,8 @@ moduleLayout.directive("directiveActionPanel",
                             .currentAttributeType;
                         var attributeTypes = vizObject
                             .getAttributeTypes();
+                        var modificationTypes = vizObject
+                            .getModificationTypes();
 
                         var list = currentAttributeType + "Names";
 
@@ -1085,24 +1112,25 @@ moduleLayout.directive("directiveActionPanel",
                             vizObject.patientLists.medications;
 
                         html = '<div>' +
-                            // Data/Filters tabs
-                            '<div class="btn-group btn-group-justified" ' +
-                                    'role="group" aria-label="...">' +
-                                '<div class="btn-group"> ' +
-                                    '<button type="button" ' +
-                                        'id="btnDisplayData" ' +
-                                        'class="btn btn-default" ' +
-                                        '>' +
-                                        'Dados</button>' +
-                                '</div>' +
-                                '<div class="btn-group"> ' +
-                                    '<button type="button" ' +
-                                        'id="btnDisplayFilters" ' +
-                                        'class="btn btn-default" ' +
-                                        '>' +
-                                        'Filtros</button>' +
-                                '</div>' +
-                            '</div>' +
+                            // Data/Filters pills
+                            '<ul class="nav nav-pills">' +
+                                '<li ' +
+                                    'id="btnDisplayData" ' +
+                                    'ng-class="isModificationTypeActive(\'' + 
+                                        modificationTypes.DATA + '\')" ' +
+                                    'ng-click="setModificationType(\'' + 
+                                        modificationTypes.DATA + '\')">' +
+                                    '<a href="#">Dados</a>' +
+                                '</li>' +
+                                '<li ' +
+                                    'id="btnDisplayFilters" ' +
+                                    'ng-class="isModificationTypeActive(\'' + 
+                                        modificationTypes.FILTERS + '\')" ' +
+                                    'ng-click="setModificationType(\'' + 
+                                        modificationTypes.FILTERS + '\')">' +
+                                    '<a href="#">Filtros</a>' +
+                                '</li>' +
+                            '</ul>' +
                             '<p/>' +
                             // Attribute lists
                             '<div class="btn-group-vertical custom-container-width" ' +
@@ -1198,15 +1226,13 @@ moduleLayout.directive("directiveActionPanel",
                                 '<div class="btn-group"> ' +
                                     '<button type="button" ' +
                                         'id="btnDisplayData" ' +
-                                        'class="btn btn-default" ' +
-                                        '>' +
+                                        'class="btn btn-default">' +
                                         'Dados</button>' +
                                 '</div>' +
                                 '<div class="btn-group"> ' +
                                     '<button type="button" ' +
                                         'id="btnDisplayFilters" ' +
-                                        'class="btn btn-default" ' +
-                                        '>' +
+                                        'class="btn btn-default">' +
                                         'Filtros</button>' +
                                 '</div>' +
                             '</div>' +
@@ -1321,14 +1347,14 @@ moduleLayout.directive("directivePanes",
                             id:     id,
                             method: "paneColapse()",
                             title:  "Colapsar Vista",
-                            img:    "images/controls/colapse.svg"
+                            img:    "images/controls/black/colapse.svg"
                         });
                     } else {
                         viewportButton = widgets.makeImgButton({
                             id:     id,
                             method: "paneMaximize($event)",
                             title:  "Maximizar Vista",
-                            img:    "images/controls/maximize.svg"
+                            img:    "images/controls/black/maximize.svg"
                         });
                     }
                 }
@@ -1342,19 +1368,19 @@ moduleLayout.directive("directivePanes",
                         id:     id,
                         method: "paneSplitVertical($event)",
                         title:  "Separar na Vertical",
-                        img:    "images/controls/split-vertical.svg"
+                        img:    "images/controls/black/split-vertical.svg"
                     }) +
                     widgets.makeImgButton({
                         id:     id,
                         method: "paneSplitHorizontal($event)",
                         title:  "Separar na Horizontal",
-                        img:    "images/controls/split-horizontal.svg"
+                        img:    "images/controls/black/split-horizontal.svg"
                     }) +
                     widgets.makeImgButton({
                         id:     id,
                         method: "paneRemove($event)",
                         title:  "Remover Vista",
-                        img:    "images/controls/remove.svg"
+                        img:    "images/controls/black/remove.svg"
                     }) +
                     visualization +
                     '</div>' +
@@ -1523,7 +1549,7 @@ moduleLayout.directive("directivePanes",
                                 'class="custom-btn-svg custom-btn-svg-checked"> ';
                     } else {
                         target.removeClass('custom-btn-checked');
-                        img = "images/controls/pin.svg";
+                        img = "images/controls/black/pin.svg";
                         html = '<img src="' + img + '" ' +
                                 'data-id="' + vizID + '" ' +
                                 'class="custom-btn-svg"> ';
@@ -1689,14 +1715,14 @@ moduleLayout.directive("directivePanes",
                         nodeID: id,
                         method: "updateFromSpiralAttribute($event)",
                         title:  "Substituir atributo",
-                        img:    "images/controls/config.svg"
+                        img:    "images/controls/black/config.svg"
                     }) +
                     widgets.makeImgButton({
                         id:     vizID,
                         nodeID: id,
                         method: "joinSpiral($event)",
                         title:  "Juntar Espirais",
-                        img:    "images/controls/join.svg"
+                        img:    "images/controls/black/join.svg"
                     }) +
                     widgets.makeImgButton({
                         id:           vizID,
@@ -1704,7 +1730,9 @@ moduleLayout.directive("directivePanes",
                         checkable:    true,
                         method:       "togglePinnedSpiral($event)",
                         title:        "Marcar espiral como visualização principal",
-                        img:          "images/controls/pin.svg",
+                        img:          (isChecked) ?
+                                        "images/controls/pin.svg" :
+                                        "images/controls/black/pin.svg",
                         isChecked:    isChecked,
                         clazzChecked: "custom-btn-checked",
                         titleChecked: "Desmarcar espiral como visualização principal",
@@ -1715,7 +1743,7 @@ moduleLayout.directive("directivePanes",
                         nodeID: id,
                         method: "removeSpiral($event)",
                         title:  "Remover Espiral",
-                        img:    "images/controls/remove.svg"
+                        img:    "images/controls/black/remove.svg"
                     });
                 }
 

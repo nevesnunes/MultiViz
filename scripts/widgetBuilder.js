@@ -3,7 +3,7 @@ var moduleWidgetBuilder = angular.module('moduleWidgetBuilder',
 
 moduleWidgetBuilder.factory('widgets', [function() {
     var makeImgButton = function(options) {
-        options.clazz = options.clazz || "btn-primary";
+        options.clazz = options.clazz || "btn-secondary";
         options.directive = options.directive || "";
         options.id = options.id || "";
         options.nodeID = options.nodeID || "";

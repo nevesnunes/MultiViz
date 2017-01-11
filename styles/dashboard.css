@@ -347,7 +347,12 @@ body {
 }
 
 .buttonSelected {
-    background-color: #777;
+    background-color: #337ab7;
+    color: white;
+    font-weight: bold;
+}
+
+.pillSelected {
     color: white;
     font-weight: bold;
 }

@@ -1,3 +1,7 @@
 [ng-cloak], .ng-cloak {
   visibility: hidden !important;
 }
+
+.btn-secondary {
+    border: 1px solid #ccc;
+}

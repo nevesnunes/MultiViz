@@ -89,6 +89,7 @@ moduleVisualizations.factory('HeatMapVisualization',
         this.rendererAddStyle = rendererAddStyle.SIM; 
         this.rendererRemoveStyle = rendererRemoveStyle.SIM; 
         this.currentAttributeType = attributeType.DISEASES;
+        this.currentModificationType = modificationType.DATA;
 
         // Specific state is maintained in a separate object,
         // which we will use in our facade
@@ -1445,6 +1446,36 @@ moduleVisualizations.factory('HeatMapVisualization',
         MEDICATIONS: "medications"
     });
 
+    HeatMapVisualization.prototype.isAttributeTypeActive = function(type) {
+        return this.currentAttributeType === type;
+    };
+
+    HeatMapVisualization.prototype.getAttributeTypes = function(type) {
+        return attributeType;
+    };
+
+    HeatMapVisualization.prototype.setCurrentAttributeType = function(type) {
+        this.currentAttributeType = type;
+    };
+
+    var modificationType = Object.freeze({
+        NONE: "none",
+        DATA: "data",
+        FILTERS: "filters"
+    });
+
+    HeatMapVisualization.prototype.isModificationTypeActive = function(type) {
+        return this.currentModificationType === type;
+    };
+
+    HeatMapVisualization.prototype.getModificationTypes = function(type) {
+        return modificationType;
+    };
+
+    HeatMapVisualization.prototype.setCurrentModificationType = function(type) {
+        this.currentModificationType = type;
+    };
+
     // NOTE: We want the called methods to have their `this` as the created
     // `HeatMapVisualization` object. Since using bind() here would be too
     // tricky, we simple have a property on the `HeatMapVisualization` object
@@ -1519,18 +1550,6 @@ moduleVisualizations.factory('HeatMapVisualization',
 
         // Render paths, reusing data stored in the visualization object
         self.render();
-    };
-
-    HeatMapVisualization.prototype.isAttributeTypeActive = function(type) {
-        return this.currentAttributeType === type;
-    };
-
-    HeatMapVisualization.prototype.getAttributeTypes = function(type) {
-        return attributeType;
-    };
-
-    HeatMapVisualization.prototype.setCurrentAttributeType = function(type) {
-        this.currentAttributeType = type;
     };
 
     HeatMapVisualization.prototype.isRendererActive = function(type) {

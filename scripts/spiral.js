@@ -28,6 +28,7 @@ moduleVisualizations.factory('SpiralVisualization',
         this.medications = options.medications;
         this.currentMedication = [options.currentMedication];
         this.currentAttributeType = attributeType.DISEASES;
+        this.currentModificationType = modificationType.DATA;
 
         // Specific state is maintained in a separate object,
         // which we will use in our facade
@@ -507,6 +508,24 @@ moduleVisualizations.factory('SpiralVisualization',
 
     SpiralVisualization.prototype.setCurrentAttributeType = function(type) {
         this.currentAttributeType = type;
+    };
+
+    var modificationType = Object.freeze({
+        NONE: "none",
+        DATA: "data",
+        FILTERS: "filters"
+    });
+
+    SpiralVisualization.prototype.isModificationTypeActive = function(type) {
+        return this.currentModificationType === type;
+    };
+
+    SpiralVisualization.prototype.getModificationTypes = function(type) {
+        return modificationType;
+    };
+
+    SpiralVisualization.prototype.setCurrentModificationType = function(type) {
+        this.currentModificationType = type;
     };
 
     visualizations.validateInterface(
