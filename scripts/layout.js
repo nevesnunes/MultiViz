@@ -1100,6 +1100,8 @@ moduleLayout.directive("directiveActionPanel",
                             .currentAttributeType;
                         var attributeTypes = vizObject
                             .getAttributeTypes();
+                        var currentModificationType = vizObject
+                            .currentModificationType;
                         var modificationTypes = vizObject
                             .getModificationTypes();
 
@@ -1131,7 +1133,8 @@ moduleLayout.directive("directiveActionPanel",
                                     '<a href="#">Filtros</a>' +
                                 '</li>' +
                             '</ul>' +
-                            '<div class="custom-separator" />' +
+                            '<div class="custom-separator" />';
+                        html += (currentModificationType === modificationTypes.DATA) ?
                             // Attribute lists
                             '<div class="btn-group-vertical custom-container-width" ' +
                                     'role="group" aria-label="...">' +
@@ -1201,8 +1204,11 @@ moduleLayout.directive("directiveActionPanel",
                                         '</div>' +
                                     '</div>' +
                                 '</div>' +
-                            '</div>' +
-                        '</div>';
+                            '</div>' :
+                            '<div>' +
+                                'TODO' +
+                            '</div>';
+                        html += '</div>';
                     } else if (currentNode.model.vizType ===
                             scope.vizType.SPIRAL) {
                         var vizObject = nodes.getVizByIDs(
@@ -1213,6 +1219,8 @@ moduleLayout.directive("directiveActionPanel",
                             .currentAttributeType;
                         var attributeTypes = vizObject
                             .getAttributeTypes();
+                        var currentModificationType = vizObject
+                            .currentModificationType;
                         var modificationTypes = vizObject
                             .getModificationTypes();
 
@@ -1250,11 +1258,15 @@ moduleLayout.directive("directiveActionPanel",
                                     '<a href="#">Filtros</a>' +
                                 '</li>' +
                             '</ul>' +
-                            '<div class="custom-separator" />' +
+                            '<div class="custom-separator" />';
+                        html += (currentModificationType === modificationTypes.DATA) ?
                             '<div>' +
                                 spiralActions +
-                            '</div>' +
-                        '</div>';
+                            '</div>' :
+                            '<div>' +
+                                'TODO' +
+                            '</div>';
+                        html += '</div>';
                     } else {
                         html = "<span>TODO</span>";
                     }

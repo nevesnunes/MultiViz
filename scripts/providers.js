@@ -121,6 +121,34 @@ moduleProviders.factory('retrievePatientData', ['$http', function($http) {
 moduleProviders.factory('retrieveCountsData',
         ['patientData', 'retrievePatientData',
         function(patientData, retrievePatientData) {
+    var retrieveAges = function() {
+        var counts = {};
+
+        var patients = patientData.getAttribute(
+            patientData.KEY_PATIENTS);
+        counts.data = patients.map(function(patient) {
+            return {
+                age: patient.biomedicalAttributes.age,
+                ageGroup: patient.biomedicalAttributes.ageGroup,
+                id: patient.id
+            };
+        });
+
+        counts.minAge = Number.MAX_SAFE_INTEGER;
+        counts.maxAge = Number.MIN_SAFE_INTEGER;
+        var length = counts.data.length;
+        while (length--) {
+            if (counts.data[length].age > counts.maxAge) {
+                counts.maxAge = counts.data[length].age;
+            }
+            if (counts.data[length].age < counts.minAge) {
+                counts.minAge = counts.data[length].age;
+            }
+        }
+
+        return counts;
+    };
+
     var retrieveIncidences = retrievePatientData.retrieveData('counts.json')
         .then(function(result) {
             var counts = {};
@@ -130,7 +158,7 @@ moduleProviders.factory('retrieveCountsData',
                 patientData.KEY_PATIENTS);
             counts.countPatients = patients.length;
 
-            counts.maxIncidences = 0;
+            counts.maxIncidences = Number.MIN_SAFE_INTEGER;
             var length = result.length;
             while (length--) {
                 if (result[length].incidences > counts.maxIncidences) {
@@ -142,6 +170,7 @@ moduleProviders.factory('retrieveCountsData',
         });
 
     return {
+        retrieveAges: retrieveAges,
         retrieveIncidences: retrieveIncidences
     };
 }]);

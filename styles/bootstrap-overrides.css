@@ -5,3 +5,8 @@
 .btn-secondary {
     border: 1px solid #ccc;
 }
+
+.btn-secondary:hover {
+    background-color: #ccc;
+    border-color: #aaa;
+}
