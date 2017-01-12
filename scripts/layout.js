@@ -438,34 +438,18 @@ moduleLayout.directive("directiveActionPanel",
             };
 
             scope.updateFilters = function(node) {
-                var dataAges = retrieveCountsData.retrieveAges();
-                d3.select('#filters-' + node.model.id)
-                    .html('<div id="filters-age">Idade</div>');
-
-                var vizWidth = angular.element(
-                    '#filters-' + node.model.id
-                )[0].offsetWidth;
-                var padding = 10;
-                var svgAges = d3.select('#filters-age')
-                    .append("svg")
-                    .attr("width", vizWidth)
-                    .attr("height", padding * 4);
-
-                //
-                // axis
-                //
-                var x2 = d3.scaleLinear().range([0, vizWidth - padding * 4]);
-                x2.domain([dataAges.minAge, dataAges.maxAge]);
-                var xAxis = d3.axisBottom(x2)
-                    .tickValues([dataAges.minAge, dataAges.maxAge]);
-                svgAges.selectAll(".line-axis").remove();
-                svgAges.append("g")
-                    .attr("class", "x axis line-axis")
-                    .attr("height", padding * 4)
-                    .attr("transform", "translate(" +
-                        (padding * 2) + "," +
-                        (padding * 2 + 1) + ")")
-                    .call(xAxis);
+                // FIXME: Implement observer pattern to broadcast to all
+                // visible views
+                var viz = nodes.getVizByIDs(
+                    node.model.id, node.model.currentVizID);
+                var vizObject = viz.vizObject;
+                vizObject.update(
+                    node.model.id,
+                    node.model.currentVizID,
+                    {
+                        filters: ['age']
+                    }
+                );
             };
 
             scope.chooseSpiral = function() {
@@ -1131,19 +1115,24 @@ moduleLayout.directive("directiveActionPanel",
                     (!nodes.isMaximized(nodes.getRootNode().model.id));
                 if (rootHasNoChildren || viewNotRoot) {
                     var currentNode = nodes.getCurrentNode();
+                    var vizObject; 
+                    var currentAttributeType; 
+                    var attributeTypes; 
+                    var currentModificationType; 
+                    var modificationTypes; 
                     if (currentNode.model.vizType ===
                             scope.vizType.HEAT_MAP) {
-                        var vizObject = nodes.getVizByIDs(
+                        vizObject = nodes.getVizByIDs(
                                 currentNode.model.id,
                                 currentNode.model.currentVizID)
                             .vizObject;
-                        var currentAttributeType = vizObject
+                        currentAttributeType = vizObject
                             .currentAttributeType;
-                        var attributeTypes = vizObject
+                        attributeTypes = vizObject
                             .getAttributeTypes();
-                        var currentModificationType = vizObject
+                        currentModificationType = vizObject
                             .currentModificationType;
-                        var modificationTypes = vizObject
+                        modificationTypes = vizObject
                             .getModificationTypes();
 
                         var list = currentAttributeType + "Names";
@@ -1252,17 +1241,17 @@ moduleLayout.directive("directiveActionPanel",
                         html += '</div>';
                     } else if (currentNode.model.vizType ===
                             scope.vizType.SPIRAL) {
-                        var vizObject = nodes.getVizByIDs(
+                        vizObject = nodes.getVizByIDs(
                                 currentNode.model.id,
                                 currentNode.model.currentVizID)
                             .vizObject;
-                        var currentAttributeType = vizObject
+                        currentAttributeType = vizObject
                             .currentAttributeType;
-                        var attributeTypes = vizObject
+                        attributeTypes = vizObject
                             .getAttributeTypes();
-                        var currentModificationType = vizObject
+                        currentModificationType = vizObject
                             .currentModificationType;
-                        var modificationTypes = vizObject
+                        modificationTypes = vizObject
                             .getModificationTypes();
 
                         scope.patient = 

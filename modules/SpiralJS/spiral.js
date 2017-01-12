@@ -400,7 +400,7 @@ Spiral.prototype.render = function(reusePaths) {
             .attr("class", "x axis temporal-line-axis")
             .attr("transform", "translate(" +
                 (option.margin.left + option.marginLine) + "," +
-                (option.lineRange.y + option.padding + 1) + ")")
+                (option.lineRange.y + option.padding) + ")")
             .call(xAxis)
             .append("text")
                 .attr("x", option.lineRange.x - option.padding * 2)

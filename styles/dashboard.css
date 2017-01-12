@@ -360,6 +360,14 @@ body {
     clip-path: url(#clip);
 }
 
+.zoom {
+    cursor: move;
+    fill: none;
+    pointer-events: all;
+}
+
+/* d3 brush */
+
 rect.handle.handle--e,
 rect.handle.handle--w {
     width: 0.5em;
@@ -373,12 +381,9 @@ rect.handle.handle--w:active {
     fill: #31708f;
 }
 
-.zoom {
-    cursor: move;
-    fill: none;
-    pointer-events: all;
+rect.selection {
+    stroke: transparent;
 }
-
 
 /* Tooltips */
 

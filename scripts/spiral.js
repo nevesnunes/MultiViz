@@ -398,6 +398,12 @@ moduleVisualizations.factory('SpiralVisualization',
         }
     };
 
+    SpiralVisualization.prototype.populateFilters = function(
+            nodeID, vizID, state) {
+        d3.select('#filters-' + nodeID)
+            .html('<div id="filters-age">TODO</div>');
+    };
+
     SpiralVisualization.prototype.update = function(nodeID, vizID, state) {
         // FIXME: Review makeBins not called more than once
         var spiral = nodes.getVizByIDs(nodeID, vizID);
@@ -446,6 +452,11 @@ moduleVisualizations.factory('SpiralVisualization',
                 .set('intervalDates', [])
                 .set('intervalPos', []);
             areBinsBeingCreated = true;
+        }
+
+        if (state.filters) {
+            this.populateFilters(nodeID, vizID, state.filters);
+            return;
         }
 
         if (areBinsBeingCreated) {

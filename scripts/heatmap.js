@@ -23,8 +23,8 @@ moduleVisualizations.directive('directiveHeatMapTooltip', function() {
 });
 
 moduleVisualizations.factory('HeatMapVisualization',
-        ['$timeout', 'visualizations', 'patientData', 'retrievePatientData', 'utils', 'nodes',
-        function($timeout, visualizations, patientData, retrievePatientData, utils, nodes) {
+        ['$timeout', 'visualizations', 'patientData', 'retrieveCountsData', 'retrievePatientData', 'utils', 'nodes',
+        function($timeout, visualizations, patientData, retrieveCountsData, retrievePatientData, utils, nodes) {
     // d3 Extensions
     //
     // https://github.com/wbkd/d3-extended
@@ -1605,6 +1605,97 @@ moduleVisualizations.factory('HeatMapVisualization',
         }
     };
 
+    HeatMapVisualization.prototype.populateFilters = function(
+            nodeID, vizID, state) {
+        //
+        // age
+        //
+        var dataAges = retrieveCountsData.retrieveAges();
+        d3.select('#filters-' + nodeID)
+            .html('<div id="filters-age">Idade</div>');
+
+        var vizWidth = angular.element(
+            '#filters-' + nodeID
+        )[0].offsetWidth;
+        var padding = 10;
+        var vizHeight = padding * 4;
+        var svgAges = d3.select('#filters-age')
+            .append("svg")
+            .attr("width", vizWidth)
+            .attr("height", vizHeight);
+
+        //
+        // axis
+        //
+        var vizContentWidth = vizWidth - padding * 4;
+        
+        var x2 = d3.scaleLinear().range([0, vizContentWidth]);
+        x2.domain([dataAges.minAge, dataAges.maxAge]);
+        var xAxis = d3.axisBottom(x2)
+            .tickValues([dataAges.minAge, dataAges.maxAge]);
+        var axisHeight = vizHeight / 2;
+        svgAges.selectAll(".line-axis").remove();
+        svgAges.append("g")
+            .attr("class", "x axis line-axis")
+            .attr("height", axisHeight)
+            .attr("transform", "translate(" +
+                ((vizWidth - vizContentWidth) / 2) + "," +
+                (axisHeight) + ")")
+            .call(xAxis);
+
+        //
+        // bars
+        //
+        var agesBarsHeight = vizHeight / 2;
+        var x = d3.scaleBand().range([0, vizContentWidth + 1]),
+            y = d3.scaleLinear().range([agesBarsHeight, 0]);
+
+        var data = dataAges.data;
+        x.domain(data.map(function(d, i) { return i; }));
+        var maxY = d3.max(data, function(d) { return d; });
+        y.domain([0, maxY]);
+
+        var g = svgAges.append("g")
+            .attr("height", agesBarsHeight)
+            .attr("transform", "translate(" +
+                ((vizWidth - vizContentWidth) / 2) + "," +
+                (0) + ")");
+        var agesBars = g.selectAll(".ages")
+            .data(data);
+        var agesBarsGroup = agesBars.enter();
+        agesBarsGroup.append("rect")
+            .attr("class", "filter-bar")
+            .merge(agesBars)
+                .attr("x", function(d, i) { 
+                        var a = x(i);
+                        return x(i); 
+                        })
+                .attr("y", function(d) { return y(d); })
+                .attr("width", x.bandwidth())
+                .attr("height", function(d) { return agesBarsHeight - y(d); });
+
+        //
+        // brush
+        //
+        var brushPos = x.range();
+        var brush = d3.brushX()
+            .extent([
+                [0, 0],
+                [vizContentWidth, agesBarsHeight]
+            ])
+            .on("start", function() {
+                // TODO
+            })
+            .on("end", function() {
+                // TODO
+            });
+        g.selectAll(".temporal-line-brush").remove();
+        g.append("g")
+            .attr("class", "brush temporal-line-brush")
+            .call(brush)
+            .call(brush.move, brushPos);
+    };
+
     HeatMapVisualization.prototype.update = function(nodeID, vizID, state) {
         var self = this;
 
@@ -1620,6 +1711,11 @@ moduleVisualizations.factory('HeatMapVisualization',
         if (state.medications) {
             self.patientLists.medications = state.medications.slice();
         }
+        if (state.filters) {
+            self.populateFilters(nodeID, vizID, state.filters);
+            return;
+        }
+
         self.populate(nodeID, vizID);
     };
 

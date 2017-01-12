@@ -124,26 +124,30 @@ moduleProviders.factory('retrieveCountsData',
     var retrieveAges = function() {
         var counts = {};
 
-        var patients = patientData.getAttribute(
-            patientData.KEY_PATIENTS);
-        counts.data = patients.map(function(patient) {
-            return {
-                age: patient.biomedicalAttributes.age,
-                ageGroup: patient.biomedicalAttributes.ageGroup,
-                id: patient.id
-            };
-        });
-
         counts.minAge = Number.MAX_SAFE_INTEGER;
         counts.maxAge = Number.MIN_SAFE_INTEGER;
-        var length = counts.data.length;
+        var patients = patientData.getAttribute(
+            patientData.KEY_PATIENTS);
+        var length = patients.length;
         while (length--) {
-            if (counts.data[length].age > counts.maxAge) {
-                counts.maxAge = counts.data[length].age;
+            if (patients[length].biomedicalAttributes.age > counts.maxAge) {
+                counts.maxAge = patients[length].biomedicalAttributes.age;
             }
-            if (counts.data[length].age < counts.minAge) {
-                counts.minAge = counts.data[length].age;
+            if (patients[length].biomedicalAttributes.age < counts.minAge) {
+                counts.minAge = patients[length].biomedicalAttributes.age;
             }
+        }
+
+        // Data is an array, where each position stores the count of 
+        // patients of the corresponding age
+        var agesLength = counts.maxAge - counts.minAge + 1;
+        counts.data = Array
+            .apply(null, Array(agesLength))
+            .map(Number.prototype.valueOf, 0);
+        length = patients.length;
+        while (length--) {
+            var age = patients[length].biomedicalAttributes.age;
+            counts.data[age - counts.minAge]++;
         }
 
         return counts;
