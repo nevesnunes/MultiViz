@@ -153,6 +153,9 @@ digraph dependencies {
           "patientData"[label="patientData"]
           "patientData" -> "HeatMapVisualization"
         
+          "retrieveCountsData"[label="retrieveCountsData"]
+          "retrieveCountsData" -> "HeatMapVisualization"
+        
           "retrievePatientData"[label="retrievePatientData"]
           "retrievePatientData" -> "HeatMapVisualization"
         
@@ -679,6 +682,9 @@ digraph dependencies {
         
           "nodes"[label="nodes"]
           "nodes" -> "directiveActionPanel"
+        
+          "retrieveCountsData"[label="retrieveCountsData"]
+          "retrieveCountsData" -> "directiveActionPanel"
         
       
         

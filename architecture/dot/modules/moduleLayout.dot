@@ -102,6 +102,9 @@ digraph dependencies {
         "nodes"[label="nodes"]
         "nodes" -> "directiveActionPanel"
       
+        "retrieveCountsData"[label="retrieveCountsData"]
+        "retrieveCountsData" -> "directiveActionPanel"
+      
     
       
         "widgets"[label="widgets"]

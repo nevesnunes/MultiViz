@@ -340,22 +340,36 @@ moduleLayout.controller('controllerLayout',
     $scope.APIActionPanel = {};
 }]);
 
+moduleLayout.controller("controllerEntryBarFill", 
+        ['$scope', 'utils',
+        function($scope, utils) {
+    $scope.proportionObjects = [];
+    $scope.orderByProportion = function(name) {
+        // Use negative values to reverse order
+        var index = utils.arrayObjectIndexOf(
+            $scope.proportionObjects, name, "name");
+        return (index !== -1) ?
+            -($scope.proportionObjects[index].proportion) :
+            -1;
+    };
+}]);
 moduleLayout.directive("directiveEntryBarFill", 
         ['utils', 'retrieveCountsData',
         function(utils, retrieveCountsData) {
     return {
-        scope: {
-            attribute: "=attribute"
-        },
+        scope: true,
         link: function(scope, element, attrs) {
             retrieveCountsData.retrieveIncidences.then(function(result) {
                 var index = utils.arrayObjectIndexOf(
                     result.data, scope.attribute, "name");
                 if (index !== -1) {
-                    var proportion = result.data[index].incidences /
+                    scope.proportion = result.data[index].incidences /
                         result.countPatients * 100;
-                    element.css({'width': proportion + '%'});
                 }
+                scope.proportionObjects.push({
+                    name: scope.attribute,
+                    proportion: scope.proportion
+                });
             });
         }
     };
@@ -384,8 +398,8 @@ moduleLayout.directive('directiveMenuTooltip', function() {
 });
 
 moduleLayout.directive("directiveActionPanel",
-        ['$compile', 'visualizations', 'patientData', 'utils', 'widgets', 'nodes', 'retrieveCountsData',
-        function($compile, visualizations, patientData, utils, widgets, nodes, retrieveCountsData) {
+        ['$compile', '$filter', 'visualizations', 'patientData', 'utils', 'widgets', 'nodes', 'retrieveCountsData',
+        function($compile, $filter, visualizations, patientData, utils, widgets, nodes, retrieveCountsData) {
 	return { 
         scope: true,
         link: function(scope, element, attrs) {
@@ -1108,18 +1122,20 @@ moduleLayout.directive("directiveActionPanel",
             };
 
             scope.makeDefaultActions = function() {
+                var currentNode = nodes.getCurrentNode();
+                var vizObject; 
+                var currentAttributeType; 
+                var attributeTypes; 
+                var currentModificationType; 
+                var modificationTypes; 
+                var list;
+
                 var html = "";
                 var rootHasNoChildren = (nodes.getRootNode()) &&
                     (!nodes.getRootNode().hasChildren());
                 var viewNotRoot = (nodes.getRootNode()) &&
                     (!nodes.isMaximized(nodes.getRootNode().model.id));
                 if (rootHasNoChildren || viewNotRoot) {
-                    var currentNode = nodes.getCurrentNode();
-                    var vizObject; 
-                    var currentAttributeType; 
-                    var attributeTypes; 
-                    var currentModificationType; 
-                    var modificationTypes; 
                     if (currentNode.model.vizType ===
                             scope.vizType.HEAT_MAP) {
                         vizObject = nodes.getVizByIDs(
@@ -1135,7 +1151,17 @@ moduleLayout.directive("directiveActionPanel",
                         modificationTypes = vizObject
                             .getModificationTypes();
 
-                        var list = currentAttributeType + "Names";
+                        var retrieveAgeFromElement = function(element) {
+                            return retrieveCountsData.retrieveIncidences.then(function(result) {
+                                var index = utils.arrayObjectIndexOf(
+                                    result.data, element, "name");
+                                if (index !== -1) {
+                                    return result.data[index].incidences /
+                                        result.countPatients * 100;
+                                }
+                            });
+                        };
+                        list = currentAttributeType + "Names";
 
                         // Set the visualization's stored patient lists
                         scope.selectedDiseases =
@@ -1212,9 +1238,9 @@ moduleLayout.directive("directiveActionPanel",
                             '</div>' +
                             '<p/>' +
                             // List
-                            '<div class="table table-condensed table-bordered patient-table">' +
-                                '<div class="checkboxInTable patient-table-entry" ' +
-                                    'ng-repeat="attribute in filteredAttributes = (' + list + ' | filter:optionListModel)"' +
+                            '<div ng-controller="controllerEntryBarFill" class="table table-condensed table-bordered patient-table">' +
+                                '<div directive-entry-bar-fill class="checkboxInTable patient-table-entry"' +
+                                    'ng-repeat="attribute in filteredAttributes = (' + list + ' | filter:optionListModel | orderBy:orderByProportion)" ' +
                                     'ng-click="check(attribute)" ' +
                                     'ng-mouseenter="vizStyleFromMouseEnter(attribute)" ' +
                                     'ng-mouseleave="vizStyleFromMouseLeave(attribute)" ' +
@@ -1230,13 +1256,12 @@ moduleLayout.directive("directiveActionPanel",
                                             '{{::attribute}}' +
                                     '</div>' +
                                     '<div class="patient-table-entry-bar"> ' +
-                                        '<div class="patient-table-entry-bar-fill" attribute="attribute" directive-entry-bar-fill> ' +
+                                        '<div class="patient-table-entry-bar-fill" attribute="attribute" style="width:{{::proportion}}%"> ' +
                                         '</div>' +
                                     '</div>' +
                                 '</div>' +
                             '</div>' :
                             '<div id="filters-' + currentNode.model.id + '">' +
-                                'TODO' +
                             '</div>';
                         html += '</div>';
                     } else if (currentNode.model.vizType ===
@@ -1294,7 +1319,6 @@ moduleLayout.directive("directiveActionPanel",
                                 spiralActions +
                             '</div>' :
                             '<div id="filters-' + currentNode.model.id + '">' +
-                                'TODO' +
                             '</div>';
                         html += '</div>';
                     } else {
