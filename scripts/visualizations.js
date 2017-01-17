@@ -263,7 +263,7 @@ moduleVisualizations.factory('visualizations',
             '#filters-' + nodeID
         )[0].offsetWidth;
         var padding = 10;
-        var vizHeight = padding * 4;
+        var vizHeight = padding * 6;
         var svgAges = d3.select('#filters-age')
             .append("svg")
             .attr("width", vizWidth)
@@ -285,7 +285,7 @@ moduleVisualizations.factory('visualizations',
             .attr("height", axisHeight)
             .attr("transform", "translate(" +
                 ((vizWidth - vizContentWidth) / 2) + "," +
-                (axisHeight) + ")")
+                (axisHeight + padding) + ")")
             .call(xAxis);
 
         //
@@ -304,7 +304,7 @@ moduleVisualizations.factory('visualizations',
             .attr("height", agesBarsHeight)
             .attr("transform", "translate(" +
                 ((vizWidth - vizContentWidth) / 2) + "," +
-                (0) + ")");
+                (padding) + ")");
         var agesBars = g.selectAll(".ages")
             .data(data);
         var agesBarsGroup = agesBars.enter();
