@@ -237,7 +237,10 @@ moduleVisualizations.factory('visualizations',
         handlers: [],
         renderer: {
             intervalValues: [],
-            intervalPos: []
+            intervalPos: [],
+            x: null,
+            brush: null,
+            brushed: null
         }
     });
 
@@ -266,18 +269,45 @@ moduleVisualizations.factory('visualizations',
 
     var makeFilterAge = function(nodeID) {
         var dataAges = retrieveCountsData.retrieveAges();
-        d3.select('#filters-' + nodeID)
-            .html('<div id="filters-age">Idade</div>');
 
         var vizWidth = angular.element(
-            '#filters-' + nodeID
+            '#action-panel'
         )[0].offsetWidth;
         var padding = 10;
-        var vizHeight = padding * 6;
-        var svgAges = d3.select('#filters-age')
+        var vizHeight = padding * 8;
+        var svgAges = d3.select('#filters-' + nodeID)
             .append("svg")
+            .attr('id', 'filters-age')
             .attr("width", vizWidth)
             .attr("height", vizHeight);
+
+        //
+        // reset
+        //
+        svgAges.append("text")
+            .attr("transform", "translate(" +
+                0 + "," +
+                padding + ")")
+            .text('Idade');
+        svgAges.append("a")
+            .attr('xlink:href', '#')
+            .append("text")
+                .attr('id', 'filters-age-reset')
+                .attr('class', 'link')
+                .style('fill', '#337ab7')
+                .style('text-anchor', 'end')
+                .attr('startOffset', '100%')
+                .attr("transform", "translate(" +
+                    vizWidth + "," +
+                    padding + ")")
+                .text('Reset')
+                .on('click', function() {
+                    var svgAges = d3.select('#filters-age');
+                    svgAges.select(".temporal-line-brush")
+                        .call(
+                            filterAge.renderer.brush.move,
+                            filterAge.renderer.x.range().slice());
+                });
 
         //
         // axis
@@ -295,7 +325,7 @@ moduleVisualizations.factory('visualizations',
             .attr("height", axisHeight)
             .attr("transform", "translate(" +
                 ((vizWidth - vizContentWidth) / 2) + "," +
-                (axisHeight + padding) + ")")
+                (axisHeight + padding * 2) + ")")
             .call(xAxis);
 
         //
@@ -314,7 +344,7 @@ moduleVisualizations.factory('visualizations',
             .attr("height", agesBarsHeight)
             .attr("transform", "translate(" +
                 ((vizWidth - vizContentWidth) / 2) + "," +
-                (padding) + ")");
+                (padding * 2) + ")");
         var agesBars = g.selectAll(".ages")
             .data(data);
         var agesBarsGroup = agesBars.enter();
@@ -332,6 +362,46 @@ moduleVisualizations.factory('visualizations',
         //
         // brush
         //
+        var brushed = function() {
+            if ((d3.event.sourceEvent && 
+                    // Ignore brush-by-zoom
+                    d3.event.sourceEvent.type === "zoom") ||
+                    // Ignore empty selections.
+                    (!d3.event.selection)) {
+                filterAge.renderer.intervalValues = [];
+                filterAge.renderer.intervalPos = [];
+                return; 
+            }
+
+            var d0 = d3.event.selection.map(x2.invert);
+
+            // Record the new dates to be used when calculating new bins
+            filterAge.renderer.intervalValues = [
+                Math.floor(d0[0]),
+                Math.floor(d0[1])
+            ];
+
+            // Record selection coordinates in order to restore them
+            // after the new bins are made
+            filterAge.renderer.intervalPos = [
+                d3.event.selection[0],
+                d3.event.selection[1]
+            ];
+
+            // Show `reset` button if changes were made
+            var xRange = x.range();
+            if ((filterAge.renderer.intervalPos[0] === xRange[0]) &&
+                (filterAge.renderer.intervalPos[1] === xRange[1])) {
+                d3.select('#filters-age-reset')
+                    .style('display', 'none');
+            } else {
+                d3.select('#filters-age-reset')
+                    .style('display', 'initial');
+            }
+
+            filterAge.dispatch();
+        };
+
         var brushPos;
         if (filterAge.renderer.intervalPos.length > 0) {
             brushPos = filterAge.renderer.intervalPos.slice();
@@ -343,39 +413,17 @@ moduleVisualizations.factory('visualizations',
                 [0, 0],
                 [vizContentWidth, agesBarsHeight]
             ])
-            .on("end", function() {
-                if ((d3.event.sourceEvent && 
-                        // Ignore brush-by-zoom
-                        d3.event.sourceEvent.type === "zoom") ||
-                        // Ignore empty selections.
-                        (!d3.event.selection)) {
-                    filterAge.renderer.intervalValues = [];
-                    filterAge.renderer.intervalPos = [];
-                    return; 
-                }
-
-                var d0 = d3.event.selection.map(x2.invert);
-
-                // Record the new dates to be used when calculating new bins
-                filterAge.renderer.intervalValues = [
-                    Math.floor(d0[0]),
-                    Math.floor(d0[1])
-                ];
-
-                // Record selection coordinates in order to restore them
-                // after the new bins are made
-                filterAge.renderer.intervalPos = [
-                    d3.event.selection[0],
-                    d3.event.selection[1]
-                ];
-
-                filterAge.dispatch();
-            });
+            .on("end", brushed);
         g.selectAll(".temporal-line-brush").remove();
         g.append("g")
             .attr("class", "brush temporal-line-brush")
             .call(brush)
             .call(brush.move, brushPos);
+
+        // Store brush functions for later calls
+        filterAge.renderer.x = x;
+        filterAge.renderer.brush = brush;
+        filterAge.renderer.brushed = brushed;
     };
 
     return {
