@@ -398,7 +398,7 @@ moduleVisualizations.factory('SpiralVisualization',
         }
     };
 
-    SpiralVisualization.prototype.populateFilters = function(
+    SpiralVisualization.prototype.makeFilters = function(
             nodeID, vizID, state) {
         d3.select('#filters-' + nodeID)
             .html('<div id="filters-age">TODO</div>');

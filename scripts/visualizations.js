@@ -226,8 +226,9 @@ moduleVisualizations.factory('visualizations',
                 this.handlers.push(nodeID);
         },
         dispatch: function() {
+            var intervalValues = this.intervalValues;
             this.handlers.forEach(function(handler) {
-                // TODO
+                populateWithFilters(handler);
             });
         },
         remove: function(nodeID) {
@@ -239,6 +240,15 @@ moduleVisualizations.factory('visualizations',
             intervalPos: []
         }
     });
+
+    var populateWithFilters = function(nodeID) {
+        // FIXME: Hardcoded
+        var vizObject = nodes.getVizs(nodeID)[0].vizObject;
+        vizObject.populate([{
+            name: 'age',
+            state: filterAge.renderer.intervalValues
+        }]);
+    };
 
     var removeFilters = function() {
         filterAge.handlers.forEach(function(handler) {
@@ -382,6 +392,7 @@ moduleVisualizations.factory('visualizations',
         extractBBoxes: extractBBoxes,
         removeFilters: removeFilters,
         makeFilters: makeFilters,
+        populateWithFilters: populateWithFilters,
         filterAge: filterAge,
         makeFilterAge: makeFilterAge
     };

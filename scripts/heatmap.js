@@ -187,10 +187,10 @@ moduleVisualizations.factory('HeatMapVisualization',
         var self = this;
 
         self.makeSVG(elementID, heatMapID);
-        self.populate(elementID, heatMapID);
+        self.populate();
     };
 
-    HeatMapVisualization.prototype.populate = function(elementID, heatMapID) {
+    HeatMapVisualization.prototype.populate = function(filters) {
         var self = this;
 
         var patientDataPromise = 
@@ -212,6 +212,28 @@ moduleVisualizations.factory('HeatMapVisualization',
                     (allDiseaseNames.indexOf(d.first.name) !== -1) &&
                     (allMedicationNames.indexOf(d.second.name) !== -1);
             }); 
+
+            // Filter data by user specified filters
+            if (filters) {
+                filters.forEach(function(filter) {
+                    if (filter.name === 'age') {
+                        filteredData = filteredData.filter(function(d) {
+                            var filteredPatientIDs = d.patientIDs.slice();
+                            d.patientIDs.forEach(function(id) {
+                                var patient = patientData.getObjectByID(
+                                    patientData.KEY_PATIENTS, id);
+                                if ((patient.biomedicalAttributes.age >
+                                        filter.state[1]) ||
+                                    (patient.biomedicalAttributes.age <
+                                        filter.state[0])) {
+                                    filteredPatientIDs.pop(id);
+                                }
+                            });
+                            return filteredPatientIDs.length; 
+                        });
+                    }
+                });
+            }
 
             // We now remove attributes from the lists that don't have
             // matches in filtered data (i.e. no cells for that attribute
@@ -1606,9 +1628,15 @@ moduleVisualizations.factory('HeatMapVisualization',
     };
 
     HeatMapVisualization.prototype.makeFilters = function(
-            nodeID, vizID, filterNames) {
-        if (filterNames.indexOf('age') !== -1) {
+            nodeID, vizID, names) {
+        if (names.indexOf('age') !== -1) {
             visualizations.filterAge.add(nodeID, vizID);
+        }
+    };
+
+    HeatMapVisualization.prototype.notifyFilterChange = function(
+            name, state) {
+        if (name === 'age') {
         }
     };
 
@@ -1632,7 +1660,7 @@ moduleVisualizations.factory('HeatMapVisualization',
             return;
         }
 
-        self.populate(nodeID, vizID);
+        self.populate();
     };
 
     visualizations.validateInterface(

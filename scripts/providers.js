@@ -1,6 +1,7 @@
 var moduleProviders = angular.module('moduleProviders', []);
 
-moduleProviders.factory('patientData', function($window) {
+moduleProviders.factory('patientData',
+        ['$window', 'utils', function($window, utils) {
     var KEY_PATIENT = 'App.patient';
     var KEY_PATIENTS = 'App.patients';
     var attributes = {};
@@ -32,6 +33,14 @@ moduleProviders.factory('patientData', function($window) {
 
     var getAttribute = function(key) {
         return attributes[key];
+    };
+
+    var getObjectByID = function(key, id) {
+        var index = utils.arrayObjectIndexOf(
+            attributes[key], id, "id");
+        return (index !== -1) ?
+            attributes[key][index] :
+            null;
     };
 
     var reduceDataArray = function(previous, current, i) {
@@ -100,9 +109,10 @@ moduleProviders.factory('patientData', function($window) {
         getAttribute: getAttribute,
         getAttributeList: getAttributeList,
         getAttributeListByProperty: getAttributeListByProperty,
+        getObjectByID: getObjectByID,
         cloneAttributeList: cloneAttributeList
     };
-});
+}]);
 
 moduleProviders.factory('retrievePatientData', ['$http', function($http) {
     var retrieveData = function(filename) {
