@@ -5,8 +5,8 @@ var moduleVisualizations = angular.module('moduleVisualizations',
         ['moduleProviders', 'moduleUtils', 'moduleWidgetBuilder']);
 
 moduleVisualizations.factory('visualizations',
-        ['patientData', 'retrievePatientData', 'utils', 'nodes',
-        function(patientData, retrievePatientData, utils, nodes) {
+        ['patientData', 'retrievePatientData', 'retrieveCountsData', 'utils', 'nodes',
+        function(patientData, retrievePatientData, retrieveCountsData, utils, nodes) {
     // Each visualization's public interface (used by layout directives)
     // consists of the following methods
     var interfaceNames = [
@@ -218,6 +218,156 @@ moduleVisualizations.factory('visualizations',
         return textData;
     };
 
+    // Adaptation of `observer` pattern to broadcast
+    // filter changes to all visible views
+    var filterAge = Object.freeze({
+        add: function(nodeID) {
+            if (this.handlers.indexOf(nodeID) === -1)
+                this.handlers.push(nodeID);
+        },
+        dispatch: function() {
+            this.handlers.forEach(function(handler) {
+                // TODO
+            });
+        },
+        remove: function(nodeID) {
+            this.handlers.pop(nodeID);
+        },
+        handlers: [],
+        renderer: {
+            intervalValues: [],
+            intervalPos: []
+        }
+    });
+
+    var removeFilters = function() {
+        filterAge.handlers.forEach(function(handler) {
+            filterAge.remove(handler);
+        });
+        d3.selectAll('#filters-age')
+            .remove();
+    };
+
+    var makeFilters = function() {
+        // TODO: Support multiple views layout
+        if (filterAge.handlers.length)
+            makeFilterAge(filterAge.handlers[0]);
+    };
+
+    var makeFilterAge = function(nodeID) {
+        var dataAges = retrieveCountsData.retrieveAges();
+        d3.select('#filters-' + nodeID)
+            .html('<div id="filters-age">Idade</div>');
+
+        var vizWidth = angular.element(
+            '#filters-' + nodeID
+        )[0].offsetWidth;
+        var padding = 10;
+        var vizHeight = padding * 4;
+        var svgAges = d3.select('#filters-age')
+            .append("svg")
+            .attr("width", vizWidth)
+            .attr("height", vizHeight);
+
+        //
+        // axis
+        //
+        var vizContentWidth = vizWidth - padding * 4;
+        
+        var x2 = d3.scaleLinear().range([0, vizContentWidth]);
+        x2.domain([dataAges.minAge, dataAges.maxAge]);
+        var xAxis = d3.axisBottom(x2)
+            .tickValues([dataAges.minAge, dataAges.maxAge]);
+        var axisHeight = vizHeight / 2;
+        svgAges.selectAll(".line-axis").remove();
+        svgAges.append("g")
+            .attr("class", "x axis line-axis")
+            .attr("height", axisHeight)
+            .attr("transform", "translate(" +
+                ((vizWidth - vizContentWidth) / 2) + "," +
+                (axisHeight) + ")")
+            .call(xAxis);
+
+        //
+        // bars
+        //
+        var agesBarsHeight = vizHeight / 2;
+        var x = d3.scaleBand().range([0, vizContentWidth + 1]),
+            y = d3.scaleLinear().range([agesBarsHeight, 0]);
+
+        var data = dataAges.data;
+        x.domain(data.map(function(d, i) { return i; }));
+        var maxY = d3.max(data, function(d) { return d; });
+        y.domain([0, maxY]);
+
+        var g = svgAges.append("g")
+            .attr("height", agesBarsHeight)
+            .attr("transform", "translate(" +
+                ((vizWidth - vizContentWidth) / 2) + "," +
+                (0) + ")");
+        var agesBars = g.selectAll(".ages")
+            .data(data);
+        var agesBarsGroup = agesBars.enter();
+        agesBarsGroup.append("rect")
+            .attr("class", "filter-bar")
+            .merge(agesBars)
+                .attr("x", function(d, i) { 
+                        var a = x(i);
+                        return x(i); 
+                        })
+                .attr("y", function(d) { return y(d); })
+                .attr("width", x.bandwidth())
+                .attr("height", function(d) { return agesBarsHeight - y(d); });
+
+        //
+        // brush
+        //
+        var brushPos;
+        if (filterAge.renderer.intervalPos.length > 0) {
+            brushPos = filterAge.renderer.intervalPos.slice();
+        } else {
+            brushPos = x.range();
+        }
+        var brush = d3.brushX()
+            .extent([
+                [0, 0],
+                [vizContentWidth, agesBarsHeight]
+            ])
+            .on("end", function() {
+                if ((d3.event.sourceEvent && 
+                        // Ignore brush-by-zoom
+                        d3.event.sourceEvent.type === "zoom") ||
+                        // Ignore empty selections.
+                        (!d3.event.selection)) {
+                    filterAge.renderer.intervalValues = [];
+                    filterAge.renderer.intervalPos = [];
+                    return; 
+                }
+
+                var d0 = d3.event.selection.map(x2.invert);
+
+                // Record the new dates to be used when calculating new bins
+                filterAge.renderer.intervalValues = [
+                    Math.floor(d0[0]),
+                    Math.floor(d0[1])
+                ];
+
+                // Record selection coordinates in order to restore them
+                // after the new bins are made
+                filterAge.renderer.intervalPos = [
+                    d3.event.selection[0],
+                    d3.event.selection[1]
+                ];
+
+                filterAge.dispatch();
+            });
+        g.selectAll(".temporal-line-brush").remove();
+        g.append("g")
+            .attr("class", "brush temporal-line-brush")
+            .call(brush)
+            .call(brush.move, brushPos);
+    };
+
     return {
         validateInterface: validateInterface,
         colors: colors,
@@ -229,6 +379,10 @@ moduleVisualizations.factory('visualizations',
         translateFrequency: translateFrequency,
         extractDatesWithInterval: extractDatesWithInterval, 
         makeLegend: makeLegend,
-        extractBBoxes: extractBBoxes
+        extractBBoxes: extractBBoxes,
+        removeFilters: removeFilters,
+        makeFilters: makeFilters,
+        filterAge: filterAge,
+        makeFilterAge: makeFilterAge
     };
 }]);

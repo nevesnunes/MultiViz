@@ -9,7 +9,7 @@ var moduleLayout = angular.module('moduleLayout',
         ['moduleProviders', 'moduleUtils', 'moduleVisualizations', 'moduleWidgetBuilder']);
 
 moduleLayout.factory("nodes",
-        ['utils', function(utils) {
+        ['utils', function(utils, visualizations) {
     // Store our view layout in a tree.
     var treeModel = new TreeModel();
     var rootNode;
@@ -371,8 +371,8 @@ moduleLayout.directive("directiveEntryBarFill",
                     proportion: scope.proportion
                 });
             });
-        }
-    };
+        } //link
+    }; //return
 }]);
 
 moduleLayout.directive('directiveMenuTooltip', function() {
@@ -412,6 +412,7 @@ moduleLayout.directive("directiveActionPanel",
                     currentScope.$destroy();
                 if (currentHTML)
                     currentHTML.remove();
+                visualizations.removeFilters();
 
                 currentScope = nodes.scopeCloneWithHandlers(
                     scope,
@@ -441,19 +442,24 @@ moduleLayout.directive("directiveActionPanel",
                     input.focus();
 
                 // Filters
+                // TODO: Support multiple views layout
                 var node = nodes.getCurrentNode();
                 if (node) {
-                    var filters = angular.element(
-                        '#filters-' + node.model.id);
-                    if (filters.length) {
-                        scope.updateFilters(node);
+                    var vizObject = nodes.getVizByIDs(
+                            node.model.id,
+                            node.model.currentVizID)
+                        .vizObject;
+                    var modificationTypes = vizObject
+                        .getModificationTypes();
+                    if (isModificationTypeActive(modificationTypes.FILTERS)) {
+                        scope.updateFilterListeners(node);
+
+                        visualizations.makeFilters();
                     }
                 }
             };
 
-            scope.updateFilters = function(node) {
-                // FIXME: Implement observer pattern to broadcast to all
-                // visible views
+            scope.updateFilterListeners = function(node) {
                 var viz = nodes.getVizByIDs(
                     node.model.id, node.model.currentVizID);
                 var vizObject = viz.vizObject;
