@@ -188,6 +188,8 @@ moduleVisualizations.factory('HeatMapVisualization',
 
         self.makeSVG(elementID, heatMapID);
         self.populate();
+        // FIXME:
+        // visualizations.populateWithFilters(nodeID);
     };
 
     HeatMapVisualization.prototype.populate = function(filters) {
@@ -1634,12 +1636,6 @@ moduleVisualizations.factory('HeatMapVisualization',
         }
     };
 
-    HeatMapVisualization.prototype.notifyFilterChange = function(
-            name, state) {
-        if (name === 'age') {
-        }
-    };
-
     HeatMapVisualization.prototype.update = function(nodeID, vizID, state) {
         var self = this;
 
@@ -1660,7 +1656,7 @@ moduleVisualizations.factory('HeatMapVisualization',
             return;
         }
 
-        self.populate();
+        visualizations.populateWithFilters(nodeID);
     };
 
     visualizations.validateInterface(

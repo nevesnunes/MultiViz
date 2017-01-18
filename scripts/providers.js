@@ -1,4 +1,6 @@
-var moduleProviders = angular.module('moduleProviders', []);
+var moduleUtils = angular.module('moduleUtils');
+var moduleProviders = angular.module('moduleProviders',
+        ['moduleUtils']);
 
 moduleProviders.factory('patientData',
         ['$window', 'utils', function($window, utils) {
