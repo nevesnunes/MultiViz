@@ -275,7 +275,7 @@ moduleVisualizations.factory('visualizations',
         )[0].offsetWidth;
         var padding = 10;
         var vizHeight = padding * 8;
-        var svgAges = d3.select('#filters-' + nodeID)
+        var svg = d3.select('#filters-' + nodeID)
             .append("svg")
             .attr('id', 'filters-age')
             .attr("width", vizWidth)
@@ -284,12 +284,12 @@ moduleVisualizations.factory('visualizations',
         //
         // reset
         //
-        svgAges.append("text")
+        svg.append("text")
             .attr("transform", "translate(" +
                 0 + "," +
                 padding + ")")
             .text('Idade');
-        svgAges.append("a")
+        svg.append("a")
             .attr('xlink:href', '#')
             .append("text")
                 .attr('id', 'filters-age-reset')
@@ -302,8 +302,8 @@ moduleVisualizations.factory('visualizations',
                     padding + ")")
                 .text('Reset')
                 .on('click', function() {
-                    var svgAges = d3.select('#filters-age');
-                    svgAges.select(".temporal-line-brush")
+                    var svg = d3.select('#filters-age');
+                    svg.select(".temporal-line-brush")
                         .call(
                             filterAge.renderer.brush.move,
                             filterAge.renderer.x.range().slice());
@@ -319,8 +319,8 @@ moduleVisualizations.factory('visualizations',
         var xAxis = d3.axisBottom(x2)
             .tickValues([dataAges.minAge, dataAges.maxAge]);
         var axisHeight = vizHeight / 2;
-        svgAges.selectAll(".line-axis").remove();
-        svgAges.append("g")
+        svg.selectAll(".line-axis").remove();
+        svg.append("g")
             .attr("class", "x axis line-axis")
             .attr("height", axisHeight)
             .attr("transform", "translate(" +
@@ -340,7 +340,7 @@ moduleVisualizations.factory('visualizations',
         var maxY = d3.max(data, function(d) { return d; });
         y.domain([0, maxY]);
 
-        var g = svgAges.append("g")
+        var g = svg.append("g")
             .attr("height", agesBarsHeight)
             .attr("transform", "translate(" +
                 ((vizWidth - vizContentWidth) / 2) + "," +
@@ -352,12 +352,34 @@ moduleVisualizations.factory('visualizations',
             .attr("class", "filter-bar")
             .merge(agesBars)
                 .attr("x", function(d, i) { 
-                        var a = x(i);
                         return x(i); 
-                        })
+                    })
                 .attr("y", function(d) { return y(d); })
                 .attr("width", x.bandwidth())
                 .attr("height", function(d) { return agesBarsHeight - y(d); });
+
+        //
+        // patient mark
+        //
+        var diamondSize = 5;
+        var diamondPath = "M " + (0) + " " +
+                (diamondSize) + " " +
+            "L " + (diamondSize * 1) + " " +
+                (diamondSize * 2) + " " +
+            "L " + (diamondSize * 2) + " " +
+                (diamondSize * 1) + " " +
+            "L " + (diamondSize) + " " +
+                (0) + " " +
+            "Z";
+        svg.append("path")
+            .attr("class", "markPresent")
+            .attr("d", diamondPath)
+            .attr("transform", function() {
+                var xPos = x(dataAges.currentPatientAge); 
+                var yPos = (axisHeight + padding * 2);
+
+                return "translate(" + xPos + "," + yPos + ")";
+            });
 
         //
         // brush

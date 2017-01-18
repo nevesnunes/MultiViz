@@ -160,6 +160,11 @@ moduleProviders.factory('retrieveCountsData',
             counts.data[age - counts.minAge]++;
         }
 
+        // Include current patient age, adjusted to corresponding array index
+        var patient = patientData.getAttribute(
+            patientData.KEY_PATIENT);
+        counts.currentPatientAge = patient.age - counts.minAge + 1;
+
         return counts;
     };
 
