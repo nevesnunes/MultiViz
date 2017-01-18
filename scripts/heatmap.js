@@ -201,23 +201,11 @@ moduleVisualizations.factory('HeatMapVisualization',
             var allMedicationNames = visualizations.processSelectedList(
                 self.patientLists.medications);
 
-            // Retrieve all matches of different attributes;
-            // JSON data contains all attributes, which need to be filtered
-            // first by user selected attributes
-            // FIXME: Hardcoded pair order
-            var filteredData = data.filter(function(d) {
-                var isValidPair = ((d.first.type === 'disease') &&
-                        (d.second.type === 'medication'));
-                return isValidPair &&
-                    (allDiseaseNames.indexOf(d.first.name) !== -1) &&
-                    (allMedicationNames.indexOf(d.second.name) !== -1);
-            }); 
-
             // Filter data by user specified filters
             if (filters) {
                 filters.forEach(function(filter) {
                     if (filter.name === 'age') {
-                        filteredData = filteredData.filter(function(d) {
+                        data = data.filter(function(d) {
                             var filteredPatientIDs = d.patientIDs.slice();
                             d.patientIDs.forEach(function(id) {
                                 var patient = patientData.getObjectByID(
@@ -234,6 +222,18 @@ moduleVisualizations.factory('HeatMapVisualization',
                     }
                 });
             }
+
+            // Retrieve all matches of different attributes;
+            // JSON data contains all attributes, which need to be filtered
+            // first by user selected attributes
+            // FIXME: Hardcoded pair order
+            var filteredData = data.filter(function(d) {
+                var isValidPair = ((d.first.type === 'disease') &&
+                        (d.second.type === 'medication'));
+                return isValidPair &&
+                    (allDiseaseNames.indexOf(d.first.name) !== -1) &&
+                    (allMedicationNames.indexOf(d.second.name) !== -1);
+            }); 
 
             // We now remove attributes from the lists that don't have
             // matches in filtered data (i.e. no cells for that attribute
