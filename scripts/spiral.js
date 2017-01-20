@@ -111,6 +111,7 @@ moduleVisualizations.factory('SpiralVisualization',
                    self.makeBins();
                 }).bind(self),
                 makeLegend: visualizations.makeLegend,
+                adjustHandles: visualizations.adjustHandles,
                 extractDatesWithInterval: visualizations.extractDatesWithInterval,
                 translateInterval: visualizations.translateInterval
             },

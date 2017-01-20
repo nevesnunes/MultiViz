@@ -218,6 +218,17 @@ moduleVisualizations.factory('visualizations',
         return textData;
     };
 
+    var adjustHandles = function(group) {
+        group.selectAll(".handle--e")
+            .attr("width", 10)
+            .attr("transform", "translate(" +
+                3 + ")");
+        group.selectAll(".handle--w")
+            .attr("width", 10)
+            .attr("transform", "translate(" +
+                -3 + ")");
+    };
+
     // Adaptation of `observer` pattern to broadcast
     // filter changes to all visible views
     var filterAge = Object.freeze({
@@ -437,10 +448,11 @@ moduleVisualizations.factory('visualizations',
             ])
             .on("end", brushed);
         g.selectAll(".temporal-line-brush").remove();
-        g.append("g")
+        var gBrush = g.append("g")
             .attr("class", "brush temporal-line-brush")
-            .call(brush)
-            .call(brush.move, brushPos);
+            .call(brush);
+        adjustHandles(gBrush);
+        gBrush.call(brush.move, brushPos);
 
         // Store brush functions for later calls
         filterAge.renderer.x = x;
@@ -460,6 +472,7 @@ moduleVisualizations.factory('visualizations',
         extractDatesWithInterval: extractDatesWithInterval, 
         makeLegend: makeLegend,
         extractBBoxes: extractBBoxes,
+        adjustHandles: adjustHandles,
         removeFilters: removeFilters,
         makeFilters: makeFilters,
         populateWithFilters: populateWithFilters,

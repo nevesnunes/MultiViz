@@ -466,13 +466,14 @@ Spiral.prototype.render = function(reusePaths) {
             })
             .on("end", brushed);
         svgLine.selectAll(".temporal-line-brush").remove();
-        svgLine.append("g")
+        var gBrush = svgLine.append("g")
             .attr("class", "brush temporal-line-brush")
             .attr("transform", "translate(" +
                 (option.margin.left + option.marginLine) + "," +
                 0 + ")")
-            .call(brush)
-            .call(brush.move, brushPos);
+            .call(brush);
+        option.functions.adjustHandles(gBrush);
+        gBrush.call(brush.move, brushPos);
     }
 };
 

@@ -370,7 +370,6 @@ body {
 
 rect.handle.handle--e,
 rect.handle.handle--w {
-    width: 0.5em;
     fill: #aaa;
 }
 
