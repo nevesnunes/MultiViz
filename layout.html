@@ -66,7 +66,20 @@
                                 <a href="#" ng-cloak class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Paciente: <span ng-bind="patient.name"></span><span class="caret custom-caret-margin"></span></a>
                                 <ul class="dropdown-menu">
                                     <li><a href="#"><b>ID:</b> {{ patient.id }}</a></li>
-                                    <li><a href="#"><b>Idade:</b> {{ patient.age }} (<b>Faixa Etária:</b> {{ patient.ageGroup }})</a></li>
+                                    <li><a href="#"><b>Idade:</b> {{ patient.age }} (<b>Faixa Etária:</b> {{ patient.ageGroup }}) | <b>Peso:</b> {{ patient.biomedicalAttributes.weight }}kg | <b>Altura:</b> {{ patient.biomedicalAttributes.height }}cm</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="#"><b>Hábitos Alimentares:</b></a></li>
+                                    <li ng-repeat='(key, prop) in patient.habits track by key' class="label-indented">
+                                        <a href="#"><span>{{prop.name}} ({{prop.frequency.name}})</span></a>
+                                    </li>
+                                    <li><a href="#"><b>Hábitos de Higiéne:</b></a></li>
+                                    <li ng-repeat='(key, prop) in patient.habitsHigiene track by key' class="label-indented">
+                                        <a href="#"><span>{{prop.name}} ({{prop.frequency.name}})</span></a>
+                                    </li>
+                                    <li><a href="#"><b>Hábitos Gerais:</b></a></li>
+                                    <li ng-repeat='(key, prop) in patient.habitsGeneral track by key' class="label-indented">
+                                        <a href="#"><span>{{prop.type}}</span></a>
+                                    </li>
                                     <li role="separator" class="divider"></li>
                                     <li><a href="#"><b>Última consulta:</b> {{ dateLastVisit }}</a></li>
                                 </ul>

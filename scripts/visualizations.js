@@ -251,6 +251,7 @@ moduleVisualizations.factory('visualizations',
     // Concrete observers
     var filterAge = Object.freeze({
         handlers: [],
+        name: 'age',
         renderer: {
             intervalValues: [],
             intervalPos: [],
@@ -264,7 +265,7 @@ moduleVisualizations.factory('visualizations',
         // FIXME: Hardcoded
         var vizObject = nodes.getVizs(nodeID)[0].vizObject;
         vizObject.populate([{
-            name: 'age',
+            name: filterAge.name,
             state: filterAge.renderer.intervalValues
         }]);
     };
@@ -278,7 +279,7 @@ moduleVisualizations.factory('visualizations',
     };
 
     var addFiltersFromNames = function(nodeID, vizID, names) {
-        if (names.indexOf('age') !== -1) {
+        if (names.indexOf(filterAge.name) !== -1) {
             filterObserver.add(filterAge, nodeID, vizID);
         }
     };
@@ -299,7 +300,7 @@ moduleVisualizations.factory('visualizations',
                 xMin: data.minAge,
                 xMax: data.maxAge,
             },
-            'age',
+            filterAge.name,
             nodeID);
     };
 
