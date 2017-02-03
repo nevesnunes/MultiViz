@@ -297,8 +297,8 @@ moduleVisualizations.factory('visualizations',
             {
                 currentPatientData: data.currentPatientAge,
                 data: data.data,
-                xMin: data.minAge,
-                xMax: data.maxAge,
+                xMin: data.min,
+                xMax: data.max,
             },
             filterAge.name,
             nodeID);

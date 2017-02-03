@@ -133,39 +133,51 @@ moduleProviders.factory('retrievePatientData', ['$http', function($http) {
 moduleProviders.factory('retrieveCountsData',
         ['patientData', 'retrievePatientData',
         function(patientData, retrievePatientData) {
-    var retrieveAges = function() {
+    var fillOrderedArray = function(attributeParent, attributeName) {
         var counts = {};
 
-        counts.minAge = Number.MAX_SAFE_INTEGER;
-        counts.maxAge = Number.MIN_SAFE_INTEGER;
+        counts.min = Number.MAX_SAFE_INTEGER;
+        counts.max = Number.MIN_SAFE_INTEGER;
         var patients = patientData.getAttribute(
             patientData.KEY_PATIENTS);
         var length = patients.length;
+        var value;
         while (length--) {
-            if (patients[length].biomedicalAttributes.age > counts.maxAge) {
-                counts.maxAge = patients[length].biomedicalAttributes.age;
+            value = (attributeParent) ?
+                patients[length][attributeParent][attributeName] :
+                patients[length][attributeName];
+            if (value > counts.max) {
+                counts.max = value;
             }
-            if (patients[length].biomedicalAttributes.age < counts.minAge) {
-                counts.minAge = patients[length].biomedicalAttributes.age;
+            if (value < counts.min) {
+                counts.min = value;
             }
         }
 
         // Data is an array, where each position stores the count of 
-        // patients of the corresponding age
-        var agesLength = counts.maxAge - counts.minAge + 1;
+        // patients of the corresponding attribute value
+        var dataLength = counts.max - counts.min + 1;
         counts.data = Array
-            .apply(null, Array(agesLength))
+            .apply(null, Array(dataLength))
             .map(Number.prototype.valueOf, 0);
         length = patients.length;
         while (length--) {
-            var age = patients[length].biomedicalAttributes.age;
-            counts.data[age - counts.minAge]++;
+            value = (attributeParent) ?
+                patients[length][attributeParent][attributeName] :
+                patients[length][attributeName];
+            counts.data[value - counts.min]++;
         }
+
+        return counts;
+    };
+
+    var retrieveAges = function() {
+        var counts = fillOrderedArray('biomedicalAttributes', 'age');
 
         // Include current patient age, adjusted to corresponding array index
         var patient = patientData.getAttribute(
             patientData.KEY_PATIENT);
-        counts.currentPatientAge = patient.age - counts.minAge + 1;
+        counts.currentPatientAge = patient.age - counts.min + 1;
 
         return counts;
     };
