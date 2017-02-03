@@ -402,7 +402,7 @@ moduleVisualizations.factory('SpiralVisualization',
     SpiralVisualization.prototype.makeFilters = function(
             nodeID, vizID, state) {
         d3.select('#filters-' + nodeID)
-            .html('<div id="filters-age">TODO</div>');
+            .html('<div>TODO</div>');
     };
 
     SpiralVisualization.prototype.update = function(nodeID, vizID, state) {
@@ -456,7 +456,7 @@ moduleVisualizations.factory('SpiralVisualization',
         }
 
         if (state.filters) {
-            this.populateFilters(nodeID, vizID, state.filters);
+            this.makeFilters(nodeID, vizID, state.filters);
             return;
         }
 
