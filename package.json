@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "grunt": "^1.0.1",
-    "grunt-angular-architecture-graph": "^0.2.6"
+    "grunt-angular-architecture-graph": "^0.2.6",
+    "mysql": "^2.13.0"
   }
 }
