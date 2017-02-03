@@ -231,20 +231,25 @@ moduleVisualizations.factory('visualizations',
 
     // Adaptation of `observer` pattern to broadcast
     // filter changes to all visible views
-    var filterAge = Object.freeze({
-        add: function(nodeID) {
-            if (this.handlers.indexOf(nodeID) === -1)
-                this.handlers.push(nodeID);
+    //
+    // Generic observer with common methods
+    var filterObserver = Object.freeze({
+        add: function(observer, nodeID) {
+            if (observer.handlers.indexOf(nodeID) === -1)
+                observer.handlers.push(nodeID);
         },
-        dispatch: function() {
-            var intervalValues = this.intervalValues;
-            this.handlers.forEach(function(handler) {
+        dispatch: function(observer) {
+            observer.handlers.forEach(function(handler) {
                 populateWithFilters(handler);
             });
         },
-        remove: function(nodeID) {
-            this.handlers.pop(nodeID);
-        },
+        remove: function(observer, nodeID) {
+            observer.handlers.pop(nodeID);
+        }
+    });
+
+    // Concrete observers
+    var filterAge = Object.freeze({
         handlers: [],
         renderer: {
             intervalValues: [],
@@ -266,10 +271,16 @@ moduleVisualizations.factory('visualizations',
 
     var removeFilters = function() {
         filterAge.handlers.forEach(function(handler) {
-            filterAge.remove(handler);
+            filterObserver.remove(filterAge, handler);
         });
         d3.selectAll('#filters-age')
             .remove();
+    };
+
+    var addFiltersFromNames = function(nodeID, vizID, names) {
+        if (names.indexOf('age') !== -1) {
+            filterObserver.add(filterAge, nodeID, vizID);
+        }
     };
 
     var makeFilters = function() {
@@ -279,8 +290,20 @@ moduleVisualizations.factory('visualizations',
     };
 
     var makeFilterAge = function(nodeID) {
-        var dataAges = retrieveCountsData.retrieveAges();
+        var data = retrieveCountsData.retrieveAges();
+        makeFilterHistogram(
+            filterAge,
+            {
+                currentPatientData: data.currentPatientAge,
+                data: data.data,
+                xMin: data.minAge,
+                xMax: data.maxAge,
+            },
+            'age',
+            nodeID);
+    };
 
+    var makeFilterHistogram = function(observer, dataObserver, name, nodeID) {
         var vizWidth = angular.element(
             '#action-panel'
         )[0].offsetWidth;
@@ -288,7 +311,7 @@ moduleVisualizations.factory('visualizations',
         var vizHeight = padding * 8;
         var svg = d3.select('#filters-' + nodeID)
             .append("svg")
-            .attr('id', 'filters-age')
+            .attr('id', 'filters' + name)
             .attr("width", vizWidth)
             .attr("height", vizHeight);
 
@@ -303,7 +326,7 @@ moduleVisualizations.factory('visualizations',
         svg.append("a")
             .attr('xlink:href', '#')
             .append("text")
-                .attr('id', 'filters-age-reset')
+                .attr('id', 'filters-' + name + '-reset')
                 .attr('class', 'link')
                 .style('fill', '#337ab7')
                 .style('text-anchor', 'end')
@@ -313,11 +336,11 @@ moduleVisualizations.factory('visualizations',
                     padding + ")")
                 .text('Reset')
                 .on('click', function() {
-                    var svg = d3.select('#filters-age');
+                    var svg = d3.select('#filters' + name);
                     svg.select(".temporal-line-brush")
                         .call(
-                            filterAge.renderer.brush.move,
-                            filterAge.renderer.x.range().slice());
+                            observer.renderer.brush.move,
+                            observer.renderer.x.range().slice());
                 });
 
         //
@@ -326,9 +349,9 @@ moduleVisualizations.factory('visualizations',
         var vizContentWidth = vizWidth - padding * 4;
         
         var x2 = d3.scaleLinear().range([0, vizContentWidth]);
-        x2.domain([dataAges.minAge, dataAges.maxAge]);
+        x2.domain([dataObserver.xMin, dataObserver.xMax]);
         var xAxis = d3.axisBottom(x2)
-            .tickValues([dataAges.minAge, dataAges.maxAge]);
+            .tickValues([dataObserver.xMin, dataObserver.xMax]);
         var axisHeight = vizHeight / 2;
         svg.selectAll(".line-axis").remove();
         svg.append("g")
@@ -342,32 +365,32 @@ moduleVisualizations.factory('visualizations',
         //
         // bars
         //
-        var agesBarsHeight = vizHeight / 2;
+        var histogramHeight = vizHeight / 2;
         var x = d3.scaleBand().range([0, vizContentWidth + 1]),
-            y = d3.scaleLinear().range([agesBarsHeight, 0]);
+            y = d3.scaleLinear().range([histogramHeight, 0]);
 
-        var data = dataAges.data;
+        var data = dataObserver.data;
         x.domain(data.map(function(d, i) { return i; }));
         var maxY = d3.max(data, function(d) { return d; });
         y.domain([0, maxY]);
 
         var g = svg.append("g")
-            .attr("height", agesBarsHeight)
+            .attr("height", histogramHeight)
             .attr("transform", "translate(" +
                 ((vizWidth - vizContentWidth) / 2) + "," +
                 (padding * 2) + ")");
-        var agesBars = g.selectAll(".ages")
+        var histogram = g.selectAll(".histogram")
             .data(data);
-        var agesBarsGroup = agesBars.enter();
-        agesBarsGroup.append("rect")
+        var histogramGroup = histogram.enter();
+        histogramGroup.append("rect")
             .attr("class", "filter-bar")
-            .merge(agesBars)
+            .merge(histogram)
                 .attr("x", function(d, i) { 
                         return x(i); 
                     })
                 .attr("y", function(d) { return y(d); })
                 .attr("width", x.bandwidth())
-                .attr("height", function(d) { return agesBarsHeight - y(d); });
+                .attr("height", function(d) { return histogramHeight - y(d); });
 
         //
         // patient mark
@@ -386,7 +409,7 @@ moduleVisualizations.factory('visualizations',
             .attr("class", "markPresent")
             .attr("d", diamondPath)
             .attr("transform", function() {
-                var xPos = x(dataAges.currentPatientAge); 
+                var xPos = x(dataObserver.currentPatientData); 
                 var yPos = (axisHeight + padding * 2);
 
                 return "translate(" + xPos + "," + yPos + ")";
@@ -401,50 +424,50 @@ moduleVisualizations.factory('visualizations',
                     d3.event.sourceEvent.type === "zoom") ||
                     // Ignore empty selections.
                     (!d3.event.selection)) {
-                filterAge.renderer.intervalValues = [];
-                filterAge.renderer.intervalPos = [];
+                observer.renderer.intervalValues = [];
+                observer.renderer.intervalPos = [];
                 return; 
             }
 
             var d0 = d3.event.selection.map(x2.invert);
 
             // Record the new dates to be used when calculating new bins
-            filterAge.renderer.intervalValues = [
+            observer.renderer.intervalValues = [
                 Math.floor(d0[0]),
                 Math.floor(d0[1])
             ];
 
             // Record selection coordinates in order to restore them
             // after the new bins are made
-            filterAge.renderer.intervalPos = [
+            observer.renderer.intervalPos = [
                 d3.event.selection[0],
                 d3.event.selection[1]
             ];
 
             // Show `reset` button if changes were made
             var xRange = x.range();
-            if ((filterAge.renderer.intervalPos[0] === xRange[0]) &&
-                (filterAge.renderer.intervalPos[1] === xRange[1])) {
-                d3.select('#filters-age-reset')
+            if ((observer.renderer.intervalPos[0] === xRange[0]) &&
+                (observer.renderer.intervalPos[1] === xRange[1])) {
+                d3.select('#filters-' + name + '-reset')
                     .style('display', 'none');
             } else {
-                d3.select('#filters-age-reset')
+                d3.select('#filters-' + name + '-reset')
                     .style('display', 'initial');
             }
 
-            filterAge.dispatch();
+            filterObserver.dispatch(observer);
         };
 
         var brushPos;
-        if (filterAge.renderer.intervalPos.length > 0) {
-            brushPos = filterAge.renderer.intervalPos.slice();
+        if (observer.renderer.intervalPos.length > 0) {
+            brushPos = observer.renderer.intervalPos.slice();
         } else {
             brushPos = x.range();
         }
         var brush = d3.brushX()
             .extent([
                 [0, 0],
-                [vizContentWidth, agesBarsHeight]
+                [vizContentWidth, histogramHeight]
             ])
             .on("end", brushed);
         g.selectAll(".temporal-line-brush").remove();
@@ -455,9 +478,9 @@ moduleVisualizations.factory('visualizations',
         gBrush.call(brush.move, brushPos);
 
         // Store brush functions for later calls
-        filterAge.renderer.x = x;
-        filterAge.renderer.brush = brush;
-        filterAge.renderer.brushed = brushed;
+        observer.renderer.x = x;
+        observer.renderer.brush = brush;
+        observer.renderer.brushed = brushed;
     };
 
     return {
@@ -475,7 +498,9 @@ moduleVisualizations.factory('visualizations',
         adjustHandles: adjustHandles,
         removeFilters: removeFilters,
         makeFilters: makeFilters,
+        addFiltersFromNames: addFiltersFromNames,
         populateWithFilters: populateWithFilters,
+        filterObserver: filterObserver,
         filterAge: filterAge,
         makeFilterAge: makeFilterAge
     };

@@ -1631,8 +1631,10 @@ moduleVisualizations.factory('HeatMapVisualization',
 
     HeatMapVisualization.prototype.makeFilters = function(
             nodeID, vizID, names) {
+        visualizations.addFiltersFromNames(nodeID, vizID, names);
         if (names.indexOf('age') !== -1) {
-            visualizations.filterAge.add(nodeID, vizID);
+            visualizations.filterObserver.add(
+                visualizations.filterAge, nodeID, vizID);
         }
     };
 
