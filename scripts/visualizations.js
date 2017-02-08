@@ -100,6 +100,23 @@ moduleVisualizations.factory('visualizations',
         return intervals[interval].translation;
     };
     
+    // TODO: Hardcoded from filterNames
+    var filterAttributes = {
+        'age': {
+            translation: 'Idade'
+        },
+        'height': {
+            translation: 'Altura'
+        },
+        'weight': {
+            translation: 'Peso'
+        }
+    };
+
+    var translateFilterAttribute = function(attribute) {
+        return filterAttributes[attribute].translation;
+    };
+
     var frequencies = {
         'Anual': {
             translation: 'years'
@@ -274,12 +291,52 @@ moduleVisualizations.factory('visualizations',
         return renderer.intervalValues;
     };
 
+    var makeFilterWeight = function(nodeID) {
+        var data = retrieveCountsData.retrieveWeights();
+        var filter = getFilterByName(filterNames.WEIGHT);
+        makeFilterHistogram(
+            filter,
+            {
+                currentPatientData: data.currentPatientData,
+                data: data.data,
+                xMin: data.min,
+                xMax: data.max,
+            },
+            filter.name,
+            nodeID);
+    };
+
+    var extractFilterWeightState = function(renderer) {
+        return renderer.intervalValues;
+    };
+
+    var makeFilterHeight = function(nodeID) {
+        var data = retrieveCountsData.retrieveHeights();
+        var filter = getFilterByName(filterNames.HEIGHT);
+        makeFilterHistogram(
+            filter,
+            {
+                currentPatientData: data.currentPatientData,
+                data: data.data,
+                xMin: data.min,
+                xMax: data.max,
+            },
+            filter.name,
+            nodeID);
+    };
+
+    var extractFilterHeightState = function(renderer) {
+        return renderer.intervalValues;
+    };
+
     //
     // Concrete observers
     //
 
     var filterNames = Object.freeze({
-        AGE: "age"
+        AGE: "age",
+        WEIGHT: "weight",
+        HEIGHT: "height"
     });
 
     var filters = [
@@ -295,6 +352,32 @@ moduleVisualizations.factory('visualizations',
                 brushed: null
             },
             extractState: extractFilterAgeState
+        }),
+        Object.freeze({
+            handlers: [],
+            make: makeFilterWeight,
+            name: filterNames.WEIGHT,
+            renderer: {
+                intervalValues: [],
+                intervalPos: [],
+                x: null,
+                brush: null,
+                brushed: null
+            },
+            extractState: extractFilterWeightState
+        }),
+        Object.freeze({
+            handlers: [],
+            make: makeFilterHeight,
+            name: filterNames.HEIGHT,
+            renderer: {
+                intervalValues: [],
+                intervalPos: [],
+                x: null,
+                brush: null,
+                brushed: null
+            },
+            extractState: extractFilterHeightState
         })
     ];
 
@@ -309,12 +392,14 @@ moduleVisualizations.factory('visualizations',
     var populateWithFilters = function(nodeID) {
         // FIXME: Hardcoded
         var vizObject = nodes.getVizs(nodeID)[0].vizObject;
+        var extractedFilters = [];
         filters.forEach(function(filter) {
-            vizObject.populate([{
+            extractedFilters.push({
                 name: filter.name,
                 state: filter.extractState(filter.renderer)
-            }]);
+            });
         });
+        vizObject.populate(extractedFilters);
     };
 
     var removeFilters = function() {
@@ -362,7 +447,7 @@ moduleVisualizations.factory('visualizations',
             .attr("transform", "translate(" +
                 0 + "," +
                 padding + ")")
-            .text('Idade');
+            .text(translateFilterAttribute(observer.name));
         svg.append("a")
             .attr('xlink:href', '#')
             .append("text")

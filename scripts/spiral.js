@@ -400,7 +400,7 @@ moduleVisualizations.factory('SpiralVisualization',
     };
 
     SpiralVisualization.prototype.makeFilters = function(
-            nodeID, vizID, state) {
+            nodeID, vizID) {
         d3.select('#filters-' + nodeID)
             .html('<div>TODO</div>');
     };
@@ -455,8 +455,8 @@ moduleVisualizations.factory('SpiralVisualization',
             areBinsBeingCreated = true;
         }
 
-        if (state.filters) {
-            this.makeFilters(nodeID, vizID, state.filters);
+        if (state.useFilters) {
+            this.makeFilters(nodeID, vizID);
             return;
         }
 

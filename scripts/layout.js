@@ -467,7 +467,7 @@ moduleLayout.directive("directiveActionPanel",
                     node.model.id,
                     node.model.currentVizID,
                     {
-                        filters: ['age']
+                        useFilters: true
                     }
                 );
             };

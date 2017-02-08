@@ -183,7 +183,7 @@ moduleProviders.factory('retrieveCountsData',
     };
 
     var retrieveHeights = function() {
-        var counts = fillOrderedArray('biomedicalAttributes', 'weight');
+        var counts = fillOrderedArray('biomedicalAttributes', 'height');
 
         // Include current patient value, adjusted to corresponding array index
         var patient = patientData.getAttribute(
@@ -228,6 +228,8 @@ moduleProviders.factory('retrieveCountsData',
 
     return {
         retrieveAges: retrieveAges,
+        retrieveHeights: retrieveHeights,
+        retrieveWeights: retrieveWeights,
         retrieveIncidences: retrieveIncidences
     };
 }]);

@@ -205,6 +205,7 @@ moduleVisualizations.factory('HeatMapVisualization',
 
             // Filter data by user specified filters
             if (filters) {
+            console.log("[Filters] Total: " + data.length);
                 filters.forEach(function(filter) {
                     if (filter.name === visualizations.filterNames.AGE) {
                         data = data.filter(function(d) {
@@ -221,6 +222,44 @@ moduleVisualizations.factory('HeatMapVisualization',
                             });
                             return filteredPatientIDs.length; 
                         });
+                        console.log("[Filters] After " +
+                            filter.name + ": " + data.length);
+                    } else if (filter.name === 
+                            visualizations.filterNames.HEIGHT) {
+                        data = data.filter(function(d) {
+                            var filteredPatientIDs = d.patientIDs.slice();
+                            d.patientIDs.forEach(function(id) {
+                                var patient = patientData.getObjectByID(
+                                    patientData.KEY_PATIENTS, id);
+                                if ((patient.biomedicalAttributes.height >
+                                        filter.state[1]) ||
+                                    (patient.biomedicalAttributes.height <
+                                        filter.state[0])) {
+                                    filteredPatientIDs.pop(id);
+                                }
+                            });
+                            return filteredPatientIDs.length; 
+                        });
+                        console.log("[Filters] After " +
+                            filter.name + ": " + data.length);
+                    } else if (filter.name === 
+                            visualizations.filterNames.WEIGHT) {
+                        data = data.filter(function(d) {
+                            var filteredPatientIDs = d.patientIDs.slice();
+                            d.patientIDs.forEach(function(id) {
+                                var patient = patientData.getObjectByID(
+                                    patientData.KEY_PATIENTS, id);
+                                if ((patient.biomedicalAttributes.weight >
+                                        filter.state[1]) ||
+                                    (patient.biomedicalAttributes.weight <
+                                        filter.state[0])) {
+                                    filteredPatientIDs.pop(id);
+                                }
+                            });
+                            return filteredPatientIDs.length; 
+                        });
+                        console.log("[Filters] After " +
+                            filter.name + ": " + data.length);
                     }
                 });
             }
@@ -1630,14 +1669,14 @@ moduleVisualizations.factory('HeatMapVisualization',
     };
 
     HeatMapVisualization.prototype.makeFilters = function(
-            nodeID, vizID, names) {
-        visualizations.addFiltersFromNames(nodeID, vizID, names);
-        if (names.indexOf(visualizations.filterNames.AGE) !== -1) {
-            visualizations.filterObserver.add(
-                visualizations.getFilterByName(visualizations.filterNames.AGE),
-                nodeID,
-                vizID);
-        }
+            nodeID, vizID) {
+        var names = visualizations.filterNames;
+        var expectedNames = [
+            names.AGE,
+            names.WEIGHT,
+            names.HEIGHT
+        ];
+        visualizations.addFiltersFromNames(nodeID, vizID, expectedNames);
     };
 
     HeatMapVisualization.prototype.update = function(nodeID, vizID, state) {
@@ -1655,8 +1694,8 @@ moduleVisualizations.factory('HeatMapVisualization',
         if (state.medications) {
             self.patientLists.medications = state.medications.slice();
         }
-        if (state.filters) {
-            self.makeFilters(nodeID, vizID, state.filters);
+        if (state.useFilters) {
+            self.makeFilters(nodeID, vizID);
             return;
         }
 
