@@ -206,7 +206,7 @@ moduleVisualizations.factory('HeatMapVisualization',
             // Filter data by user specified filters
             if (filters) {
                 filters.forEach(function(filter) {
-                    if (filter.name === 'age') {
+                    if (filter.name === visualizations.filterNames.AGE) {
                         data = data.filter(function(d) {
                             var filteredPatientIDs = d.patientIDs.slice();
                             d.patientIDs.forEach(function(id) {
@@ -1632,9 +1632,11 @@ moduleVisualizations.factory('HeatMapVisualization',
     HeatMapVisualization.prototype.makeFilters = function(
             nodeID, vizID, names) {
         visualizations.addFiltersFromNames(nodeID, vizID, names);
-        if (names.indexOf('age') !== -1) {
+        if (names.indexOf(visualizations.filterNames.AGE) !== -1) {
             visualizations.filterObserver.add(
-                visualizations.filterAge, nodeID, vizID);
+                visualizations.getFilterByName(visualizations.filterNames.AGE),
+                nodeID,
+                vizID);
         }
     };
 

@@ -174,10 +174,34 @@ moduleProviders.factory('retrieveCountsData',
     var retrieveAges = function() {
         var counts = fillOrderedArray('biomedicalAttributes', 'age');
 
-        // Include current patient age, adjusted to corresponding array index
+        // Include current patient value, adjusted to corresponding array index
         var patient = patientData.getAttribute(
             patientData.KEY_PATIENT);
-        counts.currentPatientAge = patient.age - counts.min + 1;
+        counts.currentPatientData = patient.age - counts.min + 1;
+
+        return counts;
+    };
+
+    var retrieveHeights = function() {
+        var counts = fillOrderedArray('biomedicalAttributes', 'weight');
+
+        // Include current patient value, adjusted to corresponding array index
+        var patient = patientData.getAttribute(
+            patientData.KEY_PATIENT);
+        counts.currentPatientData = 
+            patient.biomedicalAttributes.height - counts.min + 1;
+
+        return counts;
+    };
+
+    var retrieveWeights = function() {
+        var counts = fillOrderedArray('biomedicalAttributes', 'weight');
+
+        // Include current patient value, adjusted to corresponding array index
+        var patient = patientData.getAttribute(
+            patientData.KEY_PATIENT);
+        counts.currentPatientData = 
+            patient.biomedicalAttributes.weight - counts.min + 1;
 
         return counts;
     };

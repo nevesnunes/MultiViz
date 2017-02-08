@@ -229,10 +229,13 @@ moduleVisualizations.factory('visualizations',
                 -3 + ")");
     };
 
+    //
     // Adaptation of `observer` pattern to broadcast
     // filter changes to all visible views
     //
     // Generic observer with common methods
+    //
+
     var filterObserver = Object.freeze({
         add: function(observer, nodeID) {
             if (observer.handlers.indexOf(nodeID) === -1)
@@ -248,60 +251,96 @@ moduleVisualizations.factory('visualizations',
         }
     });
 
-    // Concrete observers
-    var filterAge = Object.freeze({
-        handlers: [],
-        name: 'age',
-        renderer: {
-            intervalValues: [],
-            intervalPos: [],
-            x: null,
-            brush: null,
-            brushed: null
-        }
-    });
-
-    var populateWithFilters = function(nodeID) {
-        // FIXME: Hardcoded
-        var vizObject = nodes.getVizs(nodeID)[0].vizObject;
-        vizObject.populate([{
-            name: filterAge.name,
-            state: filterAge.renderer.intervalValues
-        }]);
-    };
-
-    var removeFilters = function() {
-        filterAge.handlers.forEach(function(handler) {
-            filterObserver.remove(filterAge, handler);
-        });
-        d3.selectAll('#filters-age')
-            .remove();
-    };
-
-    var addFiltersFromNames = function(nodeID, vizID, names) {
-        if (names.indexOf(filterAge.name) !== -1) {
-            filterObserver.add(filterAge, nodeID, vizID);
-        }
-    };
-
-    var makeFilters = function() {
-        // TODO: Support multiple views layout
-        if (filterAge.handlers.length)
-            makeFilterAge(filterAge.handlers[0]);
-    };
-
+    //
+    // Visualization methods for concrete observers
+    //
+    
     var makeFilterAge = function(nodeID) {
         var data = retrieveCountsData.retrieveAges();
+        var filter = getFilterByName(filterNames.AGE);
         makeFilterHistogram(
-            filterAge,
+            filter,
             {
-                currentPatientData: data.currentPatientAge,
+                currentPatientData: data.currentPatientData,
                 data: data.data,
                 xMin: data.min,
                 xMax: data.max,
             },
-            filterAge.name,
+            filter.name,
             nodeID);
+    };
+
+    var extractFilterAgeState = function(renderer) {
+        return renderer.intervalValues;
+    };
+
+    //
+    // Concrete observers
+    //
+
+    var filterNames = Object.freeze({
+        AGE: "age"
+    });
+
+    var filters = [
+        Object.freeze({
+            handlers: [],
+            make: makeFilterAge,
+            name: filterNames.AGE,
+            renderer: {
+                intervalValues: [],
+                intervalPos: [],
+                x: null,
+                brush: null,
+                brushed: null
+            },
+            extractState: extractFilterAgeState
+        })
+    ];
+
+    var getFilterByName = function(name) {
+        var filter;
+        filters.some(function(obj, i) {
+            return (obj.name === name) ? ((filter = filters[i]), true) : false;
+        });
+        return filter;
+    };
+
+    var populateWithFilters = function(nodeID) {
+        // FIXME: Hardcoded
+        var vizObject = nodes.getVizs(nodeID)[0].vizObject;
+        filters.forEach(function(filter) {
+            vizObject.populate([{
+                name: filter.name,
+                state: filter.extractState(filter.renderer)
+            }]);
+        });
+    };
+
+    var removeFilters = function() {
+        filters.forEach(function(filter, i) {
+            filter.handlers.forEach(function(handler) {
+                filterObserver.remove(filters[i], handler);
+            });
+            d3.selectAll('#filters-' + filter.name)
+                .remove();
+        });
+    };
+
+    var addFiltersFromNames = function(nodeID, vizID, names) {
+        filters.forEach(function(filter, i) {
+            if (names.indexOf(filter.name) !== -1) {
+                filterObserver.add(filters[i], nodeID, vizID);
+            }
+        });
+    };
+
+    var makeFilters = function() {
+        // TODO: Support multiple views layout
+        filters.forEach(function(filter, i) {
+            if (filter.handlers.length)
+                filter.make(filter.handlers[0]);
+        });
     };
 
     var makeFilterHistogram = function(observer, dataObserver, name, nodeID) {
@@ -501,8 +540,9 @@ moduleVisualizations.factory('visualizations',
         makeFilters: makeFilters,
         addFiltersFromNames: addFiltersFromNames,
         populateWithFilters: populateWithFilters,
+        getFilterByName: getFilterByName,
         filterObserver: filterObserver,
-        filterAge: filterAge,
-        makeFilterAge: makeFilterAge
+        filterNames: filterNames,
+        filters: filters
     };
 }]);
