@@ -271,7 +271,12 @@ moduleVisualizations.factory('visualizations',
     //
     // Visualization methods for concrete observers
     //
-    
+
+    var comparatorFilterAge = function(state, patient) {
+        return ((patient.biomedicalAttributes.age > state[1]) ||
+            (patient.biomedicalAttributes.age < state[0]));
+    };
+
     var makeFilterAge = function(nodeID) {
         var data = retrieveCountsData.retrieveAges();
         var filter = getFilterByName(filterNames.AGE);
@@ -291,6 +296,11 @@ moduleVisualizations.factory('visualizations',
         return renderer.intervalValues;
     };
 
+    var comparatorFilterWeight = function(state, patient) {
+        return ((patient.biomedicalAttributes.weight > state[1]) ||
+            (patient.biomedicalAttributes.weight < state[0]));
+    };
+
     var makeFilterWeight = function(nodeID) {
         var data = retrieveCountsData.retrieveWeights();
         var filter = getFilterByName(filterNames.WEIGHT);
@@ -308,6 +318,11 @@ moduleVisualizations.factory('visualizations',
 
     var extractFilterWeightState = function(renderer) {
         return renderer.intervalValues;
+    };
+
+    var comparatorFilterHeight = function(state, patient) {
+        return ((patient.biomedicalAttributes.height > state[1]) ||
+            (patient.biomedicalAttributes.height < state[0]));
     };
 
     var makeFilterHeight = function(nodeID) {
@@ -342,6 +357,7 @@ moduleVisualizations.factory('visualizations',
     var filters = [
         Object.freeze({
             handlers: [],
+            comparator: comparatorFilterAge,
             make: makeFilterAge,
             name: filterNames.AGE,
             renderer: {
@@ -355,6 +371,7 @@ moduleVisualizations.factory('visualizations',
         }),
         Object.freeze({
             handlers: [],
+            comparator: comparatorFilterWeight,
             make: makeFilterWeight,
             name: filterNames.WEIGHT,
             renderer: {
@@ -368,6 +385,7 @@ moduleVisualizations.factory('visualizations',
         }),
         Object.freeze({
             handlers: [],
+            comparator: comparatorFilterHeight,
             make: makeFilterHeight,
             name: filterNames.HEIGHT,
             renderer: {
@@ -396,6 +414,7 @@ moduleVisualizations.factory('visualizations',
         filters.forEach(function(filter) {
             extractedFilters.push({
                 name: filter.name,
+                comparator: filter.comparator,
                 state: filter.extractState(filter.renderer)
             });
         });

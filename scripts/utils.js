@@ -102,10 +102,21 @@ moduleUtils.factory('utils', ['$q', function($q) {
         return to;
     };
 
+    // Replace object if exists, otherwise add it
+    var updateObjectInArray = function(array, key, value, object) {
+        var index = arrayObjectIndexOf(array, value, key);
+        if (index > -1) {
+            array[index] = object;
+        } else {
+            array.push(object);
+        }
+    };
+
     return {
         arrayObjectIndexOf: arrayObjectIndexOf,
         arrayObjectPairIndexOf: arrayObjectPairIndexOf,
         arrayObjectFullPairIndexOf: arrayObjectFullPairIndexOf,
+        updateObjectInArray: updateObjectInArray,
         extractValueFromPair: extractValueFromPair,
         resolveEvents: resolveEvents,
         extend: extend

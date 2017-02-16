@@ -54,6 +54,7 @@ moduleProviders.factory('patientData',
         return previous;
     };
 
+    // Collects all values of a given array
     var getAttributeList = function(key, attributeType) {
         // FIXME:
         // Invalid lists, due to loading url without stored attributes;
@@ -65,6 +66,22 @@ moduleProviders.factory('patientData',
         return attributes[key]
             .map(function(patient) {
                 return patient[attributeType];
+            })
+            .reduce(reduceDataArray, []);
+    };
+
+    // Wraps non-array property into array before collection
+    var getAttributePropertyList = function(key, attributeType) {
+        // FIXME:
+        // Invalid lists, due to loading url without stored attributes;
+        // Will probably change to some REST API
+        if (attributes[key].length === 0) {
+            window.location.href = "index.html";
+        }
+
+        return attributes[key]
+            .map(function(patient) {
+                return [patient[attributeType]];
             })
             .reduce(reduceDataArray, []);
     };
@@ -111,6 +128,7 @@ moduleProviders.factory('patientData',
         getAttribute: getAttribute,
         getAttributeList: getAttributeList,
         getAttributeListByProperty: getAttributeListByProperty,
+        getAttributePropertyList: getAttributePropertyList,
         getObjectByID: getObjectByID,
         cloneAttributeList: cloneAttributeList
     };

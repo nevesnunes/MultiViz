@@ -198,76 +198,47 @@ moduleVisualizations.factory('HeatMapVisualization',
         var patientDataPromise = 
             retrievePatientData.retrieveData('incidences.json');
         patientDataPromise.then(function(data) {
-            var allDiseaseNames = visualizations.processSelectedList(
-                self.patientLists.diseases);
-            var allMedicationNames = visualizations.processSelectedList(
-                self.patientLists.medications);
+            // Stores filtered patient data of each applied filter,
+            // identified by it's name. They will be used to
+            // compute distributions.
+            var filteredDatas = {};
 
-            // Filter data by user specified filters
+            // Compute results for each applied filter
             if (filters) {
-            console.log("[Filters] Total: " + data.length);
+                console.log("[Filters] Total: " + data.length);
                 filters.forEach(function(filter) {
-                    if (filter.name === visualizations.filterNames.AGE) {
-                        data = data.filter(function(d) {
-                            var filteredPatientIDs = d.patientIDs.slice();
-                            d.patientIDs.forEach(function(id) {
-                                var patient = patientData.getObjectByID(
-                                    patientData.KEY_PATIENTS, id);
-                                if ((patient.biomedicalAttributes.age >
-                                        filter.state[1]) ||
-                                    (patient.biomedicalAttributes.age <
-                                        filter.state[0])) {
-                                    filteredPatientIDs.pop(id);
-                                }
-                            });
-                            return filteredPatientIDs.length; 
+                    filteredDatas[filter.name] = data.filter(function(d) {
+                        var filteredPatientIDs = d.patientIDs.slice();
+                        d.patientIDs.forEach(function(id) {
+                            var patient = patientData.getObjectByID(
+                                patientData.KEY_PATIENTS, id);
+                            if (filter.comparator(filter.state, patient)) {
+                                filteredPatientIDs.splice(
+                                    filteredPatientIDs.indexOf(id), 1);
+                            }
                         });
-                        console.log("[Filters] After " +
-                            filter.name + ": " + data.length);
-                    } else if (filter.name === 
-                            visualizations.filterNames.HEIGHT) {
-                        data = data.filter(function(d) {
-                            var filteredPatientIDs = d.patientIDs.slice();
-                            d.patientIDs.forEach(function(id) {
-                                var patient = patientData.getObjectByID(
-                                    patientData.KEY_PATIENTS, id);
-                                if ((patient.biomedicalAttributes.height >
-                                        filter.state[1]) ||
-                                    (patient.biomedicalAttributes.height <
-                                        filter.state[0])) {
-                                    filteredPatientIDs.pop(id);
-                                }
-                            });
-                            return filteredPatientIDs.length; 
-                        });
-                        console.log("[Filters] After " +
-                            filter.name + ": " + data.length);
-                    } else if (filter.name === 
-                            visualizations.filterNames.WEIGHT) {
-                        data = data.filter(function(d) {
-                            var filteredPatientIDs = d.patientIDs.slice();
-                            d.patientIDs.forEach(function(id) {
-                                var patient = patientData.getObjectByID(
-                                    patientData.KEY_PATIENTS, id);
-                                if ((patient.biomedicalAttributes.weight >
-                                        filter.state[1]) ||
-                                    (patient.biomedicalAttributes.weight <
-                                        filter.state[0])) {
-                                    filteredPatientIDs.pop(id);
-                                }
-                            });
-                            return filteredPatientIDs.length; 
-                        });
-                        console.log("[Filters] After " +
-                            filter.name + ": " + data.length);
-                    }
+                        return filteredPatientIDs.length; 
+                    });
+                    // Update initial data with filtered results
+                    data = utils.extend(filteredDatas[filter.name], []);
                 });
+
+                for (var property in filteredDatas) {
+                    if (filteredDatas.hasOwnProperty(property)) {
+                        console.log("[Filters] After " +
+                            property + ": " + filteredDatas[property].length);
+                    }
+                }
             }
 
             // Retrieve all matches of different attributes;
             // JSON data contains all attributes, which need to be filtered
             // first by user selected attributes
             // FIXME: Hardcoded pair order
+            var allDiseaseNames = visualizations.processSelectedList(
+                self.patientLists.diseases);
+            var allMedicationNames = visualizations.processSelectedList(
+                self.patientLists.medications);
             var filteredData = data.filter(function(d) {
                 var isValidPair = ((d.first.type === 'disease') &&
                         (d.second.type === 'medication'));
