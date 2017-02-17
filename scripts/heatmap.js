@@ -204,6 +204,7 @@ moduleVisualizations.factory('HeatMapVisualization',
             var filteredDatas = {};
 
             // Compute results for each applied filter
+            // FIXME: AFTER user selections
             if (filters) {
                 console.log("[Filters] Total: " + data.length);
                 filters.forEach(function(filter) {
@@ -228,6 +229,10 @@ moduleVisualizations.factory('HeatMapVisualization',
                         console.log("[Filters] After " +
                             property + ": " + filteredDatas[property].length);
                     }
+                }
+                for (var i=0; i<visualizations.activatedFilters.length; i++) {
+                    console.log("[Filters] Order of " +
+                        visualizations.activatedFilters[i] + ": " + i);
                 }
             }
 

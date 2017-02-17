@@ -354,19 +354,32 @@ moduleVisualizations.factory('visualizations',
         HEIGHT: "height"
     });
 
+    var isFilterActive = function(observer) {
+        var xRange = observer.renderer.x.range();
+        return ((observer.renderer.intervalPos[0] !== xRange[0]) ||
+                (observer.renderer.intervalPos[1] !== xRange[1]));
+    };
+
+    var makeFilterWithBrushRenderer = function() {
+        return {
+            brush: null,
+            brushed: null,
+            isActive: isFilterActive,
+            intervalValues: [],
+            intervalPos: [],
+            x: null
+        };
+    };
+
+    // Index in array encodes order of the corresponding filter
+    var activatedFilters = [];
     var filters = [
         Object.freeze({
             handlers: [],
             comparator: comparatorFilterAge,
             make: makeFilterAge,
             name: filterNames.AGE,
-            renderer: {
-                intervalValues: [],
-                intervalPos: [],
-                x: null,
-                brush: null,
-                brushed: null
-            },
+            renderer: makeFilterWithBrushRenderer(),
             extractState: extractFilterAgeState
         }),
         Object.freeze({
@@ -374,13 +387,7 @@ moduleVisualizations.factory('visualizations',
             comparator: comparatorFilterWeight,
             make: makeFilterWeight,
             name: filterNames.WEIGHT,
-            renderer: {
-                intervalValues: [],
-                intervalPos: [],
-                x: null,
-                brush: null,
-                brushed: null
-            },
+            renderer: makeFilterWithBrushRenderer(),
             extractState: extractFilterWeightState
         }),
         Object.freeze({
@@ -388,13 +395,7 @@ moduleVisualizations.factory('visualizations',
             comparator: comparatorFilterHeight,
             make: makeFilterHeight,
             name: filterNames.HEIGHT,
-            renderer: {
-                intervalValues: [],
-                intervalPos: [],
-                x: null,
-                brush: null,
-                brushed: null
-            },
+            renderer: makeFilterWithBrushRenderer(),
             extractState: extractFilterHeightState
         })
     ];
@@ -529,9 +530,7 @@ moduleVisualizations.factory('visualizations',
         histogramGroup.append("rect")
             .attr("class", "filter-bar")
             .merge(histogram)
-                .attr("x", function(d, i) { 
-                        return x(i); 
-                    })
+                .attr("x", function(d, i) { return x(i); })
                 .attr("y", function(d) { return y(d); })
                 .attr("width", x.bandwidth())
                 .attr("height", function(d) { return histogramHeight - y(d); });
@@ -589,14 +588,16 @@ moduleVisualizations.factory('visualizations',
             ];
 
             // Show `reset` button if changes were made
-            var xRange = x.range();
-            if ((observer.renderer.intervalPos[0] === xRange[0]) &&
-                (observer.renderer.intervalPos[1] === xRange[1])) {
-                d3.select('#filters-' + name + '-reset')
-                    .style('display', 'none');
-            } else {
+            if (observer.renderer.isActive(observer)) {
                 d3.select('#filters-' + name + '-reset')
                     .style('display', 'initial');
+                if (activatedFilters.indexOf(observer.name) === -1)
+                    activatedFilters.push(observer.name);
+            } else {
+                d3.select('#filters-' + name + '-reset')
+                    .style('display', 'none');
+                activatedFilters.splice(
+                    activatedFilters.indexOf(observer.name), 1);
             }
 
             filterObserver.dispatch(observer);
@@ -614,17 +615,19 @@ moduleVisualizations.factory('visualizations',
                 [vizContentWidth, histogramHeight]
             ])
             .on("end", brushed);
+
+        // Store brush functions for later calls
+        observer.renderer.x = x;
+        observer.renderer.brush = brush;
+        observer.renderer.brushed = brushed;
+
+        // Initialize brush
         g.selectAll(".temporal-line-brush").remove();
         var gBrush = g.append("g")
             .attr("class", "brush temporal-line-brush")
             .call(brush);
         adjustHandles(gBrush);
         gBrush.call(brush.move, brushPos);
-
-        // Store brush functions for later calls
-        observer.renderer.x = x;
-        observer.renderer.brush = brush;
-        observer.renderer.brushed = brushed;
     };
 
     return {
@@ -647,6 +650,7 @@ moduleVisualizations.factory('visualizations',
         getFilterByName: getFilterByName,
         filterObserver: filterObserver,
         filterNames: filterNames,
-        filters: filters
+        filters: filters,
+        activatedFilters: activatedFilters
     };
 }]);
