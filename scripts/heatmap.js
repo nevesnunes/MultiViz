@@ -198,17 +198,25 @@ moduleVisualizations.factory('HeatMapVisualization',
         var patientDataPromise = 
             retrievePatientData.retrieveData('incidences.json');
         patientDataPromise.then(function(data) {
-            // Stores filtered patient data of each applied filter,
-            // identified by it's name. They will be used to
-            // compute distributions.
-            var filteredDatas = {};
+            // Data without any filters applied.
+            // Used to compute distributions.
+            var initialData = utils.extend(data, {});
+
+            // Filtered patient data of each applied filter,
+            // identified by it's name. Used to compute distributions.
+            var specificDatas = {};
+
+            // Distributions and other derived measures from filtered data
+            // against initial data.
+            // TODO: Need to know order to compute measures
+            var dataMeasures = {};
 
             // Compute results for each applied filter
             // FIXME: AFTER user selections
             if (filters) {
                 console.log("[Filters] Total: " + data.length);
                 filters.forEach(function(filter) {
-                    filteredDatas[filter.name] = data.filter(function(d) {
+                    specificDatas[filter.name] = data.filter(function(d) {
                         var filteredPatientIDs = d.patientIDs.slice();
                         d.patientIDs.forEach(function(id) {
                             var patient = patientData.getObjectByID(
@@ -221,13 +229,13 @@ moduleVisualizations.factory('HeatMapVisualization',
                         return filteredPatientIDs.length; 
                     });
                     // Update initial data with filtered results
-                    data = utils.extend(filteredDatas[filter.name], []);
+                    data = utils.extend(specificDatas[filter.name], []);
                 });
 
-                for (var property in filteredDatas) {
-                    if (filteredDatas.hasOwnProperty(property)) {
+                for (var property in specificDatas) {
+                    if (specificDatas.hasOwnProperty(property)) {
                         console.log("[Filters] After " +
-                            property + ": " + filteredDatas[property].length);
+                            property + ": " + specificDatas[property].length);
                     }
                 }
                 for (var i=0; i<visualizations.activatedFilters.length; i++) {
@@ -525,9 +533,15 @@ moduleVisualizations.factory('HeatMapVisualization',
                 diseaseNames.length :
                 medicationNames.length;
             self.visualizationRenderer = {
-                dataIncidences: data,
+                // Data properties
+                data: data,
+                dataMeasures: dataMeasures,
                 filteredData: filteredData,
                 filteredSimilarityData: filteredSimilarityData,
+                initialData: initialData,
+                specificDatas: specificDatas,
+
+                // Other properties
                 diseaseNames: diseaseNames,
                 medicationNames: medicationNames,
                 longestDimensionLength: longestDimensionLength,
@@ -679,7 +693,7 @@ moduleVisualizations.factory('HeatMapVisualization',
         var self = this;
 
         var svg = matrixElement.svg;
-        var data = self.visualizationRenderer.dataIncidences; 
+        var data = self.visualizationRenderer.data; 
         var filteredData = self.visualizationRenderer.filteredData;
         var diseaseNames = self.visualizationRenderer.diseaseNames;
         var medicationNames = self.visualizationRenderer.medicationNames;

@@ -587,7 +587,8 @@ moduleVisualizations.factory('visualizations',
                 d3.event.selection[1]
             ];
 
-            // Show `reset` button if changes were made
+            // Show `reset` button if changes were made;
+            // Update activation order
             if (observer.renderer.isActive(observer)) {
                 d3.select('#filters-' + name + '-reset')
                     .style('display', 'initial');
