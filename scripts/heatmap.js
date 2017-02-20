@@ -198,25 +198,34 @@ moduleVisualizations.factory('HeatMapVisualization',
         var patientDataPromise = 
             retrievePatientData.retrieveData('incidences.json');
         patientDataPromise.then(function(data) {
-            // Data without any filters applied.
-            // Used to compute distributions.
-            var initialData = utils.extend(data, {});
+            // All types of data related to filters
+            var datas = {
+                // Data without any filters applied.
+                // Used to compute distributions.
+                initial: utils.extend(data, []),
 
-            // Filtered patient data of each applied filter,
-            // identified by it's name. Used to compute distributions.
-            var specificDatas = {};
+                // Filtered patient data of each applied filter,
+                // identified by it's name. Used to compute distributions.
+                specific: {},
 
-            // Distributions and other derived measures from filtered data
-            // against initial data.
-            // TODO: Need to know order to compute measures
-            var dataMeasures = {};
+                // Distributions and other derived measures from filtered data
+                // against initial data.
+                measures: {}
+            };
 
             // Compute results for each applied filter
             // FIXME: AFTER user selections
             if (filters) {
                 console.log("[Filters] Total: " + data.length);
-                filters.forEach(function(filter) {
-                    specificDatas[filter.name] = data.filter(function(d) {
+
+                visualizations.activatedFilters.forEach(function(filterName) {
+                    var index = utils.arrayObjectIndexOf(
+                        filters, filterName, 'name');
+                    if (index === -1)
+                        return;
+
+                    var filter = filters[index];
+                    datas.specific[filter.name] = data.filter(function(d) {
                         var filteredPatientIDs = d.patientIDs.slice();
                         d.patientIDs.forEach(function(id) {
                             var patient = patientData.getObjectByID(
@@ -226,21 +235,55 @@ moduleVisualizations.factory('HeatMapVisualization',
                                     filteredPatientIDs.indexOf(id), 1);
                             }
                         });
+
                         return filteredPatientIDs.length; 
                     });
+
                     // Update initial data with filtered results
-                    data = utils.extend(specificDatas[filter.name], []);
+                    data = utils.extend(datas.specific[filter.name], []);
+                });
+                
+                // Keep track of patients in filtered data
+                datas.measures.initial = {};
+                datas.measures.initial.presentPatientIDs = [];
+                datas.initial.forEach(function(d) {
+                    d.patientIDs.forEach(function(id) {
+                        if (datas.measures.initial.presentPatientIDs
+                                .indexOf(id) === -1)
+                           datas.measures.initial.presentPatientIDs
+                                .push(id);
+                    });
                 });
 
-                for (var property in specificDatas) {
-                    if (specificDatas.hasOwnProperty(property)) {
+                for (var property in datas.specific) {
+                    if (datas.specific.hasOwnProperty(property)) {
+                        datas.measures[property] = {};
+                        datas.measures[property].presentPatientIDs = [];
+                        datas.specific[property].forEach(function(d) {
+                            d.patientIDs.forEach(function(id) {
+                                if (datas.measures[property].presentPatientIDs
+                                        .indexOf(id) === -1)
+                                    datas.measures[property].presentPatientIDs
+                                        .push(id);
+                            });
+                        });
+                    }
+                }
+
+                for (property in datas.specific) {
+                    if (datas.specific.hasOwnProperty(property)) {
                         console.log("[Filters] After " +
-                            property + ": " + specificDatas[property].length);
+                            property + ": " + datas.specific[property].length);
                     }
                 }
                 for (var i=0; i<visualizations.activatedFilters.length; i++) {
                     console.log("[Filters] Order of " +
                         visualizations.activatedFilters[i] + ": " + i);
+                    console.log("[Filters] Length of " +
+                        visualizations.activatedFilters[i] + ": " + datas
+                            .measures[visualizations.activatedFilters[i]]
+                            .presentPatientIDs
+                            .length);
                 }
             }
 
@@ -535,11 +578,9 @@ moduleVisualizations.factory('HeatMapVisualization',
             self.visualizationRenderer = {
                 // Data properties
                 data: data,
-                dataMeasures: dataMeasures,
+                datas: datas,
                 filteredData: filteredData,
                 filteredSimilarityData: filteredSimilarityData,
-                initialData: initialData,
-                specificDatas: specificDatas,
 
                 // Other properties
                 diseaseNames: diseaseNames,
