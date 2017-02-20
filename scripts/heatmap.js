@@ -612,11 +612,9 @@ moduleVisualizations.factory('HeatMapVisualization',
         var self = this;
 
         var datas = self.visualizationRenderer.datas;
-        var hasFilters = visualizations.activatedFilters.length > 0;
 
         // If no filters are applied, then present patients are all patients
-        var presentPatients = (hasFilters) ?
-            Number.MAX_SAFE_INTEGER :
+        var presentPatients =
             datas.measures.initial.presentPatientIDs.length;
 
         // Due to the order of filters being applied, the smallest one will
@@ -641,6 +639,7 @@ moduleVisualizations.factory('HeatMapVisualization',
             nonPresentPacients * filtersWidth / totalPatients
         ];
 
+        // TODO: Calculate this in render() and pass as parameter
         var cellSizeOffset = self.visualizationRenderer.cellSizeOffset;
         var diamondInitialX = self.visualizationRenderer.diamondInitialX;
         var diamondInitialY = self.visualizationRenderer.diamondInitialY;
@@ -648,12 +647,15 @@ moduleVisualizations.factory('HeatMapVisualization',
         var labelHeight = self.gridHeight - cellSizeOffset * 2;
         var labelWidth = self.visualizationRenderer
             .longestNameLength * 8 + self.gridWidth;
+        var labelSimilarityWidth = self.visualizationRenderer
+            .longestSimilarityNameLength * 8 + self.gridWidth;
         var filtersOffsetX = (((
             (2 + diamondInitialX) *
             self.gridHeight +
             (2 * diamondInitialY) *
             (diamondSize + cellSizeOffset)
-        ) / 2) + labelWidth) || 0;
+        ) / 2) + labelWidth) || (
+            300 + labelSimilarityWidth);
 
         var sum = function(array, start, end) {
             var total = 0;
@@ -670,44 +672,60 @@ moduleVisualizations.factory('HeatMapVisualization',
                 (filtersOffsetX + self.margin.left) + "," +
                 self.margin.top + ")");
 
-            var filters = svg.selectAll('.rect-filter')
-                .data(datavars);
-            var filtersGroup = filters.enter();
-            filtersGroup.append('rect')
-                .attr("class", "rect-filter")
-                .attr('height', labelHeight)
-                .attr('y', 0)
-                .merge(filters)
-                    .attr('width', function(d) { return d; })
-                    .attr('x', function(d, i) { return sum(datavars, 0, i); })
-                    .attr('fill', function(d, i) { return colors[i]; });
+            visualizations.activatedFilters.forEach(function(filterName, i) {
+                var presentPatients = 
+                    datas.measures[filterName].presentPatientIDs.length;
+                var nonPresentPacients =
+                    datas.measures.initial.presentPatientIDs.length -
+                    presentPatients;
+                var totalPatients = presentPatients + nonPresentPacients;
+                var filtersWidth = 300;
+                var datavars = [
+                    presentPatients * filtersWidth / totalPatients,
+                    nonPresentPacients * filtersWidth / totalPatients
+                ];
 
-            var filtersTip = d3.tip()
-                .attr('class', 'tooltip tooltip-element tooltip-d3')
-                .offset([10, 0])
-                .direction('s')
-                .html(function() {
-                    return "<div style=\"text-align: left\">" +
-                        "<span><b>" + presentPatients + "</b> em " + 
-                            totalPatients + " pacientes</span>" +
-                    "</div>";
-                });
-            svg.selectAll('.rect-filter-overlay')
-                .remove();
-            svg.append('rect')
-                .attr("class", "rect-filter-overlay")
-                .attr('height', labelHeight)
-                .attr('y', 0)
-                .attr('width', filtersWidth)
-                .attr('x', 0)
-                .attr('fill', 'transparent')
-                .call(filtersTip)
-                    .on("mouseover", function() {
-                        filtersTip.show();
-                    })
-                    .on("mouseout", function() {
-                        filtersTip.hide();
+                var svg = element.filtersSVG;
+
+                var filters = svg.selectAll('.rect-filter-' + i)
+                    .data(datavars);
+                var filtersGroup = filters.enter();
+                filtersGroup.append('rect')
+                    .attr("class", "rect-filter-" + i)
+                    .attr('height', labelHeight)
+                    .attr('y', 50 + (labelHeight + 2) * i)
+                    .merge(filters)
+                        .attr('width', function(d) { return d; })
+                        .attr('x', function(d, i) { return sum(datavars, 0, i); })
+                        .attr('fill', function(d, i) { return colors[i]; });
+
+                var filtersTip = d3.tip()
+                    .attr('class', 'tooltip tooltip-element tooltip-d3')
+                    .offset([10, 0])
+                    .direction('s')
+                    .html(function() {
+                        return "<div style=\"text-align: left\">" +
+                            "<span><b>" + presentPatients + "</b> em " + 
+                                totalPatients + " pacientes</span>" +
+                        "</div>";
                     });
+                svg.selectAll('.rect-filter-' + i + '-overlay')
+                    .remove();
+                svg.append('rect')
+                    .attr("class", "rect-filter-" + i + "-overlay")
+                    .attr('height', labelHeight)
+                    .attr('y', 50 + (labelHeight + 2) * i)
+                    .attr('width', filtersWidth)
+                    .attr('x', 0)
+                    .attr('fill', 'transparent')
+                    .call(filtersTip)
+                        .on("mouseover", function() {
+                            filtersTip.show();
+                        })
+                        .on("mouseout", function() {
+                            filtersTip.hide();
+                        });
+            });
         });
     };
 
