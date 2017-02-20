@@ -188,7 +188,6 @@ body {
     border: 1px solid transparent;
     border-radius: 4px;
     margin-top: 1em;
-    max-width: 800px;
     overflow: auto;
 }
 
@@ -258,6 +257,9 @@ body {
 .main,
 .pretty-split-pane-frame {
     background: #ddd;
+}
+.pretty-split-pane-component-inner {
+    padding: 10px;
 }
 
 

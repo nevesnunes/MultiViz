@@ -2028,9 +2028,9 @@ moduleLayout.directive("directivePanes",
                                 '</div>' +
                             '</div>' +
                             '<div class="viz-main" id="' + vizID + '-main">' +
+                                // If more than one matrix is used, it will
+                                // be defined here
                                 '<div id="' + vizID + '-main-1">' +
-                                '</div>' +
-                                '<div id="' + vizID + '-main-2">' +
                                 '</div>' +
                             '</div>' +
                             '<div id="' + vizID + '-details">' +

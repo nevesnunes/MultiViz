@@ -121,8 +121,10 @@ moduleVisualizations.factory('HeatMapVisualization',
     };
 
     HeatMapVisualization.prototype.makeSVG = function(elementID, heatMapID) {
+        var self = this;
+
         // Dynamic properties
-        this.margin = (this.renderer === renderer.SIM) ? {
+        self.margin = (self.renderer === renderer.SIM) ? {
             top: 40,
             right: 0,
             bottom: 40,
@@ -133,18 +135,19 @@ moduleVisualizations.factory('HeatMapVisualization',
             bottom: 40,
             left: 40
         };
-        this.width = 800 - this.margin.left - this.margin.right;
-        this.height = 420 - this.margin.top - this.margin.bottom;
-        this.gridHeight = Math.floor(this.height / 12);
-        this.gridWidth = this.gridHeight;
+        var vizWidth = angular.element('#' + elementID)[0]
+            .offsetWidth;
+        self.width = vizWidth - self.margin.left - self.margin.right -
+            10; // Padding from .pretty-split-pane-component-inner
+        self.height = 420 - self.margin.top - self.margin.bottom;
+        self.gridHeight = Math.floor(self.height / 12);
+        self.gridWidth = self.gridHeight;
 
         if (elementID === undefined) {
             console.log("[WARN] @make: undefined id.");
             return;
         }
         
-        var self = this;
-
         // Multiple matrixes can be defined, each with their own
         // html elements appended dynamically.
         var matrixNumbers = [1];
@@ -154,10 +157,18 @@ moduleVisualizations.factory('HeatMapVisualization',
                     .attr("width", 
 						self.width + self.margin.left + self.margin.right)
                     .attr("height", 
-						self.height + self.margin.top + self.margin.bottom)
-                .append("g")
-                    .attr("transform", "translate(" +
-                        self.margin.left + "," + self.margin.top + ")");
+						self.height + self.margin.top + self.margin.bottom);
+
+            // Group for filters
+            var filtersSVG = svg.append("g")
+                .attr("id", "filters");
+
+            // Group for main visualization
+            svg = svg.append("g")
+                .attr("id", "viz")
+                .attr("transform", "translate(" +
+                    self.margin.left + "," + self.margin.top + ")");
+
             d3.select("#" + heatMapID + "-main-" + matrixNumber)
                 .style('float', 'left');
             d3.select('#' + heatMapID + "-sorting")
@@ -171,6 +182,7 @@ moduleVisualizations.factory('HeatMapVisualization',
                 elementID: elementID,
                 heatMapID: heatMapID,
                 id: matrixNumber,
+                filtersSVG: filtersSVG,
                 svg: svg
             };
 
@@ -213,6 +225,17 @@ moduleVisualizations.factory('HeatMapVisualization',
                 measures: {}
             };
 
+            datas.measures.initial = {};
+            datas.measures.initial.presentPatientIDs = [];
+            datas.initial.forEach(function(d) {
+                d.patientIDs.forEach(function(id) {
+                    if (datas.measures.initial.presentPatientIDs
+                            .indexOf(id) === -1)
+                       datas.measures.initial.presentPatientIDs
+                            .push(id);
+                });
+            });
+
             // Compute results for each applied filter
             // FIXME: AFTER user selections
             if (filters) {
@@ -243,18 +266,6 @@ moduleVisualizations.factory('HeatMapVisualization',
                     data = utils.extend(datas.specific[filter.name], []);
                 });
                 
-                // Keep track of patients in filtered data
-                datas.measures.initial = {};
-                datas.measures.initial.presentPatientIDs = [];
-                datas.initial.forEach(function(d) {
-                    d.patientIDs.forEach(function(id) {
-                        if (datas.measures.initial.presentPatientIDs
-                                .indexOf(id) === -1)
-                           datas.measures.initial.presentPatientIDs
-                                .push(id);
-                    });
-                });
-
                 for (var property in datas.specific) {
                     if (datas.specific.hasOwnProperty(property)) {
                         datas.measures[property] = {};
@@ -594,6 +605,109 @@ moduleVisualizations.factory('HeatMapVisualization',
             self.render();
         }, function(error) {
             console.log("[ERROR] d3.js parsing results: " + error);
+        });
+    };
+
+    HeatMapVisualization.prototype.filtersRender = function() {
+        var self = this;
+
+        var datas = self.visualizationRenderer.datas;
+        var hasFilters = visualizations.activatedFilters.length > 0;
+
+        // If no filters are applied, then present patients are all patients
+        var presentPatients = (hasFilters) ?
+            Number.MAX_SAFE_INTEGER :
+            datas.measures.initial.presentPatientIDs.length;
+
+        // Due to the order of filters being applied, the smallest one will
+        // contain all present patients
+        for (var property in datas.specific) {
+            if (datas.specific.hasOwnProperty(property)) {
+                var count = datas.measures[property].presentPatientIDs.length;
+                if (count < presentPatients)
+                    presentPatients = count;
+            }
+        }
+
+        var nonPresentPacients =
+            datas.measures.initial.presentPatientIDs.length -
+            presentPatients;
+
+        var totalPatients = presentPatients + nonPresentPacients;
+
+        var filtersWidth = 300;
+        var datavars = [
+            presentPatients * filtersWidth / totalPatients,
+            nonPresentPacients * filtersWidth / totalPatients
+        ];
+
+        var cellSizeOffset = self.visualizationRenderer.cellSizeOffset;
+        var diamondInitialX = self.visualizationRenderer.diamondInitialX;
+        var diamondInitialY = self.visualizationRenderer.diamondInitialY;
+        var diamondSize = self.visualizationRenderer.diamondSize;
+        var labelHeight = self.gridHeight - cellSizeOffset * 2;
+        var labelWidth = self.visualizationRenderer
+            .longestNameLength * 8 + self.gridWidth;
+        var filtersOffsetX = (((
+            (2 + diamondInitialX) *
+            self.gridHeight +
+            (2 * diamondInitialY) *
+            (diamondSize + cellSizeOffset)
+        ) / 2) + labelWidth) || 0;
+
+        var sum = function(array, start, end) {
+            var total = 0;
+            for (var i = start; i < end; i++)
+                total += array[i];
+            return total;
+        };
+
+        var colors = ['#000', '#ddd'];
+        self.html.forEach(function(element) {
+            var svg = element.filtersSVG;
+
+            svg.attr("transform", "translate(" +
+                (filtersOffsetX + self.margin.left) + "," +
+                self.margin.top + ")");
+
+            var filters = svg.selectAll('.rect-filter')
+                .data(datavars);
+            var filtersGroup = filters.enter();
+            filtersGroup.append('rect')
+                .attr("class", "rect-filter")
+                .attr('height', labelHeight)
+                .attr('y', 0)
+                .merge(filters)
+                    .attr('width', function(d) { return d; })
+                    .attr('x', function(d, i) { return sum(datavars, 0, i); })
+                    .attr('fill', function(d, i) { return colors[i]; });
+
+            var filtersTip = d3.tip()
+                .attr('class', 'tooltip tooltip-element tooltip-d3')
+                .offset([10, 0])
+                .direction('s')
+                .html(function() {
+                    return "<div style=\"text-align: left\">" +
+                        "<span><b>" + presentPatients + "</b> em " + 
+                            totalPatients + " pacientes</span>" +
+                    "</div>";
+                });
+            svg.selectAll('.rect-filter-overlay')
+                .remove();
+            svg.append('rect')
+                .attr("class", "rect-filter-overlay")
+                .attr('height', labelHeight)
+                .attr('y', 0)
+                .attr('width', filtersWidth)
+                .attr('x', 0)
+                .attr('fill', 'transparent')
+                .call(filtersTip)
+                    .on("mouseover", function() {
+                        filtersTip.show();
+                    })
+                    .on("mouseout", function() {
+                        filtersTip.hide();
+                    });
         });
     };
 
@@ -1208,6 +1322,8 @@ moduleVisualizations.factory('HeatMapVisualization',
                 -diamondSize,
                 (self.visualizationRenderer.longestDimensionLength + 4) *
                     self.gridHeight);
+
+        self.filtersRender();
     };
 
     HeatMapVisualization.prototype.addSimilarityStyleSelections = function(d) {
@@ -1532,6 +1648,8 @@ moduleVisualizations.factory('HeatMapVisualization',
                 self.gridHeight,
                 self.gridHeight,
                 (similarityNames.length) * self.gridHeight);
+
+        self.filtersRender();
     };
 
     var attributeType = Object.freeze({
