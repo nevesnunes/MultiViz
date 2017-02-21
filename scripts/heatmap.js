@@ -630,7 +630,6 @@ moduleVisualizations.factory('HeatMapVisualization',
             return total;
         };
 
-        var colors = ['#000', '#ddd'];
         var dragging = {};
         self.html.forEach(function(element) {
             var svg = element.filtersSVG;
@@ -754,23 +753,21 @@ moduleVisualizations.factory('HeatMapVisualization',
 
             svg.selectAll('.rect-filter-present').remove();
             g.append('rect')
-                .attr("class", "rect-filter-present")
+                .attr("class", "rect-filter-present filter-bar")
                 .attr('height', labelHeight)
                 .attr('y', 0)
                 .merge(dimension.selectAll(".rect-filter-present"))
                     .attr('width', function(d, i) { return d[0]; })
-                    .attr('x', function(d, i) { return 0; })
-                    .attr('fill', function(d, i) { return colors[0]; });
+                    .attr('x', function(d, i) { return 0; });
 
             svg.selectAll('.rect-filter-nonpresent').remove();
             g.append('rect')
-                .attr("class", "rect-filter-nonpresent")
+                .attr("class", "rect-filter-nonpresent filter-bar-empty")
                 .attr('height', labelHeight)
                 .attr('y', 0)
                 .merge(dimension.selectAll(".rect-filter-nonpresent"))
                     .attr('width', function(d, i) { return d[1]; })
-                    .attr('x', function(d, i) { return d[0]; })
-                    .attr('fill', function(d, i) { return colors[1]; });
+                    .attr('x', function(d, i) { return d[0]; });
 
             svg.selectAll('.rect-filter-overlay').remove();
             g.append('rect')

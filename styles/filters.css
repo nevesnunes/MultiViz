@@ -1,5 +1,11 @@
 .filter-bar {
     background-color: #333;
+    fill: #333;
+}
+
+.filter-bar-empty {
+    background-color: #ddd;
+    fill: #ddd;
 }
 
 .filter-draggable {
