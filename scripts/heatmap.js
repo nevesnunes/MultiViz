@@ -135,9 +135,9 @@ moduleVisualizations.factory('HeatMapVisualization',
             bottom: 40,
             left: 40
         };
-        var vizWidth = angular.element('#' + elementID)[0]
+        self.vizWidth = angular.element('#' + elementID)[0]
             .offsetWidth;
-        self.width = vizWidth - self.margin.left - self.margin.right -
+        self.width = self.vizWidth - self.margin.left - self.margin.right -
             10; // Padding from .pretty-split-pane-component-inner
         self.height = 420 - self.margin.top - self.margin.bottom;
         self.gridHeight = Math.floor(self.height / 12);
@@ -613,49 +613,15 @@ moduleVisualizations.factory('HeatMapVisualization',
 
         var datas = self.visualizationRenderer.datas;
 
-        // If no filters are applied, then present patients are all patients
-        var presentPatients =
-            datas.measures.initial.presentPatientIDs.length;
-
-        // Due to the order of filters being applied, the smallest one will
-        // contain all present patients
-        for (var property in datas.specific) {
-            if (datas.specific.hasOwnProperty(property)) {
-                var count = datas.measures[property].presentPatientIDs.length;
-                if (count < presentPatients)
-                    presentPatients = count;
-            }
-        }
-
-        var nonPresentPacients =
-            datas.measures.initial.presentPatientIDs.length -
-            presentPatients;
-
-        var totalPatients = presentPatients + nonPresentPacients;
-
-        var filtersWidth = 300;
-        var datavars = [
-            presentPatients * filtersWidth / totalPatients,
-            nonPresentPacients * filtersWidth / totalPatients
-        ];
-
-        // TODO: Calculate this in render() and pass as parameter
         var cellSizeOffset = self.visualizationRenderer.cellSizeOffset;
-        var diamondInitialX = self.visualizationRenderer.diamondInitialX;
-        var diamondInitialY = self.visualizationRenderer.diamondInitialY;
-        var diamondSize = self.visualizationRenderer.diamondSize;
         var labelHeight = self.gridHeight - cellSizeOffset * 2;
-        var labelWidth = self.visualizationRenderer
-            .longestNameLength * 8 + self.gridWidth;
-        var labelSimilarityWidth = self.visualizationRenderer
-            .longestSimilarityNameLength * 8 + self.gridWidth;
-        var filtersOffsetX = (((
-            (2 + diamondInitialX) *
-            self.gridHeight +
-            (2 * diamondInitialY) *
-            (diamondSize + cellSizeOffset)
-        ) / 2) + labelWidth) || (
-            300 + labelSimilarityWidth);
+        var labelWidth = (
+                (self.visualizationRenderer.longestNameLength) ||
+                (self.visualizationRenderer.longestSimilarityNameLength)
+            ) * 8 + self.gridWidth;
+        var filtersWidth = 300;
+        var filtersOffsetX = self.vizWidth -
+            filtersWidth - labelWidth;
 
         var sum = function(array, start, end) {
             var total = 0;
@@ -667,11 +633,11 @@ moduleVisualizations.factory('HeatMapVisualization',
         var colors = ['#000', '#ddd'];
         self.html.forEach(function(element) {
             var svg = element.filtersSVG;
-
             svg.attr("transform", "translate(" +
                 (filtersOffsetX + self.margin.left) + "," +
                 self.margin.top + ")");
 
+            var data = [];
             visualizations.activatedFilters.forEach(function(filterName, i) {
                 var presentPatients = 
                     datas.measures[filterName].presentPatientIDs.length;
@@ -679,13 +645,10 @@ moduleVisualizations.factory('HeatMapVisualization',
                     datas.measures.initial.presentPatientIDs.length -
                     presentPatients;
                 var totalPatients = presentPatients + nonPresentPacients;
-                var filtersWidth = 300;
                 var datavars = [
                     presentPatients * filtersWidth / totalPatients,
                     nonPresentPacients * filtersWidth / totalPatients
                 ];
-
-                var svg = element.filtersSVG;
 
                 var filters = svg.selectAll('.rect-filter-' + i)
                     .data(datavars);
@@ -693,7 +656,7 @@ moduleVisualizations.factory('HeatMapVisualization',
                 filtersGroup.append('rect')
                     .attr("class", "rect-filter-" + i)
                     .attr('height', labelHeight)
-                    .attr('y', 50 + (labelHeight + 2) * i)
+                    .attr('y', (labelHeight + 2) * i)
                     .merge(filters)
                         .attr('width', function(d) { return d; })
                         .attr('x', function(d, i) { return sum(datavars, 0, i); })
@@ -714,7 +677,7 @@ moduleVisualizations.factory('HeatMapVisualization',
                 svg.append('rect')
                     .attr("class", "rect-filter-" + i + "-overlay")
                     .attr('height', labelHeight)
-                    .attr('y', 50 + (labelHeight + 2) * i)
+                    .attr('y', (labelHeight + 2) * i)
                     .attr('width', filtersWidth)
                     .attr('x', 0)
                     .attr('fill', 'transparent')
