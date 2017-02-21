@@ -1,3 +1,7 @@
 .filter-bar {
     background-color: #333;
 }
+
+.filter-draggable {
+    cursor: move;
+}

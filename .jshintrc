@@ -1,0 +1,11 @@
+{
+  "esversion": 6,
+  "futurehostile": true,
+  "globals": {
+      "angular": false,
+      "console": false,
+      "d3": false,
+      "window": true
+  },
+  "undef": true
+}

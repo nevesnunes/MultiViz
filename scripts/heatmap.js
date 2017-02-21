@@ -631,6 +631,7 @@ moduleVisualizations.factory('HeatMapVisualization',
         };
 
         var colors = ['#000', '#ddd'];
+        var dragging = {};
         self.html.forEach(function(element) {
             var svg = element.filtersSVG;
             svg.attr("transform", "translate(" +
@@ -645,50 +646,161 @@ moduleVisualizations.factory('HeatMapVisualization',
                     datas.measures.initial.presentPatientIDs.length -
                     presentPatients;
                 var totalPatients = presentPatients + nonPresentPacients;
-                var datavars = [
+                data.push([
                     presentPatients * filtersWidth / totalPatients,
-                    nonPresentPacients * filtersWidth / totalPatients
-                ];
-
-                var filters = svg.selectAll('.rect-filter-' + i)
-                    .data(datavars);
-                var filtersGroup = filters.enter();
-                filtersGroup.append('rect')
-                    .attr("class", "rect-filter-" + i)
-                    .attr('height', labelHeight)
-                    .attr('y', (labelHeight + 2) * i)
-                    .merge(filters)
-                        .attr('width', function(d) { return d; })
-                        .attr('x', function(d, i) { return sum(datavars, 0, i); })
-                        .attr('fill', function(d, i) { return colors[i]; });
-
-                var filtersTip = d3.tip()
-                    .attr('class', 'tooltip tooltip-element tooltip-d3')
-                    .offset([10, 0])
-                    .direction('s')
-                    .html(function() {
-                        return "<div style=\"text-align: left\">" +
-                            "<span><b>" + presentPatients + "</b> em " + 
-                                totalPatients + " pacientes</span>" +
-                        "</div>";
-                    });
-                svg.selectAll('.rect-filter-' + i + '-overlay')
-                    .remove();
-                svg.append('rect')
-                    .attr("class", "rect-filter-" + i + "-overlay")
-                    .attr('height', labelHeight)
-                    .attr('y', (labelHeight + 2) * i)
-                    .attr('width', filtersWidth)
-                    .attr('x', 0)
-                    .attr('fill', 'transparent')
-                    .call(filtersTip)
-                        .on("mouseover", function() {
-                            filtersTip.show();
-                        })
-                        .on("mouseout", function() {
-                            filtersTip.hide();
-                        });
+                    nonPresentPacients * filtersWidth / totalPatients,
+                    presentPatients * 1,
+                    nonPresentPacients,
+                    filterName
+                ]);
             });
+
+            var dimensionsLength = data.length;
+            if (!dimensionsLength)
+                return;
+
+            var dimensions = d3.range(dimensionsLength);
+            var yMaxRange = (dimensionsLength + 1) * labelHeight;
+            var y = d3.scalePoint()
+                .domain(dimensions)
+                .range([0, yMaxRange])
+                .padding(1);
+
+            var position = function(d) {
+                var v = dragging[d];
+                return v === undefined ? y(d) : v;
+            };
+
+            var filtersTip = d3.tip()
+                .attr('class', 'tooltip tooltip-element tooltip-d3')
+                .offset([10, 0])
+                .direction('s')
+                .html(function(d) {
+                    return "<div style=\"text-align: left\">" +
+                        "<span><b>" +
+                        d[2] +
+                        "</b> em " +
+                        (d[2] + d[3]) +
+                        " pacientes</span>" +
+                    "</div>";
+                });
+
+            var endReorderFilter = function(d, i) {
+                delete dragging[i];
+                d3.select(this).transition().duration(500)
+                    .attr("transform", "translate(0," + y(i) + ")")
+                    .on("end", function(d, i) {
+                        // Extract new ordered filters
+                        var isOrderChanged = false;
+                        var reorderedFilters = [];
+                        for (var j = 0; j < dimensions.length; j++) {
+                            var filterIndex = dimensions[j];
+                            if (filterIndex !== j)
+                                isOrderChanged = true;
+                            reorderedFilters.push(
+                                visualizations.activatedFilters[filterIndex]);
+                        }
+
+                        // Update viz if order was changed
+                        if (isOrderChanged) {
+                            visualizations.activatedFilters =
+                                reorderedFilters.slice();
+                            var currentIndex = utils.arrayObjectIndexOf(
+                                visualizations.filters, d[4], 'name');
+                            visualizations.filterObserver.dispatch(
+                                visualizations.filters[currentIndex]);
+                        }
+                    });
+            };
+
+            var dimension = svg.selectAll('.dimension')
+                .data(data);
+            var dimensionGroup = dimension.enter();
+            var g = dimensionGroup.append('g')
+                .attr("class", "dimension")
+                .merge(dimension)
+                    .attr("transform", function(d, i) {
+                        var a = y(i);
+                        return "translate(0," + y(i) + ")";
+                    })
+                    .call(d3.drag()
+                        .subject(function(d, i) { 
+                            return {x: 0, y: y(i)};
+                        })
+                        .on("start", function(d, i) {
+                            // Silence other listeners
+                            d3.event.sourceEvent.stopPropagation();
+                            if (d3.event.sourceEvent.which == 1) {
+                                dragging[i] = y(i);
+                                d3.select(this).moveToFront();
+                                filtersTip.hide();
+                            }
+                        })
+                        .on("drag", function(d, i) {
+                            dragging[i] = Math.min(
+                                Math.max(0, d3.event.y),
+                                yMaxRange
+                            );
+                            dimensions.sort(function(a, b) {
+                                return position(a) - position(b);
+                            });
+                            y.domain(dimensions);
+                            g.attr("transform", function(d, i) { 
+                                return "translate(0," + position(i) + ")";
+                            });
+                        })
+                        .on("end", endReorderFilter)
+                    );
+
+            svg.selectAll('.rect-filter-present').remove();
+            g.append('rect')
+                .attr("class", "rect-filter-present")
+                .attr('height', labelHeight)
+                .attr('y', 0)
+                .merge(dimension.selectAll(".rect-filter-present"))
+                    .attr('width', function(d, i) { return d[0]; })
+                    .attr('x', function(d, i) { return 0; })
+                    .attr('fill', function(d, i) { return colors[0]; });
+
+            svg.selectAll('.rect-filter-nonpresent').remove();
+            g.append('rect')
+                .attr("class", "rect-filter-nonpresent")
+                .attr('height', labelHeight)
+                .attr('y', 0)
+                .merge(dimension.selectAll(".rect-filter-nonpresent"))
+                    .attr('width', function(d, i) { return d[1]; })
+                    .attr('x', function(d, i) { return d[0]; })
+                    .attr('fill', function(d, i) { return colors[1]; });
+
+            svg.selectAll('.rect-filter-overlay').remove();
+            g.append('rect')
+                .attr("class", "rect-filter-overlay filter-draggable")
+                .attr('height', labelHeight)
+                .attr('y', 0)
+                .attr('width', filtersWidth)
+                .attr('x', 0)
+                .attr('fill', 'transparent')
+                .merge(dimension.selectAll(".rect-filter-overlay"))
+                    .call(filtersTip)
+                        .on("mouseover", function(d) {
+                            filtersTip.show(d);
+                        })
+                        .on("mouseout", function(d) {
+                            filtersTip.hide(d);
+                        });
+
+            svg.selectAll('.text-filter-name').remove();
+            g.append('text')
+                .attr("class", "text-filter-name")
+                .attr('height', labelHeight)
+                .attr('x', filtersWidth + 10)
+                .attr('y', labelHeight / 2)
+                .attr("dy", ".35em")
+                .merge(dimension.selectAll(".text-filter-name"))
+                    .text(function(d) {
+                        return visualizations
+                            .translateFilterAttribute(d[4]);
+                    });
         });
     };
 
