@@ -691,7 +691,8 @@ moduleVisualizations.factory('HeatMapVisualization',
             };
 
             var filtersTip = d3.tip()
-                .attr('class', 'tooltip tooltip-element tooltip-d3')
+                .attr('class',
+                    'tooltip tooltip-element tooltip-d3 tooltip-d3-filter')
                 .offset([10, 0])
                 .direction('s')
                 .html(function(d) {
@@ -722,6 +723,9 @@ moduleVisualizations.factory('HeatMapVisualization',
 
                         // Update viz if order was changed
                         if (isOrderChanged) {
+                            // Remove tooltips from previous elements
+                            d3.selectAll(".tooltip-d3-filter").remove();
+
                             visualizations.activatedFilters =
                                 reorderedFilters.slice();
                             var currentIndex = utils.arrayObjectIndexOf(
