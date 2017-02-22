@@ -537,10 +537,11 @@ moduleVisualizations.factory('visualizations',
         var histogramGroup = histogram.enter();
         histogramGroup.append("rect")
             .attr("class", "filter-bar")
+            .attr("shape-rendering", "crispEdges")
             .merge(histogram)
                 .attr("x", function(d, i) { return x(i); })
                 .attr("y", function(d) { return y(d); })
-                .attr("width", x.bandwidth())
+                .attr("width", Math.ceil(x.bandwidth()))
                 .attr("height", function(d) { return histogramHeight - y(d); });
 
         //
