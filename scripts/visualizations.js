@@ -482,10 +482,18 @@ moduleVisualizations.factory('visualizations',
                 .text('Reset')
                 .on('click', function() {
                     var svg = d3.select('#filters' + name);
+
+                    // Set brush with initial values
                     svg.select(".temporal-line-brush")
                         .call(
                             observer.renderer.brush.move,
                             observer.renderer.x.range().slice());
+
+                    // Remove corresponding distribution bars
+                    var currentIndex = utils.arrayObjectIndexOf(
+                        filters, name, 'name');
+                    filterObserver.dispatch(
+                        filters[currentIndex]);
                 });
 
         //
@@ -592,13 +600,16 @@ moduleVisualizations.factory('visualizations',
             if (observer.renderer.isActive(observer)) {
                 d3.select('#filters-' + name + '-reset')
                     .style('display', 'initial');
+
                 if (activatedFilters.indexOf(observer.name) === -1)
                     activatedFilters.push(observer.name);
             } else {
                 d3.select('#filters-' + name + '-reset')
                     .style('display', 'none');
-                activatedFilters.splice(
-                    activatedFilters.indexOf(observer.name), 1);
+
+                var spliceIndex = activatedFilters.indexOf(observer.name);
+                if (spliceIndex !== -1)
+                    activatedFilters.splice(spliceIndex, 1);
             }
 
             filterObserver.dispatch(observer);

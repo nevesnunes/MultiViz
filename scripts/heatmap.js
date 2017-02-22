@@ -254,8 +254,11 @@ moduleVisualizations.factory('HeatMapVisualization',
                             var patient = patientData.getObjectByID(
                                 patientData.KEY_PATIENTS, id);
                             if (filter.comparator(filter.state, patient)) {
-                                filteredPatientIDs.splice(
-                                    filteredPatientIDs.indexOf(id), 1);
+                                var spliceIndex =
+                                    filteredPatientIDs.indexOf(id);
+                                if (spliceIndex !== -1)
+                                    filteredPatientIDs.splice(
+                                        spliceIndex, 1);
                             }
                         });
 
@@ -630,6 +633,15 @@ moduleVisualizations.factory('HeatMapVisualization',
             return total;
         };
 
+        // If we could get merges working with groups, this
+        // would be unnecessary...
+        var removeOldFilters = function(svg) {
+            svg.selectAll('.rect-filter-present').remove();
+            svg.selectAll('.rect-filter-nonpresent').remove();
+            svg.selectAll('.rect-filter-overlay').remove();
+            svg.selectAll('.text-filter-name').remove();
+        };
+
         var dragging = {};
         self.html.forEach(function(element) {
             var svg = element.filtersSVG;
@@ -653,6 +665,8 @@ moduleVisualizations.factory('HeatMapVisualization',
                     filterName
                 ]);
             });
+
+            removeOldFilters(svg);
 
             var dimensionsLength = data.length;
             if (!dimensionsLength)
