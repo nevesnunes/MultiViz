@@ -636,6 +636,8 @@ moduleVisualizations.factory('HeatMapVisualization',
         // If we could get merges working with groups, this
         // would be unnecessary...
         var removeOldFilters = function(svg) {
+            svg.selectAll('text').remove();
+
             svg.selectAll('.rect-filter-present').remove();
             svg.selectAll('.rect-filter-nonpresent').remove();
             svg.selectAll('.rect-filter-overlay').remove();
@@ -671,6 +673,10 @@ moduleVisualizations.factory('HeatMapVisualization',
             var dimensionsLength = data.length;
             if (!dimensionsLength)
                 return;
+
+            svg.append("text")
+                .attr('y', labelHeight / 2)
+                .text("Distribuições");
 
             var dimensions = d3.range(dimensionsLength);
             var yMaxRange = (dimensionsLength + 1) * labelHeight;
