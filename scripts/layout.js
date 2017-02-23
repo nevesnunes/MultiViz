@@ -300,7 +300,7 @@ moduleLayout.controller('controllerLayout',
         function($scope, patientData) {
     $scope.vizType = Object.freeze({
         NONE: "NONE",
-        HEAT_MAP: "Matrix",
+        HEATMAP: "Matrix",
         SPIRAL: "Espiral",
         TIMELINE: "Linha Temporal"
     });
@@ -433,7 +433,6 @@ moduleLayout.directive("directiveActionPanel",
                         name: "setModificationType",
                         handler: setModificationType
                     }
-
                 ]);
 
                 currentHTML = $compile(html)(currentScope);
@@ -481,7 +480,7 @@ moduleLayout.directive("directiveActionPanel",
             };
 
             scope.chooseHeatmap = function() {
-                scope.APIPanes.makePaneSplit(scope.APIPanes.vizType.HEAT_MAP);
+                scope.APIPanes.makePaneSplit(scope.APIPanes.vizType.HEATMAP);
             };
 
             scope.chooseTimeline = function() {
@@ -1151,31 +1150,11 @@ moduleLayout.directive("directiveActionPanel",
                     (!nodes.isMaximized(nodes.getRootNode().model.id));
                 if (rootHasNoChildren || viewNotRoot) {
                     if (currentNode.model.vizType ===
-                            scope.vizType.HEAT_MAP) {
+                            scope.vizType.HEATMAP) {
                         vizObject = nodes.getVizByIDs(
                                 currentNode.model.id,
                                 currentNode.model.currentVizID)
                             .vizObject;
-                        currentAttributeType = vizObject
-                            .currentAttributeType;
-                        attributeTypes = vizObject
-                            .getAttributeTypes();
-                        currentModificationType = vizObject
-                            .currentModificationType;
-                        modificationTypes = vizObject
-                            .getModificationTypes();
-
-                        var retrieveAgeFromElement = function(element) {
-                            return retrieveCountsData.retrieveIncidences.then(function(result) {
-                                var index = utils.arrayObjectIndexOf(
-                                    result.data, element, "name");
-                                if (index !== -1) {
-                                    return result.data[index].incidences /
-                                        result.countPatients * 100;
-                                }
-                            });
-                        };
-                        list = currentAttributeType + "Names";
 
                         // Set the visualization's stored patient lists
                         scope.selectedDiseases =
@@ -1183,100 +1162,26 @@ moduleLayout.directive("directiveActionPanel",
                         scope.selectedMedications =
                             vizObject.patientLists.medications;
 
-                        html = '<div>' +
-                            // Data/Filters pills
-                            '<ul class="nav nav-pills nav-justified">' +
-                                '<li ' +
-                                    'id="btnDisplayData" ' +
-                                    'ng-class="isModificationTypeActive(\'' + 
-                                        modificationTypes.DATA + '\')" ' +
-                                    'ng-click="setModificationType(\'' + 
-                                        modificationTypes.DATA + '\')">' +
-                                    '<a href="#">Dados</a>' +
-                                '</li>' +
-                                '<li ' +
-                                    'id="btnDisplayFilters" ' +
-                                    'ng-class="isModificationTypeActive(\'' + 
-                                        modificationTypes.FILTERS + '\')" ' +
-                                    'ng-click="setModificationType(\'' + 
-                                        modificationTypes.FILTERS + '\')">' +
-                                    '<a href="#">Filtros</a>' +
-                                '</li>' +
-                            '</ul>' +
-                            '<div class="custom-separator" />';
-                        html += (currentModificationType === modificationTypes.DATA) ?
-                            // Attribute lists
-                            '<div class="btn-group-vertical custom-container-width" ' +
-                                    'role="group" aria-label="...">' +
-                                '<button type="button" ' +
-                                    'id="btnDiseases" ' +
-                                    'class="btn btn-default custom-container-align" ' +
-                                    'ng-class="isAttributeTypeActive(\'' + 
-                                        attributeTypes.DISEASES + '\')" ' +
-                                    'ng-click="setAttributeType(\'' + 
-                                        attributeTypes.DISEASES + '\')">' +
-                                    'Doenças</button>' +
-                                '<button type="button" ' +
-                                    'id="btnMedications" ' +
-                                    'class="btn btn-default custom-container-align" ' +
-                                    'ng-class="isAttributeTypeActive(\'' + 
-                                        attributeTypes.MEDICATIONS + '\')" ' +
-                                    'ng-click="setAttributeType(\'' + 
-                                        attributeTypes.MEDICATIONS + '\')">' +
-                                    'Medicações</button>' +
-                            '</div>' +
-                            '<p/>' +
-                            // Search
-                            '<div class="right-inner-addon">' +
-                                '<i class="glyphicon glyphicon-search"></i>' +
-                                '<input type="text" ' +
-                                    'id="input-option-list" ' +
-                                    'class="form-control" ' +
-                                    'placeholder="Procurar..." ' +
-                                    'ng-model="optionListModel" ' +
-                                    'autofocus tabindex=1>' +
-                            '</div>' +
-                            // Selection choices
-                            '<span>Selecionar:</span>' +
-                                '<button class="btn btn-link custom-btn-link" ' +
-                                    'ng-click="checkAll()">Todos</button>' +
-                                '|' +
-                                '<button class="btn btn-link custom-btn-link" ' +
-                                    'ng-click="checkNone()">Nenhum</button>' +
-                            // Help
-                            '<div style="display: block"> ' +
-                                '<img class="tooltip-wrapper help" ' +
-                                    'title="{{tooltipText}}" ' + 
-                                    'directive-tooltip directive-menu-tooltip ' +
-                                    'src="images/controls/info.svg">' +
-                            '</div>' +
-                            '<p/>' +
-                            // List
-                            '<div ng-controller="controllerEntryBarFill" class="table table-condensed table-bordered patient-table">' +
-                                '<div directive-entry-bar-fill class="checkboxInTable patient-table-entry"' +
-                                    'ng-repeat="attribute in filteredAttributes = (' + list + ' | filter:optionListModel | orderBy:orderByProportion)" ' +
-                                    'ng-click="check(attribute)" ' +
-                                    'ng-mouseenter="vizStyleFromMouseEnter(attribute)" ' +
-                                    'ng-mouseleave="vizStyleFromMouseLeave(attribute)" ' +
-                                    'ng-class="isEntrySelected($index)">' +
-                                    '<div class="patient-table-entry-text">' +
-                                        '<div style="display: inline-block" ' +
-                                            'ng-class="isEntryCurrentPatientAttribute(attribute)">' +
-                                        '</div>' +
-                                        '<input ' +
-                                            'class="custom-checkbox" ' +
-                                            'type="checkbox" ' +
-                                            'ng-checked="isSelected(attribute)"> ' +
-                                            '{{::attribute}}' +
-                                    '</div>' +
-                                    '<div class="patient-table-entry-bar"> ' +
-                                        '<div class="patient-table-entry-bar-fill" attribute="attribute" style="width:{{::proportion}}%"> ' +
-                                        '</div>' +
-                                    '</div>' +
-                                '</div>' +
-                            '</div>' :
-                            '<div id="filters-' + currentNode.model.id + '">' +
-                            '</div>';
+                        html = '<div>';
+                        html += widgets.makeAttributePills({
+                            currentModificationType: vizObject
+                                .currentModificationType,
+                            modificationTypes: vizObject
+                                .getModificationTypes()
+                        });
+                        html += widgets.makeAttributePillsContents({
+                            list: vizObject
+                                .currentAttributeType + "Names",
+                            currentNode: currentNode,
+                            currentAttributeType: vizObject
+                                .currentAttributeType,
+                            attributeTypes: vizObject
+                                .getAttributeTypes(),
+                            currentModificationType: vizObject
+                                .currentModificationType,
+                            modificationTypes: vizObject
+                                .getModificationTypes()
+                        });
                         html += '</div>';
                     } else if (currentNode.model.vizType ===
                             scope.vizType.SPIRAL) {
@@ -1284,10 +1189,6 @@ moduleLayout.directive("directiveActionPanel",
                                 currentNode.model.id,
                                 currentNode.model.currentVizID)
                             .vizObject;
-                        currentAttributeType = vizObject
-                            .currentAttributeType;
-                        attributeTypes = vizObject
-                            .getAttributeTypes();
                         currentModificationType = vizObject
                             .currentModificationType;
                         modificationTypes = vizObject
@@ -1307,27 +1208,13 @@ moduleLayout.directive("directiveActionPanel",
                             text:   "Adicionar espiral",
                             img:    "images/controls/black/add.svg"
                         });
-                        html = '<div>' +
-                            // Data/Filters pills
-                            '<ul class="nav nav-pills nav-justified">' +
-                                '<li ' +
-                                    'id="btnDisplayData" ' +
-                                    'ng-class="isModificationTypeActive(\'' + 
-                                        modificationTypes.DATA + '\')" ' +
-                                    'ng-click="setModificationType(\'' + 
-                                        modificationTypes.DATA + '\')">' +
-                                    '<a href="#">Dados</a>' +
-                                '</li>' +
-                                '<li ' +
-                                    'id="btnDisplayFilters" ' +
-                                    'ng-class="isModificationTypeActive(\'' + 
-                                        modificationTypes.FILTERS + '\')" ' +
-                                    'ng-click="setModificationType(\'' + 
-                                        modificationTypes.FILTERS + '\')">' +
-                                    '<a href="#">Filtros</a>' +
-                                '</li>' +
-                            '</ul>' +
-                            '<div class="custom-separator" />';
+                        html = '<div>';
+                        html += widgets.makeAttributePills({
+                            currentModificationType: vizObject
+                                .currentModificationType,
+                            modificationTypes: vizObject
+                                .getModificationTypes()
+                        });
                         html += (currentModificationType === modificationTypes.DATA) ?
                             '<div>' +
                                 spiralActions +
@@ -1337,7 +1224,38 @@ moduleLayout.directive("directiveActionPanel",
                         html += '</div>';
                     } else if (currentNode.model.vizType ===
                             scope.vizType.TIMELINE) {
-                        html = "<span>TIMELINE TODO</span>";
+                        vizObject = nodes.getVizByIDs(
+                                currentNode.model.id,
+                                currentNode.model.currentVizID)
+                            .vizObject;
+
+                        // Set the visualization's stored patient lists
+                        scope.selectedDiseases =
+                            vizObject.patientLists.diseases;
+                        scope.selectedMedications =
+                            vizObject.patientLists.medications;
+
+                        html = '<div>';
+                        html += widgets.makeAttributePills({
+                            currentModificationType: vizObject
+                                .currentModificationType,
+                            modificationTypes: vizObject
+                                .getModificationTypes()
+                        });
+                        html += widgets.makeAttributePillsContents({
+                            list: vizObject
+                                .currentAttributeType + "Names",
+                            currentNode: currentNode,
+                            currentAttributeType: vizObject
+                                .currentAttributeType,
+                            attributeTypes: vizObject
+                                .getAttributeTypes(),
+                            currentModificationType: vizObject
+                                .currentModificationType,
+                            modificationTypes: vizObject
+                                .getModificationTypes()
+                        });
+                        html += '</div>';
                     } else {
                         html = "<span>TODO</span>";
                     }
@@ -1426,7 +1344,7 @@ moduleLayout.directive("directivePanes",
                 if (node.model.vizType !== scope.vizType.NONE) {
                     visualization = '<div id=' + id + '>';
                     var descriptionHTML = "";
-                    if (node.model.vizType === scope.vizType.HEAT_MAP) {
+                    if (node.model.vizType === scope.vizType.HEATMAP) {
                         descriptionHTML = HeatMapVisualization.prototype
                             .makeDescription(node.model.id);
                     } else if (node.model.vizType === scope.vizType.SPIRAL) {
@@ -2131,7 +2049,7 @@ moduleLayout.directive("directivePanes",
                     scope,
                     targetScope,
                     [
-                    ]);
+                ]);
 
                 var targetHTML = $compile(html)(targetScope);
                 var target = angular.element('#' + id);
@@ -2188,7 +2106,7 @@ moduleLayout.directive("directivePanes",
                     // Insert visualizations into generated views
                     nodes.getCurrentNode().walk(function(node) {
                         if (node.model.vizType ===
-                                scope.vizType.HEAT_MAP) {
+                                scope.vizType.HEATMAP) {
                             makeHeatMap(node);
                         } else if (node.model.vizType ===
                                 scope.vizType.SPIRAL) {

@@ -19,7 +19,11 @@ moduleVisualizations.factory('TimelineVisualization',
         function(visualizations, patientData, retrievePatientData, utils, nodes) {
     var TimelineVisualization = function(options) {
         // Patient attribute lists
-        this.medications = options.medications;
+        this.patientLists = {
+            diseases: options.diseases.slice(),
+            medications: options.medications.slice()
+        };
+
         this.currentAttributeType = attributeType.DISEASES;
         this.currentModificationType = modificationType.DATA;
 
@@ -111,6 +115,8 @@ moduleVisualizations.factory('TimelineVisualization',
     };
 
     TimelineVisualization.prototype.update = function(nodeID, vizID, state) {
+        var self = this;
+
         // FIXME: Review makeBins not called more than once
         var timeline = nodes.getVizByIDs(nodeID, vizID);
         var areBinsBeingCreated = false;
@@ -119,10 +125,11 @@ moduleVisualizations.factory('TimelineVisualization',
 
             areBinsBeingCreated = true;
         }
+        if (state.diseases) {
+            self.patientLists.diseases = state.diseases.slice();
+        }
         if (state.medications) {
-            // Remove all previous data
-            this.medications = state.medications;
-            this.attributeData = null;
+            self.patientLists.medications = state.medications.slice();
         }
         if (state.currentMedication) {
             if (this.currentMedication.indexOf(state.currentMedication) === -1) {

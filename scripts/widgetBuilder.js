@@ -2,6 +2,108 @@ var moduleWidgetBuilder = angular.module('moduleWidgetBuilder',
         ['moduleProviders']);
 
 moduleWidgetBuilder.factory('widgets', [function() {
+    var makeAttributePills = function(options) {
+        var html = '<ul class="nav nav-pills nav-justified">' +
+                '<li ' +
+                    'id="btnDisplayData" ' +
+                    'ng-class="isModificationTypeActive(\'' + 
+                        options.modificationTypes.DATA + '\')" ' +
+                    'ng-click="setModificationType(\'' + 
+                        options.modificationTypes.DATA + '\')">' +
+                    '<a href="#">Dados</a>' +
+                '</li>' +
+                '<li ' +
+                    'id="btnDisplayFilters" ' +
+                    'ng-class="isModificationTypeActive(\'' + 
+                        options.modificationTypes.FILTERS + '\')" ' +
+                    'ng-click="setModificationType(\'' + 
+                        options.modificationTypes.FILTERS + '\')">' +
+                    '<a href="#">Filtros</a>' +
+                '</li>' +
+            '</ul>' +
+            '<div class="custom-separator" />';
+
+        return html;
+    };
+
+    var makeAttributePillsContents = function(options) {
+        var html = (options.currentModificationType === options.modificationTypes.DATA) ?
+            // Attribute lists
+            '<div class="btn-group-vertical custom-container-width" ' +
+                    'role="group" aria-label="...">' +
+                '<button type="button" ' +
+                    'id="btnDiseases" ' +
+                    'class="btn btn-default custom-container-align" ' +
+                    'ng-class="isAttributeTypeActive(\'' + 
+                        options.attributeTypes.DISEASES + '\')" ' +
+                    'ng-click="setAttributeType(\'' + 
+                        options.attributeTypes.DISEASES + '\')">' +
+                    'Doenças</button>' +
+                '<button type="button" ' +
+                    'id="btnMedications" ' +
+                    'class="btn btn-default custom-container-align" ' +
+                    'ng-class="isAttributeTypeActive(\'' + 
+                        options.attributeTypes.MEDICATIONS + '\')" ' +
+                    'ng-click="setAttributeType(\'' + 
+                        options.attributeTypes.MEDICATIONS + '\')">' +
+                    'Medicações</button>' +
+            '</div>' +
+            '<p/>' +
+            // Search
+            '<div class="right-inner-addon">' +
+                '<i class="glyphicon glyphicon-search"></i>' +
+                '<input type="text" ' +
+                    'id="input-option-list" ' +
+                    'class="form-control" ' +
+                    'placeholder="Procurar..." ' +
+                    'ng-model="optionListModel" ' +
+                    'autofocus tabindex=1>' +
+            '</div>' +
+            // Selection choices
+            '<span>Selecionar:</span>' +
+                '<button class="btn btn-link custom-btn-link" ' +
+                    'ng-click="checkAll()">Todos</button>' +
+                '|' +
+                '<button class="btn btn-link custom-btn-link" ' +
+                    'ng-click="checkNone()">Nenhum</button>' +
+            // Help
+            '<div style="display: block"> ' +
+                '<img class="tooltip-wrapper help" ' +
+                    'title="{{tooltipText}}" ' + 
+                    'directive-tooltip directive-menu-tooltip ' +
+                    'src="images/controls/info.svg">' +
+            '</div>' +
+            '<p/>' +
+            // List
+            '<div ng-controller="controllerEntryBarFill" class="table table-condensed table-bordered patient-table">' +
+                '<div directive-entry-bar-fill class="checkboxInTable patient-table-entry"' +
+                    'ng-repeat="attribute in filteredAttributes = (' + options.list + ' | filter:optionListModel | orderBy:orderByProportion)" ' +
+                    'ng-click="check(attribute)" ' +
+                    'ng-mouseenter="vizStyleFromMouseEnter(attribute)" ' +
+                    'ng-mouseleave="vizStyleFromMouseLeave(attribute)" ' +
+                    'ng-class="isEntrySelected($index)">' +
+                    '<div class="patient-table-entry-text">' +
+                        '<div style="display: inline-block" ' +
+                            'ng-class="isEntryCurrentPatientAttribute(attribute)">' +
+                        '</div>' +
+                        '<input ' +
+                            'class="custom-checkbox" ' +
+                            'type="checkbox" ' +
+                            'ng-checked="isSelected(attribute)"> ' +
+                            '{{::attribute}}' +
+                    '</div>' +
+                    '<div class="patient-table-entry-bar"> ' +
+                        '<div class="patient-table-entry-bar-fill" attribute="attribute" style="width:{{::proportion}}%"> ' +
+                        '</div>' +
+                    '</div>' +
+                '</div>' +
+            '</div>' :
+            '<div id="filters-' + options.currentNode.model.id + '">' +
+            '</div>';
+
+        return html;
+    };
+
     var makeImgButton = function(options) {
         options.clazz = options.clazz || "btn-secondary";
         options.directive = options.directive || "";
@@ -49,6 +151,8 @@ moduleWidgetBuilder.factory('widgets', [function() {
     };
 
     return {
+        makeAttributePills: makeAttributePills,
+        makeAttributePillsContents: makeAttributePillsContents,
         makeImgButton: makeImgButton
     };
 }]);
