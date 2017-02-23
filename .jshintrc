@@ -5,6 +5,8 @@
       "angular": false,
       "console": false,
       "d3": false,
+      "TreeModel": false,
+      "uuid": false,
       "moment": false,
       "window": true
   },

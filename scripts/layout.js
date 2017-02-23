@@ -1,3 +1,5 @@
+/* globals PointerEventsPolyfill */
+
 var moduleSplits = angular.module('moduleSplits',
         ['shagstrom.angular-split-pane']);
 
@@ -299,7 +301,8 @@ moduleLayout.controller('controllerLayout',
     $scope.vizType = Object.freeze({
         NONE: "NONE",
         HEAT_MAP: "Matrix",
-        SPIRAL: "Espiral"
+        SPIRAL: "Espiral",
+        TIMELINE: "Linha Temporal"
     });
 
     // Attribute lists shared among multiple patients
@@ -481,12 +484,16 @@ moduleLayout.directive("directiveActionPanel",
                 scope.APIPanes.makePaneSplit(scope.APIPanes.vizType.HEAT_MAP);
             };
 
-            // FIXME: Just for testing
+            scope.chooseTimeline = function() {
+                scope.APIPanes.makePaneSplit(scope.APIPanes.vizType.TIMELINE);
+            };
+
+            // Just for testing
             scope.chooseTODO = function() {
                 scope.APIPanes.makePaneSplit(scope.APIPanes.vizType.NONE);
             };
 
-            // FIXME: Just for testing
+            // Just for testing
             scope.makeTODOActionPanel = function() {
                 updateActionPanel("<span>TODO</span>");
             };
@@ -541,12 +548,13 @@ moduleLayout.directive("directiveActionPanel",
                             'Análise temporal de atributos' +
                         '</a>' +
                     '</div>' +
-                    '<div class="view-choice" ng-click="chooseTODO()">' +
+                    '<div class="view-choice" ng-click="chooseTimeline()">' +
                     '<img src="images/views/circular.svg" ' +
                         'class="view-choice-svg">' +
                         '<a class="discrete-link" href="#">' +
-                            'TODO' +
+                            'Interacção temporal entre atributos' +
                         '</a>' +
+                    '</img>' +
                     '</div>';
                 
                 updateActionPanel(html);
@@ -1327,6 +1335,9 @@ moduleLayout.directive("directiveActionPanel",
                             '<div id="filters-' + currentNode.model.id + '">' +
                             '</div>';
                         html += '</div>';
+                    } else if (currentNode.model.vizType ===
+                            scope.vizType.TIMELINE) {
+                        html = "<span>TIMELINE TODO</span>";
                     } else {
                         html = "<span>TODO</span>";
                     }
@@ -1370,10 +1381,10 @@ moduleLayout.directive("directiveActionPanel",
 }]);
 
 moduleLayout.directive("directivePanes",
-        ['$compile', 'widgets', 'nodes', 'patientData',
-            'visualizations', 'HeatMapVisualization', 'SpiralVisualization',
-        function($compile, widgets, nodes, patientData,
-            visualizations, HeatMapVisualization, SpiralVisualization) {
+        ['$compile', 'widgets', 'nodes', 'patientData', 'visualizations',
+        'HeatMapVisualization', 'SpiralVisualization', 'TimelineVisualization',
+        function($compile, widgets, nodes, patientData, visualizations,
+            HeatMapVisualization, SpiralVisualization, TimelineVisualization) {
 	return { 
         scope: true,
         link: function(scope, element, attrs) {
@@ -1420,6 +1431,9 @@ moduleLayout.directive("directivePanes",
                             .makeDescription(node.model.id);
                     } else if (node.model.vizType === scope.vizType.SPIRAL) {
                         descriptionHTML = SpiralVisualization.prototype
+                            .makeDescription(node.model.id);
+                    } else if (node.model.vizType === scope.vizType.TIMELINE) {
+                        descriptionHTML = TimelineVisualization.prototype
                             .makeDescription(node.model.id);
                     }
                     visualization += descriptionHTML; 
@@ -1621,6 +1635,7 @@ moduleLayout.directive("directivePanes",
 
                     // Update DOM
                     var img = "";
+                    var imgChecked = "";
                     var html = "";
                     var target = elementProperties.target;
                     if (viz.isChecked) {
@@ -1983,7 +1998,7 @@ moduleLayout.directive("directivePanes",
                     '</div>';
 
                 var sortOptionsHTML = '';
-                for (i = 0; i < vizObject.availableSortings.length; i++) {
+                for (var i = 0; i < vizObject.availableSortings.length; i++) {
                     sortOptionsHTML += '<li>' +
                         '<a href="#" ' +
                             'data-id="' + vizID + '" ' +
@@ -2076,6 +2091,74 @@ moduleLayout.directive("directivePanes",
                 });
             };
 
+            // Two step creation: 
+            // - first, angular elements we need for d3 to use;
+            // - then, d3 elements
+            var makeTimeline = function(node) {
+                var id = node.model.id;
+                // We assume a node will only have one heatmap
+                var timeline = node.model.vizs[0];
+                var vizID;
+                var vizObject;
+                var isNotCreated = !(timeline);
+                if (isNotCreated) {
+                    vizID = TimelineVisualization.prototype.makeID();
+                    vizObject = new TimelineVisualization({
+                        diseases: scope.selectedDiseases,
+                        medications: scope.selectedMedications
+                    });
+                } else {
+                    vizID = timeline.id;
+                    vizObject = timeline.vizObject;
+                }
+
+                var html = '<div ' +
+                        'id="' + vizID + '" ' +
+                        'data-node-id="' + id + '">' +
+                        '<div style="display: block">' + 
+                            // FIXME: remove
+                            vizID +
+                        '</div>' +
+                        '<div id="' + vizID + '-contents">' +
+                            '<div class="viz-main" id="' + vizID + '-main">' +
+                            '</div>' +
+                            '<div id="' + vizID + '-details">' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>';
+
+                var targetScope = nodes.scopeCloneWithHandlers(
+                    scope,
+                    targetScope,
+                    [
+                    ]);
+
+                var targetHTML = $compile(html)(targetScope);
+                var target = angular.element('#' + id);
+                target.append(targetHTML);
+
+                // Add d3 elements
+                if (isNotCreated) {
+                    vizObject.make(id, vizID);
+                } else {
+                    vizObject.remake(id, vizID);
+                }
+
+                // All elements created, now set their visibility
+                var isMaximized = nodes.isMaximized(id);
+                vizObject.modifyDetailsVisibility(isMaximized);
+
+                // Save visualization for d3 updates
+                nodes.updateViz({
+                    nodeID: id,
+                    vizID: vizID,
+                    currentVizID: vizID,
+                    vizObject: vizObject,
+                    nodeHTML: targetHTML,
+                    nodeScope: targetScope
+                });
+            };
+
             // Make html node layout
             var currentScope;
             var currentHTML;
@@ -2110,6 +2193,9 @@ moduleLayout.directive("directivePanes",
                         } else if (node.model.vizType ===
                                 scope.vizType.SPIRAL) {
                             makeSpirals(node);
+                        } else if (node.model.vizType ===
+                                scope.vizType.TIMELINE) {
+                            makeTimeline(node);
                         }
                     });
 
