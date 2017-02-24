@@ -218,9 +218,11 @@ moduleLayout.factory("nodes",
         scopeObject.handlers = null;
     };
 
+    // This is not some Java quirk. We do need these methods
+    // in order for changes in factory properties be reflected in
+    // other modules. Directly accessing these properties might not work.
     var getCurrentNode = function() { return currentNode; };
     var setCurrentNode = function(node) { currentNode = node; };
-
     var getRootNode = function() { return rootNode; };
     var setRootNode = function(node) { rootNode = node; };
 
@@ -401,8 +403,8 @@ moduleLayout.directive('directiveMenuTooltip', function() {
 });
 
 moduleLayout.directive("directiveActionPanel",
-        ['$compile', '$filter', 'visualizations', 'patientData', 'utils', 'widgets', 'nodes', 'retrieveCountsData',
-        function($compile, $filter, visualizations, patientData, utils, widgets, nodes, retrieveCountsData) {
+        ['$compile', '$filter', 'visualizations', 'filters', 'patientData', 'utils', 'widgets', 'nodes', 'retrieveCountsData',
+        function($compile, $filter, visualizations, filters, patientData, utils, widgets, nodes, retrieveCountsData) {
 	return { 
         scope: true,
         link: function(scope, element, attrs) {
@@ -415,7 +417,7 @@ moduleLayout.directive("directiveActionPanel",
                     currentScope.$destroy();
                 if (currentHTML)
                     currentHTML.remove();
-                visualizations.removeFilters();
+                filters.removeFilters();
 
                 currentScope = nodes.scopeCloneWithHandlers(
                     scope,
@@ -456,7 +458,7 @@ moduleLayout.directive("directiveActionPanel",
                     if (isModificationTypeActive(modificationTypes.FILTERS)) {
                         scope.updateFilterListeners(node);
 
-                        visualizations.makeFilters();
+                        filters.makeFilters();
                     }
                 }
             };
@@ -2403,6 +2405,12 @@ var test2 = function() {
             function() {
                 return $timeout(function() {
                     angular.element('#heatmap-1-type-pairs')
+                        .triggerHandler('click');
+                }, delay);
+            },
+            function() {
+                return $timeout(function() {
+                    angular.element('#btnDisplayFilters')
                         .triggerHandler('click');
                 }, delay);
             }

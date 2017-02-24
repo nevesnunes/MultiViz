@@ -23,8 +23,8 @@ moduleVisualizations.directive('directiveHeatMapTooltip', function() {
 });
 
 moduleVisualizations.factory('HeatMapVisualization',
-        ['$timeout', 'visualizations', 'patientData', 'retrieveCountsData', 'retrievePatientData', 'utils', 'nodes',
-        function($timeout, visualizations, patientData, retrieveCountsData, retrievePatientData, utils, nodes) {
+        ['$timeout', 'visualizations', 'filters', 'patientData', 'retrieveCountsData', 'retrievePatientData', 'utils', 'nodes',
+        function($timeout, visualizations, filters, patientData, retrieveCountsData, retrievePatientData, utils, nodes) {
     // d3 Extensions
     //
     // https://github.com/wbkd/d3-extended
@@ -204,7 +204,7 @@ moduleVisualizations.factory('HeatMapVisualization',
         // visualizations.populateWithFilters(nodeID);
     };
 
-    HeatMapVisualization.prototype.populate = function(filters) {
+    HeatMapVisualization.prototype.populate = function(filtersArray) {
         var self = this;
 
         var patientDataPromise = 
@@ -238,16 +238,16 @@ moduleVisualizations.factory('HeatMapVisualization',
 
             // Compute results for each applied filter
             // FIXME: AFTER user selections
-            if (filters) {
+            if (filtersArray) {
                 console.log("[Filters] Total: " + data.length);
 
-                visualizations.activatedFilters.forEach(function(filterName) {
+                filters.getActivatedFilters().forEach(function(filterName) {
                     var index = utils.arrayObjectIndexOf(
-                        filters, filterName, 'name');
+                        filtersArray, filterName, 'name');
                     if (index === -1)
                         return;
 
-                    var filter = filters[index];
+                    var filter = filtersArray[index];
                     datas.specific[filter.name] = data.filter(function(d) {
                         var filteredPatientIDs = d.patientIDs.slice();
                         d.patientIDs.forEach(function(id) {
@@ -290,12 +290,13 @@ moduleVisualizations.factory('HeatMapVisualization',
                             property + ": " + datas.specific[property].length);
                     }
                 }
-                for (var i=0; i<visualizations.activatedFilters.length; i++) {
+                var length = filters.getActivatedFilters().length;
+                for (var i=0; i<length; i++) {
                     console.log("[Filters] Order of " +
-                        visualizations.activatedFilters[i] + ": " + i);
+                        filters.getActivatedFilters()[i] + ": " + i);
                     console.log("[Filters] Length of " +
-                        visualizations.activatedFilters[i] + ": " + datas
-                            .measures[visualizations.activatedFilters[i]]
+                        filters.getActivatedFilters()[i] + ": " + datas
+                            .measures[filters.getActivatedFilters()[i]]
                             .presentPatientIDs
                             .length);
                 }
@@ -652,7 +653,7 @@ moduleVisualizations.factory('HeatMapVisualization',
                 self.margin.top + ")");
 
             var data = [];
-            visualizations.activatedFilters.forEach(function(filterName, i) {
+            filters.getActivatedFilters().forEach(function(filterName, i) {
                 var presentPatients = 
                     datas.measures[filterName].presentPatientIDs.length;
                 var nonPresentPacients =
@@ -718,7 +719,7 @@ moduleVisualizations.factory('HeatMapVisualization',
                             if (filterIndex !== j)
                                 isOrderChanged = true;
                             reorderedFilters.push(
-                                visualizations.activatedFilters[filterIndex]);
+                                filters.getActivatedFilters()[filterIndex]);
                         }
 
                         // Update viz if order was changed
@@ -726,12 +727,13 @@ moduleVisualizations.factory('HeatMapVisualization',
                             // Remove tooltips from previous elements
                             d3.selectAll(".tooltip-d3-filter").remove();
 
-                            visualizations.activatedFilters =
-                                reorderedFilters.slice();
+                            filters.setActivatedFilters(
+                                reorderedFilters.slice()
+                            );
                             var currentIndex = utils.arrayObjectIndexOf(
-                                visualizations.filters, d[4], 'name');
-                            visualizations.filterObserver.dispatch(
-                                visualizations.filters[currentIndex]);
+                                filters.filters, d[4], 'name');
+                            filters.filterObserver.dispatch(
+                                filters.filters[currentIndex]);
                         }
                     });
             };
@@ -819,7 +821,7 @@ moduleVisualizations.factory('HeatMapVisualization',
                 .attr("dy", ".35em")
                 .merge(dimension.selectAll(".text-filter-name"))
                     .text(function(d) {
-                        return visualizations
+                        return filters
                             .translateFilterAttribute(d[4]);
                     });
         });
@@ -1933,13 +1935,13 @@ moduleVisualizations.factory('HeatMapVisualization',
 
     HeatMapVisualization.prototype.makeFilters = function(
             nodeID, vizID) {
-        var names = visualizations.filterNames;
+        var names = filters.filterNames;
         var expectedNames = [
             names.AGE,
             names.WEIGHT,
             names.HEIGHT
         ];
-        visualizations.addFiltersFromNames(nodeID, vizID, expectedNames);
+        filters.addFiltersFromNames(nodeID, vizID, expectedNames);
     };
 
     HeatMapVisualization.prototype.update = function(nodeID, vizID, state) {
@@ -1962,7 +1964,7 @@ moduleVisualizations.factory('HeatMapVisualization',
             return;
         }
 
-        visualizations.populateWithFilters(nodeID);
+        filters.populateWithFilters(nodeID);
     };
 
     visualizations.validateInterface(
