@@ -1,3 +1,5 @@
+/* jshint node: true */
+
 var _node_fs = require('fs');
 
 var generator = (function() {

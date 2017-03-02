@@ -31,6 +31,9 @@ digraph dependencies {
       "controllerLayout"[label="controllerLayout", color=4]
       "moduleLayout" -> "controllerLayout"
     
+      "controllerEntryBarFill"[label="controllerEntryBarFill", color=4]
+      "moduleLayout" -> "controllerEntryBarFill"
+    
 
     
 
@@ -90,6 +93,9 @@ digraph dependencies {
         "visualizations"[label="visualizations"]
         "visualizations" -> "directiveActionPanel"
       
+        "filters"[label="filters"]
+        "filters" -> "directiveActionPanel"
+      
         "patientData"[label="patientData"]
         "patientData" -> "directiveActionPanel"
       
@@ -125,6 +131,9 @@ digraph dependencies {
         "SpiralVisualization"[label="SpiralVisualization"]
         "SpiralVisualization" -> "directivePanes"
       
+        "TimelineVisualization"[label="TimelineVisualization"]
+        "TimelineVisualization" -> "directivePanes"
+      
     
 
 
@@ -143,6 +152,14 @@ digraph dependencies {
       
         "patientData"[label="patientData"]
         "patientData" -> "controllerLayout"
+      
+    
+      
+        "$scope"[label="$scope"]
+        "$scope" -> "controllerEntryBarFill"
+      
+        "utils"[label="utils"]
+        "utils" -> "controllerEntryBarFill"
       
     
 

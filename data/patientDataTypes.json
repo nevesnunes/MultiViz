@@ -1,0 +1,48 @@
+{
+    "habitsHigiene": [
+        "Escova de dentes manual",
+        "Escova de dentes mecânica",
+        "Palitos de madeira",
+        "Palitos de plástico",
+        "Carvão vegetal",
+        "Pastilha elástica",
+        "Fio Dentário",
+        "Escovilhão Dentário"
+    ],
+    "habitsHigieneWithType": [{
+        "name": "Colutório",
+        "type": null,
+        "specifyDuration": false
+    }, {
+        "name": "Prótese Dentária",
+        "type": [
+            "Fixa sobre dentes",
+            "Fixa sobre implantes",
+            "Prótese removivel esquelética",
+            "Prótese removivel acrílica"
+        ],
+        "specifyDuration": true
+    }],
+    "habitsHigieneFrequencies": [{
+        "name": "Nunca",
+        "value": 0
+    }, {
+        "name": "Uma vez por mês",
+        "value": 1
+    }, {
+        "name": "2-3 vezes por mês",
+        "value": 2
+    }, {
+        "name": "1 vez por semana",
+        "value": 3
+    }, {
+        "name": "2-6 vezes por semana",
+        "value": 4
+    }, {
+        "name": "1 vez por dia",
+        "value": 5
+    }, {
+        "name": "2 ou mais vezes ao dia",
+        "value": 6
+    }]
+}

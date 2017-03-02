@@ -32,6 +32,12 @@ digraph dependencies {
       "SpiralVisualization"[label="SpiralVisualization", color=6]
       "moduleVisualizations" -> "SpiralVisualization"
     
+      "TimelineVisualization"[label="TimelineVisualization", color=6]
+      "moduleVisualizations" -> "TimelineVisualization"
+    
+      "filters"[label="filters", color=6]
+      "moduleVisualizations" -> "filters"
+    
       "visualizations"[label="visualizations", color=6]
       "moduleVisualizations" -> "visualizations"
     
@@ -45,6 +51,9 @@ digraph dependencies {
     
       "directiveSpiralTooltip"[label="directiveSpiralTooltip", color=3]
       "moduleVisualizations" -> "directiveSpiralTooltip"
+    
+      "directiveTimelineTooltip"[label="directiveTimelineTooltip", color=3]
+      "moduleVisualizations" -> "directiveTimelineTooltip"
     
 
 
@@ -63,6 +72,8 @@ digraph dependencies {
     
       
     
+      
+    
 
 
     
@@ -73,6 +84,9 @@ digraph dependencies {
       
         "visualizations"[label="visualizations"]
         "visualizations" -> "HeatMapVisualization"
+      
+        "filters"[label="filters"]
+        "filters" -> "HeatMapVisualization"
       
         "patientData"[label="patientData"]
         "patientData" -> "HeatMapVisualization"
@@ -108,11 +122,45 @@ digraph dependencies {
       
     
       
+        "visualizations"[label="visualizations"]
+        "visualizations" -> "TimelineVisualization"
+      
+        "patientData"[label="patientData"]
+        "patientData" -> "TimelineVisualization"
+      
+        "retrievePatientData"[label="retrievePatientData"]
+        "retrievePatientData" -> "TimelineVisualization"
+      
+        "utils"[label="utils"]
+        "utils" -> "TimelineVisualization"
+      
+        "nodes"[label="nodes"]
+        "nodes" -> "TimelineVisualization"
+      
+    
+      
+        "retrieveCountsData"[label="retrieveCountsData"]
+        "retrieveCountsData" -> "filters"
+      
+        "utils"[label="utils"]
+        "utils" -> "filters"
+      
+        "nodes"[label="nodes"]
+        "nodes" -> "filters"
+      
+        "visualizations"[label="visualizations"]
+        "visualizations" -> "filters"
+      
+    
+      
         "patientData"[label="patientData"]
         "patientData" -> "visualizations"
       
         "retrievePatientData"[label="retrievePatientData"]
         "retrievePatientData" -> "visualizations"
+      
+        "retrieveCountsData"[label="retrieveCountsData"]
+        "retrieveCountsData" -> "visualizations"
       
         "utils"[label="utils"]
         "utils" -> "visualizations"

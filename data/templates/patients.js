@@ -1,21 +1,26 @@
+/* jshint node: true */
+
 var node_fs = require('fs');
 
 var uuid = require('../../node_modules/node-uuid/uuid.js');
 var moment = require('../../node_modules/moment/moment.js');
 moment().format();
 
-// Databases
+// Mock Databases
 var firstNames = require('../../modules/random-name/first-names.json');
 var middleNames = require('../../modules/random-name/middle-names.json');
 var lastNames = require('../../modules/random-name/names.json');
 
+// Patient Databases
+var patientDataTypes = require('../patientDataTypes.json');
+
 var generator = (function() {
-	var iterations = 80;
+	var iterations = 100;
 
 	var canMakeInstance = function() {
 		return true; // FIXME
 	};
-        
+
     var randomDate = function(start, end) {
         return new Date(start.getTime() + 
             Math.random() * (end.getTime() - start.getTime()));
@@ -171,12 +176,12 @@ var generator = (function() {
         'Café com açúcar'
     ];
     var habitsFrequencies = [
-        { name: 'Nunca', value: null, factor: null },
-        { name: 'Várias vezes por mês', value: 14, factor: 1 },
-        { name: 'Uma vez por semana', value: 7, factor: 1 },
-        { name: 'Várias vezes por semana', value: 3, factor: 1 },
-        { name: 'Todos os dias', value: 1, factor: 1 },
-        { name: 'Várias vezes ao dia', value: 1, factor: 2 },
+        { name: 'Nunca', value: 0},
+        { name: 'Várias vezes por mês', value: 1},
+        { name: 'Uma vez por semana', value: 2},
+        { name: 'Várias vezes por semana', value: 3},
+        { name: 'Todos os dias', value: 4},
+        { name: 'Várias vezes ao dia', value: 5},
     ];
     var habitsObjectGenerator = function(element) {
         return {
@@ -188,43 +193,10 @@ var generator = (function() {
     //
     // Higiene
     //
-    var habitsHigiene = [
-        'Escova de dentes manual',
-        'Escova de dentes mecânica',
-        'Palitos de madeira',
-        'Palitos de plástico',
-        'Carvão vegetal',
-        'Pastilha elástica',
-        'Fio Dentário',
-        'Escovilhão Dentário',
-    ];
-    var habitsHigieneWithType = [
-        { name: 'Colutório', type: null, specifyDuration: false },
-        { name: 'Prótese Dentária',
-            type: [
-                'Fixa sobre dentes',
-                'Fixa sobre implantes',
-                'Prótese removivel esquelética',
-                'Prótese removivel acrílica'
-            ],
-            specifyDuration: true
-        }
-    ];
-    var habitsHigieneFrequencies = [
-        { name: 'Nunca', value: null, factor: null },
-        { name: 'Uma vez por mês', value: 30, factor: 1 },
-        { name: '2-3 vezes por mês', value: 14, factor: 1 },
-        { name: '1 vez por semana', value: 7, factor: 1 },
-        { name: '2-6 vezes por semana', value: 2, factor: 1 },
-        { name: '1 vez por dia', value: 1, factor: 1 },
-        { name: '2 ou mais vezes ao dia', value: 1, factor: 2 },
-    ];
-    var habitsHigieneBrushingFrequency;
     var habitsHigieneObjectGenerator = function(element) {
         return {
             name: element,
-            frequency: pickRandomElement(habitsHigieneFrequencies),
-            typedFrequency: pickRandomElementOrNone(habitsHigieneWithType)
+            frequency: pickRandomElement(patientDataTypes.habitsHigieneFrequencies)
         };
     };
 
@@ -423,7 +395,7 @@ var generator = (function() {
 		var pickedHabits = makeRandomArray(
                 habits, habitsObjectGenerator, "name");
 		var pickedHabitsHigiene = makeRandomArray(
-                habitsHigiene, habitsHigieneObjectGenerator, "name");
+                patientDataTypes.habitsHigiene, habitsHigieneObjectGenerator, "name");
         var pickedHabitsGeneral = makeRandomArray(
                 habitsGeneral, habitsGeneralObjectGenerator, "type");
 

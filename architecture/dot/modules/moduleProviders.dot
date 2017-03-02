@@ -6,6 +6,9 @@ digraph dependencies {
     "moduleProviders"[label="moduleProviders", color=1]
 
     
+      "moduleUtils"[label="moduleUtils", color=1]
+      "moduleUtils" -> "moduleProviders"
+    
 
 
     node[shape="ellipse"]
@@ -51,6 +54,9 @@ digraph dependencies {
     
 
     
+      
+        "utils"[label="utils"]
+        "utils" -> "patientData"
       
     
       

@@ -75,8 +75,19 @@ moduleWidgetBuilder.factory('widgets', [function() {
             '</div>' +
             '<p/>' +
             // List
-            '<div ng-controller="controllerEntryBarFill" class="table table-condensed table-bordered patient-table">' +
-                '<div directive-entry-bar-fill class="checkboxInTable patient-table-entry"' +
+            makeListWithEntryBars({
+                list: options.list,
+                controller: 'controllerEntryBarFill'
+            }) :
+            '<div id="filters-' + options.currentNode.model.id + '">' +
+        '</div>';
+
+        return html;
+    };
+
+    var makeListWithEntryBars = function(options) {
+        return '<div ng-controller="' + options.controller + '" class="table table-condensed table-bordered patient-table">' +
+                '<div directive-entry-bar-fill class="checkboxInTable patient-table-entry" ' +
                     'ng-repeat="attribute in filteredAttributes = (' + options.list + ' | filter:optionListModel | orderBy:orderByProportion)" ' +
                     'ng-click="check(attribute)" ' +
                     'ng-mouseenter="vizStyleFromMouseEnter(attribute)" ' +
@@ -97,11 +108,7 @@ moduleWidgetBuilder.factory('widgets', [function() {
                         '</div>' +
                     '</div>' +
                 '</div>' +
-            '</div>' :
-            '<div id="filters-' + options.currentNode.model.id + '">' +
             '</div>';
-
-        return html;
     };
 
     var makeImgButton = function(options) {
@@ -153,6 +160,7 @@ moduleWidgetBuilder.factory('widgets', [function() {
     return {
         makeAttributePills: makeAttributePills,
         makeAttributePillsContents: makeAttributePillsContents,
+        makeListWithEntryBars: makeListWithEntryBars,
         makeImgButton: makeImgButton
     };
 }]);

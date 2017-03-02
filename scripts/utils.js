@@ -9,6 +9,16 @@ moduleUtils.factory('utils', ['$q', function($q) {
         return -1;
     };
 
+    var capitalizeEachWord = function(str) {
+        return str.replace(/\w\S*/g, function(txt) {
+            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        });
+    };
+
+    var removeSpaces = function(str) {
+        return str.replace(/ /g,'');
+    };
+
     // Match one of the elements of a pair
     var arrayObjectPairIndexOf = function(parameters) {
         for (var i = 0, len = parameters.array.length; i < len; i++) {
@@ -116,6 +126,8 @@ moduleUtils.factory('utils', ['$q', function($q) {
         arrayObjectIndexOf: arrayObjectIndexOf,
         arrayObjectPairIndexOf: arrayObjectPairIndexOf,
         arrayObjectFullPairIndexOf: arrayObjectFullPairIndexOf,
+        capitalizeEachWord: capitalizeEachWord,
+        removeSpaces: removeSpaces,
         updateObjectInArray: updateObjectInArray,
         extractValueFromPair: extractValueFromPair,
         resolveEvents: resolveEvents,

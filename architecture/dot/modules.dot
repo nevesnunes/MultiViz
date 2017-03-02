@@ -30,6 +30,8 @@ digraph dependencies {
     
   
     
+      "moduleUtils" -> "moduleProviders"
+    
   
     
       "moduleProviders" -> "moduleWidgetBuilder"

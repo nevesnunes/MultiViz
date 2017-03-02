@@ -5,8 +5,8 @@ var moduleVisualizations = angular.module('moduleVisualizations',
         ['moduleProviders', 'moduleUtils', 'moduleWidgetBuilder']);
 
 moduleVisualizations.factory("filters",
-        ['retrieveCountsData', 'utils', 'nodes', 'visualizations',
-        function(retrieveCountsData, utils, nodes, visualizations) {
+        ['retrieveCountsData', 'utils', 'nodes', 'visualizations', 'widgets', '$q',
+        function(retrieveCountsData, utils, nodes, visualizations, widgets, $q) {
     // Adaptation of `observer` pattern to broadcast
     // filter changes to all visible views
 
@@ -41,7 +41,7 @@ moduleVisualizations.factory("filters",
     var makeFilterAge = function(nodeID) {
         var data = retrieveCountsData.retrieveAges();
         var filter = getFilterByName(filterNames.AGE);
-        makeFilterHistogram(
+        return makeFilterHistogram(
             filter,
             {
                 currentPatientData: data.currentPatientData,
@@ -65,7 +65,7 @@ moduleVisualizations.factory("filters",
     var makeFilterWeight = function(nodeID) {
         var data = retrieveCountsData.retrieveWeights();
         var filter = getFilterByName(filterNames.WEIGHT);
-        makeFilterHistogram(
+        return makeFilterHistogram(
             filter,
             {
                 currentPatientData: data.currentPatientData,
@@ -89,7 +89,7 @@ moduleVisualizations.factory("filters",
     var makeFilterHeight = function(nodeID) {
         var data = retrieveCountsData.retrieveHeights();
         var filter = getFilterByName(filterNames.HEIGHT);
-        makeFilterHistogram(
+        return makeFilterHistogram(
             filter,
             {
                 currentPatientData: data.currentPatientData,
@@ -105,14 +105,43 @@ moduleVisualizations.factory("filters",
         return renderer.intervalValues;
     };
 
+    var comparatorFilterHabitsHigiene = function(state, patient) {
+        var i = utils.arrayObjectIndexOf(
+            patient.habitsHigiene, state.habitName, 'name');
+        if (i === -1)
+            return false;
+        
+        var frequencyName = patient.habitsHigiene[i].frequency.name;
+        return (frequencyName === state.frequencyName);
+    };
+
+    var makeFilterHabitsHigiene = function(nodeID) {
+        return retrieveCountsData.retrieveHabitsHigiene.then(function(result) {
+            var filter = getFilterByName(filterNames.HABITS_HIGIENE);
+            return makeFilterLists(
+                filter,
+                {
+                    data: result.data,
+                },
+                filter.name,
+                nodeID);
+        });
+    };
+
+    var extractFilterHabitsHigieneState = function(renderer) {
+        // FIXME: Exposing everything
+        return renderer;
+    };
+
     //
     // Concrete observers
     //
 
     var filterNames = Object.freeze({
-        AGE: "age",
-        WEIGHT: "weight",
-        HEIGHT: "height"
+        AGE: "Age",
+        WEIGHT: "Weight",
+        HEIGHT: "Height",
+        HABITS_HIGIENE: "HabitsHigiene"
     });
 
     var isFilterActive = function(observer) {
@@ -132,8 +161,28 @@ moduleVisualizations.factory("filters",
         };
     };
 
+    var makeFilterWithListsRenderer = function() {
+        return {
+            habitName: null,
+            frequencyName: null,
+            isActive: isFilterActive
+        };
+    };
+
     // Index in array encodes order of the corresponding filter
     var activatedFilters = [];
+
+    // Container of all available filter objects
+    //
+    // comparator:
+    //   checks if current state is contained in compared state
+    // make:
+    //   populates html with filter specific d3 elements;
+    //   returns a promise with info of any elements that need compiling
+    // renderer:
+    //   private state properties
+    // extractState:
+    //   public sub-set of state properties
     var filters = [
         Object.freeze({
             handlers: [],
@@ -158,6 +207,14 @@ moduleVisualizations.factory("filters",
             name: filterNames.HEIGHT,
             renderer: makeFilterWithBrushRenderer(),
             extractState: extractFilterHeightState
+        }),
+        Object.freeze({
+            handlers: [],
+            comparator: comparatorFilterHabitsHigiene,
+            make: makeFilterHabitsHigiene,
+            name: filterNames.HABITS_HIGIENE,
+            renderer: makeFilterWithListsRenderer(),
+            extractState: extractFilterHabitsHigieneState
         })
     ];
 
@@ -207,12 +264,92 @@ moduleVisualizations.factory("filters",
         });
     };
 
-    var makeFilters = function() {
-        // TODO: Support multiple views layout
-        filters.forEach(function(filter, i) {
-            if (filter.handlers.length)
-                filter.make(filter.handlers[0]);
-        });
+    var makeFilterLists = function(observer, dataObserver, name, nodeID) {
+        var vizWidth = angular.element(
+            '#action-panel'
+        )[0].offsetWidth;
+        var padding = 10;
+        var vizHeight = padding * 8;
+        var div = d3.select('#filters-' + nodeID)
+            .append("div")
+            .attr('id', 'filters-' + name);
+        var svg = d3.select('#filters-' + name)
+            .append("svg")
+            .attr('id', 'filters-svg-' + name)
+            .attr("width", vizWidth)
+            .attr("height", vizHeight);
+
+        //
+        // reset
+        //
+        svg.append("text")
+            .attr("transform", "translate(" +
+                0 + "," +
+                padding + ")")
+            .text(translateFilterAttribute(observer.name));
+        // TODO
+
+        var elementsToProcess = [];
+        /*
+        var dataObserverPromiseContents = function(habit) {
+            return {
+                countPatients: habit.countPatients,
+                data: habit.data,
+                frequencies: habit.data.frequencies
+            };
+        };
+        */
+        for (var i in dataObserver.data) {
+            // List
+            var habit = dataObserver.data[i];
+            var html = widgets.makeListWithEntryBars({
+                list: habit.htmlName,
+                controller: 'controllerFilterEntryBarFill'
+            });
+
+            // Element
+            d3.select('#filters-' + name)
+                .append("div")
+                .attr('id', 'filters-' + name + '-' + habit.htmlName);
+
+            // Promise with list entries
+            // TODO
+            var deferred = $q.defer();
+            var promise = deferred.promise;
+            deferred.resolve();
+            (function(habit) {
+                promise.then(function() {
+                    return {
+                        countPatients: 80, //TODO
+                        data: habit,
+                        frequencies: habit.frequencies
+                    };
+                });
+            })(habit);
+            /*
+            promise.then(dataObserverPromiseContents({
+                countPatients: 80, //TODO
+                data: habit
+            }));
+            */
+            elementsToProcess.push({
+                // Defined in controllerFilterListEntryBarFill
+                attributeElement: promise,
+                attributeName: 'proportionPromise',
+                // For scope of controllerFilterListEntryBarFill
+                list: {
+                    data: habit.frequencies
+                },
+                listName: habit.htmlName,
+                targetName: 'filters-' + name + '-' + habit.htmlName,
+                html: html
+            });
+        }
+
+        return {
+            elementsToProcess: elementsToProcess,
+            needsCompiling: true
+        };
     };
 
     var makeFilterHistogram = function(observer, dataObserver, name, nodeID) {
@@ -221,9 +358,12 @@ moduleVisualizations.factory("filters",
         )[0].offsetWidth;
         var padding = 10;
         var vizHeight = padding * 8;
-        var svg = d3.select('#filters-' + nodeID)
+        var div = d3.select('#filters-' + nodeID)
+            .append("div")
+            .attr('id', 'filters-' + name);
+        var svg = d3.select('#filters-' + name)
             .append("svg")
-            .attr('id', 'filters' + name)
+            .attr('id', 'filters-svg-' + name)
             .attr("width", vizWidth)
             .attr("height", vizHeight);
 
@@ -238,7 +378,7 @@ moduleVisualizations.factory("filters",
         svg.append("a")
             .attr('xlink:href', '#')
             .append("text")
-                .attr('id', 'filters-' + name + '-reset')
+                .attr('id', 'filters-svg-' + name + '-reset')
                 .attr('class', 'link')
                 .style('fill', '#337ab7')
                 .style('text-anchor', 'end')
@@ -248,7 +388,7 @@ moduleVisualizations.factory("filters",
                     padding + ")")
                 .text('Reset')
                 .on('click', function() {
-                    var svg = d3.select('#filters' + name);
+                    var svg = d3.select('#filters-svg-' + name);
 
                     // Set brush with initial values
                     svg.select(".temporal-line-brush")
@@ -366,13 +506,13 @@ moduleVisualizations.factory("filters",
             // Show `reset` button if changes were made;
             // Update activation order
             if (observer.renderer.isActive(observer)) {
-                d3.select('#filters-' + name + '-reset')
+                d3.select('#filters-svg-' + name + '-reset')
                     .style('display', 'initial');
 
                 if (activatedFilters.indexOf(observer.name) === -1)
                     activatedFilters.push(observer.name);
             } else {
-                d3.select('#filters-' + name + '-reset')
+                d3.select('#filters-svg-' + name + '-reset')
                     .style('display', 'none');
 
                 var spliceIndex = activatedFilters.indexOf(observer.name);
@@ -408,18 +548,31 @@ moduleVisualizations.factory("filters",
             .call(brush);
         visualizations.adjustHandles(gBrush);
         gBrush.call(brush.move, brushPos);
+
+        // Dummy promise for calling directive: Nothing to compile
+        var deferred = $q.defer();
+        var promise = deferred.promise;
+        deferred.resolve();
+        return promise.then(function() {
+            return {
+                needsCompiling: false
+            };
+        });
     };
 
     // TODO: Hardcoded from filterNames
     var filterAttributes = {
-        'age': {
+        'Age': {
             translation: 'Idade'
         },
-        'height': {
+        'Height': {
             translation: 'Altura'
         },
-        'weight': {
+        'Weight': {
             translation: 'Peso'
+        },
+        'HabitsHigiene': {
+            translation: 'Hábitos de Higiene'
         }
     };
 
@@ -430,7 +583,6 @@ moduleVisualizations.factory("filters",
     return {
         translateFilterAttribute: translateFilterAttribute,
         removeFilters: removeFilters,
-        makeFilters: makeFilters,
         addFiltersFromNames: addFiltersFromNames,
         populateWithFilters: populateWithFilters,
         getFilterByName: getFilterByName,

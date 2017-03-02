@@ -1939,7 +1939,8 @@ moduleVisualizations.factory('HeatMapVisualization',
         var expectedNames = [
             names.AGE,
             names.WEIGHT,
-            names.HEIGHT
+            names.HEIGHT,
+            names.HABITS_HIGIENE
         ];
         filters.addFiltersFromNames(nodeID, vizID, expectedNames);
     };

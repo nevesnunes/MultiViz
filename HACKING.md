@@ -1,3 +1,8 @@
+<!--
+-- # Generate pdf:
+markdown-pdf --css-path ~/code/web/markdown-to-pdf.css -o HACKING.pdf HACKING.md
+-->
+
 # Architecture
 An overview is shown in the following graph:
 ![](architecture/png/modules.png)

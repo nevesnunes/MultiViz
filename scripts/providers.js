@@ -149,8 +149,8 @@ moduleProviders.factory('retrievePatientData', ['$http', function($http) {
 }]);
 
 moduleProviders.factory('retrieveCountsData',
-        ['patientData', 'retrievePatientData',
-        function(patientData, retrievePatientData) {
+        ['patientData', 'retrievePatientData', 'utils',
+        function(patientData, retrievePatientData, utils) {
     var fillOrderedArray = function(attributeParent, attributeName) {
         var counts = {};
 
@@ -244,8 +244,95 @@ moduleProviders.factory('retrieveCountsData',
             return counts;
         });
 
+    var retrieveHabitsHigiene = retrievePatientData.retrieveData(
+            'patientDataTypes.json')
+        .then(function(result) {
+            var counts = [];
+
+            var patients = patientData.getAttribute(
+                patientData.KEY_PATIENTS);
+
+            var habits = result.habitsHigiene;
+            var frequencies = result.habitsHigieneFrequencies;
+
+            // Collect all existing habits
+            counts.data = [];
+            var length = patients.length;
+            while (length--) {
+                var patient = patients[length];
+                for (var i in patient.habitsHigiene) {
+                    var habit = patient.habitsHigiene[i];
+                    var index = utils.arrayObjectIndexOf(
+                        counts.data, habit.name, 'name');
+                    // Store habit if new
+                    if (index === -1) {
+                        counts.data.push({
+                            name: habit.name,
+                            htmlName: utils.removeSpaces(
+                                utils.capitalizeEachWord(habit.name))
+                                .replace(/[^a-zA-Z\d]/g, '_'),
+                        frequencies: []
+                    });
+                    index = utils.arrayObjectIndexOf(
+                        counts.data, habit.name, 'name');
+                }
+
+                // Store frequency if new
+                var frequencyIndex = utils.arrayObjectIndexOf(
+                    counts.data[index].frequencies,
+                    habit.frequency.name,
+                    'name');
+                if (frequencyIndex === -1) {
+                    counts.data[index].frequencies.push({
+                        name: habit.frequency.name,
+                        htmlName: counts.data[index].htmlName +
+                            utils.removeSpaces(
+                                utils.capitalizeEachWord(
+                                        habit.frequency.name))
+                                .replace(/[^a-zA-Z\d]/g, '_'),
+                            incidences: habit.frequency.value,
+                            patientIDs: []
+                        });
+                        frequencyIndex = utils.arrayObjectIndexOf(
+                            counts.data[index].frequencies,
+                            habit.frequency.name,
+                            'name');
+                    }
+                    // Count patient with current frequency
+                    if (counts
+                            .data[index]
+                            .frequencies[frequencyIndex]
+                            .patientIDs
+                            .indexOf(patient.id) === -1)
+                        counts
+                            .data[index]
+                            .frequencies[frequencyIndex]
+                            .patientIDs
+                            .push(patient.id);
+                }
+            }
+
+            // Sort frequencies
+            for (var habitIndex in counts.data) {
+                counts.data[habitIndex]
+                    .frequencies.sort(function(a, b) {
+                        if (a.incidences < b.incidences) return -1;
+                        if (a.incidences > b.incidences) return 1;
+                        return 0;
+                  });
+            }
+
+            // Include current patient value
+            var currentPatient = patientData.getAttribute(
+                patientData.KEY_PATIENT);
+            // TODO
+
+            return counts;
+        });
+
     return {
         retrieveAges: retrieveAges,
+        retrieveHabitsHigiene: retrieveHabitsHigiene,
         retrieveHeights: retrieveHeights,
         retrieveWeights: retrieveWeights,
         retrieveIncidences: retrieveIncidences

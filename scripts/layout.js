@@ -317,6 +317,15 @@ moduleLayout.controller('controllerLayout',
     $scope.medicationsNames = patientData.getAttributeListByProperty(
         patientData.KEY_PATIENTS, 'medications', 'name');
 
+    // Custom attribute lists to be used in
+    // compiled list widgets (e.g. makeListWithEntryBars)
+    /*
+    $scope.customNames = {};
+    $scope.setListInCustomNames = function(list) {
+        utils.extend(list, $scope.customNames[name]);
+    }
+    */
+
     // Shared state among multiple directives;
     // Note that directives have scope set to `true`, so these properties have
     // to be objects in order to be modifiable by the directives
@@ -346,9 +355,33 @@ moduleLayout.controller('controllerLayout',
 }]);
 
 moduleLayout.controller("controllerEntryBarFill", 
-        ['$scope', 'utils',
-        function($scope, utils) {
+        ['$scope', 'utils', 'retrieveCountsData',
+        function($scope, utils, retrieveCountsData) {
+    // Populated in directive
     $scope.proportionObjects = [];
+
+    $scope.proportionPromise = retrieveCountsData.retrieveIncidences;
+    $scope.orderByProportion = function(name) {
+        // Use negative values to reverse order
+        var index = utils.arrayObjectIndexOf(
+            $scope.proportionObjects, name, "name");
+        return (index !== -1) ?
+            -($scope.proportionObjects[index].proportion) :
+            -1;
+    };
+}]);
+moduleLayout.controller("controllerFilterEntryBarFill", 
+        ['$scope', 'utils', 'retrieveCountsData',
+        function($scope, utils, retrieveCountsData) {
+    // Populated in directive
+    $scope.proportionObjects = [];
+
+    // Set by widget building function
+    // $scope.proportionPromise;
+
+    // Overrides unused model
+    $scope.optionListModel = "";
+
     $scope.orderByProportion = function(name) {
         // Use negative values to reverse order
         var index = utils.arrayObjectIndexOf(
@@ -359,12 +392,14 @@ moduleLayout.controller("controllerEntryBarFill",
     };
 }]);
 moduleLayout.directive("directiveEntryBarFill", 
-        ['utils', 'retrieveCountsData',
-        function(utils, retrieveCountsData) {
+        ['utils',
+        function(utils) {
     return {
         scope: true,
         link: function(scope, element, attrs) {
-            retrieveCountsData.retrieveIncidences.then(function(result) {
+            scope.proportionPromise.then(function(result) {
+                // scope.attribute set when filtering attribute list
+                // with ng-repeat
                 var index = utils.arrayObjectIndexOf(
                     result.data, scope.attribute, "name");
                 if (index !== -1) {
@@ -458,7 +493,32 @@ moduleLayout.directive("directiveActionPanel",
                     if (isModificationTypeActive(modificationTypes.FILTERS)) {
                         scope.updateFilterListeners(node);
 
-                        filters.makeFilters();
+                        // Make filters, compiling when needed
+                        filters.filters.forEach(function(filter, i) {
+                            if (filter.handlers.length) {
+                                var widgetRequestPromise = filter.make(
+                                    filter.handlers[0]
+                                );
+                                widgetRequestPromise.then(
+                                        function(widgetRequest) {
+                                    if (widgetRequest.needsCompiling) {
+                                        for (i in widgetRequest
+                                                .elementsToProcess) {
+                                            var element = widgetRequest
+                                                .elementsToProcess[i];
+                                            scope[element.attributeName] =
+                                                element.attributeElement;
+                                            scope[element.listName] =
+                                                element.list.data;
+                                            var elementTarget = angular.element(
+                                                '#' + element.targetName);
+                                            elementTarget.html(
+                                                $compile(element.html)(scope));
+                                        }
+                                    }
+                                });
+                            }
+                        });
                     }
                 }
             };
@@ -1164,6 +1224,7 @@ moduleLayout.directive("directiveActionPanel",
                         scope.selectedMedications =
                             vizObject.patientLists.medications;
 
+                        // Populate widgets with common lists ("...Names")
                         html = '<div>';
                         html += widgets.makeAttributePills({
                             currentModificationType: vizObject
@@ -1237,6 +1298,7 @@ moduleLayout.directive("directiveActionPanel",
                         scope.selectedMedications =
                             vizObject.patientLists.medications;
 
+                        // Populate widgets with common lists ("...Names")
                         html = '<div>';
                         html += widgets.makeAttributePills({
                             currentModificationType: vizObject
@@ -1703,7 +1765,7 @@ moduleLayout.directive("directivePanes",
 
             // Three step creation: 
             // - first, angular elements we need for d3 to use;
-            // - second, d3 elements
+            // - second, d3 elements;
             // - finally, angular elements which use computed data.
             var makeSpiral = function(id, vizID) {
                 // If it's the only visualization in the view,

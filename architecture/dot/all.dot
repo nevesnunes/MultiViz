@@ -30,6 +30,8 @@ digraph dependencies {
       
     
       
+        "moduleProviders" -> "moduleUtils"
+      
     
       
         "moduleWidgetBuilder" -> "moduleProviders"
@@ -81,6 +83,10 @@ digraph dependencies {
       
         "SpiralVisualization"[label="SpiralVisualization", color=6]
       
+        "TimelineVisualization"[label="TimelineVisualization", color=6]
+      
+        "filters"[label="filters", color=6]
+      
         "visualizations"[label="visualizations", color=6]
       
 
@@ -93,6 +99,8 @@ digraph dependencies {
         "directiveHeatMapTooltip"[label="directiveHeatMapTooltip", color=3]
       
         "directiveSpiralTooltip"[label="directiveSpiralTooltip", color=3]
+      
+        "directiveTimelineTooltip"[label="directiveTimelineTooltip", color=3]
       
 
 
@@ -107,6 +115,8 @@ digraph dependencies {
       
         "moduleVisualizations" -> "directiveSpiralTooltip"
       
+        "moduleVisualizations" -> "directiveTimelineTooltip"
+      
 
       
 
@@ -116,6 +126,10 @@ digraph dependencies {
         "moduleVisualizations" -> "HeatMapVisualization"
       
         "moduleVisualizations" -> "SpiralVisualization"
+      
+        "moduleVisualizations" -> "TimelineVisualization"
+      
+        "moduleVisualizations" -> "filters"
       
         "moduleVisualizations" -> "visualizations"
       
@@ -140,6 +154,8 @@ digraph dependencies {
       
         
       
+        
+      
 
       
 
@@ -149,6 +165,9 @@ digraph dependencies {
         
           "visualizations"[label="visualizations"]
           "visualizations" -> "HeatMapVisualization"
+        
+          "filters"[label="filters"]
+          "filters" -> "HeatMapVisualization"
         
           "patientData"[label="patientData"]
           "patientData" -> "HeatMapVisualization"
@@ -184,11 +203,45 @@ digraph dependencies {
         
       
         
+          "visualizations"[label="visualizations"]
+          "visualizations" -> "TimelineVisualization"
+        
+          "patientData"[label="patientData"]
+          "patientData" -> "TimelineVisualization"
+        
+          "retrievePatientData"[label="retrievePatientData"]
+          "retrievePatientData" -> "TimelineVisualization"
+        
+          "utils"[label="utils"]
+          "utils" -> "TimelineVisualization"
+        
+          "nodes"[label="nodes"]
+          "nodes" -> "TimelineVisualization"
+        
+      
+        
+          "retrieveCountsData"[label="retrieveCountsData"]
+          "retrieveCountsData" -> "filters"
+        
+          "utils"[label="utils"]
+          "utils" -> "filters"
+        
+          "nodes"[label="nodes"]
+          "nodes" -> "filters"
+        
+          "visualizations"[label="visualizations"]
+          "visualizations" -> "filters"
+        
+      
+        
           "patientData"[label="patientData"]
           "patientData" -> "visualizations"
         
           "retrievePatientData"[label="retrievePatientData"]
           "retrievePatientData" -> "visualizations"
+        
+          "retrieveCountsData"[label="retrieveCountsData"]
+          "retrieveCountsData" -> "visualizations"
         
           "utils"[label="utils"]
           "utils" -> "visualizations"
@@ -265,6 +318,9 @@ digraph dependencies {
       
 
       
+        
+          "utils"[label="utils"]
+          "utils" -> "patientData"
         
       
         
@@ -581,6 +637,8 @@ digraph dependencies {
       
         "controllerLayout"[label="controllerLayout", color=4]
       
+        "controllerEntryBarFill"[label="controllerEntryBarFill", color=4]
+      
 
       
 
@@ -629,6 +687,8 @@ digraph dependencies {
       
         "moduleLayout" -> "controllerLayout"
       
+        "moduleLayout" -> "controllerEntryBarFill"
+      
 
       
 
@@ -671,6 +731,9 @@ digraph dependencies {
           "visualizations"[label="visualizations"]
           "visualizations" -> "directiveActionPanel"
         
+          "filters"[label="filters"]
+          "filters" -> "directiveActionPanel"
+        
           "patientData"[label="patientData"]
           "patientData" -> "directiveActionPanel"
         
@@ -706,6 +769,9 @@ digraph dependencies {
           "SpiralVisualization"[label="SpiralVisualization"]
           "SpiralVisualization" -> "directivePanes"
         
+          "TimelineVisualization"[label="TimelineVisualization"]
+          "TimelineVisualization" -> "directivePanes"
+        
       
 
       
@@ -723,6 +789,14 @@ digraph dependencies {
         
           "patientData"[label="patientData"]
           "patientData" -> "controllerLayout"
+        
+      
+        
+          "$scope"[label="$scope"]
+          "$scope" -> "controllerEntryBarFill"
+        
+          "utils"[label="utils"]
+          "utils" -> "controllerEntryBarFill"
         
       
 
