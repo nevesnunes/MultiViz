@@ -314,9 +314,8 @@ moduleVisualizations.factory("filters",
                 return promise.then(function() {
                     // Wrap in an object expected by the directive
                     return {
-                        countPatients: 80, //TODO
-                        data: habit,
-                        frequencies: habit.frequencies
+                        countPatients: 10, //TODO
+                        data: habit.frequencies
                     };
                 });
             })(habit);
