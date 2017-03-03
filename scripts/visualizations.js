@@ -122,6 +122,7 @@ moduleVisualizations.factory("filters",
                 filter,
                 {
                     data: result.data,
+                    countPatients: result.countPatients
                 },
                 filter.name,
                 nodeID);
@@ -274,26 +275,20 @@ moduleVisualizations.factory("filters",
             .append("div")
             .attr('id', 'filters-' + name);
         var svg = d3.select('#filters-' + name)
-            .append("svg")
-            .attr('id', 'filters-svg-' + name)
-            .attr("width", vizWidth)
-            .attr("height", vizHeight);
-
-        //
-        // reset
-        //
-        svg.append("text")
-            .attr("transform", "translate(" +
-                0 + "," +
-                padding + ")")
-            .text(translateFilterAttribute(observer.name));
-        // TODO
+            .append("div")
+            .attr('id', 'filters-svg-' + name);
+        svg.html(translateFilterAttribute(observer.name));
 
         var elementsToProcess = [];
         for (var i in dataObserver.data) {
-            // List
             var habit = dataObserver.data[i];
-            var html = widgets.makeListWithEntryBars({
+
+            // Title & Reset
+            // TODO
+            var html = "<span>" + habit.name + "</span>";
+            
+            // List
+            html += widgets.makeListWithEntryBars({
                 list: habit.htmlName,
                 controller: 'controllerFilterEntryBarFill'
             });
@@ -314,7 +309,7 @@ moduleVisualizations.factory("filters",
                 return promise.then(function() {
                     // Wrap in an object expected by the directive
                     return {
-                        countPatients: 10, //TODO
+                        countPatients: habit.countPatients,
                         data: habit.frequencies
                     };
                 });

@@ -290,7 +290,8 @@ moduleProviders.factory('retrieveCountsData',
                                 utils.capitalizeEachWord(
                                         habit.frequency.name))
                                 .replace(/[^a-zA-Z\d]/g, '_'),
-                            incidences: habit.frequency.value,
+                            incidences: 0,
+                            value: habit.frequency.value,
                             patientIDs: []
                         });
                         frequencyIndex = utils.arrayObjectIndexOf(
@@ -316,11 +317,24 @@ moduleProviders.factory('retrieveCountsData',
             for (var habitIndex in counts.data) {
                 counts.data[habitIndex]
                     .frequencies.sort(function(a, b) {
-                        if (a.incidences < b.incidences) return -1;
-                        if (a.incidences > b.incidences) return 1;
+                        if (a.value < b.value) return -1;
+                        if (a.value > b.value) return 1;
                         return 0;
                   });
             }
+
+            // Count incidences
+            counts.data.forEach(function(habit, i) {
+                var countPatients = 0;
+                habit.frequencies.forEach(function(frequency, j) {
+                    var countPatientsWithFrequency =
+                        counts.data[i].frequencies[j].patientIDs.length;
+                    counts.data[i].frequencies[j].incidences = 
+                        countPatientsWithFrequency;
+                    countPatients += countPatientsWithFrequency;
+                });
+                counts.data[i].countPatients = countPatients;
+            });
 
             // Include current patient value
             var currentPatient = patientData.getAttribute(
