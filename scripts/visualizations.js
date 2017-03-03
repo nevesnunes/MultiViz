@@ -290,15 +290,6 @@ moduleVisualizations.factory("filters",
         // TODO
 
         var elementsToProcess = [];
-        /*
-        var dataObserverPromiseContents = function(habit) {
-            return {
-                countPatients: habit.countPatients,
-                data: habit.data,
-                frequencies: habit.data.frequencies
-            };
-        };
-        */
         for (var i in dataObserver.data) {
             // List
             var habit = dataObserver.data[i];
@@ -313,12 +304,15 @@ moduleVisualizations.factory("filters",
                 .attr('id', 'filters-' + name + '-' + habit.htmlName);
 
             // Promise with list entries
-            // TODO
             var deferred = $q.defer();
             var promise = deferred.promise;
             deferred.resolve();
-            (function(habit) {
-                promise.then(function() {
+
+            // Capture attributes in closure, just to be sure the promise
+            // contains the current iterated habit
+            promise = (function(habit) {
+                return promise.then(function() {
+                    // Wrap in an object expected by the directive
                     return {
                         countPatients: 80, //TODO
                         data: habit,
@@ -326,19 +320,16 @@ moduleVisualizations.factory("filters",
                     };
                 });
             })(habit);
-            /*
-            promise.then(dataObserverPromiseContents({
-                countPatients: 80, //TODO
-                data: habit
-            }));
-            */
             elementsToProcess.push({
                 // Defined in controllerFilterListEntryBarFill
                 attributeElement: promise,
                 attributeName: 'proportionPromise',
+
                 // For scope of controllerFilterListEntryBarFill
                 list: {
-                    data: habit.frequencies
+                    data: habit.frequencies.map(function(frequency) {
+                        return frequency.name;
+                    })
                 },
                 listName: habit.htmlName,
                 targetName: 'filters-' + name + '-' + habit.htmlName,
