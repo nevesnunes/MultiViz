@@ -239,9 +239,8 @@ moduleVisualizations.factory('HeatMapVisualization',
             // Compute results for each applied filter
             // FIXME: AFTER user selections
             if (filtersArray) {
-                console.log("[Filters] Total: " + data.length);
-
-                filters.getActivatedFilters().forEach(function(filterName) {
+                filters.getActivatedFilters().forEach(function(filterObject) {
+                    var filterName = filterObject.listName;
                     var index = utils.arrayObjectIndexOf(
                         filtersArray, filterName, 'name');
                     if (index === -1)
@@ -294,11 +293,6 @@ moduleVisualizations.factory('HeatMapVisualization',
                 for (var i=0; i<length; i++) {
                     console.log("[Filters] Order of " +
                         filters.getActivatedFilters()[i] + ": " + i);
-                    console.log("[Filters] Length of " +
-                        filters.getActivatedFilters()[i] + ": " + datas
-                            .measures[filters.getActivatedFilters()[i]]
-                            .presentPatientIDs
-                            .length);
                 }
             }
 
@@ -653,7 +647,8 @@ moduleVisualizations.factory('HeatMapVisualization',
                 self.margin.top + ")");
 
             var data = [];
-            filters.getActivatedFilters().forEach(function(filterName, i) {
+            filters.getActivatedFilters().forEach(function(filterObject, i) {
+                var filterName = filterObject.listName;
                 var presentPatients = 
                     datas.measures[filterName].presentPatientIDs.length;
                 var nonPresentPacients =

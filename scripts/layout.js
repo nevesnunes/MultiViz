@@ -758,51 +758,38 @@ moduleLayout.directive("directiveActionPanel",
             };
 
             // Select a property from the corresponding filter list
-            scope.checkFilter = function(name, list) {
+            scope.checkFilter = function(entryName, listName) {
                 // FIXME: Hardcoded
                 var vizObject = nodes.getVizs(
                     nodes.getCurrentNode().model.id)[0].vizObject;
-                var currentAttributeType = vizObject.currentAttributeType;
-                var attributeTypes = vizObject
-                    .getAttributeTypes();
 
-                var array;
-                if (currentAttributeType ===
-                        attributeTypes.DISEASES) {
-                    array = vizObject.patientLists.diseases;
-                } else if (currentAttributeType ===
-                        attributeTypes.MEDICATIONS) {
-                    array = vizObject.patientLists.medications;
+                var checkedActivatedFilters =
+                    filters.getActivatedFilters();
+                var i = utils.arrayObjectIndexOf(
+                    checkedActivatedFilters,
+                    listName,
+                    'listName'
+                );
+                if (i === -1) {
+                    checkedActivatedFilters.push({
+                        entryName: entryName,
+                        listName: listName
+                    });
+                } else {
+                    checkedActivatedFilters[i].entryName = entryName;
                 }
+                filters.setActivatedFilters(checkedActivatedFilters);
 
-                var index = utils.arrayObjectIndexOf(array, name, "name");
-                if (index === -1)
-                    return;
-
-                array[index] = {
-                    name: array[index].name,
-                    selected: !(array[index].selected)
-                };
-
-                // Set the visualization's stored patient lists
-                scope.selectedDiseases =
-                    vizObject.patientLists.diseases;
-                scope.selectedMedications =
-                    vizObject.patientLists.medications;
-
-                // Remove any remaining highlights of the previous state
-                // HACK: Unused object
-                if (vizObject.rendererRemoveStyle)
-                    vizObject.rendererRemoveStyle({});
-
+                // TODO
+                /*
                 updateFromSelections({
-                    diseases: scope.selectedDiseases,
-                    medications: scope.selectedMedications
                 });
+                */
             };
 
 
             // Select a single property from the view's active property list
+            // Used for transient lists (one-shot selection)
             scope.checkSingle = function() {
                 updateFromSelections({
                     medications: scope.selectedMedications,
@@ -888,6 +875,15 @@ moduleLayout.directive("directiveActionPanel",
                     diseases: scope.selectedDiseases,
                     medications: scope.selectedMedications
                 });
+            };
+
+            scope.isListInputSelected = function(entryName, listName) {
+                var i = utils.arrayObjectIndexOf(
+                    filters.getActivatedFilters(),
+                    listName,
+                    "listName");
+                return (i !== -1) && (filters.getActivatedFilters()[i]
+                    .entryName === entryName);
             };
 
             scope.isSelected = function(name) {

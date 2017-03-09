@@ -87,9 +87,15 @@ moduleWidgetBuilder.factory('widgets', [function() {
 
     var makeListWithEntryBars = function(options) {
         options.checkMethod = options.checkMethod || 'check';
+        var checkMethodCall = (options.checkMethod === 'checkFilter') ?
+             '(attribute, \'' + options.list + '\')' :
+             '(attribute)';
         options.directive = options.directive || 'directive-entry-bar-fill';
         options.entryType = options.entryType || 'checkbox';
-        var checkMethodCall = (options.checkMethod === 'checkFilter') ?
+        options.isSelectedMethod =
+            options.isSelectedMethod || 'isSelected';
+        var isSelectedMethodCall =
+                (options.isSelectedMethod === 'isListInputSelected') ?
              '(attribute, \'' + options.list + '\')' :
              '(attribute)';
         return '<form ng-controller="' + options.controller + '" class="table table-condensed table-bordered patient-table">' +
@@ -107,7 +113,8 @@ moduleWidgetBuilder.factory('widgets', [function() {
                             'class="custom-checkbox" ' +
                             'name="' + options.list + '" ' +
                             'type="' + options.entryType + '" ' +
-                            'ng-checked="isSelected(attribute)"> ' +
+                            'ng-checked="' + options.isSelectedMethod +
+                                isSelectedMethodCall + '"> ' +
                             '{{::attribute}}' +
                     '</div>' +
                     '<div class="patient-table-entry-bar"> ' +

@@ -222,8 +222,12 @@ moduleVisualizations.factory("filters",
     // This is not some Java quirk. We do need these methods
     // in order for changes in factory properties be reflected in
     // other modules. Directly accessing these properties might not work.
-    var getActivatedFilters = function() { return activatedFilters; };
-    var setActivatedFilters = function(array) { activatedFilters = array; };
+    var getActivatedFilters = function() {
+        return activatedFilters;
+    };
+    var setActivatedFilters = function(array) {
+        activatedFilters = utils.extend(array, []);
+    };
 
     var getFilterByName = function(name) {
         var filter;
@@ -294,7 +298,8 @@ moduleVisualizations.factory("filters",
                 checkMethod: 'checkFilter',
                 controller: 'controllerListEntryBarFill',
                 directive: 'directive-list-entry-bar-fill',
-                entryType: 'radio'
+                entryType: 'radio',
+                isSelectedMethod: 'isListInputSelected'
             });
 
             // Element
@@ -504,15 +509,21 @@ moduleVisualizations.factory("filters",
                 d3.select('#filters-svg-' + name + '-reset')
                     .style('display', 'initial');
 
-                if (activatedFilters.indexOf(observer.name) === -1)
-                    activatedFilters.push(observer.name);
+                activatedFilters = utils.updateObjectInArray(
+                    activatedFilters,
+                    'listName',
+                    observer.name,
+                    {listName: observer.name}
+                );
             } else {
                 d3.select('#filters-svg-' + name + '-reset')
                     .style('display', 'none');
 
-                var spliceIndex = activatedFilters.indexOf(observer.name);
-                if (spliceIndex !== -1)
-                    activatedFilters.splice(spliceIndex, 1);
+                activatedFilters = utils.spliceObjectInArray(
+                    activatedFilters,
+                    'listName',
+                    observer.name
+                );
             }
 
             filterObserver.dispatch(observer);

@@ -120,6 +120,18 @@ moduleUtils.factory('utils', ['$q', function($q) {
         } else {
             array.push(object);
         }
+
+        return extend(array, []);
+    };
+
+    // Remove object if exists
+    var spliceObjectInArray = function(array, key, value) {
+        var index = arrayObjectIndexOf(array, value, key);
+        if (index > -1) {
+            return array.splice(spliceIndex, 1);
+        }
+
+        return array;
     };
 
     /*
@@ -154,6 +166,7 @@ moduleUtils.factory('utils', ['$q', function($q) {
         arrayObjectFullPairIndexOf: arrayObjectFullPairIndexOf,
         capitalizeEachWord: capitalizeEachWord,
         removeSpaces: removeSpaces,
+        spliceObjectInArray: spliceObjectInArray,
         updateObjectInArray: updateObjectInArray,
         extractValueFromPair: extractValueFromPair,
         resolveEvents: resolveEvents,
