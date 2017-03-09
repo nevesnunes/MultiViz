@@ -86,10 +86,16 @@ moduleWidgetBuilder.factory('widgets', [function() {
     };
 
     var makeListWithEntryBars = function(options) {
-        return '<div ng-controller="' + options.controller + '" class="table table-condensed table-bordered patient-table">' +
-                '<div directive-entry-bar-fill class="checkboxInTable patient-table-entry" ' +
+        options.checkMethod = options.checkMethod || 'check';
+        options.directive = options.directive || 'directive-entry-bar-fill';
+        options.entryType = options.entryType || 'checkbox';
+        var checkMethodCall = (options.checkMethod === 'checkFilter') ?
+             '(attribute, \'' + options.list + '\')' :
+             '(attribute)';
+        return '<form ng-controller="' + options.controller + '" class="table table-condensed table-bordered patient-table">' +
+                '<div ' + options.directive + ' class="checkboxInTable patient-table-entry" ' +
                     'ng-repeat="attribute in filteredAttributes = (' + options.list + ' | filter:optionListModel | orderBy:orderByProportion)" ' +
-                    'ng-click="check(attribute)" ' +
+                    'ng-click="' + options.checkMethod + checkMethodCall + '" ' +
                     'ng-mouseenter="vizStyleFromMouseEnter(attribute)" ' +
                     'ng-mouseleave="vizStyleFromMouseLeave(attribute)" ' +
                     'ng-class="isEntrySelected($index)">' +
@@ -99,7 +105,8 @@ moduleWidgetBuilder.factory('widgets', [function() {
                         '</div>' +
                         '<input ' +
                             'class="custom-checkbox" ' +
-                            'type="checkbox" ' +
+                            'name="' + options.list + '" ' +
+                            'type="' + options.entryType + '" ' +
                             'ng-checked="isSelected(attribute)"> ' +
                             '{{::attribute}}' +
                     '</div>' +
@@ -108,7 +115,7 @@ moduleWidgetBuilder.factory('widgets', [function() {
                         '</div>' +
                     '</div>' +
                 '</div>' +
-            '</div>';
+            '</form>';
     };
 
     var makeImgButton = function(options) {

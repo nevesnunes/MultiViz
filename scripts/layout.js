@@ -370,7 +370,7 @@ moduleLayout.controller("controllerEntryBarFill",
             -1;
     };
 }]);
-moduleLayout.controller("controllerFilterEntryBarFill", 
+moduleLayout.controller("controllerListEntryBarFill", 
         ['$scope', 'utils', 'retrieveCountsData',
         function($scope, utils, retrieveCountsData) {
     // Populated in directive
@@ -382,12 +382,18 @@ moduleLayout.controller("controllerFilterEntryBarFill",
     // Overrides unused model
     $scope.optionListModel = "";
 
-    $scope.orderByProportion = function(name) {
+    $scope.orderByProportion = function(entryName) {
         // Use negative values to reverse order
-        var index = utils.arrayObjectIndexOf(
-            $scope.proportionObjects, name, "name");
-        return (index !== -1) ?
-            -($scope.proportionObjects[index].proportion) :
+        var listName = $scope.listName;
+        var listIndex = utils.arrayObjectIndexOf(
+            $scope.proportionObjects, listName, "name");
+        if (listIndex === -1)
+            return -1;
+
+        var entryIndex = utils.arrayObjectIndexOf(
+            $scope.proportionObjects[listIndex].list, entryName, "name");
+        return (entryIndex !== -1) ?
+            -($scope.proportionObjects[listIndex].list[entryIndex].proportion) :
             -1;
     };
 }]);
@@ -398,7 +404,7 @@ moduleLayout.directive("directiveEntryBarFill",
         scope: true,
         link: function(scope, element, attrs) {
             scope.proportionPromise.then(function(result) {
-                // scope.attribute set when filtering attribute list
+                // HACK: scope.attribute set when filtering attribute list
                 // with ng-repeat
                 var index = utils.arrayObjectIndexOf(
                     result.data, scope.attribute, "name");
@@ -407,6 +413,43 @@ moduleLayout.directive("directiveEntryBarFill",
                         result.countPatients * 100;
                 }
                 scope.proportionObjects.push({
+                    name: scope.attribute,
+                    proportion: scope.proportion
+                });
+            });
+        } //link
+    }; //return
+}]);
+moduleLayout.directive("directiveListEntryBarFill", 
+        ['utils',
+        function(utils) {
+    return {
+        scope: true,
+        link: function(scope, element, attrs) {
+            scope.proportionPromise.then(function(result) {
+                console.log(result);
+
+                var listIndex = utils.arrayObjectIndexOf(
+                    scope.proportionObjects, result.listName, "name");
+                if (listIndex === -1)
+                    scope.proportionObjects.push({
+                        name: result.listName,
+                        list: []
+                    });
+                listIndex = utils.arrayObjectIndexOf(
+                    scope.proportionObjects, result.listName, "name");
+
+                // HACK: scope.attribute set when filtering attribute list
+                // with ng-repeat
+                var entryIndex = utils.arrayObjectIndexOf(
+                    result.data,
+                    scope.attribute,
+                    "name");
+                if (entryIndex !== -1) {
+                    scope.proportion = result.data[entryIndex].incidences /
+                        result.countPatients * 100;
+                }
+                scope.proportionObjects[listIndex].list.push({
                     name: scope.attribute,
                     proportion: scope.proportion
                 });
@@ -494,6 +537,7 @@ moduleLayout.directive("directiveActionPanel",
                         scope.updateFilterListeners(node);
 
                         // Make filters, compiling when needed
+                        scope.filterLists = [];
                         filters.filters.forEach(function(filter, i) {
                             if (filter.handlers.length) {
                                 var widgetRequestPromise = filter.make(
@@ -506,14 +550,21 @@ moduleLayout.directive("directiveActionPanel",
                                                 .elementsToProcess) {
                                             var element = widgetRequest
                                                 .elementsToProcess[i];
-                                            scope[element.attributeName] =
+                                            // FIXME: Need to keep track
+                                            // of new scopes so we can
+                                            // destroy them later
+                                            var targetScope = scope.$new();
+                                            targetScope[element.attributeName] =
                                                 element.attributeElement;
-                                            scope[element.listName] =
+                                            targetScope[element.listName] =
                                                 element.list.data;
+                                            targetScope.listName =
+                                                element.listName;
                                             var elementTarget = angular.element(
                                                 '#' + element.targetName);
                                             elementTarget.html(
-                                                $compile(element.html)(scope));
+                                                $compile(element.html)
+                                                (targetScope));
                                         }
                                     }
                                 });
@@ -705,6 +756,51 @@ moduleLayout.directive("directiveActionPanel",
                     medications: scope.selectedMedications
                 });
             };
+
+            // Select a property from the corresponding filter list
+            scope.checkFilter = function(name, list) {
+                // FIXME: Hardcoded
+                var vizObject = nodes.getVizs(
+                    nodes.getCurrentNode().model.id)[0].vizObject;
+                var currentAttributeType = vizObject.currentAttributeType;
+                var attributeTypes = vizObject
+                    .getAttributeTypes();
+
+                var array;
+                if (currentAttributeType ===
+                        attributeTypes.DISEASES) {
+                    array = vizObject.patientLists.diseases;
+                } else if (currentAttributeType ===
+                        attributeTypes.MEDICATIONS) {
+                    array = vizObject.patientLists.medications;
+                }
+
+                var index = utils.arrayObjectIndexOf(array, name, "name");
+                if (index === -1)
+                    return;
+
+                array[index] = {
+                    name: array[index].name,
+                    selected: !(array[index].selected)
+                };
+
+                // Set the visualization's stored patient lists
+                scope.selectedDiseases =
+                    vizObject.patientLists.diseases;
+                scope.selectedMedications =
+                    vizObject.patientLists.medications;
+
+                // Remove any remaining highlights of the previous state
+                // HACK: Unused object
+                if (vizObject.rendererRemoveStyle)
+                    vizObject.rendererRemoveStyle({});
+
+                updateFromSelections({
+                    diseases: scope.selectedDiseases,
+                    medications: scope.selectedMedications
+                });
+            };
+
 
             // Select a single property from the view's active property list
             scope.checkSingle = function() {

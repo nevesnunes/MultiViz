@@ -286,17 +286,21 @@ moduleVisualizations.factory("filters",
             // Title & Reset
             // TODO
             var html = "<span>" + habit.name + "</span>";
-            
+
             // List
+            var listName = habit.htmlName;
             html += widgets.makeListWithEntryBars({
-                list: habit.htmlName,
-                controller: 'controllerFilterEntryBarFill'
+                list: listName,
+                checkMethod: 'checkFilter',
+                controller: 'controllerListEntryBarFill',
+                directive: 'directive-list-entry-bar-fill',
+                entryType: 'radio'
             });
 
             // Element
             d3.select('#filters-' + name)
                 .append("div")
-                .attr('id', 'filters-' + name + '-' + habit.htmlName);
+                .attr('id', 'filters-' + name + '-' + listName);
 
             // Promise with list entries
             var deferred = $q.defer();
@@ -305,30 +309,36 @@ moduleVisualizations.factory("filters",
 
             // Capture attributes in closure, just to be sure the promise
             // contains the current iterated habit
-            promise = (function(habit) {
+            promise = (function(capturedHabit) {
                 return promise.then(function() {
                     // Wrap in an object expected by the directive
                     return {
-                        countPatients: habit.countPatients,
-                        data: habit.frequencies
+                        countPatients: capturedHabit.countPatients,
+                        listName: capturedHabit.htmlName,
+                        data: capturedHabit.frequencies
                     };
                 });
             })(habit);
-            elementsToProcess.push({
-                // Defined in controllerFilterListEntryBarFill
-                attributeElement: promise,
-                attributeName: 'proportionPromise',
+            var elementToProcess = (function(capturedHabit) {
+                return {
+                    // Defined in controllerFilterListEntryBarFill
+                    attributeElement: promise,
+                    attributeName: 'proportionPromise',
 
-                // For scope of controllerFilterListEntryBarFill
-                list: {
-                    data: habit.frequencies.map(function(frequency) {
-                        return frequency.name;
-                    })
-                },
-                listName: habit.htmlName,
-                targetName: 'filters-' + name + '-' + habit.htmlName,
-                html: html
-            });
+                    // For scope of controllerFilterListEntryBarFill
+                    list: {
+                        data: capturedHabit.frequencies.map(
+                            function(frequency) {
+                                return frequency.name;
+                            })
+                    },
+                    listName: capturedHabit.htmlName,
+                    targetName: 'filters-' + name + '-' +
+                        capturedHabit.htmlName,
+                    html: html
+                };
+            })(habit);
+            elementsToProcess.push(elementToProcess);
         }
 
         return {

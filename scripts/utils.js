@@ -122,6 +122,32 @@ moduleUtils.factory('utils', ['$q', function($q) {
         }
     };
 
+    /*
+     * Run additional functionality before executing a function.
+     *
+     * Example:
+     *
+	 * augment(visualizations, function(name, fn) {
+	 *     console.log("calling " + name);
+	 * });
+	 */
+    var augment = function(fnHolder, withFn) {
+        var name, fn;
+        for (name in fnHolder) {
+            fn = fnHolder[name];
+            if (typeof fn === 'function') {
+                fnHolder[name] = (function(name, fn) {
+                    var args = arguments;
+                    return function() {
+                        withFn.apply(this, args);
+                        return fn.apply(this, arguments);
+
+                    };
+                })(name, fn);
+            }
+        }
+    };
+
     return {
         arrayObjectIndexOf: arrayObjectIndexOf,
         arrayObjectPairIndexOf: arrayObjectPairIndexOf,
@@ -131,6 +157,7 @@ moduleUtils.factory('utils', ['$q', function($q) {
         updateObjectInArray: updateObjectInArray,
         extractValueFromPair: extractValueFromPair,
         resolveEvents: resolveEvents,
+        augment: augment,
         extend: extend
     };
 }]);
