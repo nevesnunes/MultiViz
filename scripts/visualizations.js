@@ -627,7 +627,7 @@ moduleVisualizations.factory('visualizations',
     var validateInterface = function(object, objectName) {
         for (var i in interfaceNames)
             if (!isImplemented(object, interfaceNames[i]))
-                console.log('[Error] @validateInterface: ' + objectName +
+                console.log('[ERROR] @validateInterface: ' + objectName +
                     ' does not implement "' + interfaceNames[i] + '"');
     };
 

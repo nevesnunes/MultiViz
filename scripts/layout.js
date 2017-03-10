@@ -427,8 +427,6 @@ moduleLayout.directive("directiveListEntryBarFill",
         scope: true,
         link: function(scope, element, attrs) {
             scope.proportionPromise.then(function(result) {
-                console.log(result);
-
                 var listIndex = utils.arrayObjectIndexOf(
                     scope.proportionObjects, result.listName, "name");
                 if (listIndex === -1)
@@ -1212,9 +1210,6 @@ moduleLayout.directive("directiveActionPanel",
                             currentAttributeProperties.slice()
                         );
                     }
-
-                    //console.log(newDosage);
-                    //console.log(newRecordedFrequency);
 
                     // target was selected
                     scope.cleanOverlays();
