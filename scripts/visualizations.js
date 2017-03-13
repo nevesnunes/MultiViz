@@ -348,7 +348,7 @@ moduleVisualizations.factory("filters",
                 });
 
             // Accordion card starts collapsed
-            //hideFilter(elementListName);
+            hideFilter(elementListName);
 
             // Reset
             d3.select('#filters-' + elementListName)
@@ -501,33 +501,42 @@ moduleVisualizations.factory("filters",
         //
         // reset
         //
-        svg.append("a")
-            .attr('xlink:href', '#')
-            .append("text")
-                .attr('id', 'filters-svg-' + name + '-reset')
-                .attr('class', 'link')
-                .style('fill', '#337ab7')
-                .style('text-anchor', 'end')
-                .attr('startOffset', '100%')
-                .attr("transform", "translate(" +
-                    vizWidth + "," +
-                    padding + ")")
-                .text('Reset')
-                .on('click', function() {
-                    var svg = d3.select('#filters-svg-' + name);
+        var a = svg.append("a")
+            .attr('xlink:href', '#');
+        a.append("text")
+            .attr('id', 'filters-svg-' + name + '-range')
+            .style('text-anchor', 'start')
+            .attr("transform", "translate(" +
+                0 + "," +
+                padding + ")");
+        a.append("text")
+            .attr('id', 'filters-svg-' + name + '-reset')
+            .attr('class', 'link')
+            .style('fill', '#337ab7')
+            .style('text-anchor', 'end')
+            .attr('startOffset', '100%')
+            .attr("transform", "translate(" +
+                vizWidth + "," +
+                padding + ")")
+            .text('Reset')
+            .on('click', function() {
+                var svg = d3.select('#filters-svg-' + name);
 
-                    // Set brush with initial values
-                    svg.select(".temporal-line-brush")
-                        .call(
-                            observer.renderer.brush.move,
-                            observer.renderer.x.range().slice());
+                // Set brush with initial values
+                svg.select(".temporal-line-brush")
+                    .call(
+                        observer.renderer.brush.move,
+                        observer.renderer.x.range().slice());
 
-                    // Remove corresponding distribution bars
-                    var currentIndex = utils.arrayObjectIndexOf(
-                        filters, name, 'name');
-                    filterObserver.dispatch(
-                        filters[currentIndex]);
-                });
+                svg.select("#filters-svg-" + name + "-range")
+                    .text("");
+
+                // Remove corresponding distribution bars
+                var currentIndex = utils.arrayObjectIndexOf(
+                    filters, name, 'name');
+                filterObserver.dispatch(
+                    filters[currentIndex]);
+            });
 
         //
         // axis
@@ -635,6 +644,12 @@ moduleVisualizations.factory("filters",
                 d3.select('#filters-svg-' + name + '-reset')
                     .style('display', 'initial');
 
+                svg.select("#filters-svg-" + name + "-range")
+                    .text(function() {
+                        return observer.renderer.intervalValues[0] + " - " +
+                            observer.renderer.intervalValues[1];
+                    });
+
                 activatedFilters = utils.updateObjectInArray(
                     activatedFilters,
                     'listName',
@@ -644,6 +659,9 @@ moduleVisualizations.factory("filters",
             } else {
                 d3.select('#filters-svg-' + name + '-reset')
                     .style('display', 'none');
+
+                svg.select("#filters-svg-" + name + "-range")
+                    .text("");
 
                 activatedFilters = utils.spliceObjectInArray(
                     activatedFilters,
@@ -682,7 +700,7 @@ moduleVisualizations.factory("filters",
         gBrush.call(brush.move, brushPos);
         
         // Accordion card starts collapsed
-        //hideFilter(name);
+        hideFilter(name);
 
         // Dummy promise for calling directive: Nothing to compile
         var deferred = $q.defer();
