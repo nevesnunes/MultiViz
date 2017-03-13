@@ -7,6 +7,21 @@ var moduleVisualizations = angular.module('moduleVisualizations',
 moduleVisualizations.factory("filters",
         ['retrieveCountsData', 'utils', 'nodes', 'visualizations', 'widgets', '$q',
         function(retrieveCountsData, utils, nodes, visualizations, widgets, $q) {
+    var hideFilter = function(name) {
+        d3.select('#filters-' + name)
+            .style('display', 'none')
+            .style("visibility", "hidden")
+            .style("width", 0)
+            .style("height", 0);
+    };
+    var showFilter = function(name) {
+        d3.select('#filters-' + name)
+            .style('display', 'inline-block')
+            .style("visibility", "initial")
+            .style("width", "initial")
+            .style("height", "initial");
+    };
+
     // Adaptation of `observer` pattern to broadcast
     // filter changes to all visible views
 
@@ -275,37 +290,57 @@ moduleVisualizations.factory("filters",
         )[0].offsetWidth;
         var padding = 10;
         var vizHeight = padding * 8;
-        var div = d3.select('#filters-' + nodeID)
-            .append("div")
-            .attr('id', 'filters-' + name);
-        var svg = d3.select('#filters-' + name)
-            .append("div")
-            .attr('id', 'filters-svg-' + name);
-        svg.html(translateFilterAttribute(observer.name));
+
+        d3.select('#filters-accordion')
+            .append("h4")
+            .attr('id', 'filters-svg-' + name)
+            .text(translateFilterAttribute(observer.name));
 
         var elementsToProcess = [];
         for (var i in dataObserver.data) {
             var habit = dataObserver.data[i];
 
-            // Title & Reset
+            // Reset
             // TODO
-            var html = "<span>" + habit.name + "</span>";
+            var html = "";
 
             // List
             var listName = habit.htmlName;
             html += widgets.makeListWithEntryBars({
-                list: listName,
                 checkMethod: 'checkFilter',
                 controller: 'controllerListEntryBarFill',
                 directive: 'directive-list-entry-bar-fill',
                 entryType: 'radio',
-                isSelectedMethod: 'isListInputSelected'
+                isSelectedMethod: 'isListInputSelected',
+
+                // Unique pair for identification of attribute
+                filter: name,
+                list: listName
             });
 
-            // Element
-            d3.select('#filters-' + name)
-                .append("div")
-                .attr('id', 'filters-' + name + '-' + listName);
+            //
+            // accordion
+            //
+            var elementListName = name + '-' + listName;
+            var target = angular.element('#filters-' + nodeID)
+                .find('#filters-accordion');
+            target.append(widgets.makeAccordionCard({
+                        contents: '<div id="filters-' + elementListName + '"></div>',
+                        header: habit.name,
+                        name: elementListName
+                    }));
+            angular.element('#collapse-' + elementListName)
+                .on('show.bs.collapse', function (e) {
+                    var name = e.currentTarget.id.split("-").slice(1).join("-");
+                    showFilter(name);
+                })
+                .on('hidden.bs.collapse', function (e) {
+                    var name = e.currentTarget.id.split("-").slice(1).join("-");
+                    hideFilter(name);
+                });
+
+            // Accordion card starts collapsed
+            //hideFilter(elementListName);
 
             // Promise with list entries
             var deferred = $q.defer();
@@ -358,9 +393,27 @@ moduleVisualizations.factory("filters",
         )[0].offsetWidth;
         var padding = 10;
         var vizHeight = padding * 8;
-        var div = d3.select('#filters-' + nodeID)
-            .append("div")
-            .attr('id', 'filters-' + name);
+
+        //
+        // accordion
+        //
+        var target = angular.element('#filters-' + nodeID)
+            .find('#filters-accordion')
+            .append(widgets.makeAccordionCard({
+                    contents: '<div id="filters-' + name + '"></div>',
+                    header: translateFilterAttribute(observer.name),
+                    name: name
+                }));
+        angular.element('#collapse-' + name)
+            .on('show.bs.collapse', function (e) {
+                var name = e.currentTarget.id.split("-").slice(1).join("-");
+                showFilter(name);
+            })
+            .on('hidden.bs.collapse', function (e) {
+                var name = e.currentTarget.id.split("-").slice(1).join("-");
+                hideFilter(name);
+            });
+
         var svg = d3.select('#filters-' + name)
             .append("svg")
             .attr('id', 'filters-svg-' + name)
@@ -370,11 +423,6 @@ moduleVisualizations.factory("filters",
         //
         // reset
         //
-        svg.append("text")
-            .attr("transform", "translate(" +
-                0 + "," +
-                padding + ")")
-            .text(translateFilterAttribute(observer.name));
         svg.append("a")
             .attr('xlink:href', '#')
             .append("text")
@@ -554,6 +602,9 @@ moduleVisualizations.factory("filters",
             .call(brush);
         visualizations.adjustHandles(gBrush);
         gBrush.call(brush.move, brushPos);
+        
+        // Accordion card starts collapsed
+        //hideFilter(name);
 
         // Dummy promise for calling directive: Nothing to compile
         var deferred = $q.defer();

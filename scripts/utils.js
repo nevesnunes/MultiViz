@@ -128,7 +128,7 @@ moduleUtils.factory('utils', ['$q', function($q) {
     var spliceObjectInArray = function(array, key, value) {
         var index = arrayObjectIndexOf(array, value, key);
         if (index > -1) {
-            return array.splice(spliceIndex, 1);
+            array.splice(index, 1);
         }
 
         return array;

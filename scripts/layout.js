@@ -756,7 +756,8 @@ moduleLayout.directive("directiveActionPanel",
             };
 
             // Select a property from the corresponding filter list
-            scope.checkFilter = function(entryName, listName) {
+            scope.checkFilter = function(
+                    entryName, listName, filterName) {
                 // FIXME: Hardcoded
                 var vizObject = nodes.getVizs(
                     nodes.getCurrentNode().model.id)[0].vizObject;
@@ -771,7 +772,8 @@ moduleLayout.directive("directiveActionPanel",
                 if (i === -1) {
                     checkedActivatedFilters.push({
                         entryName: entryName,
-                        listName: listName
+                        listName: listName,
+                        filterName: filterName
                     });
                 } else {
                     checkedActivatedFilters[i].entryName = entryName;
@@ -875,7 +877,8 @@ moduleLayout.directive("directiveActionPanel",
                 });
             };
 
-            scope.isListInputSelected = function(entryName, listName) {
+            scope.isListInputSelected = function(
+                    entryName, listName, filterName) {
                 var i = utils.arrayObjectIndexOf(
                     filters.getActivatedFilters(),
                     listName,

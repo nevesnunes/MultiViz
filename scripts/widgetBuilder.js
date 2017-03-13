@@ -2,6 +2,29 @@ var moduleWidgetBuilder = angular.module('moduleWidgetBuilder',
         ['moduleProviders']);
 
 moduleWidgetBuilder.factory('widgets', [function() {
+    // HACK: Caller must have accordion element:
+    // <div id="accordion" role="tablist" aria-multiselectable="true">
+    var makeAccordionCard = function(options) {
+        options.contents = options.contents || "Contents";
+        options.header = options.header || "Header";
+        options.parentPrefix = options.parentPrefix || "filters-";
+        return '<div class="card">' +
+            '<div class="card-header" role="tab" id="heading-' + options.name + '">' +
+              '<h5 class="mb-0">' +
+                '<a class="collapsed" data-toggle="collapse" data-parent="#' + options.parentPrefix + 'accordion" href="#collapse-' + options.name + '" aria-expanded="true" aria-controls="collapse-' + options.name + '">' +
+                  options.header +
+                '</a>' +
+              '</h5>' +
+            '</div>' +
+
+            '<div id="collapse-' + options.name + '" class="collapse show" role="tabpanel" aria-labelledby="heading-' + options.name + '">' +
+              '<div class="card-block">' +
+                options.contents +
+              '</div>' +
+            '</div>' +
+          '</div>';
+    };
+
     var makeAttributePills = function(options) {
         var html = '<ul class="nav nav-pills nav-justified">' +
                 '<li ' +
@@ -80,6 +103,8 @@ moduleWidgetBuilder.factory('widgets', [function() {
                 controller: 'controllerEntryBarFill'
             }) :
             '<div id="filters-' + options.currentNode.model.id + '">' +
+                '<div id="filters-accordion" role="tablist" aria-multiselectable="true">' +
+                '</div>' +
         '</div>';
 
         return html;
@@ -88,7 +113,9 @@ moduleWidgetBuilder.factory('widgets', [function() {
     var makeListWithEntryBars = function(options) {
         options.checkMethod = options.checkMethod || 'check';
         var checkMethodCall = (options.checkMethod === 'checkFilter') ?
-             '(attribute, \'' + options.list + '\')' :
+             '(attribute, \'' +
+                 options.list + '\', \'' +
+                 options.filter +  '\')' :
              '(attribute)';
         options.directive = options.directive || 'directive-entry-bar-fill';
         options.entryType = options.entryType || 'checkbox';
@@ -96,7 +123,9 @@ moduleWidgetBuilder.factory('widgets', [function() {
             options.isSelectedMethod || 'isSelected';
         var isSelectedMethodCall =
                 (options.isSelectedMethod === 'isListInputSelected') ?
-             '(attribute, \'' + options.list + '\')' :
+             '(attribute, \'' + 
+                 options.list + '\', \'' +
+                 options.filter +  '\')' :
              '(attribute)';
         return '<form ng-controller="' + options.controller + '" class="table table-condensed table-bordered patient-table">' +
                 '<div ' + options.directive + ' class="checkboxInTable patient-table-entry" ' +
@@ -172,6 +201,7 @@ moduleWidgetBuilder.factory('widgets', [function() {
     };
 
     return {
+        makeAccordionCard: makeAccordionCard,
         makeAttributePills: makeAttributePills,
         makeAttributePillsContents: makeAttributePillsContents,
         makeListWithEntryBars: makeListWithEntryBars,
