@@ -10,4 +10,7 @@
 
 .filter-draggable {
     cursor: move;
+	stroke: #ddd;
+	stroke-width: 2px;
+    shape-rendering: crispEdges;
 }
