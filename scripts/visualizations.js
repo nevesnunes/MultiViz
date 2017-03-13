@@ -166,6 +166,10 @@ moduleVisualizations.factory("filters",
                 (observer.renderer.intervalPos[1] !== xRange[1]));
     };
 
+    var isFilterHabitsActive = function(observer) {
+        return (observer.state.frequencyName);
+    };
+
     var makeFilterWithBrushRenderer = function() {
         return {
             brush: null,
@@ -306,8 +310,6 @@ moduleVisualizations.factory("filters",
         for (var i in dataObserver.data) {
             var habit = dataObserver.data[i];
 
-            // Reset
-            // TODO
             var html = "";
 
             // List
@@ -348,6 +350,56 @@ moduleVisualizations.factory("filters",
             // Accordion card starts collapsed
             //hideFilter(elementListName);
 
+            // Reset
+            d3.select('#filters-' + elementListName)
+                .insert("a", ":first-child")
+                .attr('href', '#')
+                    .attr('id', 'filters-svg-' + elementListName + '-reset')
+                    .attr('class', 'link')
+                    .attr('elementlistname', elementListName)
+                    .attr('listName', listName)
+                    .style('display', 'none')
+                    .style('fill', '#337ab7')
+                    .style('text-align', 'right')
+                    .text('Reset')
+                    .on('click', function() {
+                        var elementListName =
+                            this.getAttribute('elementlistname');
+                        var listName =
+                            this.getAttribute('listname');
+
+                        // Set list with initial values
+                        // TODO
+                        var filterIndex = utils.arrayObjectIndexOf(
+                            observer.renderer.lists,
+                            listName,
+                            'habitName'
+                        );
+                        observer.renderer.lists[filterIndex]
+                            .state.frequencyName = null; 
+
+                        // HACK: Copied from checkSingle()
+                        if (observer.renderer.lists[filterIndex].isActive(
+                                    observer.renderer.lists[filterIndex])) {
+                            d3.select('#filters-svg-' + elementListName + '-reset')
+                                .style('display', 'block');
+                        } else {
+                            d3.select('#filters-svg-' + elementListName + '-reset')
+                                .style('display', 'none');
+                            activatedFilters = utils.spliceObjectInArray(
+                                activatedFilters,
+                                'listName',
+                                listName
+                            );
+                        }
+
+                        // Remove corresponding distribution bars
+                        var currentIndex = utils.arrayObjectIndexOf(
+                            filters, name, 'name');
+                        filterObserver.dispatch(
+                            filters[currentIndex]);
+                    });
+            
             // Promise with list entries
             var deferred = $q.defer();
             var promise = deferred.promise;
@@ -382,7 +434,7 @@ moduleVisualizations.factory("filters",
                             frequencyName: null,
                             frequency: null
                         },
-                        isActive: function() { return false; }
+                        isActive: isFilterHabitsActive
                     }
                 );
 

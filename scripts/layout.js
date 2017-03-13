@@ -560,7 +560,7 @@ moduleLayout.directive("directiveActionPanel",
                                                 element.listName;
                                             var elementTarget = angular.element(
                                                 '#' + element.targetName);
-                                            elementTarget.html(
+                                            elementTarget.append(
                                                 $compile(element.html)
                                                 (targetScope));
                                         }
@@ -797,6 +797,21 @@ moduleLayout.directive("directiveActionPanel",
                 }
                 filters.setActivatedFilters(checkedActivatedFilters);
 
+                // Show `reset` button if changes were made;
+                // Update activation order
+                var entryIndex = utils.arrayObjectIndexOf(
+                    observer.renderer.lists,
+                    listName,
+                    'habitName');
+                var elementListName = filterName + '-' + listName;
+                if (observer.renderer.lists[entryIndex].isActive(
+                            observer.renderer.lists[entryIndex])) {
+                    d3.select('#filters-svg-' + elementListName + '-reset')
+                        .style('display', 'block');
+                } else {
+                    d3.select('#filters-svg-' + elementListName + '-reset')
+                        .style('display', 'none');
+                }
                 filters.filterObserver.dispatch(observer);
             };
 
