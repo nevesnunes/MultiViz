@@ -762,6 +762,22 @@ moduleLayout.directive("directiveActionPanel",
                 var vizObject = nodes.getVizs(
                     nodes.getCurrentNode().model.id)[0].vizObject;
 
+                // Set current filter as active
+                var observer = filters.getFilterByName(filterName);
+                var filterIndex = utils.arrayObjectIndexOf(
+                    observer.renderer.lists,
+                    listName,
+                    'habitName'
+                );
+                var displayName =
+                    observer.renderer.lists[filterIndex].displayName;
+                observer.renderer.lists[filterIndex]
+                    .state.displayName = displayName;
+                observer.renderer.lists[filterIndex]
+                    .state.frequencyName = entryName; 
+                observer.renderer.lists[filterIndex]
+                    .state.habitName = listName; 
+
                 var checkedActivatedFilters =
                     filters.getActivatedFilters();
                 var i = utils.arrayObjectIndexOf(
@@ -771,6 +787,7 @@ moduleLayout.directive("directiveActionPanel",
                 );
                 if (i === -1) {
                     checkedActivatedFilters.push({
+                        displayName: displayName,
                         entryName: entryName,
                         listName: listName,
                         filterName: filterName
@@ -780,11 +797,7 @@ moduleLayout.directive("directiveActionPanel",
                 }
                 filters.setActivatedFilters(checkedActivatedFilters);
 
-                // TODO
-                /*
-                updateFromSelections({
-                });
-                */
+                filters.filterObserver.dispatch(observer);
             };
 
 

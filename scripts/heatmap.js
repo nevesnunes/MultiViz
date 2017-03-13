@@ -240,13 +240,45 @@ moduleVisualizations.factory('HeatMapVisualization',
             // FIXME: AFTER user selections
             if (filtersArray) {
                 filters.getActivatedFilters().forEach(function(filterObject) {
+                    var filter = null;
                     var filterName = filterObject.listName;
                     var index = utils.arrayObjectIndexOf(
                         filtersArray, filterName, 'name');
-                    if (index === -1)
-                        return;
 
-                    var filter = filtersArray[index];
+                    // If index is not found, then this filter may be a list,
+                    // which we need to iterate through
+                    if (index === -1) {
+                        index = utils.arrayObjectIndexOf(
+                            filtersArray, filterObject.filterName, 'name');
+                        if (index === -1) {
+                            return;
+                        } else {
+                            var entryIndex = utils.arrayObjectIndexOf(
+                                filtersArray[index].state.lists,
+                                filterName,
+                                'habitName');
+                            if (entryIndex === -1) {
+                                return;
+                            } else {
+                                filter = filtersArray[index]
+                                    .state.lists[entryIndex];
+
+                                // HACK: Add other attributes used 
+                                // when making data measures
+                                var frequencyIndex = utils.arrayObjectIndexOf(
+                                    filter.habitObject.frequencies,
+                                    filter.state.frequencyName,
+                                    'name');
+                                filter.state.frequency = filter.habitObject
+                                    .frequencies[frequencyIndex].incidences;
+                                filter.comparator = filtersArray[index]
+                                    .comparator;
+                            }
+                        }
+                    } else {
+                        filter = filtersArray[index];
+                    }
+
                     datas.specific[filter.name] = data.filter(function(d) {
                         var filteredPatientIDs = d.patientIDs.slice();
                         d.patientIDs.forEach(function(id) {
@@ -655,12 +687,15 @@ moduleVisualizations.factory('HeatMapVisualization',
                     datas.measures.initial.presentPatientIDs.length -
                     presentPatients;
                 var totalPatients = presentPatients + nonPresentPacients;
+                // FIXME: Should be an object instead of an array
                 data.push([
                     presentPatients * filtersWidth / totalPatients,
                     nonPresentPacients * filtersWidth / totalPatients,
                     presentPatients * 1,
                     nonPresentPacients,
-                    filterName
+                    filterName,
+                    filterObject.displayName,
+                    filterObject.filterName
                 ]);
             });
 
@@ -727,10 +762,17 @@ moduleVisualizations.factory('HeatMapVisualization',
                             );
                             var currentIndex = utils.arrayObjectIndexOf(
                                 filters.filters, d[4], 'name');
+
+                            // If index is not found, then 
+                            // this filter may be a list
+                            if (currentIndex === -1) {
+                                currentIndex = utils.arrayObjectIndexOf(
+                                    filters.filters, d[6], 'name');
+                            }
                             filters.filterObserver.dispatch(
                                 filters.filters[currentIndex]);
                         }
-                    });
+                });
             };
 
             var dimension = svg.selectAll('.dimension')
@@ -817,7 +859,7 @@ moduleVisualizations.factory('HeatMapVisualization',
                 .merge(dimension.selectAll(".text-filter-name"))
                     .text(function(d) {
                         return filters
-                            .translateFilterAttribute(d[4]);
+                            .translateFilterAttribute(d[4], d[5]);
                     });
         });
     };

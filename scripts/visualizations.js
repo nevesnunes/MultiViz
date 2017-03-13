@@ -122,12 +122,12 @@ moduleVisualizations.factory("filters",
 
     var comparatorFilterHabitsHigiene = function(state, patient) {
         var i = utils.arrayObjectIndexOf(
-            patient.habitsHigiene, state.habitName, 'name');
+            patient.habitsHigiene, state.displayName, 'name');
         if (i === -1)
-            return false;
+            return true;
         
         var frequencyName = patient.habitsHigiene[i].frequency.name;
-        return (frequencyName === state.frequencyName);
+        return (frequencyName !== state.frequencyName);
     };
 
     var makeFilterHabitsHigiene = function(nodeID) {
@@ -178,10 +178,16 @@ moduleVisualizations.factory("filters",
     };
 
     var makeFilterWithListsRenderer = function() {
+        /**
+         * {
+         *   habitName
+         *   frequencyName
+         *   frequency
+         *   isActive
+         * }
+         */
         return {
-            habitName: null,
-            frequencyName: null,
-            isActive: isFilterActive
+            lists: []
         };
     };
 
@@ -360,6 +366,26 @@ moduleVisualizations.factory("filters",
                 });
             })(habit);
             var elementToProcess = (function(capturedHabit) {
+                // Add list to filter's renderer
+                utils.updateObjectInArray(
+                    observer.renderer.lists,
+                    'habitName',
+                    capturedHabit.name,
+                    {
+                        displayName: capturedHabit.name,
+                        name: capturedHabit.htmlName,
+                        habitName: capturedHabit.htmlName,
+                        habitObject: capturedHabit,
+
+                        // To be set by checkFilter()
+                        state: {
+                            frequencyName: null,
+                            frequency: null
+                        },
+                        isActive: function() { return false; }
+                    }
+                );
+
                 return {
                     // Defined in controllerFilterListEntryBarFill
                     attributeElement: promise,
@@ -633,8 +659,10 @@ moduleVisualizations.factory("filters",
         }
     };
 
-    var translateFilterAttribute = function(attribute) {
-        return filterAttributes[attribute].translation;
+    var translateFilterAttribute = function(attribute, displayName) {
+        return (filterAttributes[attribute]) ?
+            filterAttributes[attribute].translation :
+            displayName;
     };
 
     return {
