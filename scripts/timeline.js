@@ -81,6 +81,23 @@ moduleVisualizations.factory('TimelineVisualization',
 
     TimelineVisualization.prototype.render = function() {
         // TODO
+        var self = this;
+
+        var maxOverlapCount = 0;
+        for (var j = 0;
+                j < self.visualizationRenderer.recordedFrequency.length;
+                j++) {
+            var overlaps =
+                self.visualizationRenderer.recordedDosage[j].length;
+            if (overlaps > 1) {
+                if (maxOverlapCount < overlaps) {
+                    maxOverlapCount = overlaps;
+                }
+                console.log(self.visualizationRenderer.recordedDosage[j]);
+                console.log(self.visualizationRenderer.recordedFrequency[j]);
+            }
+        }
+        console.log(maxOverlapCount);
     };
 
     TimelineVisualization.prototype.populate = function(data, id) {
@@ -168,13 +185,6 @@ moduleVisualizations.factory('TimelineVisualization',
                 resultJoinProperties.newDosage;
             targetViz.recordedFrequency =
                 resultJoinProperties.newRecordedFrequency;
-        }
-
-        for (var j = 0; j < targetViz.recordedFrequency.length; j++) {
-            if (targetViz.recordedDosage[j].length > 1) {
-                console.log(targetViz.recordedDosage[j]);
-                console.log(targetViz.recordedFrequency[j]);
-            }
         }
 
         self.visualizationRenderer = utils.extend(targetViz, {});
