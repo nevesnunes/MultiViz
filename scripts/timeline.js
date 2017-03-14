@@ -15,8 +15,8 @@ moduleVisualizations.directive('directiveTimelineTooltip', function() {
 });
 
 moduleVisualizations.factory('TimelineVisualization',
-        ['visualizations', 'patientData', 'retrievePatientData', 'utils', 'nodes',
-        function(visualizations, patientData, retrievePatientData, utils, nodes) {
+        ['visualizations', 'patientData', 'retrievePatientData', 'utils', 'nodes', 'timeWeaver',
+        function(visualizations, patientData, retrievePatientData, utils, nodes, timeWeaver) {
     var TimelineVisualization = function(options) {
         // Patient attribute lists
         this.patientLists = {
@@ -84,7 +84,102 @@ moduleVisualizations.factory('TimelineVisualization',
     };
 
     TimelineVisualization.prototype.populate = function(data, id) {
-        this.render();
+        var self = this;
+
+        // Iterate through medications, storing all overlapping moments
+        // TODO
+        var patient = patientData.getAttribute(patientData.KEY_PATIENT);
+        var targetViz;
+        for(var i = 0; i < self.patientLists.medications.length; i++) {
+            var medication = self.patientLists.medications[i];
+            var patientMedicationIndex = utils.arrayObjectIndexOf(
+                patient.medications, medication.name, "name");
+            if (patientMedicationIndex === -1)
+                continue;
+
+            var currentViz = utils.extend(
+                patient.medications[patientMedicationIndex],
+                {}
+            );
+
+            // Add additional properties for date processing
+            // NOTE: Adapted from SpiralVisualization makeBins()
+            var recordedStartMoment = moment(
+                currentViz.recordedFrequency[0]);
+            var recordedEndMoment = moment(
+                currentViz.recordedFrequency[
+                    currentViz.recordedFrequency.length - 1]);
+            currentViz.recordedStartDate =
+                recordedStartMoment.format('YYYY/MM/DD');
+            currentViz.recordedEndDate =
+                recordedEndMoment.format('YYYY/MM/DD');
+            currentViz.recordedDosage =
+                currentViz.dosage;
+
+            var sourceViz;
+            if (!targetViz) {
+                targetViz = currentViz;
+                targetViz.name = "Timeline Attributes";
+
+                continue;
+            } else {
+                sourceViz = currentViz;
+            }
+
+            // Compute common expected frequency
+            var diffIntervals = visualizations.diffInterval(
+                visualizations.translateFrequency(
+                    sourceViz.expectedFrequency),
+                visualizations.translateFrequency(
+                    targetViz.expectedFrequency));
+            var newFrequency = (diffIntervals > 0) ?
+                sourceViz.expectedFrequency :
+                targetViz.expectedFrequency;
+
+            // Compute common range;
+            // For simplicity, if the two ranges don't overlap,
+            // we just introduce that hole into the new range.
+            var newStartDate = timeWeaver.computeJoinMoment(
+                sourceViz.recordedStartDate,
+                targetViz.recordedStartDate,
+                function(a, b) { return a > b; }
+            ).toISOString();
+            var newEndDate = timeWeaver.computeJoinMoment(
+                sourceViz.recordedEndDate,
+                targetViz.recordedEndDate,
+                function(a, b) { return a < b; }
+            ).toISOString();
+
+            // Compute common recorded frequency:
+            // Iterate through all the recorded frequencies and
+            // collect the dates, alongside correspoding
+            // attribute names
+            var resultJoinProperties = timeWeaver
+                .computeJoinProperties(sourceViz, targetViz);
+
+            // Store computed properties
+            targetViz.endDate = newEndDate;
+            targetViz.expectedFrequency = newFrequency;
+            targetViz.startDate = newStartDate;
+
+            targetViz.dosage =
+                resultJoinProperties.newDosage;
+            targetViz.recordedDosage =
+                resultJoinProperties.newDosage;
+            targetViz.recordedFrequency =
+                resultJoinProperties.newRecordedFrequency;
+        }
+
+        for (var j = 0; j < targetViz.recordedFrequency.length; j++) {
+            if (targetViz.recordedDosage[j].length > 1) {
+                console.log(targetViz.recordedDosage[j]);
+                console.log(targetViz.recordedFrequency[j]);
+            }
+        }
+
+        self.visualizationRenderer = utils.extend(targetViz, {});
+        
+        self.render();
     };
 
     TimelineVisualization.prototype.remove = function(nodeID, vizID) {

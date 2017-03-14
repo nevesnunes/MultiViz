@@ -1,6 +1,7 @@
 {
   "esversion": 6,
   "futurehostile": true,
+  "loopfunc": true,
   "globals": {
       "angular": false,
       "console": false,

@@ -4,6 +4,102 @@ var moduleWidgetBuilder = angular.module('moduleWidgetBuilder');
 var moduleVisualizations = angular.module('moduleVisualizations',
         ['moduleProviders', 'moduleUtils', 'moduleWidgetBuilder']);
 
+moduleVisualizations.factory("timeWeaver",
+        ['utils', 'visualizations', '$q',
+        function(utils, visualizations, $q) {
+            var computeJoinMoment = function(
+                    source, target, comparator) {
+                var sourceStartMoment = moment(source, 'YYYY/MM/DD');
+                var targetStartMoment = moment(target, 'YYYY/MM/DD');
+                return comparator(sourceStartMoment
+                        .diff(targetStartMoment, 'days'), 0) ?
+                    targetStartMoment : 
+                    sourceStartMoment;
+            };
+
+            var computeJoinProperties = function(
+                    sourceViz, targetViz) {
+                var newDosage = [];
+                var newRecordedFrequency = [];
+
+                var sourceRecordedFrequency = sourceViz.recordedFrequency;
+                var sourceLength = sourceRecordedFrequency.length;
+                var targetRecordedFrequency = targetViz.recordedFrequency;
+                var targetLength = targetRecordedFrequency.length;
+                var makeAttributeObject = function(obj) {
+                    return {
+                        name: obj.name,
+                        dosage: obj.dosage
+                    };
+                };
+                var currentAttributeProperties = [];
+                var deepPush = function(obj) {
+                    currentAttributeProperties.push(
+                        makeAttributeObject(obj)
+                    );
+                };
+                for (var sourceIndex = 0, targetIndex = 0;
+                        (sourceIndex < sourceLength) ||
+                            (targetIndex < targetLength);
+                        // NOTHING
+                        ) {
+                    currentAttributeProperties = [];
+                    var sourceMoment = moment(
+                        sourceRecordedFrequency[sourceIndex]);
+                    var targetMoment = moment(
+                        targetRecordedFrequency[targetIndex]);
+
+                    // Add and advance the earliest recorded moment
+                    var diff = sourceMoment.diff(targetMoment, 'days');
+                    if ((diff > 0) && (targetIndex < targetLength)) {
+                        (targetViz.recordedDosage[targetIndex] || [])
+                            .forEach(deepPush);
+                        newRecordedFrequency.push(
+                            targetRecordedFrequency[targetIndex]);
+                        targetIndex++;
+                    } else if ((diff < 0) && (sourceIndex < sourceLength)) {
+                        (sourceViz.recordedDosage[sourceIndex] || [])
+                            .forEach(deepPush);
+                        newRecordedFrequency.push(
+                            sourceRecordedFrequency[sourceIndex]);
+                        sourceIndex++;
+                    // Both recorded frequencies have the same date
+                    } else {
+                        if (targetIndex < targetLength) {
+                            (targetViz.recordedDosage[targetIndex] || [])
+                                .forEach(deepPush);
+                        }
+                        if (sourceIndex < sourceLength) {
+                            (sourceViz.recordedDosage[sourceIndex] || [])
+                                .forEach(deepPush);
+                        }
+                        // Either one works here
+                        // HACK: We are ignoring hours, otherwise we would
+                        // add both in an array
+                        newRecordedFrequency.push(
+                            targetRecordedFrequency[targetIndex]);
+                        targetIndex++;
+                        sourceIndex++;
+                    }
+
+                    newDosage.push(
+                        currentAttributeProperties.slice()
+                    );
+                }
+
+                return {
+                    newDosage: newDosage,
+                    newRecordedFrequency: newRecordedFrequency
+                };
+            };
+
+            return {
+                computeJoinMoment: computeJoinMoment,
+                computeJoinProperties: computeJoinProperties
+            };
+        }
+]);
+
 moduleVisualizations.factory("filters",
         ['retrieveCountsData', 'utils', 'nodes', 'visualizations', 'widgets', '$q',
         function(retrieveCountsData, utils, nodes, visualizations, widgets, $q) {

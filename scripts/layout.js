@@ -479,8 +479,8 @@ moduleLayout.directive('directiveMenuTooltip', function() {
 });
 
 moduleLayout.directive("directiveActionPanel",
-        ['$compile', '$filter', 'visualizations', 'filters', 'patientData', 'utils', 'widgets', 'nodes', 'retrieveCountsData',
-        function($compile, $filter, visualizations, filters, patientData, utils, widgets, nodes, retrieveCountsData) {
+        ['$compile', '$filter', 'visualizations', 'filters', 'patientData', 'utils', 'widgets', 'nodes', 'timeWeaver', 'retrieveCountsData',
+        function($compile, $filter, visualizations, filters, patientData, utils, widgets, nodes, timeWeaver, retrieveCountsData) {
 	return { 
         scope: true,
         link: function(scope, element, attrs) {
@@ -1150,108 +1150,39 @@ moduleLayout.directive("directiveActionPanel",
                     // Compute common range;
                     // For simplicity, if the two ranges don't overlap,
                     // we just introduce that hole into the new range.
-                    var computeJoinMoment = function(property, comparator) {
-                        var sourceStartMoment = moment(
-                            sourceViz.visualizationRenderer.option[property],
-                            'YYYY/MM/DD'
-                        );
-                        var targetStartMoment = moment(
-                            targetViz.visualizationRenderer.option[property],
-                            'YYYY/MM/DD'
-                        );
-                        return comparator(sourceStartMoment
-                                .diff(targetStartMoment, 'days'), 0) ?
-                            targetStartMoment : 
-                            sourceStartMoment;
-                    };
-                    var newStartDate = computeJoinMoment(
-                        'recordedStartDate', function(a, b) { return a > b; }
+                    var newStartDate = timeWeaver.computeJoinMoment(
+                        sourceViz
+                            .visualizationRenderer.option.recordedStartDate,
+                        targetViz
+                            .visualizationRenderer.option.recordedStartDate,
+                        function(a, b) { return a > b; }
                     ).toISOString();
-                    var newEndDate = computeJoinMoment(
-                        'recordedEndDate', function(a, b) { return a < b; }
+                    var newEndDate = timeWeaver.computeJoinMoment(
+                        sourceViz
+                            .visualizationRenderer.option.recordedEndDate,
+                        targetViz
+                            .visualizationRenderer.option.recordedEndDate,
+                        function(a, b) { return a < b; }
                     ).toISOString();
 
                     // Compute common recorded frequency:
                     // Iterate through all the recorded frequencies and
                     // collect the dates, alongside correspoding
                     // attribute names
-                    var newDosage = [];
-                    var newRecordedFrequency = [];
-                    var sourceRecordedFrequency = sourceViz.recordedFrequency;
-                    var sourceLength = sourceRecordedFrequency.length;
-                    var targetRecordedFrequency = targetViz.recordedFrequency;
-                    var targetLength = targetRecordedFrequency.length;
-                    var makeAttributeObject = function(obj) {
-                        return {
-                            name: obj.name,
-                            dosage: obj.dosage
-                        };
-                    };
-                    var currentAttributeProperties = [];
-					var deepPush = function (obj) {
-						currentAttributeProperties.push(
-							makeAttributeObject(obj)
-						);
-					};
-                    for (var sourceIndex = 0, targetIndex = 0;
-                            (sourceIndex < sourceLength) ||
-                                (targetIndex < targetLength);
-                            // NOTHING
-                            ) {
-                        currentAttributeProperties = [];
-                        var sourceMoment = moment(
-                            sourceRecordedFrequency[sourceIndex]);
-                        var targetMoment = moment(
-                            targetRecordedFrequency[targetIndex]);
-
-                        // Add and advance the earliest recorded moment
-                        var diff = sourceMoment.diff(targetMoment, 'days');
-                        if ((diff > 0) && (targetIndex < targetLength)) {
-                            (targetViz.recordedDosage[targetIndex] || [])
-                                .forEach(deepPush);
-                            newRecordedFrequency.push(
-                                targetRecordedFrequency[targetIndex]);
-                            targetIndex++;
-                        } else if ((diff < 0) && (sourceIndex < sourceLength)) {
-                            (sourceViz.recordedDosage[sourceIndex] || [])
-                                .forEach(deepPush);
-                            newRecordedFrequency.push(
-                                sourceRecordedFrequency[sourceIndex]);
-                            sourceIndex++;
-                        // Both recorded frequencies have the same date
-                        } else {
-                            if (targetIndex < targetLength) {
-                                (targetViz.recordedDosage[targetIndex] || [])
-                                    .forEach(deepPush);
-                            }
-                            if (sourceIndex < sourceLength) {
-                                (sourceViz.recordedDosage[sourceIndex] || [])
-                                    .forEach(deepPush);
-                            }
-                            // Either one works here
-                            // HACK: We are ignoring hours, otherwise we would
-                            // add both in an array
-                            newRecordedFrequency.push(
-                                targetRecordedFrequency[targetIndex]);
-                            targetIndex++;
-                            sourceIndex++;
-                        }
-
-                        newDosage.push(
-                            currentAttributeProperties.slice()
-                        );
-                    }
+                    var resultJoinProperties = timeWeaver
+                        .computeJoinProperties(sourceViz, targetViz);
 
                     // target was selected
                     scope.cleanOverlays();
 
                     // update source spiral
                     var attributeData = {
-                        dosage: newDosage,
+                        dosage: resultJoinProperties.newDosage,
                         startDate: newStartDate,
                         endDate: newEndDate,
                         expectedFrequency: newFrequency,
-                        recordedFrequency: newRecordedFrequency
+                        recordedFrequency: 
+                            resultJoinProperties.newRecordedFrequency
                     };
                     updateFromSelections({
                         currentMedication: targetViz.currentMedication,
@@ -1794,7 +1725,7 @@ moduleLayout.directive("directivePanes",
                     // If no checked visualizations where found, automatically
                     // check the first one
                     if (!isAnyVizChecked) {
-                        spirals[0].isChecked = true;
+                       spirals[0].isChecked = true;
                         makeSpiral(id, spirals[0].id);
                     }
                 }
@@ -2515,7 +2446,7 @@ angular.module("moduleCombined", ["moduleProviders", "moduleLayout", "moduleSpli
 //
 // Running a test with template separate from this module:
 // http://stackoverflow.com/questions/28854303/using-compile-on-external-template-templateurl-in-angular-directive
-var test1 = function() {
+var testSpirals = function() {
     var injector = angular.injector(['ng', 'moduleCombined']);
     injector.invoke(function($rootScope, $compile, $timeout, utils) {
         var delay = 200;
@@ -2568,7 +2499,7 @@ var test1 = function() {
         ]);
     });
 };
-var test2 = function() {
+var testHeatmap = function() {
     var injector = angular.injector(['ng', 'moduleCombined']);
     injector.invoke(function($rootScope, $compile, $timeout, utils) {
         var delay = 200;
@@ -2597,5 +2528,23 @@ var test2 = function() {
         ]);
     });
 };
-//test1();
-test2();
+var testTimeline = function() {
+    var injector = angular.injector(['ng', 'moduleCombined']);
+    injector.invoke(function($rootScope, $compile, $timeout, utils) {
+        var delay = 200;
+        utils.resolveEvents([ 
+            function() {
+                return $timeout(function() {
+                    var target = angular.element('#action-panel');
+                    var child = target.children()[3];
+                    var elChild = angular.element(child);
+                    var scope = elChild.scope();
+                    scope.chooseTimeline();
+                });
+            }
+        ]);
+    });
+};
+//testSpirals();
+//testHeatmap();
+testTimeline();
