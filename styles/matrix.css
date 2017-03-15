@@ -18,6 +18,7 @@
 .bordered {
   stroke: white;
   stroke-width: 2px;   
+  shape-rendering: crispEdges;
 }
 
 .bordered:hover {
@@ -27,13 +28,13 @@
 }
 
 .bordered-empty {
-  stroke: grey;
-  stroke-width: 1px !important;
+  stroke: lightgrey;
+  stroke-width: 2px;
+  shape-rendering: crispEdges;
 }
 
 .bordered-empty:hover {
   fill: transparent !important;
-  stroke: grey !important;
 }
 
 .text-label {

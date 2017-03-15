@@ -147,10 +147,14 @@ moduleVisualizations.factory('TimelineVisualization',
             }
             // TODO: only push range
             // NOTE: Index needs to be corrected, since length is >= 1
-            overlaps[overlapIndex].dosages.push(
-                recordedDosage[i]);
-            overlaps[overlapIndex].frequencies.push(
-                recordedFrequency[i]);
+            overlaps[overlapIndex].dosages.push({
+                start: recordedDosage[i],
+                end: recordedDosage[i]
+            });
+            overlaps[overlapIndex].frequencies.push({
+                start: recordedFrequency[i],
+                end: recordedFrequency[i]
+            });
         }
 
         var dataHistogramCounts = Array
