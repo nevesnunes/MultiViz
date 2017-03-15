@@ -62,14 +62,40 @@ moduleVisualizations.factory('TimelineVisualization',
 
     TimelineVisualization.prototype.make = function(elementID, timelineID) {
         var self = this;
+
         if (elementID === undefined) {
             console.log("[WARN] @make: undefined id.");
             return;
         }
 
-        // Compute size based on available view width
-        var vizWidth = angular.element('#' + elementID)[0]
+        self.vizHeight = 600; // HACK: Placeholder
+
+        // Compute size based on available view dimensions
+        self.vizWidth = angular.element('#' + elementID)[0]
             .offsetWidth;
+
+        var svg = d3.select("#" + timelineID + "-main")
+            .append("svg")
+                .attr("width", self.vizWidth)
+                .attr("height", self.vizHeight);
+
+        // Group for ocurrences histogram
+        var ocurrencesSVG = svg.append("g")
+            .attr("id", "ocurrences")
+            .attr("transform", "translate(" +
+                // Offset for month text labels
+                40 + "," + 0 + ")");
+
+        // Group for main visualization
+        svg = svg.append("g")
+            .attr("id", "viz");
+
+        self.html = {
+            elementID: elementID,
+            timelineID: timelineID,
+            ocurrencesSVG: ocurrencesSVG,
+            svg: svg
+        };
 
         self.makeBins();
     };
@@ -80,24 +106,113 @@ moduleVisualizations.factory('TimelineVisualization',
     };
 
     TimelineVisualization.prototype.render = function() {
-        // TODO
         var self = this;
 
+        var recordedDosage = 
+            self.visualizationRenderer.recordedDosage;
+        var recordedFrequency = 
+            self.visualizationRenderer.recordedFrequency;
+
+        // Store overlaps by frequency;
+        // Each frequency can have many incidences by time range,
+        // identified by 2 dates & a subset of attributes present.
         var maxOverlapCount = 0;
-        for (var j = 0;
-                j < self.visualizationRenderer.recordedFrequency.length;
-                j++) {
-            var overlaps =
-                self.visualizationRenderer.recordedDosage[j].length;
-            if (overlaps > 1) {
-                if (maxOverlapCount < overlaps) {
-                    maxOverlapCount = overlaps;
+        var overlaps = [];
+        for (var i = 0;
+                i < recordedFrequency.length;
+                i++) {
+            var overlapIndex = overlapCount - 1;
+            var overlapCount =
+                recordedDosage[i].length;
+            if (overlapCount > 1) {
+                // Update maximum
+                if (maxOverlapCount < overlapCount) {
+                    maxOverlapCount = overlapCount;
                 }
-                console.log(self.visualizationRenderer.recordedDosage[j]);
-                console.log(self.visualizationRenderer.recordedFrequency[j]);
+
+                /*
+                console.log(self.visualizationRenderer.recordedDosage[i]);
+                console.log(self.visualizationRenderer.recordedFrequency[i]);
+                */
             }
+
+            if (overlaps[overlapIndex]) {
+                overlaps[overlapIndex].value += 1;
+            } else {
+                overlaps[overlapIndex] = {
+                    dosages: [],
+                    frequencies: [],
+                    value: 1
+                };
+            }
+            // TODO: only push range
+            // NOTE: Index needs to be corrected, since length is >= 1
+            overlaps[overlapIndex].dosages.push(
+                recordedDosage[i]);
+            overlaps[overlapIndex].frequencies.push(
+                recordedFrequency[i]);
         }
-        console.log(maxOverlapCount);
+
+        var dataHistogramCounts = Array
+            .apply(null, Array(maxOverlapCount))
+            .map(Number.prototype.valueOf, 0);
+        for (i = 0; i < maxOverlapCount; i++) {
+            dataHistogramCounts[i] = overlaps[i].value;
+        }
+
+        var histogramHeight = 40;
+
+        var vizContentWidth = Math.min(
+            self.vizWidth,
+            (histogramHeight / 2) * maxOverlapCount
+        );
+        var padding = 10;
+
+        //
+        // ocurrences axis
+        //
+        var x2 = d3.scaleLinear().range([0, vizContentWidth]);
+        x2.domain([0, maxOverlapCount]);
+        var xAxis = d3.axisBottom(x2)
+            .ticks(maxOverlapCount)
+            .tickFormat(d3.format("d"));
+        var axisHeight = histogramHeight;
+        self.html.ocurrencesSVG.selectAll(".line-axis").remove();
+        self.html.ocurrencesSVG.append("g")
+            .attr("class", "x axis line-axis")
+            .attr("height", axisHeight)
+            .attr("transform", "translate(" +
+                0 + "," +
+                (axisHeight + padding / 2) + ")")
+            .call(xAxis);
+
+        //
+        // ocurrences bars
+        //
+        var x = d3.scaleBand().range([0, vizContentWidth + 1]),
+            y = d3.scaleLinear().range([histogramHeight, 0]);
+
+        var data = dataHistogramCounts;
+        x.domain(data.map(function(d, i) { return i; }));
+        var maxY = d3.max(data, function(d) { return d; });
+        y.domain([0, maxY]);
+
+        var g = self.html.ocurrencesSVG.append("g")
+            .attr("height", histogramHeight);
+        var histogram = g.selectAll(".histogram")
+            .data(data);
+        var histogramGroup = histogram.enter();
+        histogramGroup.append("rect")
+            .attr("class", "filter-bar")
+            .attr("shape-rendering", "crispEdges")
+            .merge(histogram)
+                .attr("x", function(d, i) { return x(i); })
+                .attr("y", function(d) { return y(d); })
+                .attr("width", Math.ceil(x.bandwidth()))
+                .attr("height", function(d) { return histogramHeight - y(d); });
+
+        // Count number of attributes in current month
+        // TODO
     };
 
     TimelineVisualization.prototype.populate = function(data, id) {
