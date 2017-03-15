@@ -727,12 +727,14 @@ moduleVisualizations.factory('HeatMapVisualization',
                 .offset([10, 0])
                 .direction('s')
                 .html(function(d) {
-                    return "<div style=\"text-align: left\">" +
+                    return "<div style=\"text-align: center\">" +
                         "<span><b>" +
                         d[2] +
                         "</b> em " +
                         (d[2] + d[3]) +
                         " pacientes</span>" +
+                        "</br>" +
+                        "<span class=\"label label-primary\"><b>Arraste</b></span><span> para reordenar</span>" +
                     "</div>";
                 });
 
