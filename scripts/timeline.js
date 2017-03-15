@@ -74,9 +74,10 @@ moduleVisualizations.factory('TimelineVisualization',
         self.vizWidth = angular.element('#' + elementID)[0]
             .offsetWidth;
 
+        var padding = 40;
         var svg = d3.select("#" + timelineID + "-main")
             .append("svg")
-                .attr("width", self.vizWidth)
+                .attr("width", self.vizWidth - padding / 2)
                 .attr("height", self.vizHeight);
 
         // Group for ocurrences histogram
@@ -84,7 +85,7 @@ moduleVisualizations.factory('TimelineVisualization',
             .attr("id", "ocurrences")
             .attr("transform", "translate(" +
                 // Offset for month text labels
-                40 + "," + 0 + ")");
+                padding + "," + 0 + ")");
 
         // Group for main visualization
         svg = svg.append("g")
@@ -118,43 +119,85 @@ moduleVisualizations.factory('TimelineVisualization',
         // identified by 2 dates & a subset of attributes present.
         var maxOverlapCount = 0;
         var overlaps = [];
+        var lastDosage;
+        var lastFrequency;
         for (var i = 0;
                 i < recordedFrequency.length;
                 i++) {
-            var overlapIndex = overlapCount - 1;
             var overlapCount =
                 recordedDosage[i].length;
+
+            if (i === 29) {
+                console.log(self.visualizationRenderer.recordedDosage[i]);
+            }
+
+            // NOTE: Index needs to be corrected, since length is >= 1
+            var overlapIndex = overlapCount - 1;
             if (overlapCount > 1) {
                 // Update maximum
                 if (maxOverlapCount < overlapCount) {
                     maxOverlapCount = overlapCount;
                 }
-
-                /*
-                console.log(self.visualizationRenderer.recordedDosage[i]);
-                console.log(self.visualizationRenderer.recordedFrequency[i]);
-                */
             }
-
-            if (overlaps[overlapIndex]) {
-                overlaps[overlapIndex].value += 1;
-            } else {
-                overlaps[overlapIndex] = {
-                    dosages: [],
-                    frequencies: [],
-                    value: 1
+            
+            // Range started: make new object to compare
+            if (!lastDosage || !lastFrequency) {
+                lastDosage = {
+                    start: utils.extend(recordedDosage[i], [])
                 };
+                lastFrequency = {
+                    start: utils.extend(recordedFrequency[i], [])
+                };
+            } else {
+                // Check if range ended;
+                // We compare all names in current dosage with the last one.
+                var namesToCompare = lastDosage.start.map(function(obj) {
+                    return obj.name;
+                });
+                if (namesToCompare.length > 1) {
+                    console.log(self.visualizationRenderer.recordedDosage[i]);
+                    console.log(self.visualizationRenderer.recordedFrequency[i]);
+                }
+                var areNamesDifferent = false;
+                for (var dosageIndex = 0;
+                        dosageIndex < recordedDosage[i].length;
+                        dosageIndex++) {
+                    var name = recordedDosage[i][dosageIndex].name;
+                    // Mismatch: There are more names in recorded dosage
+                    if (namesToCompare.length === 0) {
+                        areNamesDifferent = true;
+                    }
+                    if (namesToCompare.indexOf(name) !== -1) {
+                        namesToCompare.splice(name, 1);
+                    }
+                }
+                // Mismatch in dosage names || end of data: the range ended
+                if (areNamesDifferent ||
+                        (namesToCompare.length !== 0) ||
+                        (i === recordedFrequency.length - 1)) {
+                    if (overlaps[overlapIndex]) {
+                        overlaps[overlapIndex].value += 1;
+                    } else {
+                        overlaps[overlapIndex] = {
+                            dosages: [],
+                            frequencies: [],
+                            value: 1
+                        };
+                    }
+                    lastDosage.end = utils.extend(recordedDosage[i], []);
+                    overlaps[overlapIndex].dosages.push(lastDosage);
+                    lastFrequency.end = utils.extend(recordedFrequency[i], []);
+                    overlaps[overlapIndex].frequencies.push(lastFrequency);
+
+                    // Range ended: reset object to compare
+                    lastDosage = {
+                        start: utils.extend(recordedDosage[i], [])
+                    };
+                    lastFrequency = {
+                        start: utils.extend(recordedFrequency[i], [])
+                    };
+                }
             }
-            // TODO: only push range
-            // NOTE: Index needs to be corrected, since length is >= 1
-            overlaps[overlapIndex].dosages.push({
-                start: recordedDosage[i],
-                end: recordedDosage[i]
-            });
-            overlaps[overlapIndex].frequencies.push({
-                start: recordedFrequency[i],
-                end: recordedFrequency[i]
-            });
         }
 
         var dataHistogramCounts = Array
@@ -193,7 +236,8 @@ moduleVisualizations.factory('TimelineVisualization',
         //
         // ocurrences bars
         //
-        var x = d3.scaleBand().range([0, vizContentWidth + 1]),
+        var x = d3.scaleBand().range([0, vizContentWidth + 1])
+                .padding(0.2),
             y = d3.scaleLinear().range([histogramHeight, 0]);
 
         var data = dataHistogramCounts;

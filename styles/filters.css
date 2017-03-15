@@ -1,11 +1,13 @@
 .filter-bar {
     background-color: #333;
     fill: #333;
+    shape-rendering: crispEdges;
 }
 
 .filter-bar-empty {
     background-color: #ddd;
     fill: #ddd;
+    shape-rendering: crispEdges;
 }
 
 .filter-draggable {
