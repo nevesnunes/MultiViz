@@ -2151,9 +2151,12 @@ moduleLayout.directive("directivePanes",
                             vizID +
                         '</div>' +
                         '<div id="' + vizID + '-contents">' +
-                            '<div class="viz-main" id="' + vizID + '-main">' +
-                            '</div>' +
+                            // Frequency histogram
                             '<div id="' + vizID + '-details">' +
+                            '</div>' +
+                            // Small multiple matrix;
+                            // Each bin will be appended to this element
+                            '<div class="viz-main" id="' + vizID + '-main">' +
                             '</div>' +
                         '</div>' +
                     '</div>';

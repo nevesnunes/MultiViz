@@ -68,28 +68,30 @@ moduleVisualizations.factory('TimelineVisualization',
             return;
         }
 
-        self.vizHeight = 600; // HACK: Placeholder
-
         // Compute size based on available view dimensions
         self.vizWidth = angular.element('#' + elementID)[0]
             .offsetWidth;
 
         var padding = 40;
+
+        // Group for main visualization
         var svg = d3.select("#" + timelineID + "-main")
             .append("svg")
                 .attr("width", self.vizWidth - padding / 2)
-                .attr("height", self.vizHeight);
+                .attr("height", 0) // Set dynamically
+                .append("g")
+                    .attr("id", "viz");
 
         // Group for ocurrences histogram
-        var ocurrencesSVG = svg.append("g")
-            .attr("id", "ocurrences")
-            .attr("transform", "translate(" +
-                // Offset for month text labels
-                padding + "," + 0 + ")");
-
-        // Group for main visualization
-        svg = svg.append("g")
-            .attr("id", "viz");
+        var ocurrencesSVG = d3.select("#" + timelineID + "-details")
+            .append("svg")
+                .attr("width", self.vizWidth - padding / 2)
+                .attr("height", 0) // Set dynamically
+                .append("g")
+                    .attr("id", "ocurrences")
+                    .attr("transform", "translate(" +
+                        // Offset for month text labels
+                        padding + "," + padding / 2 + ")");
 
         self.html = {
             elementID: elementID,
@@ -114,6 +116,15 @@ moduleVisualizations.factory('TimelineVisualization',
         var recordedFrequency = 
             self.visualizationRenderer.recordedFrequency;
 
+        /*
+         * @property {name:string, dataIndex:number} matrixDates: 
+         * Ocurrence dates, stored as a dictionary of years,
+         * each with an array of months.
+         * - name: Abreviated month name, used as label in svg;
+         * - dataIndex: corresponding dosage/frequency index
+         */
+        var matrixDates = {};
+
         // Store overlaps by frequency;
         // Each frequency can have many incidences by time range,
         // identified by 2 dates & a subset of attributes present.
@@ -126,10 +137,6 @@ moduleVisualizations.factory('TimelineVisualization',
                 i++) {
             var overlapCount =
                 recordedDosage[i].length;
-
-            if (i === 29) {
-                console.log(self.visualizationRenderer.recordedDosage[i]);
-            }
 
             // NOTE: Index needs to be corrected, since length is >= 1
             var overlapIndex = overlapCount - 1;
@@ -154,10 +161,12 @@ moduleVisualizations.factory('TimelineVisualization',
                 var namesToCompare = lastDosage.start.map(function(obj) {
                     return obj.name;
                 });
+                /*
                 if (namesToCompare.length > 1) {
                     console.log(self.visualizationRenderer.recordedDosage[i]);
                     console.log(self.visualizationRenderer.recordedFrequency[i]);
                 }
+                */
                 var areNamesDifferent = false;
                 for (var dosageIndex = 0;
                         dosageIndex < recordedDosage[i].length;
@@ -188,6 +197,20 @@ moduleVisualizations.factory('TimelineVisualization',
                     overlaps[overlapIndex].dosages.push(lastDosage);
                     lastFrequency.end = utils.extend(recordedFrequency[i], []);
                     overlaps[overlapIndex].frequencies.push(lastFrequency);
+
+                    // Save end date for matrix population
+                    var endMoment = moment(lastFrequency.end);
+                    var endMonth = endMoment.month();
+                    var endMonthName = endMoment.format('MMM');
+                    var endYear = endMoment.year();
+                    if (!matrixDates[endYear]) {
+                        matrixDates[endYear] = {};
+                    }
+                    if (!matrixDates[endYear][endMonth]) {
+                        matrixDates[endYear][endMonth] = {};
+                    }
+                    matrixDates[endYear][endMonth].dataIndex = i;
+                    matrixDates[endYear][endMonth].name = endMonthName;
 
                     // Range ended: reset object to compare
                     lastDosage = {
@@ -259,8 +282,21 @@ moduleVisualizations.factory('TimelineVisualization',
                 .attr("width", Math.ceil(x.bandwidth()))
                 .attr("height", function(d) { return histogramHeight - y(d); });
 
-        // Count number of attributes in current month
-        // TODO
+        // Adjust svg sizes
+        d3.select("#timeline-" + timelineID + "-details")
+            .select("svg")
+                .attr("height", histogramHeight + axisHeight + padding);
+
+        //
+        // Matrix
+        //
+
+        // Extract attributes in each month
+        for (var year in matrixDates) {
+            if (matrixDates.hasOwnProperty(year)) {
+                //console.log(matrixDates[year]);
+            }
+        }
     };
 
     TimelineVisualization.prototype.populate = function(data, id) {
