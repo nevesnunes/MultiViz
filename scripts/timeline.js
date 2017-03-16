@@ -352,12 +352,11 @@ moduleVisualizations.factory('TimelineVisualization',
                         // Make month matrix
                         var monthSVG = monthHTML.append("div")
                             .style("display", "inline-block")
-                            .style("float", "right")
                             .append("svg")
                                 .attr("width", self.vizWidth - 
                                     (self.padding * 2) - 
                                     self.labelPadding)
-                                .attr("height", 0) // Set dynamically
+                                .attr("height", 20 * attributesInMonth.length)
                                 .append("g")
                                     .attr("id", "viz-svg-" + year + "-" + month);
                     }
