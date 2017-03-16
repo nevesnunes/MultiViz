@@ -1273,6 +1273,17 @@ moduleLayout.directive("directiveActionPanel",
                         scope.selectedMedications =
                             vizObject.patientLists.medications;
 
+                        // Also filter names by
+                        // attributes present in the patient
+                        scope.diseasesNames = 
+                            scope.selectedDiseases.map(function(obj) {
+                                return obj.name;
+                            });
+                        scope.medicationsNames = 
+                            scope.selectedMedications.map(function(obj) {
+                                return obj.name;
+                            });
+
                         // Populate widgets with common lists ("...Names")
                         html = '<div>';
                         html += widgets.makeAttributePills({
@@ -1346,6 +1357,17 @@ moduleLayout.directive("directiveActionPanel",
                             vizObject.patientLists.diseases;
                         scope.selectedMedications =
                             vizObject.patientLists.medications;
+
+                        // Also filter names by
+                        // attributes present in the patient
+                        scope.diseasesNames = 
+                            scope.selectedDiseases.map(function(obj) {
+                                return obj.name;
+                            });
+                        scope.medicationsNames = 
+                            scope.selectedMedications.map(function(obj) {
+                                return obj.name;
+                            });
 
                         // Populate widgets with common lists ("...Names")
                         html = '<div>';

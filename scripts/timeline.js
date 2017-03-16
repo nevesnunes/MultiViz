@@ -20,8 +20,10 @@ moduleVisualizations.factory('TimelineVisualization',
     var TimelineVisualization = function(options) {
         // Patient attribute lists
         this.patientLists = {
-            diseases: options.diseases.slice(),
-            medications: options.medications.slice()
+            diseases: filterByPatientAttributes(
+                options.diseases, 'diseases'),
+            medications: filterByPatientAttributes(
+                options.medications, 'medications')
         };
 
         this.currentAttributeType = attributeType.DISEASES;
@@ -41,6 +43,18 @@ moduleVisualizations.factory('TimelineVisualization',
     TimelineVisualization.prototype.makeID = function() {
         timelineID++;
         return "timeline-" + timelineID;
+    };
+
+    var filterByPatientAttributes = function(list, listName) {
+        var self = this;
+
+        var patient = patientData.getAttribute(patientData.KEY_PATIENT);
+        return list.filter(function(obj) {
+            return (utils.arrayObjectIndexOf(
+                patient[listName],
+                obj.name,
+                "name")) !== -1;
+        });
     };
 
     TimelineVisualization.prototype.makeDescription = function(elementID) {
@@ -166,12 +180,6 @@ moduleVisualizations.factory('TimelineVisualization',
                 var namesToCompare = lastDosage.start.map(function(obj) {
                     return obj.name;
                 });
-                /*
-                if (namesToCompare.length > 1) {
-                    console.log(self.visualizationRenderer.recordedDosage[i]);
-                    console.log(self.visualizationRenderer.recordedFrequency[i]);
-                }
-                */
                 var areNamesDifferent = false;
                 for (var dosageIndex = 0;
                         dosageIndex < recordedDosage[i].length;
@@ -326,6 +334,22 @@ moduleVisualizations.factory('TimelineVisualization',
                             .style("margin-right", self.labelPadding + "px")
                             .attr("width", self.padding)
                             .html(monthObject.name);
+
+                        // Extract all attributes present in this month
+                        // NOTE: Assuming they are ordered alphabetically
+                        var monthDosage = recordedDosage[monthObject.dataIndex];
+                        var attributesInMonth = [];
+                        for (var objectIndex = 0;
+                                objectIndex < monthDosage.length;
+                                objectIndex++) {
+                            if (attributesInMonth.indexOf(
+                                    monthDosage[objectIndex].name) === -1) {
+                                attributesInMonth.push(
+                                    monthDosage[objectIndex].name);
+                            }
+                        }
+
+                        // Make month matrix
                         var monthSVG = monthHTML.append("div")
                             .style("display", "inline-block")
                             .style("float", "right")
@@ -336,8 +360,6 @@ moduleVisualizations.factory('TimelineVisualization',
                                 .attr("height", 0) // Set dynamically
                                 .append("g")
                                     .attr("id", "viz-svg-" + year + "-" + month);
-
-                        // Make month matrix
                     }
                 }
             }
@@ -475,10 +497,12 @@ moduleVisualizations.factory('TimelineVisualization',
             areBinsBeingCreated = true;
         }
         if (state.diseases) {
-            self.patientLists.diseases = state.diseases.slice();
+            self.patientLists.diseases = filterByPatientAttributes(
+                state.diseases, 'diseases');
         }
         if (state.medications) {
-            self.patientLists.medications = state.medications.slice();
+            self.patientLists.medications = filterByPatientAttributes(
+                state.medications, 'medications');
         }
         if (state.currentMedication) {
             if (this.currentMedication.indexOf(state.currentMedication) === -1) {
