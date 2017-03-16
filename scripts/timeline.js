@@ -72,32 +72,37 @@ moduleVisualizations.factory('TimelineVisualization',
         self.vizWidth = angular.element('#' + elementID)[0]
             .offsetWidth;
 
-        var padding = 40;
+        self.padding = 60;
+        self.labelPadding = 10;
 
         // Group for main visualization
-        var svg = d3.select("#" + timelineID + "-main")
-            .append("svg")
-                .attr("width", self.vizWidth - padding / 2)
-                .attr("height", 0) // Set dynamically
-                .append("g")
-                    .attr("id", "viz");
+        var mainHTML = d3.select("#" + timelineID + "-main");
 
         // Group for ocurrences histogram
+        var marginFromLabels = 
+            self.padding + self.labelPadding * 2;
+        d3.select("#" + timelineID + "-details")
+            .append("div")
+                .style('margin-left',
+                    marginFromLabels + "px")
+                .html('<h4><b>' +
+                        'Contagem de ocorrências' +
+                    '</b></h4>');
         var ocurrencesSVG = d3.select("#" + timelineID + "-details")
             .append("svg")
-                .attr("width", self.vizWidth - padding / 2)
+                .attr("width", self.vizWidth - self.padding / 2)
                 .attr("height", 0) // Set dynamically
                 .append("g")
                     .attr("id", "ocurrences")
                     .attr("transform", "translate(" +
                         // Offset for month text labels
-                        padding + "," + padding / 2 + ")");
+                        marginFromLabels + "," + 0 + ")");
 
         self.html = {
             elementID: elementID,
             timelineID: timelineID,
             ocurrencesSVG: ocurrencesSVG,
-            svg: svg
+            mainHTML: mainHTML
         };
 
         self.makeBins();
@@ -236,7 +241,6 @@ moduleVisualizations.factory('TimelineVisualization',
             self.vizWidth,
             (histogramHeight / 2) * maxOverlapCount
         );
-        var padding = 10;
 
         //
         // ocurrences axis
@@ -253,7 +257,7 @@ moduleVisualizations.factory('TimelineVisualization',
             .attr("height", axisHeight)
             .attr("transform", "translate(" +
                 0 + "," +
-                (axisHeight + padding / 2) + ")")
+                (axisHeight + self.labelPadding / 2) + ")")
             .call(xAxis);
 
         //
@@ -285,7 +289,7 @@ moduleVisualizations.factory('TimelineVisualization',
         // Adjust svg sizes
         d3.select("#timeline-" + timelineID + "-details")
             .select("svg")
-                .attr("height", histogramHeight + axisHeight + padding);
+                .attr("height", histogramHeight + axisHeight);
 
         //
         // Matrix
@@ -294,7 +298,48 @@ moduleVisualizations.factory('TimelineVisualization',
         // Extract attributes in each month
         for (var year in matrixDates) {
             if (matrixDates.hasOwnProperty(year)) {
-                //console.log(matrixDates[year]);
+                // Make year layout
+                var yearHTML = self.html.mainHTML.append("div");
+                var yearBinsHTML = yearHTML.append("div")
+                    .style("display", "inline-block")
+                    .attr("id", "viz-div-" + year);
+                yearBinsHTML.append("div")
+                    .style("display", "inline-block")
+                    .style("float", "left")
+                    .style("margin-right", self.labelPadding + "px")
+                    .attr("width", self.padding)
+                    .html(year);
+                yearBinsHTML = yearBinsHTML.append("div")
+                    .style("float", "right");
+                yearHTML.append("div")
+                    .html('<div class="custom-separator"></div>');
+
+                // Make month bins
+                for (var month in matrixDates[year]) {
+                    if (matrixDates[year].hasOwnProperty(month)) {
+                        var monthObject = matrixDates[year][month];
+                        var monthHTML = yearBinsHTML.append("div")
+                            .attr("id", "viz-div-" + year + "-" + month);
+                        monthHTML.append("div")
+                            .style("display", "inline-block")
+                            .style("float", "left")
+                            .style("margin-right", self.labelPadding + "px")
+                            .attr("width", self.padding)
+                            .html(monthObject.name);
+                        var monthSVG = monthHTML.append("div")
+                            .style("display", "inline-block")
+                            .style("float", "right")
+                            .append("svg")
+                                .attr("width", self.vizWidth - 
+                                    (self.padding * 2) - 
+                                    self.labelPadding)
+                                .attr("height", 0) // Set dynamically
+                                .append("g")
+                                    .attr("id", "viz-svg-" + year + "-" + month);
+
+                        // Make month matrix
+                    }
+                }
             }
         }
     };
