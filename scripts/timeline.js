@@ -133,7 +133,7 @@ moduleVisualizations.factory('TimelineVisualization',
                 .style('margin-left',
                     marginFromLabels + "px")
                 .html('<h4><b>' +
-                        'Contagem de ocorrências' +
+                        'Contagem de ocorrências simultâneas' +
                     '</b></h4>');
         var ocurrencesSVG = d3.select("#" + timelineID + "-details")
             .append("svg")
@@ -349,6 +349,22 @@ moduleVisualizations.factory('TimelineVisualization',
         var maxY = d3.max(data, function(d) { return d; });
         y.domain([0, maxY]);
 
+
+        var barsTip = d3.tip()
+            .attr('class', 'tooltip tooltip-element tooltip-d3')
+            .offset([-10, 0])
+            .direction('n')
+            .html(function(d, i) {
+                return "<div style=\"text-align: center\">" +
+                    "<span><b>" + d + "</b> ocorrências de atributos " + 
+                        ((i === 0) ?
+                            "isolados" :
+                            "sobrepostos " + (i + 1) + " a " + (i + 1)
+                        ) + ".</span>" +
+                "</div>";
+            });
+        self.html.ocurrencesSVG.call(barsTip);
+
         var cellSize = Math.ceil(x.bandwidth());
         var g = self.html.ocurrencesSVG.append("g")
             .attr("height", histogramHeight);
@@ -356,18 +372,23 @@ moduleVisualizations.factory('TimelineVisualization',
             .data(data);
         var histogramGroup = histogram.enter();
         histogramGroup.append("rect")
-            .attr("class", "filter-bar")
-            .attr("shape-rendering", "crispEdges")
+            .attr("class", "filter-bar filter-bar-mouseover")
             .merge(histogram)
                 .attr("x", function(d, i) { return x(i); })
                 .attr("y", function(d) { return y(d); })
                 .attr("width", cellSize)
-                .attr("height", function(d) { return histogramHeight - y(d); });
+                .attr("height", function(d) { return histogramHeight - y(d); })
+                .on("mouseover", function(d, i) {
+                    barsTip.show(d, i);
+                })
+                .on("mouseout", function(d, i) {
+                    barsTip.hide(d, i);
+                });
 
         // Adjust svg sizes
         d3.select("#timeline-" + timelineID + "-details")
             .select("svg")
-                .attr("height", histogramHeight + axisHeight);
+                .attr("height", histogramHeight + 25);
 
         //
         // Matrix

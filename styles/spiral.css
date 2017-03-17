@@ -4,7 +4,9 @@
 }
 
 .spiral-sector:hover {
-    fill: #286090 !important;
+    fill: #31708f !important;
+    stroke: #c4e3f3;
+    stroke-width: 2px;   
 }
 
 .viz-spiral {

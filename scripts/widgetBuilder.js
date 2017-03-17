@@ -82,8 +82,10 @@ moduleWidgetBuilder.factory('widgets', [function() {
                     'ng-model="optionListModel" ' +
                     'autofocus tabindex=1>' +
             '</div>' +
+            '<p/>' +
             // Selection choices
             '<span>Selecionar:</span>' +
+                '<br/>' +
                 '<button class="btn btn-link custom-btn-link" ' +
                     'ng-click="checkAll()">Todos</button>' +
                 '|' +
