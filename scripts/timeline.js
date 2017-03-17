@@ -136,11 +136,16 @@ moduleVisualizations.factory('TimelineVisualization',
             self.visualizationRenderer.recordedFrequency;
 
         /*
-         * @property {name:string, dataIndex:number} matrixDates: 
+         * @property {
+         *   name:string,
+         *   dataIndex:number
+         *   overlapIndex:number
+         * } matrixDates: 
          * Ocurrence dates, stored as a dictionary of years,
          * each with an array of months.
          * - name: Abreviated month name, used as label in svg;
          * - dataIndex: corresponding dosage/frequency index
+         * - overlapIndex: corresponding occurence count index
          */
         var matrixDates = {};
 
@@ -211,7 +216,7 @@ moduleVisualizations.factory('TimelineVisualization',
                     lastFrequency.end = utils.extend(recordedFrequency[i], []);
                     overlaps[overlapIndex].frequencies.push(lastFrequency);
 
-                    // Save end date for matrix population
+                    // Save end data for matrix population
                     var endMoment = moment(lastFrequency.end);
                     var endMonth = endMoment.month();
                     var endMonthName = endMoment.format('MMM');
@@ -220,10 +225,32 @@ moduleVisualizations.factory('TimelineVisualization',
                         matrixDates[endYear] = {};
                     }
                     if (!matrixDates[endYear][endMonth]) {
-                        matrixDates[endYear][endMonth] = {};
+                        matrixDates[endYear][endMonth] = {
+                            attributeNames: [],
+                            data: [],
+                            name: endMonthName
+                        };
                     }
-                    matrixDates[endYear][endMonth].dataIndex = i;
-                    matrixDates[endYear][endMonth].name = endMonthName;
+
+                    // Make object for this month's overlap
+                    var newAttributeNames =
+                        lastDosage.end.map(function(obj) {
+                            return obj.name;
+                        });
+                    matrixDates[endYear][endMonth].data.push({
+                        attributeNames: newAttributeNames.slice(),
+                        dataIndex: i - 1,
+                        overlapIndex: overlapIndex,
+                    });
+
+                    // Update names seen in month
+                    var oldAttributeNames =
+                        matrixDates[endYear][endMonth].attributeNames;
+                    matrixDates[endYear][endMonth].attributeNames =
+                        oldAttributeNames.concat(
+                            newAttributeNames.filter(function (item) {
+                                return oldAttributeNames.indexOf(item) < 0;
+                            }));
 
                     // Range ended: reset object to compare
                     lastDosage = {
@@ -271,8 +298,9 @@ moduleVisualizations.factory('TimelineVisualization',
         //
         // ocurrences bars
         //
+        var histogramBarPadding = 0.2;
         var x = d3.scaleBand().range([0, vizContentWidth + 1])
-                .padding(0.2),
+                .padding(histogramBarPadding),
             y = d3.scaleLinear().range([histogramHeight, 0]);
 
         var data = dataHistogramCounts;
@@ -280,6 +308,7 @@ moduleVisualizations.factory('TimelineVisualization',
         var maxY = d3.max(data, function(d) { return d; });
         y.domain([0, maxY]);
 
+        var cellSize = Math.ceil(x.bandwidth());
         var g = self.html.ocurrencesSVG.append("g")
             .attr("height", histogramHeight);
         var histogram = g.selectAll(".histogram")
@@ -291,7 +320,7 @@ moduleVisualizations.factory('TimelineVisualization',
             .merge(histogram)
                 .attr("x", function(d, i) { return x(i); })
                 .attr("y", function(d) { return y(d); })
-                .attr("width", Math.ceil(x.bandwidth()))
+                .attr("width", cellSize)
                 .attr("height", function(d) { return histogramHeight - y(d); });
 
         // Adjust svg sizes
@@ -315,7 +344,7 @@ moduleVisualizations.factory('TimelineVisualization',
                     .style("display", "inline-block")
                     .style("float", "left")
                     .style("margin-right", self.labelPadding + "px")
-                    .attr("width", self.padding)
+                    .style("width", self.padding / 2 + "px")
                     .html(year);
                 yearBinsHTML = yearBinsHTML.append("div")
                     .style("float", "right");
@@ -324,42 +353,99 @@ moduleVisualizations.factory('TimelineVisualization',
 
                 // Make month bins
                 for (var month in matrixDates[year]) {
-                    if (matrixDates[year].hasOwnProperty(month)) {
-                        var monthObject = matrixDates[year][month];
-                        var monthHTML = yearBinsHTML.append("div")
-                            .attr("id", "viz-div-" + year + "-" + month);
-                        monthHTML.append("div")
-                            .style("display", "inline-block")
-                            .style("float", "left")
-                            .style("margin-right", self.labelPadding + "px")
-                            .attr("width", self.padding)
-                            .html(monthObject.name);
+                    if (!matrixDates[year].hasOwnProperty(month))
+                        continue;
 
-                        // Extract all attributes present in this month
-                        // NOTE: Assuming they are ordered alphabetically
-                        var monthDosage = recordedDosage[monthObject.dataIndex];
-                        var attributesInMonth = [];
-                        for (var objectIndex = 0;
-                                objectIndex < monthDosage.length;
-                                objectIndex++) {
-                            if (attributesInMonth.indexOf(
-                                    monthDosage[objectIndex].name) === -1) {
-                                attributesInMonth.push(
-                                    monthDosage[objectIndex].name);
+                    // Make month matrix
+                    var monthName = matrixDates[year][month].name;
+                    var monthHTML = yearBinsHTML.append("div")
+                        .attr("id", "viz-div-" + year + "-" + month);
+                    monthHTML.append("div")
+                        .style("display", "inline-block")
+                        .style("float", "left")
+                        .style("margin-right", self.labelPadding + "px")
+                        .style("width", self.padding / 2 + "px")
+                        .html(monthName);
+
+                    var cellSizeOffset = histogramBarPadding * 10 * 2;
+                    var cellSizeWithOffset = cellSize + cellSizeOffset;
+                    var attributeNames = 
+                        matrixDates[year][month].attributeNames;
+                    var monthSVG = monthHTML.append("div")
+                        .style("display", "inline-block")
+                        .append("svg")
+                            .attr("width", self.vizWidth - 
+                                (self.padding * 2) - 
+                                self.labelPadding)
+                            .attr("height", cellSizeWithOffset *
+                                attributeNames.length)
+                            .append("g")
+                                .attr("id", "viz-svg-" + year + "-" + month);
+
+                    var monthCellsLabels = monthSVG
+                        .selectAll(".attribute-month-label")
+                        .data(attributeNames);
+                    monthCellsLabels.enter().append("text")
+                        .attr("class", "attribute-month-label")
+                        .merge(monthCellsLabels)
+                            .attr("x", function(d, i) {
+                                return (maxOverlapCount + 1) *
+                                    cellSizeWithOffset;
+                            })
+                            .attr("y", function(d, i) {
+                                return i * 
+                                    cellSizeWithOffset + cellSize -
+                                    cellSizeOffset / 2;
+                            })
+                            .text(function(d) {
+                                return d;
+                            });
+                    monthCellsLabels.exit().remove();
+
+                    // Flatten data, so that we draw as many cells as
+                    // overlapped attributes in the month
+                    var monthObj = matrixDates[year][month];
+                    var monthFlatData = [];
+                    for (var monthDataIndex in monthObj.data) {
+                        var dataInMonthObj = monthObj.data[monthDataIndex];
+                        var count = dataInMonthObj.attributeNames.length;
+                        for (var nameIndex in dataInMonthObj.attributeNames) {
+                            var nameInMonthObj = 
+                                dataInMonthObj.attributeNames[nameIndex];
+                            var flatDataIndex = utils.arrayObjectFullIndexOf(
+                                monthFlatData,
+                                [count, nameInMonthObj],
+                                ['count', 'name']);
+                            if (flatDataIndex === -1) {
+                                monthFlatData.push({
+                                    count: count,
+                                    incidences: 1,
+                                    name: nameInMonthObj
+                                });
+                            } else {
+                                monthFlatData[flatDataIndex].incidences += 1;
                             }
                         }
-
-                        // Make month matrix
-                        var monthSVG = monthHTML.append("div")
-                            .style("display", "inline-block")
-                            .append("svg")
-                                .attr("width", self.vizWidth - 
-                                    (self.padding * 2) - 
-                                    self.labelPadding)
-                                .attr("height", 20 * attributesInMonth.length)
-                                .append("g")
-                                    .attr("id", "viz-svg-" + year + "-" + month);
                     }
+
+                    var attributesInMonth = monthObj.attributeNames;
+                    var monthCells = monthSVG
+                        .selectAll(".attribute-month")
+                        .data(monthFlatData);
+                    monthCells.enter().append("rect")
+                        .attr("class", "attribute-month filter-bar")
+                        .attr("width", cellSize)
+                        .attr("height", cellSize)
+                        .merge(monthCells)
+                            .attr("x", function(d, i) {
+                                return (d.count - 1) *
+                                    cellSizeWithOffset + cellSizeOffset;
+                            })
+                            .attr("y", function(d) {
+                                return attributeNames.indexOf(d.name) * 
+                                    cellSizeWithOffset;
+                            });
+                    monthCells.exit().remove();
                 }
             }
         }
@@ -458,7 +544,13 @@ moduleVisualizations.factory('TimelineVisualization',
     };
 
     TimelineVisualization.prototype.remove = function(nodeID, vizID) {
+        var self = this;
+
         // TODO
+        self.html.mainHTML.selectAll("svg")
+            .remove();
+        self.html.ocurrencesSVG
+            .remove();
     };
 
     TimelineVisualization.prototype.remake = function(nodeID, vizID) {

@@ -1,9 +1,26 @@
 var moduleUtils = angular.module('moduleUtils', []);
 
 moduleUtils.factory('utils', ['$q', function($q) {
-    var arrayObjectIndexOf = function(array, searchTerm, property) {
+    // Match one property
+    var arrayObjectIndexOf = function(array, value, property) {
         for (var i = 0, len = array.length; i < len; i++) {
-            if (array[i][property] === searchTerm)
+            if (array[i][property] === value)
+                return i;
+        }
+        return -1;
+    };
+
+    // Match all properties
+    var arrayObjectFullIndexOf = function(array, values, properties) {
+        for (var i = 0, len = array.length; i < len; i++) {
+            var allMatched = true;
+            for (var j = 0, len2 = properties.length; j < len2; j++) {
+                var value = values[j];
+                var property = properties[j];
+                if (array[i][property] !== value)
+                    allMatched = false;
+            }
+            if (allMatched)
                 return i;
         }
         return -1;
@@ -162,6 +179,7 @@ moduleUtils.factory('utils', ['$q', function($q) {
 
     return {
         arrayObjectIndexOf: arrayObjectIndexOf,
+        arrayObjectFullIndexOf: arrayObjectFullIndexOf,
         arrayObjectPairIndexOf: arrayObjectPairIndexOf,
         arrayObjectFullPairIndexOf: arrayObjectFullPairIndexOf,
         capitalizeEachWord: capitalizeEachWord,
