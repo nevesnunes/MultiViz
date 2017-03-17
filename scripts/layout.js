@@ -247,9 +247,12 @@ moduleLayout.factory("nodes",
 moduleLayout.controller('controllerMainPanel',
         ['$document', '$scope', 'patientData',
         function($document, $scope, patientData) {
-    // Load polyfills
     $document.ready(function(){
+        // Load polyfills
         PointerEventsPolyfill.initialize({});
+
+        // Set global library options
+        moment.locale('pt');
     });
 
     $scope.patient = patientData.getAttribute(patientData.KEY_PATIENT);

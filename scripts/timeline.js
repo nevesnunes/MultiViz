@@ -57,6 +57,39 @@ moduleVisualizations.factory('TimelineVisualization',
         });
     };
 
+    TimelineVisualization.prototype.addSelections = function(d) {
+        var self = this;
+
+        var svg = self.html.mainHTML;
+
+        // Style labels
+        svg.selectAll(".attribute-month-label")
+            .attr("class", function(a) {
+                return (a === d) ?
+                    "attribute-month-label text-label-selected" :
+                    "attribute-month-label text-label";
+            });
+        svg.selectAll(".attribute-month-rect-label")
+            .style("fill-opacity", 1.0)
+            .attr("class", function(a) {
+                return (a === d) ?
+                    "attribute-month-rect-label rect-label-selected" :
+                    "attribute-month-rect-label rect-label";
+            });
+    };
+
+    TimelineVisualization.prototype.removeSelections = function(d) {
+        var self = this;
+
+        var svg = self.html.mainHTML;
+
+        // Style labels
+        svg.selectAll(".attribute-month-label")
+            .attr("class", "attribute-month-label text-label ");
+        svg.selectAll(".attribute-month-rect-label")
+            .style("fill-opacity", 0.0);
+    };
+
     TimelineVisualization.prototype.makeDescription = function(elementID) {
         if (elementID === undefined) {
             console.log("[WARN] @make: undefined id.");
@@ -190,6 +223,14 @@ moduleVisualizations.factory('TimelineVisualization',
                         dosageIndex < recordedDosage[i].length;
                         dosageIndex++) {
                     var name = recordedDosage[i][dosageIndex].name;
+
+                    // Store longest name, for label styling
+                    if (self.visualizationRenderer.longestNameLength <
+                            name.length) {
+                        self.visualizationRenderer.longestNameLength =
+                            name.length;
+                    }
+
                     // Mismatch: There are more names in recorded dosage
                     if (namesToCompare.length === 0) {
                         areNamesDifferent = true;
@@ -382,20 +423,54 @@ moduleVisualizations.factory('TimelineVisualization',
                             .append("g")
                                 .attr("id", "viz-svg-" + year + "-" + month);
 
-                    var monthCellsLabels = monthSVG
-                        .selectAll(".attribute-month-label")
+                    var labelWidth = self.visualizationRenderer
+                        .longestNameLength * 8 + cellSizeWithOffset;
+                    var monthCellsRectLabels = monthSVG
+                        .selectAll(".attribute-month-rect-label")
                         .data(attributeNames);
-                    monthCellsLabels.enter().append("text")
-                        .attr("class", "attribute-month-label")
-                        .merge(monthCellsLabels)
+                    monthCellsRectLabels.enter().append("rect")
+                        .attr("class", "attribute-month-rect-label rect-label")
+                        .merge(monthCellsRectLabels)
+                            .attr("width", labelWidth)
+                            .attr("height", cellSizeWithOffset)
                             .attr("x", function(d, i) {
                                 return (maxOverlapCount + 1) *
                                     cellSizeWithOffset;
                             })
                             .attr("y", function(d, i) {
                                 return i * 
+                                    cellSizeWithOffset;
+                            })
+                            .on("mouseover", function(d) {
+                                self.addSelections(d);
+                            })
+                            .on("mouseout", function(d) {
+                                self.removeSelections(d);
+                            });
+                    monthCellsRectLabels.exit().remove();
+
+                    var monthCellsLabels = monthSVG
+                        .selectAll(".attribute-month-label")
+                        .data(attributeNames);
+                    monthCellsLabels.enter().append("text")
+                        .attr("class", "attribute-month-label text-label")
+                        .merge(monthCellsLabels)
+                            .attr("x", function(d, i) {
+                                return (maxOverlapCount + 1) *
+                                    cellSizeWithOffset + 
+                                    // Align with rect
+                                    cellSizeOffset;
+                            })
+                            .attr("y", function(d, i) {
+                                return i * 
                                     cellSizeWithOffset + cellSize -
                                     cellSizeOffset / 2;
+                            })
+                            .on("mouseover", function(d) {
+                                self.addSelections(d);
+                            })
+                            .on("mouseout", function(d) {
+                                self.removeSelections(d);
                             })
                             .text(function(d) {
                                 return d;
@@ -539,6 +614,7 @@ moduleVisualizations.factory('TimelineVisualization',
         }
 
         self.visualizationRenderer = utils.extend(targetViz, {});
+        self.visualizationRenderer.longestNameLength = 0;
         
         self.render();
     };
