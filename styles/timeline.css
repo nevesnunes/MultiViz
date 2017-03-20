@@ -1,0 +1,6 @@
+.occurence-mouseover:hover {
+    background-color: #31708f;
+    fill: #31708f;
+    stroke: #c4e3f3;
+    stroke-width: 2px;   
+}

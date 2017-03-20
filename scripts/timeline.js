@@ -50,7 +50,7 @@ moduleVisualizations.factory('TimelineVisualization',
 
         var patient = patientData.getAttribute(patientData.KEY_PATIENT);
         return list.filter(function(obj) {
-            return (utils.arrayObjectIndexOf(
+            return (obj.selected) && (utils.arrayObjectIndexOf(
                 patient[listName],
                 obj.name,
                 "name")) !== -1;
@@ -125,7 +125,7 @@ moduleVisualizations.factory('TimelineVisualization',
         // Group for main visualization
         var mainHTML = d3.select("#" + timelineID + "-main");
 
-        // Group for ocurrences histogram
+        // Group for occurrences histogram
         var marginFromLabels = 
             self.padding + self.labelPadding * 2;
         d3.select("#" + timelineID + "-details")
@@ -133,22 +133,33 @@ moduleVisualizations.factory('TimelineVisualization',
                 .style('margin-left',
                     marginFromLabels + "px")
                 .html('<h4><b>' +
-                        'Contagem de ocorrências simultâneas' +
+                        'Contagem de <br/>ocorrências <br/>simultâneas' +
                     '</b></h4>');
-        var ocurrencesSVG = d3.select("#" + timelineID + "-details")
-            .append("svg")
-                .attr("width", self.vizWidth - self.padding / 2)
-                .attr("height", 0) // Set dynamically
-                .append("g")
-                    .attr("id", "ocurrences")
-                    .attr("transform", "translate(" +
-                        // Offset for month text labels
-                        marginFromLabels + "," + 0 + ")");
+        var occurrencesSVG = d3.select("#" + timelineID + "-details")
+            .append("div")
+                .style("display", "inline-block")
+                .append("svg")
+                    .attr("id", "svg-occurrences")
+                    .attr("width", self.vizWidth - self.padding / 2)
+                    .attr("height", 0) // Set dynamically
+                    .append("g")
+                        .attr("id", "occurrences")
+                        .attr("transform", "translate(" +
+                            // Offset for month text labels
+                            marginFromLabels + "," + 0 + ")");
+        d3.select("#" + timelineID + "-details")
+            .append("div")
+                .style("display", "inline-block")
+                .style('margin-left',
+                    marginFromLabels + "px")
+                .html('<h4><b>' +
+                        'Evolução <br/>temporal de <br/>ocorrências' +
+                    '</b></h4>');
 
         self.html = {
             elementID: elementID,
             timelineID: timelineID,
-            ocurrencesSVG: ocurrencesSVG,
+            occurrencesSVG: occurrencesSVG,
             mainHTML: mainHTML
         };
 
@@ -157,6 +168,11 @@ moduleVisualizations.factory('TimelineVisualization',
 
     TimelineVisualization.prototype.makeBins = function() {
         var data = null;
+
+        // FIXME: Element creation should be splitted up, so we don't
+        // have to remake everything
+        this.remove();
+
         this.populate(data, timelineID);
     };
 
@@ -174,7 +190,7 @@ moduleVisualizations.factory('TimelineVisualization',
          *   dataIndex:number
          *   overlapIndex:number
          * } matrixDates: 
-         * Ocurrence dates, stored as a dictionary of years,
+         * occurrence dates, stored as a dictionary of years,
          * each with an array of months.
          * - name: Abreviated month name, used as label in svg;
          * - dataIndex: corresponding dosage/frequency index
@@ -258,6 +274,7 @@ moduleVisualizations.factory('TimelineVisualization',
                     overlaps[overlapIndex].frequencies.push(lastFrequency);
 
                     // Save end data for matrix population
+                    // NOTE: month index starts at 0
                     var endMoment = moment(lastFrequency.end);
                     var endMonth = endMoment.month();
                     var endMonthName = endMoment.format('MMM');
@@ -280,7 +297,8 @@ moduleVisualizations.factory('TimelineVisualization',
                         });
                     matrixDates[endYear][endMonth].data.push({
                         attributeNames: newAttributeNames.slice(),
-                        dataIndex: i - 1,
+                        dataIndex: i,
+                        dates: utils.extend(lastFrequency, {}),
                         overlapIndex: overlapIndex,
                     });
 
@@ -319,7 +337,7 @@ moduleVisualizations.factory('TimelineVisualization',
         );
 
         //
-        // ocurrences axis
+        // occurrences axis
         //
         var x2 = d3.scaleLinear().range([0, vizContentWidth]);
         x2.domain([0, maxOverlapCount]);
@@ -327,8 +345,8 @@ moduleVisualizations.factory('TimelineVisualization',
             .ticks(maxOverlapCount)
             .tickFormat(d3.format("d"));
         var axisHeight = histogramHeight;
-        self.html.ocurrencesSVG.selectAll(".line-axis").remove();
-        self.html.ocurrencesSVG.append("g")
+        self.html.occurrencesSVG.selectAll(".line-axis").remove();
+        self.html.occurrencesSVG.append("g")
             .attr("class", "x axis line-axis")
             .attr("height", axisHeight)
             .attr("transform", "translate(" +
@@ -337,7 +355,7 @@ moduleVisualizations.factory('TimelineVisualization',
             .call(xAxis);
 
         //
-        // ocurrences bars
+        // occurrences bars
         //
         var histogramBarPadding = 0.2;
         var x = d3.scaleBand().range([0, vizContentWidth + 1])
@@ -360,19 +378,22 @@ moduleVisualizations.factory('TimelineVisualization',
                         ((i === 0) ?
                             "isolados" :
                             "sobrepostos " + (i + 1) + " a " + (i + 1)
-                        ) + ".</span>" +
+                        ) + "</span>" +
                 "</div>";
             });
-        self.html.ocurrencesSVG.call(barsTip);
+        self.html.occurrencesSVG.call(barsTip);
 
         var cellSize = Math.ceil(x.bandwidth());
-        var g = self.html.ocurrencesSVG.append("g")
+        var cellSizeOffset = histogramBarPadding * 10 * 2;
+        var cellSizeWithOffset = cellSize + cellSizeOffset;
+
+        var g = self.html.occurrencesSVG.append("g")
             .attr("height", histogramHeight);
         var histogram = g.selectAll(".histogram")
             .data(data);
         var histogramGroup = histogram.enter();
         histogramGroup.append("rect")
-            .attr("class", "filter-bar filter-bar-mouseover")
+            .attr("class", "filter-bar filter-mouseover")
             .merge(histogram)
                 .attr("x", function(d, i) { return x(i); })
                 .attr("y", function(d) { return y(d); })
@@ -393,6 +414,8 @@ moduleVisualizations.factory('TimelineVisualization',
         //
         // Matrix
         //
+
+        var longestMatrixWidth = 0;
 
         // Extract attributes in each month
         for (var year in matrixDates) {
@@ -429,20 +452,20 @@ moduleVisualizations.factory('TimelineVisualization',
                         .style("width", self.padding / 2 + "px")
                         .html(monthName);
 
-                    var cellSizeOffset = histogramBarPadding * 10 * 2;
-                    var cellSizeWithOffset = cellSize + cellSizeOffset;
                     var attributeNames = 
                         matrixDates[year][month].attributeNames;
-                    var monthSVG = monthHTML.append("div")
+                    var monthDiv = monthHTML.append("div")
                         .style("display", "inline-block")
                         .append("svg")
                             .attr("width", self.vizWidth - 
                                 (self.padding * 2) - 
                                 self.labelPadding)
                             .attr("height", cellSizeWithOffset *
-                                attributeNames.length)
-                            .append("g")
+                                attributeNames.length);
+                    var monthSVG = monthDiv.append("g")
                                 .attr("id", "viz-svg-" + year + "-" + month);
+                    var monthEvolutionSVG = monthDiv.append("g")
+                                .attr("id", "viz-evolution-svg-" + year + "-" + month);
 
                     var labelWidth = self.visualizationRenderer
                         .longestNameLength * 8 + cellSizeWithOffset;
@@ -498,10 +521,16 @@ moduleVisualizations.factory('TimelineVisualization',
                             });
                     monthCellsLabels.exit().remove();
 
+                    /*
+                    console.log(JSON.stringify(overlaps, null, 4));
+                    console.log(JSON.stringify(matrixDates, null, 4));
+                    */
+
                     // Flatten data, so that we draw as many cells as
                     // overlapped attributes in the month
                     var monthObj = matrixDates[year][month];
                     var monthFlatData = [];
+                    var monthFlatEvolutionData = [];
                     for (var monthDataIndex in monthObj.data) {
                         var dataInMonthObj = monthObj.data[monthDataIndex];
                         var count = dataInMonthObj.attributeNames.length;
@@ -521,15 +550,38 @@ moduleVisualizations.factory('TimelineVisualization',
                             } else {
                                 monthFlatData[flatDataIndex].incidences += 1;
                             }
+
+                            monthFlatEvolutionData.push({
+                                count: count,
+                                attributeNames: dataInMonthObj.attributeNames,
+                                occurenceIndex: +monthDataIndex,
+                                dataIndex: dataInMonthObj.dataIndex,
+                                dates: dataInMonthObj.dates,
+                                overlapIndex: dataInMonthObj.overlapIndex,
+                                name: nameInMonthObj
+                            });
                         }
                     }
 
+                    var cellTip = d3.tip()
+                        .attr('class', 'tooltip tooltip-element tooltip-d3')
+                        .offset([-10, 0])
+                        .direction('n')
+                        .html(function(d, i) {
+                            return "<div style=\"text-align: left\">" +
+                                "<b>Ocorrências: </b>" + 
+                                    d.incidences + 
+                            "</div>";
+                        });
+                    monthSVG.call(cellTip);
+
+                    // Make cells
                     var attributesInMonth = monthObj.attributeNames;
                     var monthCells = monthSVG
                         .selectAll(".attribute-month")
                         .data(monthFlatData);
                     monthCells.enter().append("rect")
-                        .attr("class", "attribute-month filter-bar")
+                        .attr("class", "attribute-month filter-bar filter-mouseover")
                         .attr("width", cellSize)
                         .attr("height", cellSize)
                         .merge(monthCells)
@@ -540,11 +592,79 @@ moduleVisualizations.factory('TimelineVisualization',
                             .attr("y", function(d) {
                                 return attributeNames.indexOf(d.name) * 
                                     cellSizeWithOffset;
+                            })
+                            .on("mouseover", function(d, i) {
+                                cellTip.show(d, i);
+                            })
+                            .on("mouseout", function(d, i) {
+                                cellTip.hide(d, i);
                             });
                     monthCells.exit().remove();
+
+                    var evolutionTip = d3.tip()
+                        .attr('class', 'tooltip tooltip-element tooltip-d3')
+                        .offset([-10, 0])
+                        .direction('n')
+                        .html(function(d, i) {
+                            return "<div style=\"text-align: left\">" +
+                                "<b>Início: </b>" + 
+                                    moment(d.dates.start).format("YYYY/MM/DD") + 
+                                "<br/>" +
+                                "<b>Fim: </b>" +
+                                    moment(d.dates.end).format("YYYY/MM/DD") + 
+                            "</div>";
+                        });
+                    monthEvolutionSVG.call(evolutionTip);
+
+                    // Align evolution group with matrix group
+                    // by bounding box
+                    var waitForDOMRendered = function selfFunction() {
+                        try {
+                            var textData = visualizations.extractBBoxes(
+                                monthSVG
+                            );
+                            var offsetWidth = textData[0].width;
+                            if (longestMatrixWidth < offsetWidth) {
+                                longestMatrixWidth = offsetWidth;
+                            }
+                            monthEvolutionSVG.attr("transform", "translate(" +
+                                (offsetWidth + cellSizeWithOffset) + "," +
+                                cellSizeOffset * 2 + ")");
+
+                            // Make evolution
+                            var monthEvolution = monthEvolutionSVG
+                                .selectAll(".attribute-occurence occurence-mouseover")
+                                .data(monthFlatEvolutionData);
+                            monthEvolution.enter().append("circle")
+                                .attr("class", "attribute-occurence occurence-mouseover")
+                                .attr("r", cellSize / 2)
+                                .merge(monthEvolution)
+                                    .attr("cx", function(d, i) {
+                                        return d.occurenceIndex *
+                                            cellSizeWithOffset + cellSizeOffset;
+                                    })
+                                    .attr("cy", function(d) {
+                                        return attributeNames.indexOf(d.name) * 
+                                            cellSizeWithOffset;
+                                    })
+                                    .on("mouseover", function(d, i) {
+                                        evolutionTip.show(d, i);
+                                    })
+                                    .on("mouseout", function(d, i) {
+                                        evolutionTip.hide(d, i);
+                                    });
+                            monthEvolution.exit().remove();
+                        } catch(e) {
+                            window.requestAnimationFrame(selfFunction);
+                        }
+                    };
+                    waitForDOMRendered();
                 }
             }
         }
+        d3.select("#svg-occurrences")
+            .attr("width", longestMatrixWidth + 
+                cellSizeWithOffset);
     };
 
     TimelineVisualization.prototype.populate = function(data, id) {
@@ -644,9 +764,9 @@ moduleVisualizations.factory('TimelineVisualization',
         var self = this;
 
         // TODO
-        self.html.mainHTML.selectAll("svg")
+        self.html.mainHTML.selectAll("*")
             .remove();
-        self.html.ocurrencesSVG
+        self.html.occurrencesSVG.selectAll("*")
             .remove();
     };
 
@@ -687,10 +807,14 @@ moduleVisualizations.factory('TimelineVisualization',
         if (state.diseases) {
             self.patientLists.diseases = filterByPatientAttributes(
                 state.diseases, 'diseases');
+
+            areBinsBeingCreated = true;
         }
         if (state.medications) {
             self.patientLists.medications = filterByPatientAttributes(
                 state.medications, 'medications');
+
+            areBinsBeingCreated = true;
         }
         if (state.currentMedication) {
             if (this.currentMedication.indexOf(state.currentMedication) === -1) {
