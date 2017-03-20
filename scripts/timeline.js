@@ -457,9 +457,6 @@ moduleVisualizations.factory('TimelineVisualization',
                     var monthDiv = monthHTML.append("div")
                         .style("display", "inline-block")
                         .append("svg")
-                            .attr("width", self.vizWidth - 
-                                (self.padding * 2) - 
-                                self.labelPadding)
                             .attr("height", cellSizeWithOffset *
                                 attributeNames.length);
                     var monthSVG = monthDiv.append("g")
