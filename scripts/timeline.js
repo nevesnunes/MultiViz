@@ -322,6 +322,7 @@ moduleVisualizations.factory('TimelineVisualization',
             }
         }
 
+        maxOverlapCount = Math.max(maxOverlapCount, 1);
         var dataHistogramCounts = Array
             .apply(null, Array(maxOverlapCount))
             .map(Number.prototype.valueOf, 0);
@@ -460,9 +461,10 @@ moduleVisualizations.factory('TimelineVisualization',
                             .attr("height", cellSizeWithOffset *
                                 attributeNames.length);
                     var monthSVG = monthDiv.append("g")
-                                .attr("id", "viz-svg-" + year + "-" + month);
+                        .attr("id", "viz-svg-" + year + "-" + month);
                     var monthEvolutionSVG = monthDiv.append("g")
-                                .attr("id", "viz-evolution-svg-" + year + "-" + month);
+                        .attr("class", "viz-evolution")
+                        .attr("id", "viz-evolution-svg-" + year + "-" + month);
 
                     var labelWidth = self.visualizationRenderer
                         .longestNameLength * 8 + cellSizeWithOffset;
@@ -518,10 +520,8 @@ moduleVisualizations.factory('TimelineVisualization',
                             });
                     monthCellsLabels.exit().remove();
 
-                    /*
                     console.log(JSON.stringify(overlaps, null, 4));
                     console.log(JSON.stringify(matrixDates, null, 4));
-                    */
 
                     // Flatten data, so that we draw as many cells as
                     // overlapped attributes in the month
@@ -624,9 +624,6 @@ moduleVisualizations.factory('TimelineVisualization',
                             if (longestMatrixWidth < offsetWidth) {
                                 longestMatrixWidth = offsetWidth;
                             }
-                            monthEvolutionSVG.attr("transform", "translate(" +
-                                (offsetWidth + cellSizeWithOffset) + "," +
-                                cellSizeOffset * 2 + ")");
 
                             // Make evolution
                             var monthEvolution = monthEvolutionSVG
@@ -659,96 +656,146 @@ moduleVisualizations.factory('TimelineVisualization',
                 }
             }
         }
+
+        // Align elements
         d3.select("#svg-occurrences")
             .attr("width", longestMatrixWidth + 
                 cellSizeWithOffset);
+        d3.selectAll(".viz-evolution").attr("transform", "translate(" +
+            (longestMatrixWidth + cellSizeWithOffset) + "," +
+            cellSizeOffset * 2 + ")");
     };
 
     TimelineVisualization.prototype.populate = function(data, id) {
         var self = this;
 
-        // Iterate through medications, storing all overlapping moments
-        // TODO
+        // Iterate through attribute lists, storing all overlapping moments
+        // FIXME: Only diseases and medications
         var patient = patientData.getAttribute(patientData.KEY_PATIENT);
         var targetViz;
-        for(var i = 0; i < self.patientLists.medications.length; i++) {
-            var medication = self.patientLists.medications[i];
-            var patientMedicationIndex = utils.arrayObjectIndexOf(
-                patient.medications, medication.name, "name");
-            if (patientMedicationIndex === -1)
-                continue;
+        var extractedAttributes = [];
+        extractedAttributes.push({
+            array: self.patientLists.diseases,
+            name: "diseases"
+        });
+        extractedAttributes.push({
+            array: self.patientLists.medications,
+            name: "medications"
+        });
+        for(var extractedAttributesIndex = 0;
+                extractedAttributesIndex < extractedAttributes.length;
+                extractedAttributesIndex++) {
+            var list = extractedAttributes[extractedAttributesIndex];
+            for(var i = 0; i < list.array.length; i++) {
+                var patientAttribute = list.array[i];
+                var patientListIndex = utils.arrayObjectIndexOf(
+                    patient[list.name], list.array[i].name, "name");
+                if (patientListIndex === -1)
+                    continue;
 
-            var currentViz = utils.extend(
-                patient.medications[patientMedicationIndex],
-                {}
-            );
+                var currentViz = utils.extend(
+                    patient[list.name][patientListIndex],
+                    {}
+                );
 
-            // Add additional properties for date processing
-            // NOTE: Adapted from SpiralVisualization makeBins()
-            var recordedStartMoment = moment(
-                currentViz.recordedFrequency[0]);
-            var recordedEndMoment = moment(
-                currentViz.recordedFrequency[
-                    currentViz.recordedFrequency.length - 1]);
-            currentViz.recordedStartDate =
-                recordedStartMoment.format('YYYY/MM/DD');
-            currentViz.recordedEndDate =
-                recordedEndMoment.format('YYYY/MM/DD');
-            currentViz.recordedDosage =
-                currentViz.dosage;
+                // Add placeholder properties for non-medication lists
+                if (list.name !== "medications") {
+                    if (!currentViz.expectedFrequency) {
+                        currentViz.expectedFrequency = "Diário";
+                    }
+                    if (!currentViz.recordedFrequency) {
+                        currentViz.recordedFrequency = [];
+                        var startMoment = moment(currentViz.startDate);
+                        var endMoment = moment(currentViz.endDate);
+                        var isBeforeEndDate = true;
+                        while (isBeforeEndDate) {
+                            currentViz.recordedFrequency.push(
+                                startMoment.format()
+                            );
 
-            var sourceViz;
-            if (!targetViz) {
-                targetViz = currentViz;
-                targetViz.name = "Timeline Attributes";
+                            startMoment.add(1, "days");
+                            isBeforeEndDate = 
+                                (startMoment.diff(endMoment, "days") < 0);
+                        }
+                    }
+                    if (!currentViz.dosage) {
+                        currentViz.dosage = currentViz.recordedFrequency.map(
+                            function(obj) {
+                                return [{
+                                    dosage: 1,
+                                    name: list.array[i].name
+                                }];
+                            });
+                    }
+                }
 
-                continue;
-            } else {
-                sourceViz = currentViz;
+                // Add additional properties for date processing
+                // NOTE: Adapted from SpiralVisualization makeBins()
+                var recordedStartMoment = moment(
+                    currentViz.recordedFrequency[0]);
+                var recordedEndMoment = moment(
+                    currentViz.recordedFrequency[
+                        currentViz.recordedFrequency.length - 1]);
+                currentViz.recordedStartDate =
+                    recordedStartMoment.format('YYYY/MM/DD');
+                currentViz.recordedEndDate =
+                    recordedEndMoment.format('YYYY/MM/DD');
+                currentViz.recordedDosage =
+                    currentViz.dosage;
+
+                var sourceViz;
+                if (!targetViz) {
+                    targetViz = currentViz;
+                    targetViz.name = "Timeline Attributes";
+
+                    continue;
+                } else {
+                    sourceViz = currentViz;
+                }
+
+                // Compute common expected frequency
+                var diffIntervals = visualizations.diffInterval(
+                    visualizations.translateFrequency(
+                        sourceViz.expectedFrequency),
+                    visualizations.translateFrequency(
+                        targetViz.expectedFrequency));
+                var newFrequency = (diffIntervals > 0) ?
+                    sourceViz.expectedFrequency :
+                    targetViz.expectedFrequency;
+
+                // Compute common range;
+                // For simplicity, if the two ranges don't overlap,
+                // we just introduce that hole into the new range.
+                var newStartDate = timeWeaver.computeJoinMoment(
+                    sourceViz.recordedStartDate,
+                    targetViz.recordedStartDate,
+                    function(a, b) { return a > b; }
+                ).toISOString();
+                var newEndDate = timeWeaver.computeJoinMoment(
+                    sourceViz.recordedEndDate,
+                    targetViz.recordedEndDate,
+                    function(a, b) { return a < b; }
+                ).toISOString();
+
+                // Compute common recorded frequency:
+                // Iterate through all the recorded frequencies and
+                // collect the dates, alongside correspoding
+                // attribute names
+                var resultJoinProperties = timeWeaver
+                    .computeJoinProperties(sourceViz, targetViz);
+
+                // Store computed properties
+                targetViz.endDate = newEndDate;
+                targetViz.expectedFrequency = newFrequency;
+                targetViz.startDate = newStartDate;
+
+                targetViz.dosage =
+                    resultJoinProperties.newDosage;
+                targetViz.recordedDosage =
+                    resultJoinProperties.newDosage;
+                targetViz.recordedFrequency =
+                    resultJoinProperties.newRecordedFrequency;
             }
-
-            // Compute common expected frequency
-            var diffIntervals = visualizations.diffInterval(
-                visualizations.translateFrequency(
-                    sourceViz.expectedFrequency),
-                visualizations.translateFrequency(
-                    targetViz.expectedFrequency));
-            var newFrequency = (diffIntervals > 0) ?
-                sourceViz.expectedFrequency :
-                targetViz.expectedFrequency;
-
-            // Compute common range;
-            // For simplicity, if the two ranges don't overlap,
-            // we just introduce that hole into the new range.
-            var newStartDate = timeWeaver.computeJoinMoment(
-                sourceViz.recordedStartDate,
-                targetViz.recordedStartDate,
-                function(a, b) { return a > b; }
-            ).toISOString();
-            var newEndDate = timeWeaver.computeJoinMoment(
-                sourceViz.recordedEndDate,
-                targetViz.recordedEndDate,
-                function(a, b) { return a < b; }
-            ).toISOString();
-
-            // Compute common recorded frequency:
-            // Iterate through all the recorded frequencies and
-            // collect the dates, alongside correspoding
-            // attribute names
-            var resultJoinProperties = timeWeaver
-                .computeJoinProperties(sourceViz, targetViz);
-
-            // Store computed properties
-            targetViz.endDate = newEndDate;
-            targetViz.expectedFrequency = newFrequency;
-            targetViz.startDate = newStartDate;
-
-            targetViz.dosage =
-                resultJoinProperties.newDosage;
-            targetViz.recordedDosage =
-                resultJoinProperties.newDosage;
-            targetViz.recordedFrequency =
-                resultJoinProperties.newRecordedFrequency;
         }
 
         self.visualizationRenderer = utils.extend(targetViz, {});
