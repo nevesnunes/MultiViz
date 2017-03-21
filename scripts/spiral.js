@@ -84,24 +84,29 @@ moduleVisualizations.factory('SpiralVisualization',
             return;
         }
 
-        // Compute size based on available view width
-        var vizWidth = angular.element('#' + elementID)[0]
-            .offsetWidth;
-        var size = 300;
-        var marginLine = 60;
-        var padding = 10;
+        self.layout = {
+            size: 300,
+            marginLine: 60,
+            padding: 10
+        };
+
+        // Compute size based on available view width and spiral width
+        self.layout.vizWidth = angular.element('.main')[0]
+            .offsetWidth - (self.layout.size / 3);
         this.visualizationRenderer = new Spiral({
-            svgWidth: size,
-            svgHeight: size + 50,
-            lineRangeX: (vizWidth - size) - (marginLine * 2) - (padding * 2),
+            svgWidth: self.layout.size,
+            svgHeight: self.layout.size + 50,
+            lineRangeX: (self.layout.vizWidth - self.layout.size) - 
+                (self.layout.marginLine * 2) - 
+                (self.layout.padding * 2),
             margin: {
                 top: -30,
                 right: 0,
                 bottom: 0,
                 left: 0
             },
-			marginLine: marginLine,
-			padding: padding,
+			marginLine: self.layout.marginLine,
+			padding: self.layout.padding,
             parentElement: elementID,
             targetElement: spiralID,
             colors: visualizations.colors,
@@ -383,9 +388,19 @@ moduleVisualizations.factory('SpiralVisualization',
     };
 
     SpiralVisualization.prototype.remake = function(nodeID, vizID) {
+        var self = this;
+
         // Remove previous nodes/handlers, since they are invalidated by the
         // new DOM layout
         this.visualizationRenderer.remove();
+
+        // View size may have change, so compute a new temporal line width
+        self.layout.vizWidth = angular.element('.main')[0]
+            .offsetWidth - (self.layout.size / 3);
+        this.visualizationRenderer
+            .set('lineRangeX', (self.layout.vizWidth - self.layout.size) - 
+                (self.layout.marginLine * 2) - 
+                (self.layout.padding * 2));
 
         // Add attributes and svgs to the new DOM targets. Note that the target
         // element ID is still the same.
