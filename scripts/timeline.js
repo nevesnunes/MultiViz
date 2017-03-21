@@ -693,6 +693,32 @@ moduleVisualizations.factory('TimelineVisualization',
                 .html('');
     };
 
+    TimelineVisualization.prototype.renderVisibleDetails = function() {
+        d3.select("#" + this.html.timelineID + "-details")
+            .style('display', 'inline-block')
+            .style("visibility", "initial")
+            .style("width", "initial")
+            .style("height", "initial");
+        d3.select("#" + this.html.timelineID + "-main")
+            .style('display', 'initial')
+            .style("visibility", "initial")
+            .style("width", "initial")
+            .style("height", "initial");
+    };
+
+    TimelineVisualization.prototype.renderNoVisibleDetails = function() {
+        d3.select("#" + this.html.timelineID + "-details")
+            .style('display', 'none')
+            .style("visibility", "hidden")
+            .style("width", 0)
+            .style("height", 0);
+        d3.select("#" + this.html.timelineID + "-main")
+            .style('display', 'none')
+            .style("visibility", "hidden")
+            .style("width", 0)
+            .style("height", 0);
+    };
+
     TimelineVisualization.prototype.populate = function(data, id) {
         var self = this;
 
@@ -839,7 +865,33 @@ moduleVisualizations.factory('TimelineVisualization',
     TimelineVisualization.prototype.remove = function(nodeID, vizID) {
         var self = this;
 
-        // TODO
+        // Remove handlers
+        self.html.occurrencesSVG
+            .selectAll(".histogram")
+                .selectAll(".filter-mouseover")
+                    .on("mouseover", null)
+                    .on("mouseout", null);
+        self.html.occurrencesSVG
+            .selectAll(".attribute-month-rect-label")
+                .selectAll(".rect-label")
+                    .on("mouseover", null)
+                    .on("mouseout", null);
+        self.html.mainHTML
+            .selectAll(".attribute-month-label")
+                .selectAll(".text-label")
+                    .on("mouseover", null)
+                    .on("mouseout", null);
+        self.html.mainHTML
+            .selectAll(".attribute-month")
+                .selectAll(".filter-mouseover")
+                    .on("mouseover", null)
+                    .on("mouseout", null);
+        self.html.mainHTML
+            .selectAll("viz-evolution")
+                .selectAll("occurence-mouseover")
+                    .on("mouseover", null)
+                    .on("mouseout", null);
+
         self.html.mainHTML.selectAll("*")
             .remove();
         self.html.occurrencesSVG.selectAll("*")
@@ -849,11 +901,11 @@ moduleVisualizations.factory('TimelineVisualization',
     TimelineVisualization.prototype.remake = function(nodeID, vizID) {
         // Remove previous nodes/handlers, since they are invalidated by the
         // new DOM layout
-        this.remove();
+        this.remove(nodeID, vizID);
 
         // Add attributes and svgs to the new DOM targets. Note that the target
         // element ID is still the same.
-        this.make();
+        this.make(nodeID, vizID);
 
         // Render paths, reusing data stored in the visualization object
         if (this.hasData) {
@@ -949,9 +1001,9 @@ moduleVisualizations.factory('TimelineVisualization',
             function(isMaximized) {
         // When we don't have data, we simply show all the attribute text
         if (isMaximized || !(this.hasData)) {
-            //this.renderVisibleDetails();
+            this.renderVisibleDetails();
         } else {
-            //this.renderNoVisibleDetails();
+            this.renderNoVisibleDetails();
         }
     };
 
