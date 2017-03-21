@@ -2584,5 +2584,5 @@ var testTimeline = function() {
     });
 };
 //testSpirals();
-//testHeatmap();
-testTimeline();
+testHeatmap();
+//testTimeline();

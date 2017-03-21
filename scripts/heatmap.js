@@ -159,15 +159,15 @@ moduleVisualizations.factory('HeatMapVisualization',
                     .attr("height", 
 						self.height + self.margin.top + self.margin.bottom);
 
-            // Group for filters
-            var filtersSVG = svg.append("g")
-                .attr("id", "filters");
-
             // Group for main visualization
-            svg = svg.append("g")
+            var mainSVG = svg.append("g")
                 .attr("id", "viz")
                 .attr("transform", "translate(" +
                     self.margin.left + "," + self.margin.top + ")");
+
+            // Group for filters
+            var filtersSVG = svg.append("g")
+                .attr("id", "filters");
 
             d3.select("#" + heatMapID + "-main-" + matrixNumber)
                 .style('float', 'left');
@@ -183,7 +183,7 @@ moduleVisualizations.factory('HeatMapVisualization',
                 heatMapID: heatMapID,
                 id: matrixNumber,
                 filtersSVG: filtersSVG,
-                svg: svg
+                svg: mainSVG
             };
 
             var index = utils.arrayObjectIndexOf(self.html, matrixNumber, "id");
