@@ -1,6 +1,25 @@
+.occurence-selected,
 .occurence-mouseover:hover {
-    background-color: #31708f;
-    fill: #31708f;
-    stroke: #c4e3f3;
+    background-color: #31708f !important;
+    fill: #31708f !important;
+    stroke: #c4e3f3 !important;
     stroke-width: 2px;   
+}
+
+.occurence-transparent {
+    background-color: transparent;
+    fill: none;
+}
+
+.attribute-occurence-warning {
+    /* Same as Bootstrap's label-danger */
+    background-color: #d9534f;
+    fill: #d9534f;
+}
+
+.occurence-warning {
+    background-color: white;
+    fill: white;
+    font-family: monospace;
+    font-weight: bold;
 }

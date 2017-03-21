@@ -348,7 +348,7 @@ moduleVisualizations.factory('TimelineVisualization',
 
         var vizContentWidth = Math.min(
             self.vizWidth,
-            (histogramHeight / 2) * maxOverlapCount
+            (histogramHeight / 1.5) * maxOverlapCount
         );
 
         //
@@ -467,11 +467,14 @@ moduleVisualizations.factory('TimelineVisualization',
                         .style("width", self.padding / 2 + "px")
                         .html(monthName);
 
+                    var labelWidth = self.visualizationRenderer
+                        .longestNameLength * 8 + cellSizeWithOffset;
                     var attributeNames = 
                         matrixDates[year][month].attributeNames;
                     var monthDiv = monthHTML.append("div")
                         .style("display", "inline-block")
                         .append("svg")
+                            .attr("class", "viz-svg-contents")
                             .attr("height", cellSizeWithOffset *
                                 attributeNames.length);
                     var monthSVG = monthDiv.append("g")
@@ -480,8 +483,6 @@ moduleVisualizations.factory('TimelineVisualization',
                         .attr("class", "viz-evolution")
                         .attr("id", "viz-evolution-svg-" + year + "-" + month);
 
-                    var labelWidth = self.visualizationRenderer
-                        .longestNameLength * 8 + cellSizeWithOffset;
                     var monthCellsRectLabels = monthSVG
                         .selectAll(".attribute-month-rect-label")
                         .data(attributeNames);
@@ -521,7 +522,7 @@ moduleVisualizations.factory('TimelineVisualization',
                             .attr("y", function(d, i) {
                                 return i * 
                                     cellSizeWithOffset + cellSize -
-                                    cellSizeOffset / 2;
+                                    cellSizeOffset;
                             })
                             .on("mouseover", function(d) {
                                 self.addSelections(d);
@@ -617,12 +618,20 @@ moduleVisualizations.factory('TimelineVisualization',
                         .offset([-10, 0])
                         .direction('n')
                         .html(function(d, i) {
+                            var isNonMedicated = ((utils.arrayObjectIndexOf(
+                                self.patientLists.selectedDiseases,
+                                d.name,
+                                "name") !== -1) && (d.overlapIndex === 0));
                             return "<div style=\"text-align: left\">" +
                                 "<b>Início: </b>" + 
                                     moment(d.dates.start).format("YYYY/MM/DD") + 
                                 "<br/>" +
                                 "<b>Fim: </b>" +
                                     moment(d.dates.end).format("YYYY/MM/DD") + 
+                                ((isNonMedicated) ?
+                                    ("<br/>" + "<span class=\"label label-danger\"><b>Doença não medicada</b></span>") :
+                                    ""
+                                ) +
                             "</div>";
                         });
                     monthEvolutionSVG.call(evolutionTip);
@@ -631,6 +640,16 @@ moduleVisualizations.factory('TimelineVisualization',
                     // by bounding box
                     var waitForDOMRendered = function selfFunction() {
                         try {
+                            var classByMedication = function(d, i) {
+                                var isNonMedicated = ((utils.arrayObjectIndexOf(
+                                    self.patientLists.selectedDiseases,
+                                    d.name,
+                                    "name") !== -1) && (d.overlapIndex === 0));
+                                return isNonMedicated ?
+                                    "attribute-occurence attribute-occurence-warning" :
+                                    "attribute-occurence";
+                            };
+
                             var textData = visualizations.extractBBoxes(
                                 monthSVG
                             );
@@ -643,8 +662,33 @@ moduleVisualizations.factory('TimelineVisualization',
                             var monthEvolution = monthEvolutionSVG
                                 .selectAll(".attribute-occurence occurence-mouseover")
                                 .data(monthFlatEvolutionData);
-                            monthEvolution.enter().append("circle")
-                                .attr("class", "attribute-occurence occurence-mouseover")
+                            var monthEvolutionEnter = monthEvolution.enter();
+                            var monthEvolutionEnterGroup = monthEvolutionEnter
+                                .append("g")
+                                .on("mouseover", function(d, i) {
+                                    evolutionTip.show(d, i);
+
+                                    d3.select(this.parentNode)
+                                        .selectAll(".attribute-occurence")
+                                        .attr("class", function(a) {
+                                            var isSame = 
+                                                (a.dataIndex == d.dataIndex) &&
+                                                (a.name == d.name);
+                                            return (isSame) ? 
+                                                classByMedication(a, i) +
+                                                    " occurence-selected" :
+                                                classByMedication(a, i);
+                                        });
+                                })
+                                .on("mouseout", function(d, i) {
+                                    evolutionTip.hide(d, i);
+
+                                    d3.select(this.parentNode)
+                                        .selectAll(".attribute-occurence")
+                                        .attr("class", classByMedication);
+                                });
+                            monthEvolutionEnterGroup.append("circle")
+                                .attr("class", classByMedication)
                                 .attr("r", cellSize / 2)
                                 .merge(monthEvolution)
                                     .attr("cx", function(d, i) {
@@ -653,13 +697,28 @@ moduleVisualizations.factory('TimelineVisualization',
                                     })
                                     .attr("cy", function(d) {
                                         return attributeNames.indexOf(d.name) * 
+                                            cellSizeWithOffset + cellSizeOffset;
+                                    });
+                            monthEvolutionEnterGroup.append("text")
+                                .attr("class", "occurence-warning")
+                                .merge(monthEvolution)
+                                    .attr("dx", function(d, i) {
+                                        return d.occurenceIndex *
                                             cellSizeWithOffset;
                                     })
-                                    .on("mouseover", function(d, i) {
-                                        evolutionTip.show(d, i);
+                                    .attr("dy", function(d, i) {
+                                        return attributeNames.indexOf(d.name) * 
+                                            cellSizeWithOffset + cellSizeOffset * 2;
                                     })
-                                    .on("mouseout", function(d, i) {
-                                        evolutionTip.hide(d, i);
+                                    .text(function(d, i) {
+                                        var isNonMedicated = 
+                                            ((utils.arrayObjectIndexOf(
+                                                self.patientLists
+                                                    .selectedDiseases,
+                                                d.name,
+                                                "name") !== -1) && 
+                                            (d.overlapIndex === 0));
+                                        return isNonMedicated ? "!" : "";
                                     });
                             monthEvolution.exit().remove();
                         } catch(e) {
@@ -672,6 +731,10 @@ moduleVisualizations.factory('TimelineVisualization',
         }
 
         // Align elements
+        d3.selectAll(".viz-svg-contents")
+            .attr("width", longestMatrixWidth +
+                (self.padding * 2) +
+                self.labelPadding);
         d3.select("#svg-occurrences")
             .attr("width", longestMatrixWidth + 
                 cellSizeWithOffset);
