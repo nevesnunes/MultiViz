@@ -245,6 +245,7 @@ moduleVisualizations.factory('SpiralVisualization',
                 recordedFrequency[recordedFrequency.length - 1]);
 
         var accumulatorBinDays = 0;
+        var binDosageObjects = [];
         for (var i = 0, currentDateIndex = 0; !isLastDate; i++) {
             var recordedMoment = moment(recordedFrequency[currentDateIndex]);
             var diffDates = currentMoment.diff(recordedMoment, interval);
@@ -254,6 +255,20 @@ moduleVisualizations.factory('SpiralVisualization',
                 (currentMoment.diff(lastRecordedMoment, interval) <= 0);
             isFirstDate = (currentDateIndex === 0);
             isLastDate = (currentDateIndex == recordedFrequency.length - 1);
+
+            // Keep track of any new names in bin interval
+            if (currentDateIndex < recordedDosage.length) {
+                if (recordedMoment.format("YYYY/MM/DD") == "2015/03/21") {
+                    console.log(JSON.stringify(recordedDosage[currentDateIndex], null, 4));
+                }
+                    recordedDosage[currentDateIndex].forEach(function(dosage) {
+                        var binDosageIndex = utils.arrayObjectIndexOf(
+                            binDosageObjects, dosage.name, "name");
+                        if (binDosageIndex === -1) {
+                            binDosageObjects.push(dosage);
+                        }
+                    });
+            }
 
             // A recorded value in the current date is present:
             // Save it and advance to the next recorded date
@@ -293,12 +308,13 @@ moduleVisualizations.factory('SpiralVisualization',
                 }
 
                 // Extract all dosages for each medication in the current date
-                var dosage = recordedDosage[currentDateIndex - 1]
+                var dosage = (accumulatorBinDays > 0) ? (binDosageObjects
                     .reduce(function(old, property, index) {
                         var delimiter = (index > 0) ? " + " : "";
                         return old + delimiter + property.dosage +
                             ' (' + property.name + ') ';
-                    }, '');
+                    }, '')) :
+                    "0";
 
                 // If moment is contained in the brush interval, add date to
                 // brushed data
@@ -323,6 +339,8 @@ moduleVisualizations.factory('SpiralVisualization',
                 });
 
                 accumulatorBinDays = 0;
+
+                binDosageObjects = [];
 
                 // Advance to the next bin;
                 // Add a day to the start of the next sector,
