@@ -41,12 +41,6 @@
                     <div ng-controller="controllerMainPanel">
                         <ul class="nav navbar-nav navbar-left bold-text">
                             <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-check" aria-hidden="true"></span> Selecções<span class="caret custom-caret-margin"></span></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">TODO</a></li>
-                                </ul>
-                            </li>
-                            <li class="dropdown">
                                 <a href="#" ng-click="showViews()" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-align-left" aria-hidden="true"></span> Vistas<span class="caret custom-caret-margin"></span></a>
                                 <ul class="dropdown-menu" id="showViewsMenu">
                                     <!-- Populated by showViews() -->
@@ -56,9 +50,11 @@
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-th-large" aria-hidden="true"></span> Layout<span class="caret custom-caret-margin"></span></a>
                                 <ul class="dropdown-menu">
                                     <li><a href="#" ng-click="newLayout($event)"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Novo</a></li>
+                                    <!-- FIXME: Not implemented
                                     <li role="separator" class="divider"></li>
                                     <li><a href="#"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> Guardar</a></li>
-                                    <li><a href="#"><span class="glyphicon glyphicon-open" aria-hidden="true"></span> Carregar</a></li>
+                                    <li><a hrjf="#"><span class="glyphicon glyphicon-open" aria-hidden="true"></span> Carregar</a></li>
+                                    -->
                                 </ul>
                             </li>
                         </ul>
@@ -88,12 +84,14 @@
                             <li><a href="#" ng-click="gotoIndex($event)">Fechar Sessão</a></li>
                         </ul>
                     </div>
+                    <!-- FIXME: Not implemented
                     <form class="navbar-form navbar-right">
                         <div class="right-inner-addon">
                             <i class="glyphicon glyphicon-search"></i>
                             <input type="text" class="form-control" placeholder="Procurar paciente...">
                         </div>
                     </form>
+                    -->
                 </div>
             </div>
         </nav>

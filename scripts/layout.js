@@ -287,14 +287,24 @@ moduleLayout.directive("directiveMainPanel",
                 var html = '<li>';
                 html += (scope.views.length === 0) ?
                     '<a><span class="glyphicon glyphicon-alert" aria-hidden="true"></span> Nenhuma vista disponível.</a>' :
-                    '<a href="#" id="show-views-{{::view.model.id}}" ng-repeat="view in views">' +
-                        '{{::view.model.vizType}} ({{::view.model.id}})' +
+                    '<a href="#" id="show-views-{{::view.model.id}}" ng-repeat="view in views" ng-click="paneMaximizeFromID(view.model.id)">' +
+                        '{{::view.model.vizType}}' +
                     '</a>';
                 html += '</li>';
                 var showViewsTarget = angular.element(
                     '#showViewsMenu');
                 showViewsTarget.html(
                     $compile(html)(scope));
+            };
+
+            scope.paneMaximizeFromID = function(id) {
+                var node = nodes.getRootNode().first(function (node1) {
+                    return node1.model.id === id;
+                });
+
+                nodes.setCurrentNode(node);
+
+                scope.APIPanes.updateLayout();
             };
         }
     };
@@ -662,7 +672,7 @@ moduleLayout.directive("directiveActionPanel",
                         '</a>' +
                     '</div>' +
                     '<div class="view-choice" ng-click="chooseTimeline()">' +
-                    '<img src="images/views/circular.svg" ' +
+                    '<img src="images/views/timeline.svg" ' +
                         'class="view-choice-svg">' +
                         '<a class="discrete-link" href="#">' +
                             'Interacção temporal entre atributos' +
@@ -1335,7 +1345,7 @@ moduleLayout.directive("directiveActionPanel",
                             img:    "images/controls/black/add.svg"
                         });
                         html = '<div>';
-                        html += widgets.makeAttributePills({
+                        html += widgets.makeAttributePillsOnlyData({
                             currentModificationType: vizObject
                                 .currentModificationType,
                             modificationTypes: vizObject
@@ -1374,7 +1384,7 @@ moduleLayout.directive("directiveActionPanel",
 
                         // Populate widgets with common lists ("...Names")
                         html = '<div>';
-                        html += widgets.makeAttributePills({
+                        html += widgets.makeAttributePillsOnlyData({
                             currentModificationType: vizObject
                                 .currentModificationType,
                             modificationTypes: vizObject

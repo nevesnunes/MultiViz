@@ -49,6 +49,22 @@ moduleWidgetBuilder.factory('widgets', [function() {
         return html;
     };
 
+    var makeAttributePillsOnlyData = function(options) {
+        var html = '<ul class="nav nav-pills nav-justified">' +
+                '<li ' +
+                    'id="btnDisplayData" ' +
+                    'ng-class="isModificationTypeActive(\'' + 
+                        options.modificationTypes.DATA + '\')" ' +
+                    'ng-click="setModificationType(\'' + 
+                        options.modificationTypes.DATA + '\')">' +
+                    '<a href="#">Dados</a>' +
+                '</li>' +
+            '</ul>' +
+            '<div class="custom-separator" />';
+
+        return html;
+    };
+
     var makeAttributePillsContents = function(options) {
         var html = (options.currentModificationType === options.modificationTypes.DATA) ?
             // Attribute lists
@@ -205,6 +221,7 @@ moduleWidgetBuilder.factory('widgets', [function() {
     return {
         makeAccordionCard: makeAccordionCard,
         makeAttributePills: makeAttributePills,
+        makeAttributePillsOnlyData: makeAttributePillsOnlyData,
         makeAttributePillsContents: makeAttributePillsContents,
         makeListWithEntryBars: makeListWithEntryBars,
         makeImgButton: makeImgButton
