@@ -893,6 +893,12 @@ moduleVisualizations.factory('visualizations',
         });
     };
 
+    var processSelectedListToObjects = function(list) {
+        return list.filter(function(obj) {
+            return obj.selected;
+        });
+    };
+
     var intervals = {
         'years': {
             value: 0,
@@ -1075,6 +1081,7 @@ moduleVisualizations.factory('visualizations',
         colors: colors,
         customGreens: customGreens,
         processSelectedList: processSelectedList,
+        processSelectedListToObjects: processSelectedListToObjects,
         diffInterval: diffInterval,
         nextInterval: nextInterval,
         translateInterval: translateInterval,

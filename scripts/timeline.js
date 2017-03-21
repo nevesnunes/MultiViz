@@ -25,6 +25,12 @@ moduleVisualizations.factory('TimelineVisualization',
             medications: filterByPatientAttributes(
                 options.medications, 'medications')
         };
+        this.patientLists.selectedDiseases =
+            visualizations.processSelectedListToObjects(
+                this.patientLists.diseases);
+        this.patientLists.selectedMedications =
+            visualizations.processSelectedListToObjects(
+                this.patientLists.medications);
 
         this.currentAttributeType = attributeType.DISEASES;
         this.currentModificationType = modificationType.DATA;
@@ -50,7 +56,7 @@ moduleVisualizations.factory('TimelineVisualization',
 
         var patient = patientData.getAttribute(patientData.KEY_PATIENT);
         return list.filter(function(obj) {
-            return (obj.selected) && (utils.arrayObjectIndexOf(
+            return (utils.arrayObjectIndexOf(
                 patient[listName],
                 obj.name,
                 "name")) !== -1;
@@ -130,11 +136,9 @@ moduleVisualizations.factory('TimelineVisualization',
             self.padding + self.labelPadding * 2;
         d3.select("#" + timelineID + "-details")
             .append("div")
+                .attr("id", "occurences-title")
                 .style('margin-left',
-                    marginFromLabels + "px")
-                .html('<h4><b>' +
-                        'Contagem de <br/>ocorrências <br/>simultâneas' +
-                    '</b></h4>');
+                    marginFromLabels + "px");
         var occurrencesSVG = d3.select("#" + timelineID + "-details")
             .append("div")
                 .style("display", "inline-block")
@@ -149,12 +153,10 @@ moduleVisualizations.factory('TimelineVisualization',
                             marginFromLabels + "," + 0 + ")");
         d3.select("#" + timelineID + "-details")
             .append("div")
+                .attr("id", "evolution-title")
                 .style("display", "inline-block")
                 .style('margin-left',
-                    marginFromLabels + "px")
-                .html('<h4><b>' +
-                        'Evolução <br/>temporal de <br/>ocorrências' +
-                    '</b></h4>');
+                    marginFromLabels + "px");
 
         self.html = {
             elementID: elementID,
@@ -178,6 +180,18 @@ moduleVisualizations.factory('TimelineVisualization',
 
     TimelineVisualization.prototype.render = function() {
         var self = this;
+
+        // Set titles for each visualization
+        d3.select("#" + self.html.timelineID + "-details")
+            .select("#occurences-title")
+                .html('<h4><b>' +
+                        'Contagem de <br/>ocorrências <br/>simultâneas' +
+                    '</b></h4>');
+        d3.select("#" + self.html.timelineID + "-details")
+            .select("#evolution-title")
+                .html('<h4><b>' +
+                        'Evolução <br/>temporal de <br/>ocorrências' +
+                    '</b></h4>');
 
         var recordedDosage = 
             self.visualizationRenderer.recordedDosage;
@@ -375,7 +389,7 @@ moduleVisualizations.factory('TimelineVisualization',
             .direction('n')
             .html(function(d, i) {
                 return "<div style=\"text-align: center\">" +
-                    "<span><b>" + d + "</b> ocorrências de atributos " + 
+                    "<span><b>" + d + "</b> atributos " + 
                         ((i === 0) ?
                             "isolados" :
                             "sobrepostos " + (i + 1) + " a " + (i + 1)
@@ -520,8 +534,8 @@ moduleVisualizations.factory('TimelineVisualization',
                             });
                     monthCellsLabels.exit().remove();
 
-                    console.log(JSON.stringify(overlaps, null, 4));
-                    console.log(JSON.stringify(matrixDates, null, 4));
+                    //console.log(JSON.stringify(overlaps, null, 4));
+                    //console.log(JSON.stringify(matrixDates, null, 4));
 
                     // Flatten data, so that we draw as many cells as
                     // overlapped attributes in the month
@@ -666,6 +680,19 @@ moduleVisualizations.factory('TimelineVisualization',
             cellSizeOffset * 2 + ")");
     };
 
+    TimelineVisualization.prototype.renderNoData = function() {
+        d3.select("#" + this.html.timelineID + "-main")
+            .html('<p>Nenhum atributo seleccionado.</p>');
+
+        // Remove titles
+        d3.select("#" + this.html.timelineID + "-details")
+            .select("#occurences-title")
+                .html('');
+        d3.select("#" + this.html.timelineID + "-details")
+            .select("#evolution-title")
+                .html('');
+    };
+
     TimelineVisualization.prototype.populate = function(data, id) {
         var self = this;
 
@@ -675,11 +702,11 @@ moduleVisualizations.factory('TimelineVisualization',
         var targetViz;
         var extractedAttributes = [];
         extractedAttributes.push({
-            array: self.patientLists.diseases,
+            array: self.patientLists.selectedDiseases,
             name: "diseases"
         });
         extractedAttributes.push({
-            array: self.patientLists.medications,
+            array: self.patientLists.selectedMedications,
             name: "medications"
         });
         for(var extractedAttributesIndex = 0;
@@ -798,10 +825,15 @@ moduleVisualizations.factory('TimelineVisualization',
             }
         }
 
-        self.visualizationRenderer = utils.extend(targetViz, {});
-        self.visualizationRenderer.longestNameLength = 0;
-        
-        self.render();
+        self.hasData = (targetViz);
+        if (self.hasData) {
+            self.visualizationRenderer = utils.extend(targetViz, {});
+            self.visualizationRenderer.longestNameLength = 0;
+            
+            self.render();
+        } else {
+            self.renderNoData();
+        }
     };
 
     TimelineVisualization.prototype.remove = function(nodeID, vizID) {
@@ -851,12 +883,18 @@ moduleVisualizations.factory('TimelineVisualization',
         if (state.diseases) {
             self.patientLists.diseases = filterByPatientAttributes(
                 state.diseases, 'diseases');
+            self.patientLists.selectedDiseases =
+                visualizations.processSelectedListToObjects(
+                    self.patientLists.diseases);
 
             areBinsBeingCreated = true;
         }
         if (state.medications) {
             self.patientLists.medications = filterByPatientAttributes(
                 state.medications, 'medications');
+            self.patientLists.selectedMedications =
+                visualizations.processSelectedListToObjects(
+                    self.patientLists.medications);
 
             areBinsBeingCreated = true;
         }
