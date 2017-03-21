@@ -1937,29 +1937,79 @@ moduleVisualizations.factory('HeatMapVisualization',
     };
 
     HeatMapVisualization.prototype.renderVisibleDetails = function() {
-        d3.select("#" + this.targetElement + "-switcher")
+        var self = this;
+
+        d3.select("#" + self.targetElement + "-switcher")
             .style('display', 'inline-block')
             .style("visibility", "initial")
             .style("width", "initial")
             .style("height", "initial");
-        d3.select("#" + this.targetElement + "-sorting")
+
+        d3.select("#" + self.targetElement + "-sorting")
             .style('display', 'inline-block')
             .style("visibility", "initial")
             .style("width", "initial")
             .style("height", "initial");
+
+        // Filters
+        self.html.forEach(function(element) {
+            var svg = element.filtersSVG;
+
+            svg.selectAll('text')
+                .style('display', 'initial')
+                .style("visibility", "initial");
+
+            svg.selectAll('.rect-filter-present')
+                .style('display', 'initial')
+                .style("visibility", "initial");
+            svg.selectAll('.rect-filter-nonpresent')
+                .style('display', 'initial')
+                .style("visibility", "initial");
+            svg.selectAll('.rect-filter-overlay')
+                .style('display', 'initial')
+                .style("visibility", "initial");
+            svg.selectAll('.text-filter-name')
+                .style('display', 'initial')
+                .style("visibility", "initial");
+        });
     };
 
     HeatMapVisualization.prototype.renderNoVisibleDetails = function() {
-        d3.select("#" + this.targetElement + "-switcher")
+        var self = this;
+
+        d3.select("#" + self.targetElement + "-switcher")
             .style('display', 'none')
             .style("visibility", "hidden")
             .style("width", 0)
             .style("height", 0);
-        d3.select("#" + this.targetElement + "-sorting")
+
+        d3.select("#" + self.targetElement + "-sorting")
             .style('display', 'none')
             .style("visibility", "hidden")
             .style("width", 0)
             .style("height", 0);
+
+        // Filters
+        self.html.forEach(function(element) {
+            var svg = element.filtersSVG;
+
+            svg.selectAll('text')
+                .style('display', 'none')
+                .style("visibility", "hidden");
+
+            svg.selectAll('.rect-filter-present')
+                .style('display', 'none')
+                .style("visibility", "hidden");
+            svg.selectAll('.rect-filter-nonpresent')
+                .style('display', 'none')
+                .style("visibility", "hidden");
+            svg.selectAll('.rect-filter-overlay')
+                .style('display', 'none')
+                .style("visibility", "hidden");
+            svg.selectAll('.text-filter-name')
+                .style('display', 'none')
+                .style("visibility", "hidden");
+        });
     };
 
     HeatMapVisualization.prototype.modifyDetailsVisibility =
