@@ -1160,9 +1160,6 @@ moduleLayout.directive("directiveActionPanel",
                         sourceViz.expectedFrequency :
                         targetViz.expectedFrequency;
 
-                    // Compute common range;
-                    // For simplicity, if the two ranges don't overlap,
-                    // we just introduce that hole into the new range.
                     var newStartDate = timeWeaver.computeJoinMoment(
                         sourceViz
                             .visualizationRenderer.option.recordedStartDate,
@@ -1178,10 +1175,6 @@ moduleLayout.directive("directiveActionPanel",
                         function(a, b) { return a < b; }
                     ).toISOString();
 
-                    // Compute common recorded frequency:
-                    // Iterate through all the recorded frequencies and
-                    // collect the dates, alongside correspoding
-                    // attribute names
                     var resultJoinProperties = timeWeaver
                         .computeJoinProperties(sourceViz, targetViz);
 
@@ -1210,6 +1203,18 @@ moduleLayout.directive("directiveActionPanel",
                         nodeID: currentNode.model.id,
                         vizID: vizID
                     });
+
+                    // spiral state was changed: update our reference
+                    targetViz = nodes.getVizByIDs(
+                            currentNode.model.id,
+                            currentNode.model.currentVizID)
+                        .vizObject;
+
+                    // spiral state was changed: update it's options
+                    scope.APIPanes.updateBinningOptions(
+                        currentNode.model.id,
+                        currentNode.model.currentVizID,
+                        targetViz);
 
                     // reset action panel
                     scope.makeDefaultActions();
@@ -1795,7 +1800,7 @@ moduleLayout.directive("directivePanes",
                 '</div>';
             };
 
-            var updateBinningOptions = function(id, vizID, spiralObject) {
+            scope.updateBinningOptions = function(id, vizID, spiralObject) {
                 var availableBinnings = spiralObject.extractAvailableBinnings();
                 if (availableBinnings.length > 0) {
                     // Label for current binning
@@ -1841,7 +1846,7 @@ moduleLayout.directive("directivePanes",
                     .html(makeCurrentBinningHTML(vizID));
 
                 // Add binning options to target defined previously
-                updateBinningOptions(
+                scope.updateBinningOptions(
                     id,
                     vizID,
                     spiralObject);
@@ -1951,7 +1956,7 @@ moduleLayout.directive("directivePanes",
                 }
 
                 // Add binning options to target defined previously
-                updateBinningOptions(
+                scope.updateBinningOptions(
                     id,
                     vizID,
                     spiralObject);
@@ -2452,6 +2457,7 @@ moduleLayout.directive("directivePanes",
             scope.APIPanes.newLayout = scope.newLayout;
             scope.APIPanes.updateFromSelections = scope.updateFromSelections;
             scope.APIPanes.updateBinningElements = scope.updateBinningElements;
+            scope.APIPanes.updateBinningOptions = scope.updateBinningOptions;
             scope.APIPanes.addSpiral = scope.addSpiral;
             scope.APIPanes.addSpiralRoutine = scope.addSpiralRoutine;
             scope.APIPanes.removeSpiralRoutine = scope.removeSpiralRoutine;
@@ -2583,6 +2589,6 @@ var testTimeline = function() {
         ]);
     });
 };
-//testSpirals();
-testHeatmap();
+testSpirals();
+//testHeatmap();
 //testTimeline();

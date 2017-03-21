@@ -7,6 +7,9 @@ var moduleVisualizations = angular.module('moduleVisualizations',
 moduleVisualizations.factory("timeWeaver",
         ['utils', 'visualizations', '$q',
         function(utils, visualizations, $q) {
+            // Compute common range;
+            // For simplicity, if the two ranges don't overlap,
+            // we just introduce that hole into the new range.
             var computeJoinMoment = function(
                     source, target, comparator) {
                 var sourceStartMoment = moment(source, 'YYYY/MM/DD');
@@ -17,6 +20,10 @@ moduleVisualizations.factory("timeWeaver",
                     sourceStartMoment;
             };
 
+            // Compute common recorded frequency:
+            // Iterate through all the recorded frequencies and
+            // collect the dates, alongside correspoding
+            // attribute names
             var computeJoinProperties = function(
                     sourceViz, targetViz) {
                 var newDosage = [];

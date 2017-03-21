@@ -456,15 +456,27 @@ moduleVisualizations.factory('SpiralVisualization',
                 state.joinData.targetRenderer
             );
 
-            console.log(this.visualizationAncestors);
+            // Expected frequency has changed: use the most fine-grained one
+            var diffIntervals = visualizations.diffInterval(
+                visualizations.translateFrequency(
+                    this.attributeData.expectedFrequency),
+                visualizations.translateFrequency(
+                    this.expectedFrequency));
+            this.expectedFrequency = (diffIntervals > 0) ?
+                this.attributeData.expectedFrequency :
+                this.expectedFrequency;
 
             // Invalidate previous binning: Data has changed, therefore
             // we need to compute the appropriate binning
             this.binning = null;
+            /*
+            this.binning = visualizations.translateFrequency(
+                this.expectedFrequency);
+             */
 
             this.visualizationRenderer
                 .set('binning', this.binning)
-                // Invalidate previous brushing
+                // Invalidate previous brushing: Data has changed
                 .set('intervalDates', [])
                 .set('intervalPos', []);
             areBinsBeingCreated = true;
