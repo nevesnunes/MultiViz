@@ -251,13 +251,14 @@ moduleWidgetBuilder.directive('directiveStaticTooltip', [function() {
 moduleWidgetBuilder.directive('directiveTooltip', [function() {
     return {
         link: function(scope, element, attributes) {
+            var placement = element.attr('custom-placement') || 'right';
             element
                 .on('mouseenter', function() {
                     scope.setTooltipText();
                     element.tooltip('hide')
                         .attr('data-html', true)
                         .attr('data-container', 'body')
-                        .attr('data-placement', 'right')
+                        .attr('data-placement', placement)
                         .attr('data-original-title', scope.tooltipText)
                         .attr('title', scope.tooltipText)
                         .tooltip('fixTitle')

@@ -20,7 +20,7 @@ moduleVisualizations.directive('directiveTimelineGraphTooltip', function() {
             scope.setTooltipText = function(button) {
                 scope.tooltipText = 
                     "<div style=\"text-align: left\" class=\"p\">" +
-                        "<b>Ligações mais próximas</b> " +
+                        "<b>Ligações mais curtas</b> " +
                         "correspondem a atributos com " +
                         "mais ocurrências simultâneas." +
                     "</div>";
@@ -245,6 +245,7 @@ moduleVisualizations.factory('TimelineVisualization',
             .select("#graph-title-tooltip")
                 .html('<img class="tooltip-wrapper help" ' +
                         'title="{{tooltipText}}" ' + 
+                        'custom-placement="top" ' + 
                         'directive-tooltip directive-timeline-graph-tooltip ' +
                         'src="images/controls/info.svg">' +
                     '</img>');
@@ -392,8 +393,9 @@ moduleVisualizations.factory('TimelineVisualization',
                         start: utils.extend(recordedFrequency[i], [])
                     };
 
-                    // Use seen attributes to make data for graph
-                    // TODO: Explanation
+                    // Use seen attributes to make data for graph;
+                    // We keep track of all possible pairs of attributes,
+                    // counting how many overlaps each pair has.
                     var length = newAttributeNames.length;
                     if (length > 1) {
                         for (var firstNameIndex = 0;
@@ -427,6 +429,9 @@ moduleVisualizations.factory('TimelineVisualization',
                             }
                         }
                     }
+
+                    // We need to know all the attribute names in order to
+                    // build IDs for nodes
                     graphNames = graphNames.concat(
                         matrixDates[endYear][endMonth].attributeNames
                             .filter(function(item) {

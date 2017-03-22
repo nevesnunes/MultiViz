@@ -263,8 +263,8 @@ moduleLayout.controller('controllerMainPanel',
 }]);
 
 moduleLayout.directive("directiveMainPanel",
-        ['$compile', 'nodes',
-        function($compile, nodes) {
+        ['$compile', 'nodes', 'widgets',
+        function($compile, nodes, widgets) {
 	return { 
         scope: true,
         link: function(scope, element, attrs) {
@@ -309,6 +309,23 @@ moduleLayout.directive("directiveMainPanel",
         }
     };
 }]);
+
+moduleLayout.directive('directivePatientTooltip', function() {
+    return {
+        link: function (scope, element, attrs) {
+            scope.setTooltipText = function(button) {
+                scope.tooltipText = 
+                    "<div style=\"text-align: left\" class=\"p\">" +
+                        "Os <b>atributos presentes no paciente actual</b> " +
+                        "são assinalados (" +
+                        "<div style=\"display: inline-block\" class=\"" +
+                            "markPatientAttribute markPresent markSquare\" />" +
+                        ")." +
+                    "</div>";
+            };
+        }
+    };
+});
 
 moduleLayout.controller('controllerLayout',
         ['$scope', 'patientData',
@@ -1530,9 +1547,7 @@ moduleLayout.directive("directivePanes",
                     }
                 }
 
-                return '<div class="pretty-split-pane-component-inner"><p>' + 
-                    // FIXME: remove
-                    id + '</p>' +
+                return '<div class="pretty-split-pane-component-inner">' +
                     '<div style="display: block">' + 
                     viewportButton +
                     widgets.makeImgButton({
@@ -1926,8 +1941,6 @@ moduleLayout.directive("directivePanes",
                     '<div class="viz-contents" id="' + vizID + '-contents">' +
                         '<div style="display: block">' + 
                             buttonsHTML +
-                        // FIXME: remove
-                        vizID +
                         '</div>' +
                         '<div id="' + vizID + '-details">' +
                             '<div id="' + vizID + '-attribute-text" />' +
@@ -2101,8 +2114,6 @@ moduleLayout.directive("directivePanes",
                         'id="' + vizID + '" ' +
                         'data-node-id="' + id + '">' +
                         '<div style="display: block">' + 
-                            // FIXME: remove
-                            vizID +
                         '</div>' +
                         '<div id="' + vizID + '-contents">' +
                             '<div style="display: block">' + 
@@ -2187,8 +2198,6 @@ moduleLayout.directive("directivePanes",
                         'id="' + vizID + '" ' +
                         'data-node-id="' + id + '">' +
                         '<div style="display: block">' + 
-                            // FIXME: remove
-                            vizID +
                         '</div>' +
                         '<div id="' + vizID + '-contents">' +
                             // Frequency histogram

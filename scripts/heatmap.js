@@ -136,7 +136,7 @@ moduleVisualizations.factory('HeatMapVisualization',
             left: 40
         };
         self.vizWidth = angular.element('#' + elementID)[0]
-            .offsetWidth;
+            .offsetWidth - 40;
         self.width = self.vizWidth - self.margin.left - self.margin.right -
             10; // Padding from .pretty-split-pane-component-inner
         self.height = 420 - self.margin.top - self.margin.bottom;
@@ -147,7 +147,7 @@ moduleVisualizations.factory('HeatMapVisualization',
             console.log("[WARN] @make: undefined id.");
             return;
         }
-        
+
         // Multiple matrixes can be defined, each with their own
         // html elements appended dynamically.
         var matrixNumbers = [1];

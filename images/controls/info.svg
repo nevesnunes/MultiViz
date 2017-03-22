@@ -14,7 +14,7 @@
    viewBox="0 0 22 22"
    id="svg4307"
    version="1.1"
-   inkscape:version="0.91 r13725"
+   inkscape:version="0.92.1 r"
    sodipodi:docname="info.svg">
   <defs
      id="defs4309" />
@@ -26,7 +26,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="18.459209"
-     inkscape:cx="8.5727799"
+     inkscape:cx="5.1846856"
      inkscape:cy="9.991497"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -58,7 +58,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -71,16 +71,16 @@
        transform="matrix(1.3735591,0,0,1.3758287,-219.76945,360.32037)"
        inkscape:label="document-new"
        id="g4855"
-       style="display:inline;fill:#000000;fill-opacity:0.50196078">
+       style="display:inline;fill:#808080;fill-opacity:1">
       <g
          id="g4889"
-         style="fill:#000000;fill-opacity:0.50196078">
+         style="fill:#808080;fill-opacity:1">
         <g
            id="g4139"
            inkscape:label="new-vertical"
-           style="fill:#000000;fill-opacity:0.50196078">
+           style="fill:#808080;fill-opacity:1">
           <ellipse
-             style="fill:#000000;fill-opacity:0.50196078;stroke:none"
+             style="fill:#808080;fill-opacity:1;stroke:none"
              id="path4446"
              cx="168.01321"
              cy="495"
@@ -88,31 +88,30 @@
              ry="8" />
           <text
              xml:space="preserve"
-             style="font-style:normal;font-weight:normal;font-size:10.00825882px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:0.50196078;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#808080;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
              x="158.86714"
              y="491.40549"
              id="text4448"
-             sodipodi:linespacing="125%"
              transform="scale(1.0008259,0.99917482)"><tspan
                sodipodi:role="line"
                id="tspan4450"
                x="158.86714"
-               y="491.40549" /></text>
+               y="491.40549"
+               style="font-size:10.00825882px;line-height:1.25;fill:#808080;fill-opacity:1"> </tspan></text>
         </g>
       </g>
     </g>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:20.12820625px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="7.4048376"
        y="1073.5265"
        id="text4452"
-       sodipodi:linespacing="125%"
        transform="scale(1.0242884,0.97628753)"><tspan
          sodipodi:role="line"
          id="tspan4454"
          x="7.4048376"
          y="1073.5265"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Caladea;-inkscape-font-specification:'Caladea Bold';fill:#ffffff;fill-opacity:1">i</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:20.12820625px;line-height:1.25;font-family:Caladea;-inkscape-font-specification:'Caladea Bold';fill:#ffffff;fill-opacity:1">i</tspan></text>
   </g>
 </svg>
