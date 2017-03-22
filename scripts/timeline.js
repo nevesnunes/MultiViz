@@ -14,6 +14,21 @@ moduleVisualizations.directive('directiveTimelineTooltip', function() {
     };
 });
 
+moduleVisualizations.directive('directiveTimelineGraphTooltip', function() {
+    return {
+        link: function (scope, element, attrs) {
+            scope.setTooltipText = function(button) {
+                scope.tooltipText = 
+                    "<div style=\"text-align: left\" class=\"p\">" +
+                        "<b>Ligações mais próximas</b> " +
+                        "correspondem a atributos com " +
+                        "mais ocurrências simultâneas." +
+                    "</div>";
+            };
+        }
+    };
+});
+
 moduleVisualizations.factory('TimelineVisualization',
         ['visualizations', 'patientData', 'retrievePatientData', 'utils', 'nodes', 'timeWeaver',
         function(visualizations, patientData, retrievePatientData, utils, nodes, timeWeaver) {
@@ -127,13 +142,26 @@ moduleVisualizations.factory('TimelineVisualization',
 
         self.padding = 60;
         self.labelPadding = 10;
+        var marginFromLabels = 
+            self.padding + self.labelPadding * 2;
 
         // Group for main visualization
         var mainHTML = d3.select("#" + timelineID + "-main");
 
+        // Group for graph visualization
+        self.graphSize = 300;
+        var graphSVG = d3.select("#" + timelineID + "-graph")
+            .append("div")
+                .attr("id", "graph-div")
+                .style('margin-left', marginFromLabels + "px")
+                .append("svg")
+                    .attr("id", "svg-graph")
+                    .attr("width", self.graphSize)
+                    .attr("height", self.graphSize)
+                    .append("g")
+                        .attr("id", "graph");
+
         // Group for occurrences histogram
-        var marginFromLabels = 
-            self.padding + self.labelPadding * 2;
         d3.select("#" + timelineID + "-details")
             .append("div")
                 .attr("id", "occurences-title")
@@ -144,7 +172,8 @@ moduleVisualizations.factory('TimelineVisualization',
                 .style("display", "inline-block")
                 .append("svg")
                     .attr("id", "svg-occurrences")
-                    .attr("width", self.vizWidth - self.padding / 2)
+                    .attr("width", self.vizWidth - 
+                        self.graphSize - self.padding / 2)
                     .attr("height", 0) // Set dynamically
                     .append("g")
                         .attr("id", "occurrences")
@@ -158,10 +187,25 @@ moduleVisualizations.factory('TimelineVisualization',
                 .style('margin-left',
                     marginFromLabels + "px");
 
+        d3.select("#" + timelineID + "-details")
+            .append("div")
+                .attr("id", "graph-title")
+                .style("display", "inline-block")
+                .style('margin-left',
+                    marginFromLabels + "px");
+
+        d3.select("#" + timelineID + "-details")
+            .append("div")
+                .attr("id", "graph-title-tooltip")
+                .style("display", "inline-block")
+                .style('margin-left',
+                    5 + "px");
+
         self.html = {
             elementID: elementID,
             timelineID: timelineID,
             occurrencesSVG: occurrencesSVG,
+            graphSVG: graphSVG,
             mainHTML: mainHTML
         };
 
@@ -192,6 +236,18 @@ moduleVisualizations.factory('TimelineVisualization',
                 .html('<h4><b>' +
                         'Evolução <br/>temporal de <br/>ocorrências' +
                     '</b></h4>');
+        d3.select("#" + self.html.timelineID + "-details")
+            .select("#graph-title")
+                .html('<h4><b>' +
+                        'Relações </br>entre atributos <br/>por ocorrências' +
+                    '</b></h4>');
+        d3.select("#" + self.html.timelineID + "-details")
+            .select("#graph-title-tooltip")
+                .html('<img class="tooltip-wrapper help" ' +
+                        'title="{{tooltipText}}" ' + 
+                        'directive-tooltip directive-timeline-graph-tooltip ' +
+                        'src="images/controls/info.svg">' +
+                    '</img>');
 
         var recordedDosage = 
             self.visualizationRenderer.recordedDosage;
@@ -211,6 +267,9 @@ moduleVisualizations.factory('TimelineVisualization',
          * - overlapIndex: corresponding occurence count index
          */
         var matrixDates = {};
+
+        var graphPairOccurrences = [];
+        var graphNames = [];
 
         // Store overlaps by frequency;
         // Each frequency can have many incidences by time range,
@@ -332,6 +391,47 @@ moduleVisualizations.factory('TimelineVisualization',
                     lastFrequency = {
                         start: utils.extend(recordedFrequency[i], [])
                     };
+
+                    // Use seen attributes to make data for graph
+                    // TODO: Explanation
+                    var length = newAttributeNames.length;
+                    if (length > 1) {
+                        for (var firstNameIndex = 0;
+                                firstNameIndex < (length - 1);
+                                firstNameIndex++) {
+                            for (var secondNameIndex = 0;
+                                    secondNameIndex < length;
+                                    secondNameIndex++) {
+                                    if (firstNameIndex === secondNameIndex) {
+                                        continue;
+                                    }
+
+                                    var newPair = [
+                                        newAttributeNames[firstNameIndex],
+                                        newAttributeNames[secondNameIndex]
+                                    ];
+                                    var pairIndex = utils.arrayObjectFullIndexOf(
+                                        graphPairOccurrences,
+                                        newPair,
+                                        ['firstName', 'secondName']);
+                                    if (pairIndex === -1) {
+                                        graphPairOccurrences.push({
+                                            firstName: newPair[0],
+                                            secondName: newPair[1],
+                                            incidences: 1,
+                                        });
+                                    } else {
+                                        graphPairOccurrences[pairIndex]
+                                            .incidences += 1;
+                                    }
+                            }
+                        }
+                    }
+                    graphNames = graphNames.concat(
+                        matrixDates[endYear][endMonth].attributeNames
+                            .filter(function(item) {
+                                return graphNames.indexOf(item) < 0;
+                            }));
                 }
             }
         }
@@ -741,6 +841,123 @@ moduleVisualizations.factory('TimelineVisualization',
         d3.selectAll(".viz-evolution").attr("transform", "translate(" +
             (longestMatrixWidth + cellSizeWithOffset) + "," +
             cellSizeOffset * 2 + ")");
+
+        //
+        // Graph
+        //
+
+        var graphMinIncidences = graphPairOccurrences.reduce(function(a, b) {
+            return Math.min(a.incidences, b.incidences); 
+        }); 
+        var graphMaxIncidences = graphPairOccurrences.reduce(function(a, b) {
+            return Math.max(a.incidences, b.incidences); 
+        }); 
+        var graphStrengthScale = d3.scaleLinear()
+             .domain([graphMinIncidences,graphMaxIncidences])
+             .range([1, 0.1]);
+
+        var forceSimulationNodes = graphNames.map(function(name) {
+            return {id: name};
+        });
+        var forceSimulationLinks = graphPairOccurrences.map(function(pair) {
+            return {
+                source: pair.firstName,
+                target: pair.secondName
+            };
+        });
+        var forceSimulationDistance = self.graphSize / 2;
+        var forceSimulationStrengthValues = 
+            graphPairOccurrences.map(function(pair) {
+                return graphStrengthScale(pair.incidences);
+            });
+        var forceSimulationStrength = function(d, i) {
+            return forceSimulationStrengthValues[i];
+        };
+        var forceSimulationID = function(d) {
+            return d.id;
+        };
+
+        console.log(JSON.stringify(graphPairOccurrences, null, 4));
+
+        var simulation = d3.forceSimulation(forceSimulationNodes)
+            .force("charge", d3.forceManyBody()
+                .strength(-100)
+                .distanceMax([forceSimulationDistance]))
+            .force("center", d3.forceCenter(
+                forceSimulationDistance,
+                forceSimulationDistance))
+            .force("link", d3.forceLink(forceSimulationLinks)
+                .id(forceSimulationID)
+                .distance(forceSimulationDistance)
+                .strength(forceSimulationStrength)
+                .iterations(1))
+            .force("x", d3.forceX())
+            .force("y", d3.forceY())
+            .stop();
+
+        var graphTip = d3.tip()
+            .attr('class', 'tooltip tooltip-element tooltip-d3')
+            .offset([-10, 0])
+            .direction('n')
+            .html(function(d, i) {
+                return "<div style=\"text-align: center\">" +
+                        d.id + 
+                "</div>";
+            });
+        self.html.graphSVG.call(graphTip);
+
+        // Use a timeout to allow the rest of the page to load first.
+        d3.timeout(function() {
+            // See https://github.com/d3/d3-force/blob/master/README.md#simulation_tick
+            for (var i = 0, n = Math.ceil(
+                    Math.log(simulation.alphaMin()) / 
+                        Math.log(1 - simulation.alphaDecay()));
+                    i < n;
+                    ++i) {
+                simulation.tick();
+            }
+
+            self.html.graphSVG
+                .attr("stroke", "#000")
+                .attr("stroke-width", 1.5)
+                .selectAll("line")
+                    .data(forceSimulationLinks)
+                    .enter().append("line")
+                        .attr("x1", function(d) {
+                            return d.source.x;
+                        })
+                        .attr("y1", function(d) {
+                            return d.source.y;
+                        })
+                        .attr("x2", function(d) {
+                            return d.target.x;
+                        })
+                        .attr("y2", function(d) {
+                            return d.target.y;
+                        });
+            self.html.graphSVG.append("g")
+                .attr("stroke", "#fff")
+                .attr("stroke-width", 1.5)
+                .selectAll("circle")
+                    .data(forceSimulationNodes)
+                    .enter().append("circle")
+                        .attr("fill", function(d, i) {
+                            return "#000";
+                        })
+                        .attr("cx", function(d) {
+                            return d.x;
+                        })
+                        .attr("cy", function(d) {
+                            return d.y;
+                        })
+                        .attr("r", 10)
+                        .on("mouseover", function(d, i) {
+                            graphTip.show(d, i);
+                        })
+                        .on("mouseout", function(d, i) {
+                            graphTip.hide(d, i);
+                        });
+        });
     };
 
     TimelineVisualization.prototype.renderNoData = function() {
@@ -763,7 +980,7 @@ moduleVisualizations.factory('TimelineVisualization',
             .style("width", "initial")
             .style("height", "initial");
         d3.select("#" + this.html.timelineID + "-main")
-            .style('display', 'initial')
+            .style('display', 'inline-block')
             .style("visibility", "initial")
             .style("width", "initial")
             .style("height", "initial");

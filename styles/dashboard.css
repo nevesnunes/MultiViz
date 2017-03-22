@@ -191,6 +191,15 @@ body {
     overflow: auto;
 }
 
+.viz-inline {
+    display: inline-block;
+}
+
+.viz-inline-top {
+    display: inline-block;
+    vertical-align: top;
+}
+
 .bold-text {
     font-weight: bold;
 }

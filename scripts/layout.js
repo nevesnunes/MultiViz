@@ -2196,7 +2196,11 @@ moduleLayout.directive("directivePanes",
                             '</div>' +
                             // Small multiple matrix;
                             // Each bin will be appended to this element
-                            '<div class="viz-main" id="' + vizID + '-main">' +
+                            '<div id="' + vizID + '-contents-vizs">' +
+                                '<div class="viz-main viz-inline" id="' + vizID + '-main">' +
+                                '</div>' +
+                                '<div class="viz-graph viz-inline-top" id="' + vizID + '-graph">' +
+                                '</div>' +
                             '</div>' +
                         '</div>' +
                     '</div>';
@@ -2217,6 +2221,10 @@ moduleLayout.directive("directivePanes",
                 } else {
                     vizObject.remake(id, vizID);
                 }
+
+                // Compile tooltips
+                target = angular.element('#graph-title-tooltip');
+                $compile(target)(targetScope);
 
                 // All elements created, now set their visibility
                 var isMaximized = nodes.isMaximized(id);
@@ -2589,6 +2597,6 @@ var testTimeline = function() {
         ]);
     });
 };
-testSpirals();
+//testSpirals();
 //testHeatmap();
-//testTimeline();
+testTimeline();
