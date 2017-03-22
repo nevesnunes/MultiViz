@@ -11,6 +11,7 @@
     fill: none;
 }
 
+.markOverlap,
 .attribute-occurence-warning {
     /* Same as Bootstrap's label-danger */
     background-color: #d9534f;

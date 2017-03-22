@@ -27,6 +27,8 @@ function Spiral(parameters) {
         color: parameters.color || 'black',
         colors: parameters.colors ||
             ["#bdbdbd","#969696","#737373","#525252","#252525","#000000"],
+        customReds: parameters.customReds ||
+            ["#bdbdbd","#969696","#737373","#525252","#252525","#000000"],
         functions: parameters.functions || {},
         currentMedication: parameters.currentMedication,
         intervalDates: [],
@@ -294,10 +296,15 @@ Spiral.prototype.render = function(reusePaths) {
         var colorScaleSplitter = d3.scaleQuantile()
             .domain(dataExtent)
             .range(option.colors);
+        var colorScaleRedsSplitter = d3.scaleQuantile()
+            .domain(dataExtent)
+            .range(option.customReds);
         var colorScale = function(data) {
-            return (data === 0) ?
+            return (data.value === 0) ?
                 "#ffffff" :
-                colorScaleSplitter(data);
+                ((data.countAttributes > 1) ?
+                    colorScaleRedsSplitter(data.value) :
+                    colorScaleSplitter(data.value));
         };
 
         var sectorsTip = d3.tip()
@@ -322,7 +329,7 @@ Spiral.prototype.render = function(reusePaths) {
             .attr("class", "spiral-sector")
             .merge(spiralPaths)
                 .style("fill", function(d) {
-                    return colorScale(d[2].value);
+                    return colorScale(d[2]);
                 })
                 .on("mouseover", function(d) {
                     // Prevent tooltip from being left over

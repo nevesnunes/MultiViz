@@ -14,6 +14,14 @@ moduleVisualizations.directive('directiveSpiralTooltip', function() {
                         "As <b>datas mais recentes</b> " +
                         "correspondem a sectores mais afastados do " +
                         "centro de uma espiral." +
+                    "</div>" +
+                    "</br>" +
+                    "<div style=\"text-align: left\" class=\"p\">" +
+                        "Os <b>intervalos sobrepostos</b> " +
+                        "são assinalados (" +
+                        "<div style=\"display: inline-block\" class=\"" +
+                            "markPatientAttribute markOverlap markSquare\" />" +
+                        ")." +
                     "</div>";
             };
         }
@@ -110,6 +118,7 @@ moduleVisualizations.factory('SpiralVisualization',
             parentElement: elementID,
             targetElement: spiralID,
             colors: visualizations.colors,
+            customReds: visualizations.customReds,
             functions: {
                 // This is ugly, this is amazing, this is js ;)
                 makeBins: (function() {
@@ -326,7 +335,8 @@ moduleVisualizations.factory('SpiralVisualization',
                         date: dateString,
                         startDate: startDateString,
                         endDate: endDateString,
-                        binFactor: binFactor
+                        binFactor: binFactor,
+                        countAttributes: binDosageObjects.length
                     });
                 }
                 data.push({
@@ -335,11 +345,11 @@ moduleVisualizations.factory('SpiralVisualization',
                     date: dateString,
                     startDate: startDateString,
                     endDate: endDateString,
-                    binFactor: binFactor
+                    binFactor: binFactor,
+                    countAttributes: binDosageObjects.length
                 });
 
                 accumulatorBinDays = 0;
-
                 binDosageObjects = [];
 
                 // Advance to the next bin;

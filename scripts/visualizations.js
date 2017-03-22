@@ -890,12 +890,13 @@ moduleVisualizations.factory('visualizations',
     };
 
     var customDarkGreys = 
-            ["#bdbdbd","#969696","#737373","#525252","#252525","#000000"],
+            ["#d9d9d9","#bdbdbd","#969696","#737373","#525252","#252525"],
         buckets = customDarkGreys.length,
         colors = customDarkGreys;
-
     var customGreens =
             ["#c7e9c0","#a1d99b","#74c476","#41ab5d","#238b45","#005a32"];
+    var customReds =
+            ["#fc9272","#fb6a4a","#ef3b2c","#cb181d","#a50f15","#67000d"];
 
     var processSelectedList = function(list) {
         return list.filter(function(obj) {
@@ -1093,6 +1094,7 @@ moduleVisualizations.factory('visualizations',
         validateInterface: validateInterface,
         colors: colors,
         customGreens: customGreens,
+        customReds: customReds,
         processSelectedList: processSelectedList,
         processSelectedListToObjects: processSelectedListToObjects,
         diffInterval: diffInterval,
