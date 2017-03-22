@@ -97,6 +97,14 @@ moduleVisualizations.factory('TimelineVisualization',
                     "attribute-month-rect-label rect-label-selected" :
                     "attribute-month-rect-label rect-label";
             });
+
+        // Style nodes
+        self.html.graphSVG.selectAll(".attribute-graph-node")
+            .attr("class", function(a) {
+                return (a.id === d) ?
+                    "attribute-graph-node occurence-selected" :
+                    "attribute-graph-node";
+            });
     };
 
     TimelineVisualization.prototype.removeSelections = function(d) {
@@ -109,6 +117,10 @@ moduleVisualizations.factory('TimelineVisualization',
             .attr("class", "attribute-month-label text-label ");
         svg.selectAll(".attribute-month-rect-label")
             .style("fill-opacity", 0.0);
+
+        // Style nodes
+        self.html.graphSVG.selectAll(".attribute-graph-node")
+            .attr("class", "attribute-graph-node");
     };
 
     TimelineVisualization.prototype.makeDescription = function(elementID) {
@@ -161,22 +173,22 @@ moduleVisualizations.factory('TimelineVisualization',
                     .append("g")
                         .attr("id", "graph");
 
-        // Group for occurrences histogram
+        // Group for occurences histogram
         d3.select("#" + timelineID + "-details")
             .append("div")
                 .attr("id", "occurences-title")
                 .style('margin-left',
                     marginFromLabels + "px");
-        var occurrencesSVG = d3.select("#" + timelineID + "-details")
+        var occurencesSVG = d3.select("#" + timelineID + "-details")
             .append("div")
                 .style("display", "inline-block")
                 .append("svg")
-                    .attr("id", "svg-occurrences")
+                    .attr("id", "svg-occurences")
                     .attr("width", self.vizWidth - 
                         self.graphSize - self.padding / 2)
                     .attr("height", 0) // Set dynamically
                     .append("g")
-                        .attr("id", "occurrences")
+                        .attr("id", "occurences")
                         .attr("transform", "translate(" +
                             // Offset for month text labels
                             marginFromLabels + "," + 0 + ")");
@@ -204,7 +216,7 @@ moduleVisualizations.factory('TimelineVisualization',
         self.html = {
             elementID: elementID,
             timelineID: timelineID,
-            occurrencesSVG: occurrencesSVG,
+            occurencesSVG: occurencesSVG,
             graphSVG: graphSVG,
             mainHTML: mainHTML
         };
@@ -261,7 +273,7 @@ moduleVisualizations.factory('TimelineVisualization',
          *   dataIndex:number
          *   overlapIndex:number
          * } matrixDates: 
-         * occurrence dates, stored as a dictionary of years,
+         * occurence dates, stored as a dictionary of years,
          * each with an array of months.
          * - name: Abreviated month name, used as label in svg;
          * - dataIndex: corresponding dosage/frequency index
@@ -269,7 +281,7 @@ moduleVisualizations.factory('TimelineVisualization',
          */
         var matrixDates = {};
 
-        var graphPairOccurrences = [];
+        var graphPairoccurences = [];
         var graphNames = [];
 
         // Store overlaps by frequency;
@@ -413,17 +425,17 @@ moduleVisualizations.factory('TimelineVisualization',
                                         newAttributeNames[secondNameIndex]
                                     ];
                                     var pairIndex = utils.arrayObjectFullIndexOf(
-                                        graphPairOccurrences,
+                                        graphPairoccurences,
                                         newPair,
                                         ['firstName', 'secondName']);
                                     if (pairIndex === -1) {
-                                        graphPairOccurrences.push({
+                                        graphPairoccurences.push({
                                             firstName: newPair[0],
                                             secondName: newPair[1],
                                             incidences: 1,
                                         });
                                     } else {
-                                        graphPairOccurrences[pairIndex]
+                                        graphPairoccurences[pairIndex]
                                             .incidences += 1;
                                     }
                             }
@@ -457,7 +469,7 @@ moduleVisualizations.factory('TimelineVisualization',
         );
 
         //
-        // occurrences axis
+        // occurences axis
         //
         var x2 = d3.scaleLinear().range([0, vizContentWidth]);
         x2.domain([0, maxOverlapCount]);
@@ -465,8 +477,8 @@ moduleVisualizations.factory('TimelineVisualization',
             .ticks(maxOverlapCount)
             .tickFormat(d3.format("d"));
         var axisHeight = histogramHeight;
-        self.html.occurrencesSVG.selectAll(".line-axis").remove();
-        self.html.occurrencesSVG.append("g")
+        self.html.occurencesSVG.selectAll(".line-axis").remove();
+        self.html.occurencesSVG.append("g")
             .attr("class", "x axis line-axis")
             .attr("height", axisHeight)
             .attr("transform", "translate(" +
@@ -475,7 +487,7 @@ moduleVisualizations.factory('TimelineVisualization',
             .call(xAxis);
 
         //
-        // occurrences bars
+        // occurences bars
         //
         var histogramBarPadding = 0.2;
         var x = d3.scaleBand().range([0, vizContentWidth + 1])
@@ -501,13 +513,13 @@ moduleVisualizations.factory('TimelineVisualization',
                         ) + "</span>" +
                 "</div>";
             });
-        self.html.occurrencesSVG.call(barsTip);
+        self.html.occurencesSVG.call(barsTip);
 
         var cellSize = Math.ceil(x.bandwidth());
         var cellSizeOffset = histogramBarPadding * 10 * 2;
         var cellSizeWithOffset = cellSize + cellSizeOffset;
 
-        var g = self.html.occurrencesSVG.append("g")
+        var g = self.html.occurencesSVG.append("g")
             .attr("height", histogramHeight);
         var histogram = g.selectAll(".histogram")
             .data(data);
@@ -837,7 +849,7 @@ moduleVisualizations.factory('TimelineVisualization',
             .attr("width", longestMatrixWidth +
                 (self.padding * 2) +
                 self.labelPadding);
-        d3.select("#svg-occurrences")
+        d3.select("#svg-occurences")
             .attr("width", longestMatrixWidth + 
                 cellSizeWithOffset);
         d3.selectAll(".viz-evolution").attr("transform", "translate(" +
@@ -850,7 +862,7 @@ moduleVisualizations.factory('TimelineVisualization',
 
         var graphMinIncidences = Number.MAX_SAFE_INTEGER;
         var graphMaxIncidences = Number.MIN_SAFE_INTEGER;
-        graphPairOccurrences.forEach(function(obj) {
+        graphPairoccurences.forEach(function(obj) {
             graphMinIncidences = Math.min(graphMinIncidences, obj.incidences);
             graphMaxIncidences = Math.max(graphMaxIncidences, obj.incidences);
         });
@@ -861,7 +873,7 @@ moduleVisualizations.factory('TimelineVisualization',
         var forceSimulationNodes = graphNames.map(function(name) {
             return {id: name};
         });
-        var forceSimulationLinks = graphPairOccurrences.map(function(pair) {
+        var forceSimulationLinks = graphPairoccurences.map(function(pair) {
             return {
                 source: pair.firstName,
                 target: pair.secondName
@@ -869,7 +881,7 @@ moduleVisualizations.factory('TimelineVisualization',
         });
         var forceSimulationDistance = self.graphSize / 2;
         var forceSimulationStrengthValues = 
-            graphPairOccurrences.map(function(pair) {
+            graphPairoccurences.map(function(pair) {
                 return graphStrengthScale(pair.incidences);
             });
         var forceSimulationStrength = function(d, i) {
@@ -938,9 +950,10 @@ moduleVisualizations.factory('TimelineVisualization',
             self.html.graphSVG.append("g")
                 .attr("stroke", "#fff")
                 .attr("stroke-width", 1.5)
-                .selectAll("circle")
+                .selectAll(".attribute-graph-node")
                     .data(forceSimulationNodes)
                     .enter().append("circle")
+                        .attr("class", "attribute-graph-node")
                         .attr("fill", function(d, i) {
                             return "#000";
                         })
@@ -953,9 +966,13 @@ moduleVisualizations.factory('TimelineVisualization',
                         .attr("r", 10)
                         .on("mouseover", function(d, i) {
                             graphTip.show(d, i);
+
+                            self.addSelections(d.id);
                         })
                         .on("mouseout", function(d, i) {
                             graphTip.hide(d, i);
+
+                            self.removeSelections(d.id);
                         });
         });
     };
@@ -1146,12 +1163,12 @@ moduleVisualizations.factory('TimelineVisualization',
         var self = this;
 
         // Remove handlers
-        self.html.occurrencesSVG
+        self.html.occurencesSVG
             .selectAll(".histogram")
                 .selectAll(".filter-mouseover")
                     .on("mouseover", null)
                     .on("mouseout", null);
-        self.html.occurrencesSVG
+        self.html.occurencesSVG
             .selectAll(".attribute-month-rect-label")
                 .selectAll(".rect-label")
                     .on("mouseover", null)
@@ -1179,7 +1196,7 @@ moduleVisualizations.factory('TimelineVisualization',
 
         self.html.mainHTML.selectAll("*")
             .remove();
-        self.html.occurrencesSVG.selectAll("*")
+        self.html.occurencesSVG.selectAll("*")
             .remove();
         self.html.graphSVG.selectAll("*")
             .remove();
