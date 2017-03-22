@@ -267,16 +267,13 @@ moduleVisualizations.factory('SpiralVisualization',
 
             // Keep track of any new names in bin interval
             if (currentDateIndex < recordedDosage.length) {
-                if (recordedMoment.format("YYYY/MM/DD") == "2015/03/21") {
-                    console.log(JSON.stringify(recordedDosage[currentDateIndex], null, 4));
-                }
-                    recordedDosage[currentDateIndex].forEach(function(dosage) {
-                        var binDosageIndex = utils.arrayObjectIndexOf(
-                            binDosageObjects, dosage.name, "name");
-                        if (binDosageIndex === -1) {
-                            binDosageObjects.push(dosage);
-                        }
-                    });
+                recordedDosage[currentDateIndex].forEach(function(dosage) {
+                    var binDosageIndex = utils.arrayObjectIndexOf(
+                        binDosageObjects, dosage.name, "name");
+                    if (binDosageIndex === -1) {
+                        binDosageObjects.push(dosage);
+                    }
+                });
             }
 
             // A recorded value in the current date is present:

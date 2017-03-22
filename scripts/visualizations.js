@@ -55,12 +55,6 @@ moduleVisualizations.factory("timeWeaver",
                         sourceRecordedFrequency[sourceIndex]);
                     var targetMoment = moment(
                         targetRecordedFrequency[targetIndex]);
-                if (sourceMoment.format("YYYY/MM/DD") == "2015/03/21") {
-                    console.log("source");
-                }
-                if (targetMoment.format("YYYY/MM/DD") == "2015/03/21") {
-                    console.log("target");
-                }
 
                     // Add and advance the earliest recorded moment
                     var diff = sourceMoment.diff(targetMoment, 'days');

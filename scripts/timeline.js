@@ -640,9 +640,6 @@ moduleVisualizations.factory('TimelineVisualization',
                             });
                     monthCellsLabels.exit().remove();
 
-                    //console.log(JSON.stringify(overlaps, null, 4));
-                    //console.log(JSON.stringify(matrixDates, null, 4));
-
                     // Flatten data, so that we draw as many cells as
                     // overlapped attributes in the month
                     var monthObj = matrixDates[year][month];
@@ -851,12 +848,12 @@ moduleVisualizations.factory('TimelineVisualization',
         // Graph
         //
 
-        var graphMinIncidences = graphPairOccurrences.reduce(function(a, b) {
-            return Math.min(a.incidences, b.incidences); 
-        }); 
-        var graphMaxIncidences = graphPairOccurrences.reduce(function(a, b) {
-            return Math.max(a.incidences, b.incidences); 
-        }); 
+        var graphMinIncidences = Number.MAX_SAFE_INTEGER;
+        var graphMaxIncidences = Number.MIN_SAFE_INTEGER;
+        graphPairOccurrences.forEach(function(obj) {
+            graphMinIncidences = Math.min(graphMinIncidences, obj.incidences);
+            graphMaxIncidences = Math.max(graphMaxIncidences, obj.incidences);
+        });
         var graphStrengthScale = d3.scaleLinear()
              .domain([graphMinIncidences,graphMaxIncidences])
              .range([1, 0.1]);
@@ -881,8 +878,6 @@ moduleVisualizations.factory('TimelineVisualization',
         var forceSimulationID = function(d) {
             return d.id;
         };
-
-        console.log(JSON.stringify(graphPairOccurrences, null, 4));
 
         var simulation = d3.forceSimulation(forceSimulationNodes)
             .force("charge", d3.forceManyBody()
@@ -1176,10 +1171,17 @@ moduleVisualizations.factory('TimelineVisualization',
                 .selectAll("occurence-mouseover")
                     .on("mouseover", null)
                     .on("mouseout", null);
+        self.html.graphSVG
+            .selectAll("g")
+                .selectAll("circle")
+                    .on("mouseover", null)
+                    .on("mouseout", null);
 
         self.html.mainHTML.selectAll("*")
             .remove();
         self.html.occurrencesSVG.selectAll("*")
+            .remove();
+        self.html.graphSVG.selectAll("*")
             .remove();
     };
 
