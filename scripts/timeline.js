@@ -1191,13 +1191,6 @@ moduleVisualizations.factory('TimelineVisualization',
         // Add attributes and svgs to the new DOM targets. Note that the target
         // element ID is still the same.
         this.make(nodeID, vizID);
-
-        // Render paths, reusing data stored in the visualization object
-        if (this.hasData) {
-            this.render(true);
-        } else {
-            this.renderNoData();
-        }
     };
 
     TimelineVisualization.prototype.makeFilters = function(
