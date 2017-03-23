@@ -181,6 +181,24 @@ moduleVisualizations.factory('TimelineVisualization',
         // Group for main visualization
         var mainHTML = d3.select("#" + timelineID + "-main");
 
+
+        var graphTitleDiv = d3.select("#" + timelineID + "-graph")
+            .append("div")
+                .attr("id", "graph-title-div")
+                .style("display", "inline-block");
+        graphTitleDiv
+            .append("div")
+                .attr("id", "graph-title")
+                .style("display", "inline-block")
+                .style('margin-left',
+                    marginFromLabels / 2 + "px");
+        graphTitleDiv
+            .append("div")
+                .attr("id", "graph-title-tooltip")
+                .style("display", "inline-block")
+                .style('margin-left',
+                    5 + "px");
+
         // Group for graph visualization
         self.graphSize = 300;
         var graphSVG = d3.select("#" + timelineID + "-graph")
@@ -223,19 +241,6 @@ moduleVisualizations.factory('TimelineVisualization',
         d3.select("#" + timelineID + "-details")
             .append("div")
                 .attr("id", "graph-evolution-tooltip")
-                .style("display", "inline-block")
-                .style('margin-left',
-                    5 + "px");
-
-        d3.select("#" + timelineID + "-details")
-            .append("div")
-                .attr("id", "graph-title")
-                .style("display", "inline-block")
-                .style('margin-left',
-                    marginFromLabels / 2 + "px");
-        d3.select("#" + timelineID + "-details")
-            .append("div")
-                .attr("id", "graph-title-tooltip")
                 .style("display", "inline-block")
                 .style('margin-left',
                     5 + "px");
@@ -305,20 +310,20 @@ moduleVisualizations.factory('TimelineVisualization',
             .select("#graph-evolution-tooltip")
                 .html('<img class="tooltip-wrapper help" ' +
                         'title="{{tooltipText}}" ' + 
-                        'custom-placement="top" ' + 
+                        'custom-placement="right" ' + 
                         'directive-tooltip directive-timeline-evolution-tooltip ' +
                         'src="images/controls/info.svg">' +
                     '</img>');
-        d3.select("#" + self.html.timelineID + "-details")
+        d3.select("#" + self.html.timelineID + "-graph")
             .select("#graph-title")
                 .html('<h4><b>' +
                         'Relações </br>entre atributos' +
                     '</b></h4>');
-        d3.select("#" + self.html.timelineID + "-details")
+        d3.select("#" + self.html.timelineID + "-graph")
             .select("#graph-title-tooltip")
                 .html('<img class="tooltip-wrapper help" ' +
                         'title="{{tooltipText}}" ' + 
-                        'custom-placement="top" ' + 
+                        'custom-placement="bottom" ' + 
                         'directive-tooltip directive-timeline-graph-tooltip ' +
                         'src="images/controls/info.svg">' +
                     '</img>');
@@ -1155,6 +1160,9 @@ moduleVisualizations.factory('TimelineVisualization',
         d3.select("#" + this.html.timelineID + "-details")
             .select("#evolution-title")
                 .html('');
+        d3.select("#" + this.html.timelineID + "-graph")
+            .select("#graph-title")
+                .html('');
     };
 
     TimelineVisualization.prototype.renderVisibleDetails = function() {
@@ -1168,6 +1176,12 @@ moduleVisualizations.factory('TimelineVisualization',
             .style("visibility", "initial")
             .style("width", "initial")
             .style("height", "initial");
+        d3.select("#" + this.html.timelineID + "-graph")
+            .select("#graph-title-div")
+                .style('display', 'inline-block')
+                .style("visibility", "initial")
+                .style("width", "initial")
+                .style("height", "initial");
     };
 
     TimelineVisualization.prototype.renderNoVisibleDetails = function() {
@@ -1181,6 +1195,12 @@ moduleVisualizations.factory('TimelineVisualization',
             .style("visibility", "hidden")
             .style("width", 0)
             .style("height", 0);
+        d3.select("#" + this.html.timelineID + "-graph")
+            .select("#graph-title-div")
+                .style('display', 'none')
+                .style("visibility", "hidden")
+                .style("width", 0)
+                .style("height", 0);
     };
 
     TimelineVisualization.prototype.populate = function(data, id) {
