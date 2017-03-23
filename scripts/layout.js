@@ -1615,12 +1615,21 @@ moduleLayout.directive("directivePanes",
 
             // Redraw visualizations
             scope.updateFromSelections = function(state) {
-                // FIXME: Are selections changed in multi-view layout?
                 var node = nodes.getCurrentNode();
                 var viz = nodes.getVizByIDs(
                     node.model.id, node.model.currentVizID);
                 var vizObject = viz.vizObject;
+
                 vizObject.update(node.model.id, node.model.currentVizID, state);
+
+                // Compile tooltips
+                // NOTE: We don't need to inherit scope
+                if (node.model.vizType === scope.vizType.TIMELINE) {
+                    var target = angular.element('#graph-evolution-tooltip');
+                    $compile(target)(scope.$new(true));
+                    target = angular.element('#graph-title-tooltip');
+                    $compile(target)(scope.$new(true));
+                }
             };
 
             // Select the bin size for a visualization's dataset
