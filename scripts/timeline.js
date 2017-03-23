@@ -240,7 +240,7 @@ moduleVisualizations.factory('TimelineVisualization',
                     marginFromLabels + "px");
         d3.select("#" + timelineID + "-details")
             .append("div")
-                .attr("id", "graph-evolution-tooltip")
+                .attr("id", "evolution-tooltip")
                 .style("display", "inline-block")
                 .style('margin-left',
                     5 + "px");
@@ -307,7 +307,7 @@ moduleVisualizations.factory('TimelineVisualization',
                         'Evolução <br/>temporal' +
                     '</b></h4>');
         d3.select("#" + self.html.timelineID + "-details")
-            .select("#graph-evolution-tooltip")
+            .select("#evolution-tooltip")
                 .html('<img class="tooltip-wrapper help" ' +
                         'title="{{tooltipText}}" ' + 
                         'custom-placement="right" ' + 
@@ -1197,8 +1197,14 @@ moduleVisualizations.factory('TimelineVisualization',
         d3.select("#" + this.html.timelineID + "-details")
             .select("#evolution-title")
                 .html('');
+        d3.select("#" + this.html.timelineID + "-details")
+            .select("#evolution-tooltip")
+                .html('');
         d3.select("#" + this.html.timelineID + "-graph")
             .select("#graph-title")
+                .html('');
+        d3.select("#" + this.html.timelineID + "-graph")
+            .select("#graph-title-tooltip")
                 .html('');
     };
 
