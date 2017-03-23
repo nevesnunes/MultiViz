@@ -682,6 +682,7 @@ moduleVisualizations.factory('TimelineVisualization',
 
         var longestMatrixWidth = 0;
         var longestOccurenceIndex = 0;
+        var maxIncidencesCount = 0;
 
         // Extract attributes in each month
         for (var year in matrixDates) {
@@ -795,6 +796,7 @@ moduleVisualizations.factory('TimelineVisualization',
                         var dataInMonthObj = monthObj.data[monthDataIndex];
                         var count = dataInMonthObj.attributeNames.length;
                         for (var nameIndex in dataInMonthObj.attributeNames) {
+                            var currentIncidences;
                             var nameInMonthObj = 
                                 dataInMonthObj.attributeNames[nameIndex];
                             var flatDataIndex = utils.arrayObjectFullIndexOf(
@@ -807,8 +809,15 @@ moduleVisualizations.factory('TimelineVisualization',
                                     incidences: 1,
                                     name: nameInMonthObj
                                 });
+                                currentIncidences = 1;
                             } else {
                                 monthFlatData[flatDataIndex].incidences += 1;
+                                currentIncidences = 
+                                    monthFlatData[flatDataIndex].incidences;
+                            }
+
+                            if (maxIncidencesCount < currentIncidences) {
+                                maxIncidencesCount = currentIncidences;
                             }
 
                             var occurenceIndex = +monthDataIndex;
@@ -846,7 +855,7 @@ moduleVisualizations.factory('TimelineVisualization',
                         .selectAll(".attribute-month")
                         .data(monthFlatData);
                     monthCells.enter().append("rect")
-                        .attr("class", "attribute-month filter-bar filter-mouseover")
+                        .attr("class", "attribute-month filter-crisp filter-mouseover")
                         .attr("width", cellSize)
                         .attr("height", cellSize)
                         .merge(monthCells)
@@ -986,6 +995,33 @@ moduleVisualizations.factory('TimelineVisualization',
                 }
             }
         }
+
+        //
+        // Matrix cells fill
+        //
+        var colorScale = d3.scaleQuantile()
+            .domain([0, visualizations.colors.length - 1,
+                    maxIncidencesCount])
+            .range(visualizations.colors);
+        d3.select("#" + self.html.timelineID + "-main")
+            .selectAll(".attribute-month")
+                .attr("fill", function(d, i) {
+                    return colorScale(d.incidences);
+                });
+
+        //
+        // Matrix legend
+        //
+        var legendSVG = self.html.mainHTML.append("svg")
+            .attr("width", maxIncidencesCount * (cellSize * 2));
+
+        visualizations.makeLegend(
+            legendSVG, 
+            colorScale, 
+            cellSize * 2, 
+            cellSize,
+            0,
+            cellSize / 2);
 
         // Align elements from dynamic sizes
         d3.selectAll(".viz-svg-contents")

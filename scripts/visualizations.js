@@ -1019,7 +1019,7 @@ moduleVisualizations.factory('visualizations',
                 return d;
             });
         legendRect.enter().append("rect")
-            .attr("class", "legend-rect bordered")
+            .attr("class", "legend-rect bordered-legend")
             .merge(legendRect)
                 .attr("x", function(d, i) {
                     return width * i + xMargin;
@@ -1029,15 +1029,6 @@ moduleVisualizations.factory('visualizations',
                 .attr("height", height / 2)
                 .style("fill", function(d, i) {
                     return colors[i];
-                })
-                .on("mouseover", function(d) {
-                    // select the parent and sort the paths
-                    svg.selectAll(".legend-rect").sort(function (a, b) {
-                        // a is not the hovered element, send "a" to the back
-                        if (a != d) return -1;
-                        // a is the hovered element, bring "a" to the front
-                        else return 1;                             
-                    });
                 });
         legendRect.exit().remove();
 

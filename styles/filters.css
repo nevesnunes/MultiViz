@@ -4,6 +4,10 @@
     shape-rendering: crispEdges;
 }
 
+.filter-crisp {
+    shape-rendering: crispEdges;
+}
+
 .filter-selected,
 .filter-mouseover:hover {
     background-color: #31708f !important;
