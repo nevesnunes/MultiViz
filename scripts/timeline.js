@@ -281,7 +281,7 @@ moduleVisualizations.factory('TimelineVisualization',
          */
         var matrixDates = {};
 
-        var graphPairoccurences = [];
+        var graphPairOccurences = [];
         var graphNames = [];
 
         // Store overlaps by frequency;
@@ -425,17 +425,26 @@ moduleVisualizations.factory('TimelineVisualization',
                                         newAttributeNames[secondNameIndex]
                                     ];
                                     var pairIndex = utils.arrayObjectFullIndexOf(
-                                        graphPairoccurences,
+                                        graphPairOccurences,
                                         newPair,
                                         ['firstName', 'secondName']);
+
+                                    // Try with other order
                                     if (pairIndex === -1) {
-                                        graphPairoccurences.push({
+                                        pairIndex = utils.arrayObjectFullIndexOf(
+                                                graphPairOccurences,
+                                                newPair,
+                                                ['secondName', 'firstName']);
+                                    }
+
+                                    if (pairIndex === -1) {
+                                        graphPairOccurences.push({
                                             firstName: newPair[0],
                                             secondName: newPair[1],
                                             incidences: 1,
                                         });
                                     } else {
-                                        graphPairoccurences[pairIndex]
+                                        graphPairOccurences[pairIndex]
                                             .incidences += 1;
                                     }
                             }
@@ -778,29 +787,7 @@ moduleVisualizations.factory('TimelineVisualization',
                                 .data(monthFlatEvolutionData);
                             var monthEvolutionEnter = monthEvolution.enter();
                             var monthEvolutionEnterGroup = monthEvolutionEnter
-                                .append("g")
-                                .on("mouseover", function(d, i) {
-                                    evolutionTip.show(d, i);
-
-                                    d3.select(this.parentNode)
-                                        .selectAll(".attribute-occurence")
-                                        .attr("class", function(a) {
-                                            var isSame = 
-                                                (a.dataIndex == d.dataIndex) &&
-                                                (a.name == d.name);
-                                            return (isSame) ? 
-                                                classByMedication(a, i) +
-                                                    " occurence-selected" :
-                                                classByMedication(a, i);
-                                        });
-                                })
-                                .on("mouseout", function(d, i) {
-                                    evolutionTip.hide(d, i);
-
-                                    d3.select(this.parentNode)
-                                        .selectAll(".attribute-occurence")
-                                        .attr("class", classByMedication);
-                                });
+                                .append("g");
                             monthEvolutionEnterGroup.append("circle")
                                 .attr("class", classByMedication)
                                 .attr("r", cellSize / 2)
@@ -834,6 +821,40 @@ moduleVisualizations.factory('TimelineVisualization',
                                             (d.overlapIndex === 0));
                                         return isNonMedicated ? "!" : "";
                                     });
+                            monthEvolutionEnterGroup.append("circle")
+                                .attr("fill", "transparent")
+                                .attr("r", cellSize / 2)
+                                .merge(monthEvolution)
+                                    .attr("cx", function(d, i) {
+                                        return d.occurenceIndex *
+                                            cellSizeWithOffset + cellSizeOffset;
+                                    })
+                                    .attr("cy", function(d) {
+                                        return attributeNames.indexOf(d.name) * 
+                                            cellSizeWithOffset + cellSizeOffset;
+                                    })
+                                    .on("mouseover", function(d, i) {
+                                        evolutionTip.show(d, i);
+
+                                        d3.select(this.parentNode)
+                                            .selectAll(".attribute-occurence")
+                                            .attr("class", function(a) {
+                                                var isSame = 
+                                                    (a.dataIndex == d.dataIndex) &&
+                                                    (a.name == d.name);
+                                                return (isSame) ? 
+                                                    classByMedication(a, i) +
+                                                        " occurence-selected" :
+                                                    classByMedication(a, i);
+                                            });
+                                    })
+                                    .on("mouseout", function(d, i) {
+                                        evolutionTip.hide(d, i);
+
+                                        d3.select(this.parentNode)
+                                            .selectAll(".attribute-occurence")
+                                            .attr("class", classByMedication);
+                                    });
                             monthEvolution.exit().remove();
                         } catch(e) {
                             window.requestAnimationFrame(selfFunction);
@@ -860,20 +881,22 @@ moduleVisualizations.factory('TimelineVisualization',
         // Graph
         //
 
+        console.log(JSON.stringify(graphPairOccurences, null, 4));
+
         var graphMinIncidences = Number.MAX_SAFE_INTEGER;
         var graphMaxIncidences = Number.MIN_SAFE_INTEGER;
-        graphPairoccurences.forEach(function(obj) {
+        graphPairOccurences.forEach(function(obj) {
             graphMinIncidences = Math.min(graphMinIncidences, obj.incidences);
             graphMaxIncidences = Math.max(graphMaxIncidences, obj.incidences);
         });
         var graphStrengthScale = d3.scaleLinear()
              .domain([graphMinIncidences,graphMaxIncidences])
-             .range([1, 0.1]);
+             .range([1, 0.01]);
 
         var forceSimulationNodes = graphNames.map(function(name) {
             return {id: name};
         });
-        var forceSimulationLinks = graphPairoccurences.map(function(pair) {
+        var forceSimulationLinks = graphPairOccurences.map(function(pair) {
             return {
                 source: pair.firstName,
                 target: pair.secondName
@@ -881,7 +904,7 @@ moduleVisualizations.factory('TimelineVisualization',
         });
         var forceSimulationDistance = self.graphSize / 2;
         var forceSimulationStrengthValues = 
-            graphPairoccurences.map(function(pair) {
+            graphPairOccurences.map(function(pair) {
                 return graphStrengthScale(pair.incidences);
             });
         var forceSimulationStrength = function(d, i) {
@@ -891,9 +914,10 @@ moduleVisualizations.factory('TimelineVisualization',
             return d.id;
         };
 
+        var graphNodeRadius = 15;
         var simulation = d3.forceSimulation(forceSimulationNodes)
             .force("charge", d3.forceManyBody()
-                .strength(-100)
+                .strength(-250)
                 .distanceMax([forceSimulationDistance]))
             .force("center", d3.forceCenter(
                 forceSimulationDistance,
@@ -948,7 +972,6 @@ moduleVisualizations.factory('TimelineVisualization',
                             return d.target.y;
                         });
 
-            var graphNodeRadius = 15;
             var graphNodeGroup = self.html.graphSVG.append("g");
             graphNodeGroup
                 .selectAll(".attribute-graph-node")
@@ -962,17 +985,7 @@ moduleVisualizations.factory('TimelineVisualization',
                         .attr("cy", function(d) {
                             return d.y;
                         })
-                        .attr("r", graphNodeRadius)
-                        .on("mouseover", function(d, i) {
-                            graphTip.show(d, i);
-
-                            self.addSelections(d.id);
-                        })
-                        .on("mouseout", function(d, i) {
-                            graphTip.hide(d, i);
-
-                            self.removeSelections(d.id);
-                        });
+                        .attr("r", graphNodeRadius);
             graphNodeGroup
                 .selectAll(".attribute-graph-label")
                     .data(forceSimulationNodes)
@@ -986,7 +999,20 @@ moduleVisualizations.factory('TimelineVisualization',
                         })
                         .text(function(d, i) {
                             return d.id.slice(0, 2);
+                        });
+            graphNodeGroup
+                .selectAll(".attribute-graph-node-overlay")
+                    .data(forceSimulationNodes)
+                    .enter().append("circle")
+                        .attr("class", "attribute-graph-node-overlay")
+                        .attr("fill", "transparent")
+                        .attr("cx", function(d) {
+                            return d.x;
                         })
+                        .attr("cy", function(d) {
+                            return d.y;
+                        })
+                        .attr("r", graphNodeRadius)
                         .on("mouseover", function(d, i) {
                             graphTip.show(d, i);
 
