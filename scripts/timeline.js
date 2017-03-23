@@ -191,7 +191,7 @@ moduleVisualizations.factory('TimelineVisualization',
                 .attr("id", "graph-title")
                 .style("display", "inline-block")
                 .style('margin-left',
-                    marginFromLabels / 2 + "px");
+                    marginFromLabels / 4 + "px");
         graphTitleDiv
             .append("div")
                 .attr("id", "graph-title-tooltip")
@@ -204,7 +204,7 @@ moduleVisualizations.factory('TimelineVisualization',
         var graphSVG = d3.select("#" + timelineID + "-graph")
             .append("div")
                 .attr("id", "graph-div")
-                .style('margin-left', marginFromLabels / 2 + "px")
+                .style('margin-left', marginFromLabels / 4 + "px")
                 .append("svg")
                     .attr("id", "svg-graph")
                     .attr("width", self.graphSize)
@@ -581,7 +581,7 @@ moduleVisualizations.factory('TimelineVisualization',
 
         var vizContentWidth = Math.min(
             self.vizWidth,
-            (histogramHeight / 1.5) * maxOverlapCount
+            (histogramHeight / 1.75) * maxOverlapCount
         );
 
         //
@@ -720,7 +720,7 @@ moduleVisualizations.factory('TimelineVisualization',
                         .html(monthName);
 
                     var labelWidth = self.visualizationRenderer
-                        .longestNameLength * 8 + cellSizeWithOffset;
+                        .longestNameLength * 8;
                     var attributeNames = 
                         matrixDates[year][month].attributeNames;
                     var monthDiv = monthHTML.append("div")
@@ -1013,7 +1013,8 @@ moduleVisualizations.factory('TimelineVisualization',
         // Matrix legend
         //
         var legendSVG = self.html.mainHTML.append("svg")
-            .attr("width", maxIncidencesCount * (cellSize * 2));
+            .attr("width", maxIncidencesCount * (cellSize * 2))
+            .attr("height", (cellSize * 2));
 
         visualizations.makeLegend(
             legendSVG, 

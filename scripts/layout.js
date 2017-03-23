@@ -492,7 +492,7 @@ moduleLayout.directive('directiveMenuTooltip', function() {
             scope.setTooltipText = function(button) {
                 scope.tooltipText = 
                     "<div style=\"text-align: left\" class=\"p\">" +
-                        "Cada entrada do menu contem uma barra com a <b>proporção de pacientes</b> que apresentam o atributo correspondente " +
+                        "Cada barra representa a <b>proporção de pacientes</b> com o atributo correspondente " +
                     "</div>" +
                     "<div style=\"text-align: left\" class=\"p\">" +
                         "( " +

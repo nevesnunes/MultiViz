@@ -337,6 +337,8 @@ Spiral.prototype.render = function(reusePaths) {
                     // such as brushing callbacks
                     if (!option.isIntervalBeingChanged)
                         sectorsTip.show(d);
+
+                    d3.select(this).moveToFront();
                 })
                 .on("mouseout", function(d) {
                     sectorsTip.hide(d);
