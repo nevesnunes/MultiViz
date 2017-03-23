@@ -332,9 +332,9 @@ moduleLayout.controller('controllerLayout',
         function($scope, patientData) {
     $scope.vizType = Object.freeze({
         NONE: "NONE",
-        HEATMAP: "Matrix",
-        SPIRAL: "Espiral",
-        TIMELINE: "Linha Temporal"
+        HEATMAP: "Relação entre atributos (Matrix)",
+        SPIRAL: "Análise Temporal (Espirais)",
+        TIMELINE: "Interacções Temporais (Linhas + Grafo)"
     });
 
     // Attribute lists shared among multiple patients
@@ -2232,8 +2232,11 @@ moduleLayout.directive("directivePanes",
                 }
 
                 // Compile tooltips
+                // NOTE: We don't need to inherit scope
+                target = angular.element('#graph-evolution-tooltip');
+                $compile(target)(scope.$new(true));
                 target = angular.element('#graph-title-tooltip');
-                $compile(target)(targetScope);
+                $compile(target)(scope.$new(true));
 
                 // All elements created, now set their visibility
                 var isMaximized = nodes.isMaximized(id);

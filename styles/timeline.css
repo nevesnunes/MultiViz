@@ -24,3 +24,13 @@
     font-family: monospace;
     font-weight: bold;
 }
+
+.occurence-disease {
+    background-color: #7c3702;
+    fill: #7c3702;
+}
+
+.occurence-medication {
+    background-color: #332f59;
+    fill: #332f59;
+}

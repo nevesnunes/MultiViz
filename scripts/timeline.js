@@ -14,6 +14,23 @@ moduleVisualizations.directive('directiveTimelineTooltip', function() {
     };
 });
 
+moduleVisualizations.directive('directiveTimelineEvolutionTooltip', function() {
+    return {
+        link: function (scope, element, attrs) {
+            scope.setTooltipText = function(button) {
+                scope.tooltipText = 
+                    "<div style=\"text-align: left\" class=\"p\">" +
+                        "Legenda: " +
+                        "<br/>" +
+                        "<span class=\"badge occurence-disease\"><b>D</b></span> = Doença" +
+                        "<br/>" +
+                        "<span class=\"badge occurence-medication\"><b>M</b></span> = Medicação" +
+                    "</div>";
+            };
+        }
+    };
+});
+
 moduleVisualizations.directive('directiveTimelineGraphTooltip', function() {
     return {
         link: function (scope, element, attrs) {
@@ -100,10 +117,11 @@ moduleVisualizations.factory('TimelineVisualization',
 
         // Style nodes
         self.html.graphSVG.selectAll(".attribute-graph-node")
-            .attr("class", function(a) {
+            .attr("class", function(a, b) {
                 return (a.id === d) ?
                     "attribute-graph-node occurence-selected" :
-                    "attribute-graph-node";
+                    "attribute-graph-node " + 
+                        self.classByAttribute({name: a.id}, b);
             });
     };
 
@@ -120,7 +138,10 @@ moduleVisualizations.factory('TimelineVisualization',
 
         // Style nodes
         self.html.graphSVG.selectAll(".attribute-graph-node")
-            .attr("class", "attribute-graph-node");
+            .attr("class", function(a, b) {
+                return "attribute-graph-node " + 
+                    self.classByAttribute({name: a.id}, b);
+            });
     };
 
     TimelineVisualization.prototype.makeDescription = function(elementID) {
@@ -165,7 +186,7 @@ moduleVisualizations.factory('TimelineVisualization',
         var graphSVG = d3.select("#" + timelineID + "-graph")
             .append("div")
                 .attr("id", "graph-div")
-                .style('margin-left', marginFromLabels + "px")
+                .style('margin-left', marginFromLabels / 2 + "px")
                 .append("svg")
                     .attr("id", "svg-graph")
                     .attr("width", self.graphSize)
@@ -192,20 +213,26 @@ moduleVisualizations.factory('TimelineVisualization',
                         .attr("transform", "translate(" +
                             // Offset for month text labels
                             marginFromLabels + "," + 0 + ")");
+
         d3.select("#" + timelineID + "-details")
             .append("div")
                 .attr("id", "evolution-title")
                 .style("display", "inline-block")
                 .style('margin-left',
                     marginFromLabels + "px");
+        d3.select("#" + timelineID + "-details")
+            .append("div")
+                .attr("id", "graph-evolution-tooltip")
+                .style("display", "inline-block")
+                .style('margin-left',
+                    5 + "px");
 
         d3.select("#" + timelineID + "-details")
             .append("div")
                 .attr("id", "graph-title")
                 .style("display", "inline-block")
                 .style('margin-left',
-                    marginFromLabels + "px");
-
+                    marginFromLabels / 2 + "px");
         d3.select("#" + timelineID + "-details")
             .append("div")
                 .attr("id", "graph-title-tooltip")
@@ -234,8 +261,34 @@ moduleVisualizations.factory('TimelineVisualization',
         this.populate(data, timelineID);
     };
 
+    TimelineVisualization.prototype.classByAttribute = function(d, i) {
+        var self = this;
+
+        var isDisease = (utils.arrayObjectIndexOf(
+                self.patientLists.selectedDiseases,
+                d.name,
+                "name") !== -1);
+        return isDisease ?
+            "occurence-disease" :
+            "occurence-medication";
+    };
+
     TimelineVisualization.prototype.render = function() {
         var self = this;
+
+        var classByAttribute = function(d, i) {
+            return self.classByAttribute(d, i);
+        };
+
+        var classByMedication = function(d, i) {
+            var isNonMedicated = ((utils.arrayObjectIndexOf(
+                self.patientLists.selectedDiseases,
+                d.name,
+                "name") !== -1) && (d.overlapIndex === 0));
+            return isNonMedicated ?
+                ("attribute-occurence " + "attribute-occurence-warning") :
+                ("attribute-occurence " + classByAttribute(d, i));
+        };
 
         // Set titles for each visualization
         d3.select("#" + self.html.timelineID + "-details")
@@ -246,12 +299,20 @@ moduleVisualizations.factory('TimelineVisualization',
         d3.select("#" + self.html.timelineID + "-details")
             .select("#evolution-title")
                 .html('<h4><b>' +
-                        'Evolução <br/>temporal de <br/>ocorrências' +
+                        'Evolução <br/>temporal' +
                     '</b></h4>');
+        d3.select("#" + self.html.timelineID + "-details")
+            .select("#graph-evolution-tooltip")
+                .html('<img class="tooltip-wrapper help" ' +
+                        'title="{{tooltipText}}" ' + 
+                        'custom-placement="top" ' + 
+                        'directive-tooltip directive-timeline-evolution-tooltip ' +
+                        'src="images/controls/info.svg">' +
+                    '</img>');
         d3.select("#" + self.html.timelineID + "-details")
             .select("#graph-title")
                 .html('<h4><b>' +
-                        'Relações </br>entre atributos <br/>por ocorrências' +
+                        'Relações </br>entre atributos' +
                     '</b></h4>');
         d3.select("#" + self.html.timelineID + "-details")
             .select("#graph-title-tooltip")
@@ -305,7 +366,7 @@ moduleVisualizations.factory('TimelineVisualization',
                     maxOverlapCount = overlapCount;
                 }
             }
-            
+
             // Range started: make new object to compare
             if (!lastDosage || !lastFrequency) {
                 lastDosage = {
@@ -315,11 +376,18 @@ moduleVisualizations.factory('TimelineVisualization',
                     start: utils.extend(recordedFrequency[i], [])
                 };
             } else {
-                // Check if range ended;
-                // We compare all names in current dosage with the last one.
-                var namesToCompare = lastDosage.start.map(function(obj) {
+                var endMoment;
+                var endMonth;
+                var endMonthName;
+                var endYear;
+
+                // Extract information for range end checks;
+                // We need to compare all names in current dosage 
+                // with the last one.
+                var lastNames = lastDosage.start.map(function(obj) {
                     return obj.name;
                 });
+                var namesToCompare = lastNames.slice();
                 var areNamesDifferent = false;
                 for (var dosageIndex = 0;
                         dosageIndex < recordedDosage[i].length;
@@ -341,8 +409,42 @@ moduleVisualizations.factory('TimelineVisualization',
                         namesToCompare.splice(name, 1);
                     }
                 }
-                // Mismatch in dosage names || end of data: the range ended
-                if (areNamesDifferent ||
+
+                // We also need to see if we have data in the current month
+                // before starting a new one, so we don't miss any data
+                var isMonthEndingWithoutData = false;
+                var nextIndex = i + 1;
+                if(nextIndex < recordedFrequency.length) {
+                    endMoment = moment(recordedFrequency[i]);
+                    endMonth = endMoment.month();
+                    endYear = endMoment.year();
+                    var nextFrequency = recordedFrequency[i+1];
+                    var nextMonth = moment(nextFrequency).month();
+
+                    // Is month changing next date?
+                    if (endMonth !== nextMonth) {
+                        // Was data stored for the current month?
+                        if (!matrixDates[endYear] || 
+                                !matrixDates[endYear][endMonth]) {
+                            // NOTE: Force range end only for diseases, 
+                            // because they won't be medicated.
+                            var areAllNamesDiseases = true;
+                            lastNames.forEach(function(name) {
+                                if (utils.arrayObjectIndexOf(
+                                        self.patientLists.selectedMedications,
+                                        name,
+                                        "name") !== -1) {
+                                    areAllNamesDiseases = false;
+                                }
+                            });
+                            isMonthEndingWithoutData = areAllNamesDiseases;
+                        }
+                    }
+                }
+
+                // Check if range ended
+                if (isMonthEndingWithoutData ||
+                        areNamesDifferent ||
                         (namesToCompare.length !== 0) ||
                         (i === recordedFrequency.length - 1)) {
                     if (overlaps[overlapIndex]) {
@@ -361,10 +463,10 @@ moduleVisualizations.factory('TimelineVisualization',
 
                     // Save end data for matrix population
                     // NOTE: month index starts at 0
-                    var endMoment = moment(lastFrequency.end);
-                    var endMonth = endMoment.month();
-                    var endMonthName = endMoment.format('MMM');
-                    var endYear = endMoment.year();
+                    endMoment = moment(lastFrequency.end);
+                    endMonth = endMoment.month();
+                    endMonthName = endMoment.format('MMM');
+                    endYear = endMoment.year();
                     if (!matrixDates[endYear]) {
                         matrixDates[endYear] = {};
                     }
@@ -515,10 +617,10 @@ moduleVisualizations.factory('TimelineVisualization',
             .direction('n')
             .html(function(d, i) {
                 return "<div style=\"text-align: center\">" +
-                    "<span><b>" + d + "</b> atributos " + 
+                    "<span><b>" + d + "</b> ocorrências <br/>" + 
                         ((i === 0) ?
-                            "isolados" :
-                            "sobrepostos " + (i + 1) + " a " + (i + 1)
+                            "isoladas" :
+                            "sobrepostas " + (i + 1) + " a " + (i + 1)
                         ) + "</span>" +
                 "</div>";
             });
@@ -534,17 +636,34 @@ moduleVisualizations.factory('TimelineVisualization',
             .data(data);
         var histogramGroup = histogram.enter();
         histogramGroup.append("rect")
-            .attr("class", "filter-bar filter-mouseover")
+            .attr("class", "filter-bar")
             .merge(histogram)
                 .attr("x", function(d, i) { return x(i); })
                 .attr("y", function(d) { return y(d); })
                 .attr("width", cellSize)
-                .attr("height", function(d) { return histogramHeight - y(d); })
+                .attr("height", function(d) { return histogramHeight - y(d); });
+        histogramGroup.append("rect")
+            .attr("fill", "transparent")
+            .merge(histogram)
+                .attr("x", function(d, i) { return x(i); })
+                .attr("y", function(d) { return 0; })
+                .attr("width", cellSize)
+                .attr("height", function(d) { return histogramHeight; })
                 .on("mouseover", function(d, i) {
+                    g.selectAll(".filter-bar")
+                        .attr("class", function(a, b) {
+                            return (i === b) ?
+                                "filter-bar filter-selected" :
+                                "filter-bar";
+                        });
+
                     barsTip.show(d, i);
                 })
                 .on("mouseout", function(d, i) {
                     barsTip.hide(d, i);
+
+                    g.selectAll(".filter-bar")
+                        .attr("class", "filter-bar");
                 });
 
         // Adjust svg sizes
@@ -557,6 +676,7 @@ moduleVisualizations.factory('TimelineVisualization',
         //
 
         var longestMatrixWidth = 0;
+        var longestOccurenceIndex = 0;
 
         // Extract attributes in each month
         for (var year in matrixDates) {
@@ -686,10 +806,15 @@ moduleVisualizations.factory('TimelineVisualization',
                                 monthFlatData[flatDataIndex].incidences += 1;
                             }
 
+                            var occurenceIndex = +monthDataIndex;
+                            if (longestOccurenceIndex < occurenceIndex) {
+                                longestOccurenceIndex = occurenceIndex;
+                            }
+
                             monthFlatEvolutionData.push({
                                 count: count,
                                 attributeNames: dataInMonthObj.attributeNames,
-                                occurenceIndex: +monthDataIndex,
+                                occurenceIndex: occurenceIndex,
                                 dataIndex: dataInMonthObj.dataIndex,
                                 dates: dataInMonthObj.dates,
                                 overlapIndex: dataInMonthObj.overlapIndex,
@@ -763,16 +888,6 @@ moduleVisualizations.factory('TimelineVisualization',
                     // by bounding box
                     var waitForDOMRendered = function selfFunction() {
                         try {
-                            var classByMedication = function(d, i) {
-                                var isNonMedicated = ((utils.arrayObjectIndexOf(
-                                    self.patientLists.selectedDiseases,
-                                    d.name,
-                                    "name") !== -1) && (d.overlapIndex === 0));
-                                return isNonMedicated ?
-                                    "attribute-occurence attribute-occurence-warning" :
-                                    "attribute-occurence";
-                            };
-
                             var textData = visualizations.extractBBoxes(
                                 monthSVG
                             );
@@ -812,14 +927,16 @@ moduleVisualizations.factory('TimelineVisualization',
                                             cellSizeWithOffset + cellSizeOffset * 2;
                                     })
                                     .text(function(d, i) {
-                                        var isNonMedicated = 
-                                            ((utils.arrayObjectIndexOf(
+                                        var isDisease =
+                                            (utils.arrayObjectIndexOf(
                                                 self.patientLists
                                                     .selectedDiseases,
                                                 d.name,
-                                                "name") !== -1) && 
+                                                "name") !== -1);
+                                        var isNonMedicated = (isDisease && 
                                             (d.overlapIndex === 0));
-                                        return isNonMedicated ? "!" : "";
+                                        return isNonMedicated ? "!" : 
+                                            isDisease ? "D" : "M";
                                     });
                             monthEvolutionEnterGroup.append("circle")
                                 .attr("fill", "transparent")
@@ -865,10 +982,11 @@ moduleVisualizations.factory('TimelineVisualization',
             }
         }
 
-        // Align elements
+        // Align elements from dynamic sizes
         d3.selectAll(".viz-svg-contents")
             .attr("width", longestMatrixWidth +
-                (self.padding * 2) +
+                (longestOccurenceIndex *
+                    cellSizeWithOffset + cellSizeOffset) +
                 self.labelPadding);
         d3.select("#svg-occurences")
             .attr("width", longestMatrixWidth + 
@@ -880,8 +998,6 @@ moduleVisualizations.factory('TimelineVisualization',
         //
         // Graph
         //
-
-        console.log(JSON.stringify(graphPairOccurences, null, 4));
 
         var graphMinIncidences = Number.MAX_SAFE_INTEGER;
         var graphMaxIncidences = Number.MIN_SAFE_INTEGER;
@@ -977,8 +1093,10 @@ moduleVisualizations.factory('TimelineVisualization',
                 .selectAll(".attribute-graph-node")
                     .data(forceSimulationNodes)
                     .enter().append("circle")
-                        .attr("class", "attribute-graph-node")
-                        .attr("fill", "#000")
+                        .attr("class", function(d, i) {
+                            return "attribute-graph-node " + 
+                                classByAttribute({name: d.id}, i);
+                        })
                         .attr("cx", function(d) {
                             return d.x;
                         })

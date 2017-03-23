@@ -4,10 +4,11 @@
     shape-rendering: crispEdges;
 }
 
+.filter-selected,
 .filter-mouseover:hover {
-    background-color: #31708f;
-    fill: #31708f;
-    stroke: #c4e3f3;
+    background-color: #31708f !important;
+    fill: #31708f !important;
+    stroke: #c4e3f3 !important;
     stroke-width: 2px;   
 }
 
