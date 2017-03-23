@@ -930,11 +930,11 @@ moduleVisualizations.factory('TimelineVisualization',
             }
 
             self.html.graphSVG
-                .attr("stroke", "#000")
-                .attr("stroke-width", 1.5)
                 .selectAll("line")
                     .data(forceSimulationLinks)
                     .enter().append("line")
+                        .attr("stroke", "#000")
+                        .attr("stroke-width", 1.5)
                         .attr("x1", function(d) {
                             return d.source.x;
                         })
@@ -947,23 +947,46 @@ moduleVisualizations.factory('TimelineVisualization',
                         .attr("y2", function(d) {
                             return d.target.y;
                         });
-            self.html.graphSVG.append("g")
-                .attr("stroke", "#fff")
-                .attr("stroke-width", 1.5)
+
+            var graphNodeRadius = 15;
+            var graphNodeGroup = self.html.graphSVG.append("g");
+            graphNodeGroup
                 .selectAll(".attribute-graph-node")
                     .data(forceSimulationNodes)
                     .enter().append("circle")
                         .attr("class", "attribute-graph-node")
-                        .attr("fill", function(d, i) {
-                            return "#000";
-                        })
+                        .attr("fill", "#000")
                         .attr("cx", function(d) {
                             return d.x;
                         })
                         .attr("cy", function(d) {
                             return d.y;
                         })
-                        .attr("r", 10)
+                        .attr("r", graphNodeRadius)
+                        .on("mouseover", function(d, i) {
+                            graphTip.show(d, i);
+
+                            self.addSelections(d.id);
+                        })
+                        .on("mouseout", function(d, i) {
+                            graphTip.hide(d, i);
+
+                            self.removeSelections(d.id);
+                        });
+            graphNodeGroup
+                .selectAll(".attribute-graph-label")
+                    .data(forceSimulationNodes)
+                    .enter().append("text")
+                        .attr("class", "attribute-graph-label occurence-warning")
+                        .attr("dx", function(d) {
+                            return d.x - graphNodeRadius / 2;
+                        })
+                        .attr("dy", function(d) {
+                            return d.y + graphNodeRadius / 2;
+                        })
+                        .text(function(d, i) {
+                            return d.id.slice(0, 2);
+                        })
                         .on("mouseover", function(d, i) {
                             graphTip.show(d, i);
 
