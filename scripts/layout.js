@@ -512,8 +512,8 @@ moduleLayout.directive('directiveMenuTooltip', function() {
 });
 
 moduleLayout.directive("directiveActionPanel",
-        ['$compile', '$filter', 'visualizations', 'filters', 'patientData', 'utils', 'widgets', 'nodes', 'timeWeaver', 'retrieveCountsData',
-        function($compile, $filter, visualizations, filters, patientData, utils, widgets, nodes, timeWeaver, retrieveCountsData) {
+        ['$compile', '$filter', 'visualizations', 'SpiralVisualization', 'filters', 'patientData', 'utils', 'widgets', 'nodes', 'timeWeaver', 'retrieveCountsData',
+        function($compile, $filter, visualizations, SpiralVisualization, filters, patientData, utils, widgets, nodes, timeWeaver, retrieveCountsData) {
 	return { 
         scope: true,
         link: function(scope, element, attrs) {
@@ -558,10 +558,13 @@ moduleLayout.directive("directiveActionPanel",
                 // TODO: Support multiple views layout
                 var node = nodes.getCurrentNode();
                 if (node) {
-                    var vizObject = nodes.getVizByIDs(
+                    var viz = nodes.getVizByIDs(
                             node.model.id,
-                            node.model.currentVizID)
-                        .vizObject;
+                            node.model.currentVizID);
+                    if (!viz)
+                        return;
+
+                    var vizObject = viz.vizObject;
                     var modificationTypes = vizObject
                         .getModificationTypes();
                     if (isModificationTypeActive(modificationTypes.FILTERS)) {
@@ -716,7 +719,7 @@ moduleLayout.directive("directiveActionPanel",
                 var node = nodes.getCurrentNode();
                 var viz = nodes.getVizByIDs(
                     node.model.id, node.model.currentVizID);
-                return (viz.vizObject.isAttributeTypeActive(type)) ?
+                return (viz && (viz.vizObject.isAttributeTypeActive(type))) ?
                     "button-selected" :
                     "";
             };
@@ -734,7 +737,7 @@ moduleLayout.directive("directiveActionPanel",
                 var node = nodes.getCurrentNode();
                 var viz = nodes.getVizByIDs(
                     node.model.id, node.model.currentVizID);
-                return (viz.vizObject.isModificationTypeActive(type)) ?
+                return (viz && (viz.vizObject.isModificationTypeActive(type))) ?
                     "active" :
                     "";
             };
@@ -1346,14 +1349,22 @@ moduleLayout.directive("directiveActionPanel",
                         html += '</div>';
                     } else if (currentNode.model.vizType ===
                             scope.vizType.SPIRAL) {
-                        vizObject = nodes.getVizByIDs(
-                                currentNode.model.id,
-                                currentNode.model.currentVizID)
-                            .vizObject;
-                        currentModificationType = vizObject
-                            .currentModificationType;
-                        modificationTypes = vizObject
-                            .getModificationTypes();
+                        // HACK: If no spiral exists, skip checks
+                        var spiralViz = nodes.getVizByIDs(
+                            currentNode.model.id,
+                            currentNode.model.currentVizID);
+                        if (spiralViz) {
+                            vizObject = spiralViz.vizObject;
+                            currentModificationType = vizObject
+                                .currentModificationType;
+                            modificationTypes = vizObject
+                                .getModificationTypes();
+                        } else {
+                            currentModificationType = SpiralVisualization
+                                .prototype.getModificationTypes().DATA;
+                            modificationTypes = SpiralVisualization
+                                .prototype.getModificationTypes();
+                        }
 
                         scope.patient = 
                                 patientData.getAttribute(patientData.KEY_PATIENT);
@@ -1371,10 +1382,8 @@ moduleLayout.directive("directiveActionPanel",
                         });
                         html = '<div>';
                         html += widgets.makeAttributePillsOnlyData({
-                            currentModificationType: vizObject
-                                .currentModificationType,
-                            modificationTypes: vizObject
-                                .getModificationTypes()
+                            currentModificationType: currentModificationType,
+                            modificationTypes: modificationTypes 
                         });
                         html += (currentModificationType === modificationTypes.DATA) ?
                             '<div>' +
@@ -1628,7 +1637,7 @@ moduleLayout.directive("directivePanes",
                 // Compile tooltips
                 // NOTE: We don't need to inherit scope
                 if (node.model.vizType === scope.vizType.TIMELINE) {
-                    target = angular.element('#graph-title-tooltip');
+                    var target = angular.element('#graph-title-tooltip');
                     $compile(target)(scope.$new(true));
                 }
             };
@@ -2682,6 +2691,6 @@ var testTimeline = function() {
         ]);
     });
 };
-//testSpirals();
+testSpirals();
 //testHeatmap();
-testTimeline();
+//testTimeline();
