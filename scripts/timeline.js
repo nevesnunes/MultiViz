@@ -264,11 +264,7 @@ moduleVisualizations.factory('TimelineVisualization',
         };
 
         var classByMedication = function(d, i) {
-            var isNonMedicated = ((utils.arrayObjectIndexOf(
-                self.patientLists.selectedDiseases,
-                d.name,
-                "name") !== -1) && (d.overlapIndex === 0));
-            return isNonMedicated ?
+            return d.isNonMedicated ?
                 ("attribute-occurence " + "attribute-occurence-warning") :
                 ("attribute-occurence " + classByAttribute(d, i));
         };
@@ -400,6 +396,15 @@ moduleVisualizations.factory('TimelineVisualization',
 
                 // We also need to see if we have data in the current month
                 // before starting a new one, so we don't miss any data
+                var areAllNamesDiseases = true;
+                lastNames.forEach(function(name) {
+                    if (utils.arrayObjectIndexOf(
+                            self.patientLists.selectedMedications,
+                            name,
+                            "name") !== -1) {
+                        areAllNamesDiseases = false;
+                    }
+                });
                 var isMonthEndingWithoutData = false;
                 var nextIndex = i + 1;
                 if(nextIndex < recordedFrequency.length) {
@@ -415,15 +420,6 @@ moduleVisualizations.factory('TimelineVisualization',
                                 !matrixDates[endYear][endMonth]) {
                             // NOTE: Force range end only for diseases, 
                             // because they won't be medicated.
-                            var areAllNamesDiseases = true;
-                            lastNames.forEach(function(name) {
-                                if (utils.arrayObjectIndexOf(
-                                        self.patientLists.selectedMedications,
-                                        name,
-                                        "name") !== -1) {
-                                    areAllNamesDiseases = false;
-                                }
-                            });
                             isMonthEndingWithoutData = areAllNamesDiseases;
                         }
                     }
@@ -471,10 +467,20 @@ moduleVisualizations.factory('TimelineVisualization',
                         lastDosage.end.map(function(obj) {
                             return obj.name;
                         });
+                    var isNonMedicated = true;
+                    newAttributeNames.forEach(function(name) {
+                        if (utils.arrayObjectIndexOf(
+                                self.patientLists.selectedMedications,
+                                name,
+                                "name") !== -1) {
+                            isNonMedicated = false;
+                        }
+                    });
                     matrixDates[endYear][endMonth].data.push({
                         attributeNames: newAttributeNames.slice(),
                         dataIndex: i,
                         dates: utils.extend(lastFrequency, {}),
+                        isNonMedicated: isNonMedicated,
                         overlapIndex: overlapIndex,
                     });
 
@@ -814,6 +820,7 @@ moduleVisualizations.factory('TimelineVisualization',
                                 occurenceIndex: occurenceIndex,
                                 dataIndex: dataInMonthObj.dataIndex,
                                 dates: dataInMonthObj.dates,
+                                isNonMedicated: dataInMonthObj.isNonMedicated,
                                 overlapIndex: dataInMonthObj.overlapIndex,
                                 name: nameInMonthObj
                             });
@@ -863,17 +870,13 @@ moduleVisualizations.factory('TimelineVisualization',
                         .offset([-10, 0])
                         .direction('n')
                         .html(function(d, i) {
-                            var isNonMedicated = ((utils.arrayObjectIndexOf(
-                                self.patientLists.selectedDiseases,
-                                d.name,
-                                "name") !== -1) && (d.overlapIndex === 0));
                             return "<div style=\"text-align: left\">" +
                                 "<b>Início: </b>" + 
                                     moment(d.dates.start).format("YYYY/MM/DD") + 
                                 "<br/>" +
                                 "<b>Fim: </b>" +
                                     moment(d.dates.end).format("YYYY/MM/DD") + 
-                                ((isNonMedicated) ?
+                                ((d.isNonMedicated) ?
                                     ("<br/>" + "<span class=\"label label-danger\"><b>Doença não medicada</b></span>") :
                                     ""
                                 ) +
@@ -930,9 +933,7 @@ moduleVisualizations.factory('TimelineVisualization',
                                                     .selectedDiseases,
                                                 d.name,
                                                 "name") !== -1);
-                                        var isNonMedicated = (isDisease && 
-                                            (d.overlapIndex === 0));
-                                        return isNonMedicated ? "!" : 
+                                        return d.isNonMedicated ? "!" : 
                                             isDisease ? "D" : "M";
                                     });
                             monthEvolutionEnterGroup.append("circle")
