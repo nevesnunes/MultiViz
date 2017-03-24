@@ -8,17 +8,8 @@ moduleVisualizations.directive('directiveTimelineTooltip', function() {
                     "<div style=\"text-align: left\" class=\"p\">" +
                         "Encontre atributos sequenciais ou sobrepostos " +
                         "ao longo da história clínica do paciente actual." +
-                    "</div>";
-            };
-        }
-    };
-});
-
-moduleVisualizations.directive('directiveTimelineEvolutionTooltip', function() {
-    return {
-        link: function (scope, element, attrs) {
-            scope.setTooltipText = function(button) {
-                scope.tooltipText = 
+                    "</div>" +
+                    "<br/>" +
                     "<div style=\"text-align: left\" class=\"p\">" +
                         "Legenda: " +
                         "<br/>" +
@@ -37,9 +28,9 @@ moduleVisualizations.directive('directiveTimelineGraphTooltip', function() {
             scope.setTooltipText = function(button) {
                 scope.tooltipText = 
                     "<div style=\"text-align: left\" class=\"p\">" +
-                        "<b>Ligações mais curtas</b> " +
-                        "correspondem a atributos com " +
-                        "mais ocurrências simultâneas." +
+                        "Ligações <b>mais curtas</b><br/>" +
+                        "correspondem a atributos<br/>" +
+                        "com <b>mais ocurrências simultâneas</b>." +
                     "</div>";
             };
         }
@@ -65,6 +56,7 @@ moduleVisualizations.factory('TimelineVisualization',
                 this.patientLists.medications);
 
         this.currentAttributeType = attributeType.DISEASES;
+        this.currentOccurenceType = occurenceType.HISTOGRAM;
         this.currentModificationType = modificationType.DATA;
 
         // Specific state is maintained in a separate object,
@@ -225,25 +217,9 @@ moduleVisualizations.factory('TimelineVisualization',
                     .attr("id", "svg-occurences")
                     .attr("width", self.vizWidth - 
                         self.graphSize - self.padding / 2)
-                    .attr("height", 0) // Set dynamically
+                    .style("margin-top", 20 + "px")
                     .append("g")
-                        .attr("id", "occurences")
-                        .attr("transform", "translate(" +
-                            // Offset for month text labels
-                            marginFromLabels + "," + 0 + ")");
-
-        d3.select("#" + timelineID + "-details")
-            .append("div")
-                .attr("id", "evolution-title")
-                .style("display", "inline-block")
-                .style('margin-left',
-                    marginFromLabels + "px");
-        d3.select("#" + timelineID + "-details")
-            .append("div")
-                .attr("id", "evolution-title-tooltip")
-                .style("display", "inline-block")
-                .style('margin-left',
-                    5 + "px");
+                        .attr("id", "occurences");
 
         self.html = {
             elementID: elementID,
@@ -264,6 +240,8 @@ moduleVisualizations.factory('TimelineVisualization',
         this.remove();
 
         this.populate(data, timelineID);
+
+        this.showByOccurenceType();
     };
 
     TimelineVisualization.prototype.classByAttribute = function(d, i) {
@@ -296,29 +274,11 @@ moduleVisualizations.factory('TimelineVisualization',
         };
 
         // Set titles for each visualization
-        d3.select("#" + self.html.timelineID + "-details")
-            .select("#occurences-title")
-                .html('<h4><b>' +
-                        'Contagem de <br/>ocorrências <br/>simultâneas' +
-                    '</b></h4>');
-        d3.select("#" + self.html.timelineID + "-details")
-            .select("#evolution-title")
-                .html('<h4><b>' +
-                        'Evolução <br/>temporal' +
-                    '</b></h4>');
-        d3.select("#" + self.html.timelineID + "-details")
-            .select("#evolution-title-tooltip")
-                .html('<img class="tooltip-wrapper help" ' +
-                        'title="{{tooltipText}}" ' + 
-                        'custom-placement="right" ' + 
-                        'directive-tooltip directive-timeline-evolution-tooltip ' +
-                        'src="images/controls/info.svg">' +
-                    '</img>');
         d3.select("#" + self.html.timelineID + "-graph")
             .select("#graph-title")
-                .html('<h4><b>' +
-                        'Relações </br>entre atributos' +
-                    '</b></h4>');
+                .html('<span>' +
+                        'Relações entre atributos' +
+                    '</span>');
         d3.select("#" + self.html.timelineID + "-graph")
             .select("#graph-title-tooltip")
                 .html('<img class="tooltip-wrapper help" ' +
@@ -681,6 +641,8 @@ moduleVisualizations.factory('TimelineVisualization',
         // Matrix
         //
 
+        var labelWidth = self.visualizationRenderer
+            .longestNameLength * 8;
         var longestMatrixWidth = 0;
         var longestOccurenceIndex = 0;
         var maxIncidencesCount = 0;
@@ -694,6 +656,7 @@ moduleVisualizations.factory('TimelineVisualization',
                     .style("display", "inline-block")
                     .attr("id", "viz-div-" + year);
                 yearBinsHTML.append("div")
+                    .attr("class", "year-label")
                     .style("display", "inline-block")
                     .style("float", "left")
                     .style("margin-right", self.labelPadding + "px")
@@ -714,14 +677,13 @@ moduleVisualizations.factory('TimelineVisualization',
                     var monthHTML = yearBinsHTML.append("div")
                         .attr("id", "viz-div-" + year + "-" + month);
                     monthHTML.append("div")
+                        .attr("class", "month-label")
                         .style("display", "inline-block")
                         .style("float", "left")
                         .style("margin-right", self.labelPadding + "px")
                         .style("width", self.padding / 2 + "px")
                         .html(monthName);
 
-                    var labelWidth = self.visualizationRenderer
-                        .longestNameLength * 8;
                     var attributeNames = 
                         matrixDates[year][month].attributeNames;
                     var monthDiv = monthHTML.append("div")
@@ -745,8 +707,7 @@ moduleVisualizations.factory('TimelineVisualization',
                             .attr("width", labelWidth)
                             .attr("height", cellSizeWithOffset)
                             .attr("x", function(d, i) {
-                                return (maxOverlapCount + 1) *
-                                    cellSizeWithOffset;
+                                return 0;
                             })
                             .attr("y", function(d, i) {
                                 return i * 
@@ -767,10 +728,8 @@ moduleVisualizations.factory('TimelineVisualization',
                         .attr("class", "attribute-month-label text-label")
                         .merge(monthCellsLabels)
                             .attr("x", function(d, i) {
-                                return (maxOverlapCount + 1) *
-                                    cellSizeWithOffset + 
-                                    // Align with rect
-                                    cellSizeOffset;
+                                // Align with rect
+                                return cellSizeOffset;
                             })
                             .attr("y", function(d, i) {
                                 return i * 
@@ -861,7 +820,7 @@ moduleVisualizations.factory('TimelineVisualization',
                         .attr("height", cellSize)
                         .merge(monthCells)
                             .attr("x", function(d, i) {
-                                return (d.count - 1) *
+                                return labelWidth + (d.count - 1) *
                                     cellSizeWithOffset + cellSizeOffset;
                             })
                             .attr("y", function(d) {
@@ -1027,17 +986,32 @@ moduleVisualizations.factory('TimelineVisualization',
             cellSize / 2);
 
         // Align elements from dynamic sizes
+        var marginFromLabels = 
+            self.padding + self.labelPadding * 2;
         d3.selectAll(".viz-svg-contents")
             .attr("width", longestMatrixWidth +
                 ((longestOccurenceIndex + 1) *
                     cellSizeWithOffset + cellSizeOffset) +
                 self.labelPadding);
         d3.select("#svg-occurences")
-            .attr("width", longestMatrixWidth + 
+            .attr("width", labelWidth + longestMatrixWidth + 
                 cellSizeWithOffset);
+        d3.select("#svg-occurences")
+            .select("#occurences")
+                .attr("transform", "translate(" +
+                    (labelWidth + marginFromLabels) + "," + 0 + ")");
         d3.selectAll(".viz-evolution").attr("transform", "translate(" +
-            (longestMatrixWidth + cellSizeWithOffset) + "," +
+            (labelWidth + cellSizeOffset * 2) + "," +
             cellSizeOffset * 2 + ")");
+
+        // Store dynamic sizes
+        self.cellSize = cellSize;
+        self.cellSizeOffset = cellSizeOffset;
+        self.cellSizeWithOffset = cellSizeWithOffset;
+        self.labelWidth = labelWidth;
+        self.longestMatrixWidth = longestMatrixWidth;
+        self.longestOccurenceIndex = longestOccurenceIndex;
+        self.maxIncidencesCount = maxIncidencesCount;
 
         //
         // Graph
@@ -1196,12 +1170,6 @@ moduleVisualizations.factory('TimelineVisualization',
         d3.select("#" + this.html.timelineID + "-details")
             .select("#occurences-title")
                 .html('');
-        d3.select("#" + this.html.timelineID + "-details")
-            .select("#evolution-title")
-                .html('');
-        d3.select("#" + this.html.timelineID + "-details")
-            .select("#evolution-title-tooltip")
-                .html('');
         d3.select("#" + this.html.timelineID + "-graph")
             .select("#graph-title")
                 .html('');
@@ -1211,6 +1179,11 @@ moduleVisualizations.factory('TimelineVisualization',
     };
 
     TimelineVisualization.prototype.renderVisibleDetails = function() {
+        d3.select("#" + this.html.timelineID + "-switcher")
+            .style('display', 'inline-block')
+            .style("visibility", "initial")
+            .style("width", "initial")
+            .style("height", "initial");
         d3.select("#" + this.html.timelineID + "-details")
             .style('display', 'inline-block')
             .style("visibility", "initial")
@@ -1230,6 +1203,11 @@ moduleVisualizations.factory('TimelineVisualization',
     };
 
     TimelineVisualization.prototype.renderNoVisibleDetails = function() {
+        d3.select("#" + this.html.timelineID + "-switcher")
+            .style('display', 'none')
+            .style("visibility", "hidden")
+            .style("width", 0)
+            .style("height", 0);
         d3.select("#" + this.html.timelineID + "-details")
             .style('display', 'none')
             .style("visibility", "hidden")
@@ -1576,6 +1554,76 @@ moduleVisualizations.factory('TimelineVisualization',
 
     TimelineVisualization.prototype.setCurrentAttributeType = function(type) {
         this.currentAttributeType = type;
+    };
+
+    var occurenceType = Object.freeze({
+        NONE: "none",
+        HISTOGRAM: "Histogram",
+        TIMELINE: "Timeline"
+    });
+
+    TimelineVisualization.prototype.isOccurenceTypeActive = function(type) {
+        return this.currentOccurenceType === occurenceType[type];
+    };
+
+    TimelineVisualization.prototype.switchOccurenceType = function(type) {
+        this.currentOccurenceType = occurenceType[type];
+        this.showByOccurenceType();
+    };
+
+    TimelineVisualization.prototype.showByOccurenceType = function() {
+        // Align elements from dynamic sizes
+        /*
+        d3.selectAll(".viz-svg-contents")
+            .attr("width", longestMatrixWidth +
+                ((longestOccurenceIndex + 1) *
+                    cellSizeWithOffset + cellSizeOffset) +
+                self.labelPadding);
+        d3.select("#svg-occurences")
+            .attr("width", longestMatrixWidth + 
+                cellSizeWithOffset);
+        d3.selectAll(".viz-evolution").attr("transform", "translate(" +
+            (longestMatrixWidth + cellSizeWithOffset) + "," +
+            cellSizeOffset * 2 + ")");
+            */
+
+        // Show histogram and hide evolution time-lines, or vice-versa
+        var contentsSVG;
+        if (this.currentOccurenceType === occurenceType.HISTOGRAM) {
+            d3.select("#svg-occurences")
+                .style('display', 'initial')
+                .style("visibility", "initial");
+            contentsSVG = this.html.mainHTML.selectAll(".viz-svg-contents");
+            contentsSVG.selectAll(".attribute-month")
+                .style('display', 'initial')
+                .style("visibility", "initial");
+
+            contentsSVG.selectAll(".viz-evolution")
+                .style('display', 'none')
+                .style("visibility", "hidden");
+
+            contentsSVG
+                .attr("width", this.longestMatrixWidth +
+                    (this.cellSizeWithOffset + this.cellSizeOffset) +
+                    this.labelPadding);
+        } else {
+            d3.select("#svg-occurences")
+                .style('display', 'none')
+                .style("visibility", "hidden");
+            contentsSVG = this.html.mainHTML.selectAll(".viz-svg-contents");
+            contentsSVG.selectAll(".attribute-month")
+                .style('display', 'none')
+                .style("visibility", "hidden");
+
+            contentsSVG.selectAll(".viz-evolution")
+                .style('display', 'initial')
+                .style("visibility", "initial");
+
+            contentsSVG
+                .attr("width", ((this.longestOccurenceIndex + 1) *
+                        this.cellSizeWithOffset + this.cellSizeOffset) +
+                    this.labelWidth);
+        }
     };
 
     var modificationType = Object.freeze({

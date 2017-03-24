@@ -1,3 +1,8 @@
+.month-label,
+.year-label {
+    font-weight: bold;
+}
+
 .occurence-selected,
 .occurence-mouseover:hover {
     background-color: #31708f !important;

@@ -316,7 +316,8 @@ moduleLayout.directive('directivePatientTooltip', function() {
             scope.setTooltipText = function(button) {
                 scope.tooltipText = 
                     "<div style=\"text-align: left\" class=\"p\">" +
-                        "Os <b>atributos presentes no paciente actual</b> " +
+                        "Os <b>atributos presentes</b><br/>" +
+                        "<b>no paciente actual</b><br/>" +
                         "são assinalados (" +
                         "<div style=\"display: inline-block\" class=\"" +
                             "markPatientAttribute markPresent markSquare\" />" +
@@ -492,16 +493,18 @@ moduleLayout.directive('directiveMenuTooltip', function() {
             scope.setTooltipText = function(button) {
                 scope.tooltipText = 
                     "<div style=\"text-align: left\" class=\"p\">" +
-                        "Cada barra representa a <b>proporção de pacientes</b> com o atributo correspondente " +
-                    "</div>" +
-                    "<div style=\"text-align: left\" class=\"p\">" +
+                        "Cada barra " +
                         "( " +
                         "<div style=\"display: inline-block\" class=\"" +
                                 "patient-table-entry-bar\" > " +
                             '<div class="patient-table-entry-bar-fill" style="width:35%"> ' +
                             '</div>' +
                         '</div>' +
-                        " )." +
+                        " )<br/>" +
+                        "representa a <b>proporção de pacientes</b><br/>" +
+                        "com o atributo correspondente." +
+                    "</div>" +
+                    "<div style=\"text-align: left\" class=\"p\">" +
                     "</div>";
             };
         }
@@ -1625,8 +1628,6 @@ moduleLayout.directive("directivePanes",
                 // Compile tooltips
                 // NOTE: We don't need to inherit scope
                 if (node.model.vizType === scope.vizType.TIMELINE) {
-                    var target = angular.element('#evolution-title-tooltip');
-                    $compile(target)(scope.$new(true));
                     target = angular.element('#graph-title-tooltip');
                     $compile(target)(scope.$new(true));
                 }
@@ -2182,6 +2183,28 @@ moduleLayout.directive("directivePanes",
                 });
             };
 
+            var setOccurenceType = function(nodeID, vizID, type) {
+                var node = nodes.getRootNode().first(function (node1) {
+                    return node1.model.id === nodeID;
+                });
+                var viz = nodes.getVizByIDs(nodeID, node.model.currentVizID);
+                viz.vizObject.switchOccurenceType(type);
+            };
+
+            var isOccurenceTypeActive = function(nodeID, vizID, type) {
+                if (nodes.isMaximized(nodeID)) {
+                    var node = nodes.getRootNode().first(function (node1) {
+                        return node1.model.id === nodeID;
+                    });
+                    var viz = nodes.getVizByIDs(nodeID, node.model.currentVizID);
+                    return (viz.vizObject.isOccurenceTypeActive(type)) ?
+                        "button-selected" :
+                        "";
+                } else {
+                    return "";
+                }
+            };
+
             // Two step creation: 
             // - first, angular elements we need for d3 to use;
             // - then, d3 elements
@@ -2203,10 +2226,47 @@ moduleLayout.directive("directivePanes",
                     vizObject = timeline.vizObject;
                 }
 
+                // Switch between histogram and timelines for
+                // occurence comparisons
+                var switcherHTML = '<div>' +
+                        '<div class="btn-group" ' +
+                                'role="group" aria-label="...">' +
+                            '<button type="button" ' +
+                                'id="' + vizID + '-type-pairs" ' +
+                                'class="btn btn-default" ' +
+                                'ng-class="isOccurenceTypeActive(\'' + 
+                                    id + '\', \'' +
+                                    vizID + '\', \'' +
+                                    'HISTOGRAM' + '\')" ' +
+                                'ng-click="setOccurenceType(\'' + 
+                                    id + '\', \'' +
+                                    vizID + '\', \'' +
+                                    'HISTOGRAM' + '\')" ' +
+                                '>' +
+                                'Contagem de ocorrências</button>' +
+                            '<button type="button" ' +
+                                'id="' + vizID + '-type-all" ' +
+                                'class="btn btn-default" ' +
+                                'ng-class="isOccurenceTypeActive(\'' + 
+                                    id + '\', \'' +
+                                    vizID + '\', \'' +
+                                    'TIMELINE' + '\')" ' +
+                                'ng-click="setOccurenceType(\'' + 
+                                    id + '\', \'' +
+                                    vizID + '\', \'' +
+                                    'TIMELINE' + '\')" ' +
+                                '>' +
+                                'Evolução temporal</button>' +
+                        '</div>' +
+                    '</div>';
+
                 var html = '<div ' +
                         'id="' + vizID + '" ' +
                         'data-node-id="' + id + '">' +
                         '<div style="display: block">' + 
+                        '</div>' +
+                        '<div id="' + vizID + '-switcher">' +
+                            switcherHTML +
                         '</div>' +
                         '<div id="' + vizID + '-contents">' +
                             // Frequency histogram
@@ -2226,7 +2286,13 @@ moduleLayout.directive("directivePanes",
                 var targetScope = nodes.scopeCloneWithHandlers(
                     scope,
                     targetScope,
-                    [
+                    [ {
+                        name: "isOccurenceTypeActive",
+                        handler: isOccurenceTypeActive
+                    }, {
+                        name: "setOccurenceType",
+                        handler: setOccurenceType
+                    }
                 ]);
 
                 var targetHTML = $compile(html)(targetScope);
@@ -2242,8 +2308,6 @@ moduleLayout.directive("directivePanes",
 
                 // Compile tooltips
                 // NOTE: We don't need to inherit scope
-                target = angular.element('#evolution-title-tooltip');
-                $compile(target)(scope.$new(true));
                 target = angular.element('#graph-title-tooltip');
                 $compile(target)(scope.$new(true));
 
