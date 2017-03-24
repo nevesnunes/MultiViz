@@ -2691,6 +2691,6 @@ var testTimeline = function() {
         ]);
     });
 };
-testSpirals();
+//testSpirals();
 //testHeatmap();
 //testTimeline();

@@ -53,10 +53,7 @@ moduleWidgetBuilder.factory('widgets', [function() {
         var html = '<ul class="nav nav-pills nav-justified">' +
                 '<li ' +
                     'id="btnDisplayData" ' +
-                    'ng-class="isModificationTypeActive(\'' + 
-                        options.modificationTypes.DATA + '\')" ' +
-                    'ng-click="setModificationType(\'' + 
-                        options.modificationTypes.DATA + '\')">' +
+                    'class="active">' + 
                     '<a href="#">Dados</a>' +
                 '</li>' +
             '</ul>' +
