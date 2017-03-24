@@ -345,6 +345,7 @@ moduleVisualizations.factory('TimelineVisualization',
                 var endMonth;
                 var endMonthName;
                 var endYear;
+                var nextMoment;
 
                 // Extract information for range end checks;
                 // We need to compare all names in current dosage 
@@ -375,12 +376,33 @@ moduleVisualizations.factory('TimelineVisualization',
                     }
                 }
 
+                // Check if there's a gap between the next date
+                // NOTE: Only relevant if the attribute changes
+                var hasGapBetweenAttributes = false;
+                if (i < recordedFrequency.length - 1) {
+                    endMoment = moment(recordedFrequency[i]);
+                    nextMoment = moment(recordedFrequency[i+1]);
+                    if (nextMoment.diff(endMoment, "days") > 1) {
+                        var nextDosage = recordedDosage[i+1];
+                        var namesToCompareWithNext = lastNames.slice();
+                        for (var nextDosageIndex = 0;
+                                nextDosageIndex < nextDosage.length;
+                                nextDosageIndex++) {
+                            var nextName = nextDosage[nextDosageIndex].name;
+                            // Attribute changes
+                            if (namesToCompareWithNext.indexOf(nextName) === -1) {
+                                hasGapBetweenAttributes = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+
                 // We also need to see if we have data in the current month
                 // before starting a new one, so we don't miss any data
                 var isMonthEndingWithoutData = false;
                 var nextIndex = i + 1;
                 if(nextIndex < recordedFrequency.length) {
-                    endMoment = moment(recordedFrequency[i]);
                     endMonth = endMoment.month();
                     endYear = endMoment.year();
                     var nextFrequency = recordedFrequency[i+1];
@@ -409,6 +431,7 @@ moduleVisualizations.factory('TimelineVisualization',
 
                 // Check if range ended
                 if (isMonthEndingWithoutData ||
+                        hasGapBetweenAttributes ||
                         areNamesDifferent ||
                         (namesToCompare.length !== 0) ||
                         (i === recordedFrequency.length - 1)) {
@@ -464,14 +487,6 @@ moduleVisualizations.factory('TimelineVisualization',
                                 return oldAttributeNames.indexOf(item) < 0;
                             }));
 
-                    // Range ended: reset object to compare
-                    lastDosage = {
-                        start: utils.extend(recordedDosage[i], [])
-                    };
-                    lastFrequency = {
-                        start: utils.extend(recordedFrequency[i], [])
-                    };
-
                     // Use seen attributes to make data for graph;
                     // We keep track of all possible pairs of attributes,
                     // counting how many overlaps each pair has.
@@ -525,6 +540,14 @@ moduleVisualizations.factory('TimelineVisualization',
                             .filter(function(item) {
                                 return graphNames.indexOf(item) < 0;
                             }));
+
+                    // Range ended: reset object to compare
+                    lastDosage = {
+                        start: utils.extend(recordedDosage[i], [])
+                    };
+                    lastFrequency = {
+                        start: utils.extend(recordedFrequency[i], [])
+                    };
                 }
             }
         }
@@ -980,10 +1003,10 @@ moduleVisualizations.factory('TimelineVisualization',
         visualizations.makeLegend(
             legendSVG, 
             colorScale, 
-            cellSize * 2, 
-            cellSize,
+            cellSizeWithOffset * 2, 
+            cellSizeWithOffset,
             0,
-            cellSize / 2);
+            cellSizeWithOffset / 2);
 
         // Align elements from dynamic sizes
         var marginFromLabels = 
