@@ -240,7 +240,7 @@ moduleVisualizations.factory('TimelineVisualization',
                     marginFromLabels + "px");
         d3.select("#" + timelineID + "-details")
             .append("div")
-                .attr("id", "evolution-tooltip")
+                .attr("id", "evolution-title-tooltip")
                 .style("display", "inline-block")
                 .style('margin-left',
                     5 + "px");
@@ -307,7 +307,7 @@ moduleVisualizations.factory('TimelineVisualization',
                         'Evolução <br/>temporal' +
                     '</b></h4>');
         d3.select("#" + self.html.timelineID + "-details")
-            .select("#evolution-tooltip")
+            .select("#evolution-title-tooltip")
                 .html('<img class="tooltip-wrapper help" ' +
                         'title="{{tooltipText}}" ' + 
                         'custom-placement="right" ' + 
@@ -648,6 +648,7 @@ moduleVisualizations.factory('TimelineVisualization',
                 .attr("width", cellSize)
                 .attr("height", function(d) { return histogramHeight - y(d); });
         histogramGroup.append("rect")
+            .attr("class", "filter-bar-overlay")
             .attr("fill", "transparent")
             .merge(histogram)
                 .attr("x", function(d, i) { return x(i); })
@@ -953,6 +954,7 @@ moduleVisualizations.factory('TimelineVisualization',
                                             isDisease ? "D" : "M";
                                     });
                             monthEvolutionEnterGroup.append("circle")
+                                .attr("class", "attribute-occurence-overlay")
                                 .attr("fill", "transparent")
                                 .attr("r", cellSize / 2)
                                 .merge(monthEvolution)
@@ -1027,7 +1029,7 @@ moduleVisualizations.factory('TimelineVisualization',
         // Align elements from dynamic sizes
         d3.selectAll(".viz-svg-contents")
             .attr("width", longestMatrixWidth +
-                (longestOccurenceIndex *
+                ((longestOccurenceIndex + 1) *
                     cellSizeWithOffset + cellSizeOffset) +
                 self.labelPadding);
         d3.select("#svg-occurences")
@@ -1198,7 +1200,7 @@ moduleVisualizations.factory('TimelineVisualization',
             .select("#evolution-title")
                 .html('');
         d3.select("#" + this.html.timelineID + "-details")
-            .select("#evolution-tooltip")
+            .select("#evolution-title-tooltip")
                 .html('');
         d3.select("#" + this.html.timelineID + "-graph")
             .select("#graph-title")
@@ -1393,36 +1395,60 @@ moduleVisualizations.factory('TimelineVisualization',
         var self = this;
 
         // Remove handlers
+        var selection = self.html.occurencesSVG
+            .selectAll(".filter-bar-overlay");
+        selection
+            .on("mouseover", null)
+            .on("mouseout", null);
+        selection = self.html.mainHTML
+            .selectAll(".attribute-month-rect-label");
+        selection
+            .on("mouseover", null)
+            .on("mouseout", null);
+        selection = self.html.mainHTML
+            .selectAll(".attribute-month-label");
+        selection
+            .on("mouseover", null)
+            .on("mouseout", null);
+        selection = self.html.mainHTML
+            .selectAll(".attribute-month");
+        selection
+            .on("mouseover", null)
+            .on("mouseout", null);
+        selection = self.html.mainHTML
+            .selectAll(".viz-evolution")
+                .selectAll(".attribute-occurence-overlay");
+        selection
+            .on("mouseover", null)
+            .on("mouseout", null);
+        selection = self.html.graphSVG
+            .selectAll(".attribute-graph-node-overlay");
+        selection
+            .on("mouseover", null)
+            .on("mouseout", null);
+
+        // Remove elements
         self.html.occurencesSVG
-            .selectAll(".histogram")
-                .selectAll(".filter-mouseover")
-                    .on("mouseover", null)
-                    .on("mouseout", null);
-        self.html.occurencesSVG
+            .selectAll(".filter-bar-overlay")
+                .selectAll("*")
+                    .remove();
+        self.html.mainHTML
             .selectAll(".attribute-month-rect-label")
-                .selectAll(".rect-label")
-                    .on("mouseover", null)
-                    .on("mouseout", null);
+                .remove();
         self.html.mainHTML
             .selectAll(".attribute-month-label")
-                .selectAll(".text-label")
-                    .on("mouseover", null)
-                    .on("mouseout", null);
+                .remove();
         self.html.mainHTML
             .selectAll(".attribute-month")
-                .selectAll(".filter-mouseover")
-                    .on("mouseover", null)
-                    .on("mouseout", null);
+                .remove();
         self.html.mainHTML
-            .selectAll("viz-evolution")
-                .selectAll("occurence-mouseover")
-                    .on("mouseover", null)
-                    .on("mouseout", null);
+            .selectAll(".viz-evolution")
+                .selectAll("*")
+                    .remove();
         self.html.graphSVG
             .selectAll("g")
-                .selectAll("circle")
-                    .on("mouseover", null)
-                    .on("mouseout", null);
+                .selectAll("*")
+                    .remove();
 
         self.html.mainHTML.selectAll("*")
             .remove();

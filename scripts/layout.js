@@ -1625,7 +1625,7 @@ moduleLayout.directive("directivePanes",
                 // Compile tooltips
                 // NOTE: We don't need to inherit scope
                 if (node.model.vizType === scope.vizType.TIMELINE) {
-                    var target = angular.element('#graph-evolution-tooltip');
+                    var target = angular.element('#evolution-title-tooltip');
                     $compile(target)(scope.$new(true));
                     target = angular.element('#graph-title-tooltip');
                     $compile(target)(scope.$new(true));
@@ -2242,7 +2242,7 @@ moduleLayout.directive("directivePanes",
 
                 // Compile tooltips
                 // NOTE: We don't need to inherit scope
-                target = angular.element('#graph-evolution-tooltip');
+                target = angular.element('#evolution-title-tooltip');
                 $compile(target)(scope.$new(true));
                 target = angular.element('#graph-title-tooltip');
                 $compile(target)(scope.$new(true));
