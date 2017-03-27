@@ -1,0 +1,44 @@
+@startuml
+
+skinparam monochrome true
+skinparam shadowing false
+
+actor User
+participant "Panes" as P << Directive >>
+participant "ActionPanel" as AP << Directive >>
+participant "...Visualization" as CV << Factory >>
+participant "Widgets" as W << Factory >>
+participant "Nodes" as N << Factory >>
+
+User -> AP: choose...
+note right
+    Selects a visualization
+    for a new view
+end note
+AP -> P: makePaneSplit
+P -> P: paneColapse
+P -> P: updateLayout
+
+group make view
+    P -> N: walk
+    N ---> P: walk
+    loop foreach node
+        P -> P: make... << Concrete Visualization >>
+        P -> CV: make / remake
+        note right
+            Update visualization
+            in new view's DOM
+        end note
+    end
+end
+
+group make panel
+    P -> AP :makeDefaultActions
+    note right
+        Updates attributes for widgets
+    end note
+    AP -> W: make... << Concrete Widget >>
+    AP -> AP :updateActionPanel
+end
+
+@enduml

@@ -4,7 +4,7 @@ module.exports = function(grunt) {
 	angular_architecture_graph: {
 		diagram: {
 			files: {
-				"architecture": [
+				"docs/architecture": [
 					"scripts/*.js"
 				]
 			}

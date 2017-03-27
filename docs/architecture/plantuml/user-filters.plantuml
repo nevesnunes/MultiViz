@@ -1,0 +1,34 @@
+@startuml
+
+skinparam monochrome true
+skinparam shadowing false
+
+actor User
+participant "Angular" as NG
+participant "Panes" as P << Directive >>
+participant "...Visualization" as CV << Factory >>
+participant "Filters" as F << Factory >>
+
+group brush event
+    User -> F :brushed
+    F -> F
+    note right
+        Updates activatedFilters
+    end note
+    F -> F :dispatch(observer)
+    F -> CV :populateWithFilters
+end
+
+group list event
+    User -> P :checkFilter
+    P -> F :setActivatedFilters
+    note right
+        Updates activatedFilters
+    end note
+    F -> F :dispatch(observer)
+    F -> CV :populateWithFilters
+    ...
+    NG -> P :isListInputSelected
+end
+
+@enduml

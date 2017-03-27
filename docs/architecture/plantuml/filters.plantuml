@@ -1,0 +1,40 @@
+@startuml
+
+skinparam monochrome true
+skinparam shadowing false
+
+participant "Angular" as NG
+participant "Panes" as P << Directive >>
+participant "ActionPanel" as AP << Directive >>
+participant "...Visualization" as CV << Factory >>
+participant "Filters" as F << Factory >>
+participant "Providers" as Pr << Factory >>
+
+NG -> P: updateLayout
+P -> AP: updateActionPanel
+
+AP -> AP: updateFilterListeners
+AP -> CV: update
+CV -> CV: makeFilters
+CV -> F: addFiltersFromNames
+note left
+State used:
+- filters.filterNames
+- ...Visualization.expectedNames
+- filters.filters
+end note
+CV -> CV: populateWithFilters
+CV -> CV: populate
+
+AP -> F: make
+F -> F: makeFilter... << Concrete Filter >>
+F -> Pr: retrieve...
+Pr ---> F: retrieve...
+F -> F: makeFilter... << Concrete Widget >>
+note left
+    Update widget
+    in ActionPanel's DOM
+end note
+F ---> AP: make
+
+@enduml

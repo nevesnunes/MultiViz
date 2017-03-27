@@ -85,6 +85,8 @@ digraph dependencies {
       
         "TimelineVisualization"[label="TimelineVisualization", color=6]
       
+        "timeWeaver"[label="timeWeaver", color=6]
+      
         "filters"[label="filters", color=6]
       
         "visualizations"[label="visualizations", color=6]
@@ -102,6 +104,8 @@ digraph dependencies {
       
         "directiveTimelineTooltip"[label="directiveTimelineTooltip", color=3]
       
+        "directiveTimelineGraphTooltip"[label="directiveTimelineGraphTooltip", color=3]
+      
 
 
 
@@ -117,6 +121,8 @@ digraph dependencies {
       
         "moduleVisualizations" -> "directiveTimelineTooltip"
       
+        "moduleVisualizations" -> "directiveTimelineGraphTooltip"
+      
 
       
 
@@ -128,6 +134,8 @@ digraph dependencies {
         "moduleVisualizations" -> "SpiralVisualization"
       
         "moduleVisualizations" -> "TimelineVisualization"
+      
+        "moduleVisualizations" -> "timeWeaver"
       
         "moduleVisualizations" -> "filters"
       
@@ -149,6 +157,8 @@ digraph dependencies {
       node[shape="ellipse",style="filled", color=8]
       
 
+      
+        
       
         
       
@@ -218,6 +228,17 @@ digraph dependencies {
           "nodes"[label="nodes"]
           "nodes" -> "TimelineVisualization"
         
+          "timeWeaver"[label="timeWeaver"]
+          "timeWeaver" -> "TimelineVisualization"
+        
+      
+        
+          "utils"[label="utils"]
+          "utils" -> "timeWeaver"
+        
+          "visualizations"[label="visualizations"]
+          "visualizations" -> "timeWeaver"
+        
       
         
           "retrieveCountsData"[label="retrieveCountsData"]
@@ -231,6 +252,9 @@ digraph dependencies {
         
           "visualizations"[label="visualizations"]
           "visualizations" -> "filters"
+        
+          "widgets"[label="widgets"]
+          "widgets" -> "filters"
         
       
         
@@ -331,6 +355,9 @@ digraph dependencies {
         
           "retrievePatientData"[label="retrievePatientData"]
           "retrievePatientData" -> "retrieveCountsData"
+        
+          "utils"[label="utils"]
+          "utils" -> "retrieveCountsData"
         
       
 
@@ -639,6 +666,8 @@ digraph dependencies {
       
         "controllerEntryBarFill"[label="controllerEntryBarFill", color=4]
       
+        "controllerListEntryBarFill"[label="controllerListEntryBarFill", color=4]
+      
 
       
 
@@ -654,7 +683,11 @@ digraph dependencies {
       
         "directiveMainPanel"[label="directiveMainPanel", color=3]
       
+        "directivePatientTooltip"[label="directivePatientTooltip", color=3]
+      
         "directiveEntryBarFill"[label="directiveEntryBarFill", color=3]
+      
+        "directiveListEntryBarFill"[label="directiveListEntryBarFill", color=3]
       
         "directiveMenuTooltip"[label="directiveMenuTooltip", color=3]
       
@@ -673,7 +706,11 @@ digraph dependencies {
       
         "moduleLayout" -> "directiveMainPanel"
       
+        "moduleLayout" -> "directivePatientTooltip"
+      
         "moduleLayout" -> "directiveEntryBarFill"
+      
+        "moduleLayout" -> "directiveListEntryBarFill"
       
         "moduleLayout" -> "directiveMenuTooltip"
       
@@ -688,6 +725,8 @@ digraph dependencies {
         "moduleLayout" -> "controllerLayout"
       
         "moduleLayout" -> "controllerEntryBarFill"
+      
+        "moduleLayout" -> "controllerListEntryBarFill"
       
 
       
@@ -716,13 +755,20 @@ digraph dependencies {
           "nodes"[label="nodes"]
           "nodes" -> "directiveMainPanel"
         
+          "widgets"[label="widgets"]
+          "widgets" -> "directiveMainPanel"
+        
+      
+        
       
         
           "utils"[label="utils"]
           "utils" -> "directiveEntryBarFill"
         
-          "retrieveCountsData"[label="retrieveCountsData"]
-          "retrieveCountsData" -> "directiveEntryBarFill"
+      
+        
+          "utils"[label="utils"]
+          "utils" -> "directiveListEntryBarFill"
         
       
         
@@ -730,6 +776,9 @@ digraph dependencies {
         
           "visualizations"[label="visualizations"]
           "visualizations" -> "directiveActionPanel"
+        
+          "SpiralVisualization"[label="SpiralVisualization"]
+          "SpiralVisualization" -> "directiveActionPanel"
         
           "filters"[label="filters"]
           "filters" -> "directiveActionPanel"
@@ -745,6 +794,9 @@ digraph dependencies {
         
           "nodes"[label="nodes"]
           "nodes" -> "directiveActionPanel"
+        
+          "timeWeaver"[label="timeWeaver"]
+          "timeWeaver" -> "directiveActionPanel"
         
           "retrieveCountsData"[label="retrieveCountsData"]
           "retrieveCountsData" -> "directiveActionPanel"
@@ -797,6 +849,20 @@ digraph dependencies {
         
           "utils"[label="utils"]
           "utils" -> "controllerEntryBarFill"
+        
+          "retrieveCountsData"[label="retrieveCountsData"]
+          "retrieveCountsData" -> "controllerEntryBarFill"
+        
+      
+        
+          "$scope"[label="$scope"]
+          "$scope" -> "controllerListEntryBarFill"
+        
+          "utils"[label="utils"]
+          "utils" -> "controllerListEntryBarFill"
+        
+          "retrieveCountsData"[label="retrieveCountsData"]
+          "retrieveCountsData" -> "controllerListEntryBarFill"
         
       
 

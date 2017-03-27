@@ -68,6 +68,9 @@ digraph dependencies {
         "retrievePatientData"[label="retrievePatientData"]
         "retrievePatientData" -> "retrieveCountsData"
       
+        "utils"[label="utils"]
+        "utils" -> "retrieveCountsData"
+      
     
 
     

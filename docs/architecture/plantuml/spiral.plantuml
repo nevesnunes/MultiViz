@@ -1,0 +1,33 @@
+@startuml
+
+skinparam monochrome true
+skinparam shadowing false
+
+actor User
+participant "Panes" as P << Directive >>
+participant "ActionPanel" as AP << Directive >>
+
+group Create a new Spiral view
+    User -> AP: chooseSpiralAttribute('chooseSpiral')
+    AP -> P: updateActionPanel
+    User -> AP: callWithSavedAttribute
+    AP -> AP: chooseSpiral
+    AP -> P: makePaneSplit
+    P -> P: paneColapse
+    P -> P: updateLayout
+    ...
+end
+
+group Add Spiral to existing view
+    User -> AP: chooseAddSpiral
+    AP -> AP: chooseSpiralAttribute('addSpiral')
+    AP -> P: updateActionPanel
+    User -> AP: callWithSavedAttribute
+    AP -> P: addSpiral
+    P -> P: addSpiralRoutine
+    P -> P: paneMaximize
+    P -> P: updateLayout
+    ...
+end
+
+@enduml

@@ -1,6 +1,4 @@
-# Tese 
-
-### Correr
+# Correr
 
 Iniciar um servidor local:
 
@@ -12,4 +10,14 @@ ou
 python -m SimpleHTTPServer 8888
 ```
 
-Seguidamente, abrir index.html.
+Seguidamente, abrir `index.html`.
+
+# Geração de dados
+
+Use o script na pasta `data/templates`.
+
+O grunt é usado apenas para gerar algumas imagens da documentação.
+
+# Documentação
+
+Consultar `HACKING.pdf` na pasta `docs`.
