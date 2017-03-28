@@ -314,18 +314,6 @@ moduleVisualizations.factory('HeatMapVisualization',
                         });
                     }
                 }
-
-                for (property in datas.specific) {
-                    if (datas.specific.hasOwnProperty(property)) {
-                        console.log("[Filters] After " +
-                            property + ": " + datas.specific[property].length);
-                    }
-                }
-                var length = filters.getActivatedFilters().length;
-                for (var i=0; i<length; i++) {
-                    console.log("[Filters] Order of " +
-                        filters.getActivatedFilters()[i] + ": " + i);
-                }
             }
 
             // Retrieve all matches of different attributes;

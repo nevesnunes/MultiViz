@@ -404,7 +404,10 @@ moduleVisualizations.factory("filters",
         var padding = 10;
         var vizHeight = padding * 8;
 
-        d3.select('#filters-accordion')
+        var accordionElement = d3.select('#filters-accordion');
+        accordionElement.selectAll('#filters-svg-' + name)
+            .remove();
+        accordionElement
             .append("h4")
             .attr('id', 'filters-svg-' + name)
             .text(translateFilterAttribute(observer.name));
