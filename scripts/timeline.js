@@ -143,7 +143,7 @@ moduleVisualizations.factory('TimelineVisualization',
         }
         
         return '<p class="viz-title">' +
-                'Interacção temporal entre atributos' +
+                'Interacção temporal entre doenças e medicações' +
                 '  ' +
                 '<img class="tooltip-wrapper help" ' +
                     'title="{{tooltipText}}" ' + 

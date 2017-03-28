@@ -683,7 +683,7 @@ moduleLayout.directive("directiveActionPanel",
                     '<img src="images/views/heatmap.svg" ' +
                         'class="view-choice-svg">' +
                         '<a class="discrete-link" href="#">' +
-                            'Relação entre doenças e medicações' +
+                            'Relações entre atributos' +
                         '</a>' +
                     '</img>' +
                     '</div>' +
@@ -691,14 +691,14 @@ moduleLayout.directive("directiveActionPanel",
                     '<img src="images/views/circulartime.svg" ' +
                         'class="view-choice-svg">' +
                         '<a class="discrete-link" href="#">' +
-                            'Análise temporal de atributos' +
+                            'Análise temporal de medicações' +
                         '</a>' +
                     '</div>' +
                     '<div class="view-choice" ng-click="chooseTimeline()">' +
                     '<img src="images/views/timeline.svg" ' +
                         'class="view-choice-svg">' +
                         '<a class="discrete-link" href="#">' +
-                            'Interacção temporal entre atributos' +
+                            'Interacção temporal entre doenças e medicações' +
                         '</a>' +
                     '</img>' +
                     '</div>';
@@ -1065,7 +1065,7 @@ moduleLayout.directive("directiveActionPanel",
                         '<div class="dropdown">' +
                             '<button type="button" href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Medicações <span class="caret custom-caret-margin"></span></button>' +
                             '<ul class="dropdown-menu">' +
-                                '<li><a href="#">TODO</a></li>' +
+                                '<li><a href="#">Medicações</a></li>' +
                             '</ul>' +
                         '</div>' +
                         '<p/>' +
@@ -1113,7 +1113,6 @@ moduleLayout.directive("directiveActionPanel",
                 var html = cancelButton +
                     '<div>' +
                         '<h4>Seleccione a espiral de destino</h4>' +
-                        '<h4>TODO</h4>' +
                     '</div>';
     
                 updateActionPanel(html);
@@ -1439,7 +1438,7 @@ moduleLayout.directive("directiveActionPanel",
                         });
                         html += '</div>';
                     } else {
-                        html = "<span>TODO</span>";
+                        html = "<span></span>";
                     }
                 // No specific options to be displayed;
                 // Describe possible actions

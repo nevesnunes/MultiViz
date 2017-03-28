@@ -75,7 +75,7 @@ moduleVisualizations.factory('SpiralVisualization',
         }
         
         return '<p class="viz-title">' +
-                'Análise temporal de atributos' +
+                'Análise temporal de medicações' +
                 '  ' +
                 '<img class="tooltip-wrapper help" ' +
                     'title="{{tooltipText}}" ' + 
