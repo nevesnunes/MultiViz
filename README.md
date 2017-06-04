@@ -1,5 +1,11 @@
 # Correr
 
+Instalar dependências:
+
+```
+npm install
+```
+
 Iniciar um servidor local:
 
 ```
@@ -10,14 +16,23 @@ ou
 python -m SimpleHTTPServer 8888
 ```
 
-Seguidamente, abrir `index.html`.
+Abrir num browser a página inicial: `index.html`
 
 # Geração de dados
 
-Use o script na pasta `data/templates`.
+A aplicação necessita de sejam gerados objectos JSON com os dados de pacientes.
 
-O grunt é usado apenas para gerar algumas imagens da documentação.
+Correr `data/templates/build.sh`.
 
 # Documentação
 
-Consultar `HACKING.pdf` na pasta `docs`.
+Consultar `docs/HACKING.pdf`.
+
+Para compilar, basta correr `docs/build.sh`.
+
+Dependências:
+
+```
+npm install markdown-pdf
+plantuml
+```
