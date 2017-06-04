@@ -1,10 +1,3 @@
-<!--
--- # Generate pdf:
-markdown-pdf --css-path ~/code/web/markdown-to-pdf.css -o HACKING.pdf HACKING.md
--- # Generate sequence diagrams:
-plantuml FILE -tsvg
--- -->
-
 # Architecture
 An overview of our Angular modules' hierarchy is shown in the following graph:
 <img src="architecture/png/modules.png" class="fit-A4-page" />
