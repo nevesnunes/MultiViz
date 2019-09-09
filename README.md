@@ -1,38 +1,34 @@
-# Correr
+# MultiViz
 
-Instalar dependências:
+## Dependencies
 
+For running:
 ```
 npm install
 ```
 
-Iniciar um servidor local:
-
-```
-python -m http.server 8888
-```
-ou
-```
-python -m SimpleHTTPServer 8888
-```
-
-Abrir num browser a página inicial: `index.html`
-
-# Geração de dados
-
-A aplicação necessita de sejam gerados objectos JSON com os dados de pacientes.
-
-Correr `data/templates/build.sh`.
-
-# Documentação
-
-Consultar `docs/HACKING.pdf`.
-
-Para compilar, basta correr `docs/build.sh`.
-
-Dependências:
-
+For compiling documentation:
 ```
 npm install markdown-pdf
 plantuml
 ```
+
+## Running
+
+Generate data with `data/templates/build.sh`.
+
+Start a local web server, for example:
+
+```bash
+python -m http.server 8888
+# or
+python -m SimpleHTTPServer 8888
+```
+
+Open a browser at `index.html`.
+
+## Documentation
+
+See `docs/HACKING.pdf`.
+
+Compile it with `docs/build.sh`.
