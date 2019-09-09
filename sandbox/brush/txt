@@ -1,8 +1,0 @@
-g .context
-    path .area
-    g .axis
-    g .brush
-        rect .overlay
-        rect .selection
-        rect .handle--e
-        rect .handle--w
