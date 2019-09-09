@@ -25,7 +25,7 @@ python -m http.server 8888
 python -m SimpleHTTPServer 8888
 ```
 
-Open a browser at `index.html`.
+Open `index.html` with Google Chrome browser.
 
 ## Documentation
 
