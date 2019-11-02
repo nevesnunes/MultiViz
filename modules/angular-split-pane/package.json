@@ -12,7 +12,7 @@
   "license": "MIT",
   "dependencies":{
     "@shagstrom/split-pane": "0.9.2",
-    "jquery": "^1.11.1",
+    "jquery": "^3.4.1",
     "angular": "^1.2.0"
   }
 }
